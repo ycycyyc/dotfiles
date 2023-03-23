@@ -1,0 +1,4 @@
+export PATH="$PATH:$HOME/dotfiles/centors/bin"
+
+alias jj='tmux -u a -t'
+

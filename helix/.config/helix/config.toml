@@ -1,0 +1,18 @@
+theme = "monokai"
+[editor]
+true-color = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+
+[editor.lsp]
+display-messages = true
+
+[keys.insert]
+j = { k = "normal_mode" }
+
+[keys.normal]
+"H" = "goto_line_start"
+"L" = "goto_line_end"
+"G" = "goto_file_end"

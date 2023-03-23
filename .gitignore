@@ -1,0 +1,8 @@
+lua-language-server/
+
+test.lua
+
+nvim/.config/nvim/plugin/
+lazy-lock.json
+
+.luarc.json

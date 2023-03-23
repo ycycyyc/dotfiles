@@ -1,0 +1,54 @@
+{
+    "go.checkForUpdates": "disabled",
+    "go.goplsUseDaemon": false,
+    "go.goplsOptions": {
+        "semanticTokens": true,
+        "hints": {
+            "compositeLiteralFields": true,
+            "compositeLiteralTypes": true,
+            "assignVariableTypes": true,
+            "parameterNames": true,
+            "functionTypeParameters": true,
+            "constantValues": true,
+            "rangeVariableTypes": true
+        }
+    },
+    "inlayHint.enable": false,
+    "semanticTokens.enable": false,
+    "clangd.arguments": [
+        "--function-arg-placeholders=0",
+        "--background-index",
+        "-j=15",
+        "--clang-tidy",
+        "--clang-tidy-checks=performance-*,bugprone-*",
+        "--all-scopes-completion",
+        "--completion-style=detailed",
+        "--header-insertion=iwyu",
+        "--pch-storage=memory"
+    ],
+    "suggest.virtualText": false,
+    "diagnostic.virtualText": true,
+    "diagnostic.virtualTextCurrentLineOnly": false,
+    "diagnostic.enableMessage": "never",
+    "suggest.enablePreselect": false,
+    "suggest.noselect": true,
+    "pairs.enableCharacters": [
+        "(",
+        "[",
+        "{",
+        "'",
+        "\"",
+        "`"
+    ],
+    "explorer.git.enable": false,
+    "explorer.filename.colored.enable": false,
+    "explorer.file.child.template": "[git | 2] [selection | clip | 1] [indent][icon | 1] [diagnosticError & 1][filename omitCenter 1][modified][readonly] [linkIcon & 1][link growRight 1 omitCenter 5]",
+    "explorer.keyMappings.global": {
+        "<cr>": [
+            "wait",
+            "expandable?",
+            "expand",
+            "open"
+        ]
+    }
+}
