@@ -63,6 +63,7 @@ function! s:init_fern() abort
 	\ )
 
   nmap <buffer> <cr> <Plug>(fern-my-open-or-expand)
+  nmap <buffer> o <Plug>(fern-my-open-or-expand)
 
 endfunction
 
