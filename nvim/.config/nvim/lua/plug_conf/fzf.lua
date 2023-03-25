@@ -77,6 +77,7 @@ M.config = function()
   map("n", keys.search_buffer, ":BLines<cr>")
   map("n", keys.switch_buffers, ":Buffers<cr>")
   map("n", keys.search_toggle_rg_mode, toggle_rg_cmd_type)
+  map("n", keys.search_git_grep, ":GitGrep ")
 
   user_cmd("Find", RgFzf)
   user_cmd("Rg", build_rg_func())
@@ -99,6 +100,13 @@ M.config = function()
       return cmd
     end
     build_rg_func { rg_cmd_build = rg_cmd_build }(args)
+  end)
+
+
+  user_cmd("GitGrep", function(args)
+    local cmd = "git grep -i --untracked --line-number --threads=8 -- " .. args["args"]
+    local preview = vim.fn["fzf#vim#with_preview"] "up:60%"
+    vim.fn["fzf#vim#grep"](cmd, 1, preview, args["bang"])
   end)
 
   vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }

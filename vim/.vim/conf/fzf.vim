@@ -38,3 +38,8 @@ command! -bang -nargs=* Rgnosmartcase
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
+
+command! -bang -nargs=* GitGrep
+  \ call fzf#vim#grep(
+  \   'git grep -i  --untracked --line-number --threads=8 -- '.shellescape(<q-args>), 0,
+  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)

@@ -5,7 +5,8 @@ return {
   run_find = "<Leader>F",
   search_toggle_rg_mode = "<leader>T", -- 使用fixString 匹配还是 正则
   search_buffer = "<Leader>b", -- search only in buffer use fzf
-  search_buffer_preview = "<leader>/",
+  search_buffer_preview = "<leader>L",
+  search_git_grep = "<leader>/",
   search_find_files = "<C-p>", -- 查文件
   switch_buffers = "<leader>o", -- buffers 切换
   global_find_and_replace = "<leader>R",
