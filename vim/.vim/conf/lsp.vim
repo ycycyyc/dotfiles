@@ -19,8 +19,8 @@ autocmd VimEnter * call LspAddServer(lspServers)
 
 nnoremap gd             :LspGotoDefinition<cr>
 nnoremap gy             :LspGotoTypeDef<cr>
-nnoremap ]g             :LspDiagNext<cr>:LspDiagCurrent<cr>
-nnoremap [g             :LspDiagPrev<cr>:LspDiagCurrent<cr>
+nnoremap ]g             :LspDiagNext<cr>
+nnoremap [g             :LspDiagPrev<cr>
 nnoremap gr             :LspShowReferences<cr>
 nnoremap <leader>rn     :LspRename<cr>
 nnoremap <leader>i      :LspGotoImpl<cr>
