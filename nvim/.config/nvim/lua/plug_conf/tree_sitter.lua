@@ -1,7 +1,7 @@
 local M = {}
 
 M.config = function()
-  local ensure_installed = { "cpp", "go", "lua" }
+  local ensure_installed = { "cpp", "go", "lua", "c" }
   if vim.fn.has "mac" == 1 then
     ensure_installed = { "cpp", "go" }
   end

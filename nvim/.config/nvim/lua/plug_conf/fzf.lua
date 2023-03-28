@@ -4,8 +4,6 @@ local M = {}
 local helper = require "utils.helper"
 local keys = require "basic.keys"
 
-local au_cmd = vim.api.nvim_create_autocmd
-local au_group = vim.api.nvim_create_augroup
 local user_cmd_bind = vim.api.nvim_create_user_command
 local user_cmd = function(name, cb)
   local opt = { nargs = "*", bang = true }
@@ -13,7 +11,6 @@ local user_cmd = function(name, cb)
 end
 
 local map = helper.build_keymap { noremap = true }
-local bmap = helper.build_keymap { noremap = true, buffer = true }
 
 local fix_string = true
 -- add --glob=!.git/ git ignore .git/
@@ -88,8 +85,7 @@ M.config = function()
   user_cmd("Rg", build_rg_func())
   user_cmd("RgHidden", build_rg_func { condition = "--hidden" })
   user_cmd("Rggo", build_rg_func { condition = "-t go" })
-  user_cmd("Rgcpp", build_rg_func { condition = "-t cpp" })
-  user_cmd("Rgc", build_rg_func { condition = "-t c" })
+  user_cmd("Rgcpp", build_rg_func { condition = "-t cpp -t c" })
   user_cmd("Rgrust", build_rg_func { condition = "-t rust" })
   user_cmd("Rglua", build_rg_func { condition = "-t lua" })
   user_cmd("Rglines", function(args)
@@ -112,32 +108,6 @@ M.config = function()
     local preview = vim.fn["fzf#vim#with_preview"] "up:60%"
     vim.fn["fzf#vim#grep"](cmd, 1, preview, args["bang"])
   end)
-
-  local file_grp = au_group("fzf_vim_filetype", { clear = true })
-
-  au_cmd("FileType", {
-    pattern = { "go" },
-    callback = function()
-      bmap("n", keys.search_global, ":Rggo<SPACE>")
-    end,
-    group = file_grp,
-  })
-
-  au_cmd("FileType", {
-    pattern = { "h", "cpp", "hpp" },
-    callback = function()
-      bmap("n", keys.search_global, ":Rgcpp<SPACE>")
-    end,
-    group = file_grp,
-  })
-
-  au_cmd("FileType", {
-    pattern = { "c" },
-    callback = function()
-      bmap("n", keys.search_global, ":Rgc<SPACE>")
-    end,
-    group = file_grp,
-  })
 
   vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
 

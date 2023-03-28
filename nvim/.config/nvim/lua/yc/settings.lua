@@ -1,7 +1,7 @@
 local helper = require "utils.helper"
 local gotags = require "utils.gotags"
 local keys = require "basic.keys"
-local map = helper.build_keymap { noremap = true }
+local bmap = helper.build_keymap { noremap = true, buffer = true }
 
 local au_group = vim.api.nvim_create_augroup
 local au_cmd = vim.api.nvim_create_autocmd
@@ -39,14 +39,22 @@ M.setup = function()
     group = yank_grp,
   })
 
-  local file_grp = au_group("setting_filetype", { clear = true })
+  local file_grp = au_group("setting_ft", { clear = true })
 
   au_cmd("FileType", { pattern = { "lua" }, callback = lua_file_cb, group = file_grp })
   au_cmd("FileType", { pattern = { "qf" }, command = "wincmd J", group = file_grp })
   au_cmd("FileType", {
-    pattern = { "cpp", "c" },
+    pattern = { "go" },
     callback = function()
-      map("n", keys.switch_source_header, ":ClangdSwitchSourceHeader<cr>")
+      bmap("n", keys.search_global, ":Rggo ")
+    end,
+    group = file_grp,
+  })
+  au_cmd("FileType", {
+    pattern = { "h", "cpp", "hpp", "c" },
+    callback = function()
+      bmap("n", keys.switch_source_header, ":ClangdSwitchSourceHeader<cr>")
+      bmap("n", keys.search_global, ":Rgcpp ")
     end,
     group = file_grp,
   })

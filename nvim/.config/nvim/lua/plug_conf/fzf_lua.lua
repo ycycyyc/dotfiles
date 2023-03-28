@@ -3,8 +3,11 @@ local M = {}
 local helper = require "utils.helper"
 local map = helper.build_keymap { noremap = true }
 local bmap = helper.build_keymap { noremap = true, buffer = true }
-local au_cmd = vim.api.nvim_create_autocmd
-local au_group = vim.api.nvim_create_augroup
+local user_cmd_bind = vim.api.nvim_create_user_command
+local user_cmd = function(name, cb)
+  local opt = { nargs = "*", bang = true }
+  user_cmd_bind(name, cb, opt)
+end
 
 M.config = function()
   local keys = require "basic.keys"
@@ -13,58 +16,59 @@ M.config = function()
   vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
   vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
 
+  local preview = {
+    layout = "up:+{2}-/2",
+    vertical = "up:45%",
+  }
+
+  if vim.fn.executable "bat" == 1 then
+    preview["default"] = "bat"
+  end
+
   require("fzf-lua").setup {
     winopts = {
-      width = 0.90, -- window width
+      row = 0.25,
+      col = 0.2,
+      width = 0.92, -- window width
       height = 0.95, -- window height
       fullscreen = false,
-      preview = {
-        -- layout = "reverse",
-        layout = "up:+{2}-/2",
-        vertical = "up:45%",
-      },
+      preview = preview,
     },
   }
 
   map("n", keys.search_find_files, ":FzfLua files<cr>")
   map("n", keys.search_buffer, ":FzfLua grep_curbuf<cr>")
-  map("n", keys.search_global, ":FzfLua grep<cr>")
-  map("n", keys.search_git_grep, function()
-    -- require("fzf-lua").grep { cmd = "git grep -i --untracked --line-number --column --color=always" }
-    require("fzf-lua").grep { cmd = "rg --hidden --column --line-number --no-heading --color=always --smart-case -- " }
+
+  local build_rg_func = function(opt)
+    return function(args)
+      require("fzf-lua").grep {
+        cmd = "rg --hidden --glob=!.git/  --column --line-number --no-heading "
+          .. opt
+          .. " --color=always --smart-case -- ",
+        search = args["args"],
+      }
+    end
+  end
+
+  user_cmd("Rg", build_rg_func "")
+  user_cmd("Rgcpp", build_rg_func " -t cpp -t c ")
+  user_cmd("Rggo", build_rg_func " -t go ")
+  user_cmd("GitGrep", function(args)
+    require("fzf-lua").grep {
+      cmd = "git grep -i --untracked --color=always --line-number --threads=8 -- ",
+      search = args["args"],
+      no_esc = true,
+    }
   end)
+  user_cmd_bind("Buffers", function()
+    require("fzf-lua").buffers()
+  end, {})
+  user_cmd_bind("Commits", function()
+    require("fzf-lua").git_commits()
+  end, {})
 
-  local file_grp = au_group("fzf_lua_filetype", { clear = true })
-
-  au_cmd("FileType", {
-    pattern = { "go" },
-    callback = function()
-      bmap("n", keys.search_global, function()
-        require("fzf-lua").grep { cmd = "rg --column --line-number --no-heading -t go --color=always --smart-case -- " }
-      end)
-    end,
-    group = file_grp,
-  })
-
-  au_cmd("FileType", {
-    pattern = { "c" },
-    callback = function()
-      bmap("n", keys.search_global, function()
-        require("fzf-lua").grep { cmd = "rg --column --line-number --no-heading -t c --color=always --smart-case -- " }
-      end)
-    end,
-    group = file_grp,
-  })
-
-  au_cmd("FileType", {
-    pattern = { "cpp" },
-    callback = function()
-      bmap("n", keys.search_global, function()
-        require("fzf-lua").grep { cmd = "rg --column --line-number --no-heading -t cpp --color=always --smart-case -- " }
-      end)
-    end,
-    group = file_grp,
-  })
+  map("n", keys.search_global, ":Rg ")
+  map("n", keys.search_git_grep, ":GitGrep ")
 
   local cb = function()
     bmap("n", keys.lsp_goto_definition, function()
@@ -75,6 +79,9 @@ M.config = function()
     end)
     bmap("n", keys.lsp_impl, function()
       require("fzf-lua").lsp_implementations { jump_to_single_result = true }
+    end)
+    bmap("n", keys.lsp_code_action, function()
+      require("fzf-lua").lsp_code_actions()
     end)
   end
 

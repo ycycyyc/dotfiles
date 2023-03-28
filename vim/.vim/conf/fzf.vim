@@ -13,10 +13,9 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 command! -nargs=* -bang Find call RipgrepFzf(<q-args>, <bang>0)
 
-
 command! -bang -nargs=* Rghidden
   \ call fzf#vim#grep(
-  \   'rg --hidden --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   'rg --hidden --column --line-number --no-heading --glob=!.git/ --color=always --smart-case -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 command! -bang -nargs=* Rggo
   \ call fzf#vim#grep(
@@ -24,7 +23,7 @@ command! -bang -nargs=* Rggo
   \   fzf#vim#with_preview(), <bang>0)
 command! -bang -nargs=* Rgcpp
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading -t cpp --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   'rg --column --line-number --no-heading -t cpp -t c --color=always --smart-case -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 
 command! -bang -nargs=* Rgrust
