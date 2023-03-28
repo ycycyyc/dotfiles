@@ -7,7 +7,7 @@ local M = {}
 
 local plugins = {
   "nvim-lua/plenary.nvim",
-  "kyazdani42/nvim-web-devicons",
+  -- "kyazdani42/nvim-web-devicons", // disable web icon
 
   {
     "kyazdani42/nvim-tree.lua",
@@ -100,6 +100,16 @@ local plugins = {
     dependencies = {
       "junegunn/fzf",
     },
+    cond = function()
+      return env.load_fzf_lua() == false
+    end,
+  },
+
+  {
+    "ibhagwan/fzf-lua",
+    event = "VeryLazy",
+    config = require("plug_conf.fzf_lua").config,
+    cond = env.load_fzf_lua,
   },
 
   {
@@ -153,8 +163,10 @@ local plugins = {
     config = require("plug_conf.lspfuzzy").config,
     dependencies = {
       "junegunn/fzf",
-      "junegunn/fzf.vim",
     },
+    cond = function()
+      return env.load_fzf_lua() == false
+    end,
   },
 
   { "kevinhwang91/nvim-bqf", ft = "qf" },

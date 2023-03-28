@@ -1,15 +1,20 @@
 -- fzf
 local M = {}
 
+local helper = require "utils.helper"
+local keys = require "basic.keys"
+
+local au_cmd = vim.api.nvim_create_autocmd
+local au_group = vim.api.nvim_create_augroup
 local user_cmd_bind = vim.api.nvim_create_user_command
 local user_cmd = function(name, cb)
   local opt = { nargs = "*", bang = true }
   user_cmd_bind(name, cb, opt)
 end
 
-local helper = require "utils.helper"
 local map = helper.build_keymap { noremap = true }
-local keys = require "basic.keys"
+local bmap = helper.build_keymap { noremap = true, buffer = true }
+
 local fix_string = true
 -- add --glob=!.git/ git ignore .git/
 local rg_regex_cmd = "rg --column --line-number --no-heading --glob=!.git/ --color=always --smart-case "
@@ -82,12 +87,12 @@ M.config = function()
   user_cmd("Find", RgFzf)
   user_cmd("Rg", build_rg_func())
   user_cmd("RgHidden", build_rg_func { condition = "--hidden" })
-  user_cmd("RgGo", build_rg_func { condition = "-t go" })
-  user_cmd("RgCpp", build_rg_func { condition = "-t cpp" })
-  user_cmd("RgC", build_rg_func { condition = "-t c" })
-  user_cmd("RgRust", build_rg_func { condition = "-t rust" })
-  user_cmd("RgLua", build_rg_func { condition = "-t lua" })
-  user_cmd("RgLines", function(args)
+  user_cmd("Rggo", build_rg_func { condition = "-t go" })
+  user_cmd("Rgcpp", build_rg_func { condition = "-t cpp" })
+  user_cmd("Rgc", build_rg_func { condition = "-t c" })
+  user_cmd("Rgrust", build_rg_func { condition = "-t rust" })
+  user_cmd("Rglua", build_rg_func { condition = "-t lua" })
+  user_cmd("Rglines", function(args)
     local rg_cmd_build = function(word)
       local file_name = vim.fn.fnameescape(vim.fn.expand "%")
       if word == nil or word == "" then
@@ -102,12 +107,37 @@ M.config = function()
     build_rg_func { rg_cmd_build = rg_cmd_build }(args)
   end)
 
-
   user_cmd("GitGrep", function(args)
-    local cmd = "git grep -i --untracked --line-number --threads=8 -- " .. args["args"]
+    local cmd = "git grep -i --untracked --color=always --line-number --threads=8 -- " .. args["args"]
     local preview = vim.fn["fzf#vim#with_preview"] "up:60%"
     vim.fn["fzf#vim#grep"](cmd, 1, preview, args["bang"])
   end)
+
+  local file_grp = au_group("fzf_vim_filetype", { clear = true })
+
+  au_cmd("FileType", {
+    pattern = { "go" },
+    callback = function()
+      bmap("n", keys.search_global, ":Rggo<SPACE>")
+    end,
+    group = file_grp,
+  })
+
+  au_cmd("FileType", {
+    pattern = { "h", "cpp", "hpp" },
+    callback = function()
+      bmap("n", keys.search_global, ":Rgcpp<SPACE>")
+    end,
+    group = file_grp,
+  })
+
+  au_cmd("FileType", {
+    pattern = { "c" },
+    callback = function()
+      bmap("n", keys.search_global, ":Rgc<SPACE>")
+    end,
+    group = file_grp,
+  })
 
   vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
 

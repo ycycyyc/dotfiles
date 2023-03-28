@@ -41,5 +41,5 @@ command! -bang -nargs=* Rgnosmartcase
 
 command! -bang -nargs=* GitGrep
   \ call fzf#vim#grep(
-  \   'git grep -i  --untracked --line-number --threads=8 -- '.shellescape(<q-args>), 0,
+  \   'git grep -i  --untracked --line-number --color=always --threads=8 -- '.shellescape(<q-args>), 0,
   \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)

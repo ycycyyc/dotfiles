@@ -10,6 +10,7 @@ local M = {
   -- private
   neogit = "off", -- on or off
   line = "", -- "" or "lualine"
+  fzf_lua = "off", -- on or off
 }
 -- export NVIM_CONF="neogit=off,clangd_bin=clangd,theme=default,lua_ls_root=dir,lua_ls_bin=path"
 --
@@ -39,6 +40,13 @@ end
 
 M.load_lualine = function()
   if M.line == "lualine" then
+    return true
+  end
+  return false
+end
+
+M.load_fzf_lua = function()
+  if M.fzf_lua == "on" then
     return true
   end
   return false

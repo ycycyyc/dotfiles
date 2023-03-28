@@ -4,6 +4,12 @@ local keys = require "basic.keys"
 local helper = require "utils.helper"
 local api = vim.api
 
+M.attach_cbs = {}
+
+M.register_attach_cb = function(cb)
+  table.insert(M.attach_cbs, cb)
+end
+
 M.range_format = function(pos)
   local timeoutms = 1000
   -- local context = { source = { organizeImports = true } }
@@ -90,6 +96,12 @@ M.key_on_attach = function(conf)
     -- map("n", "<leader>pa", vim.lsp.buf.add_workspace_folder)
     -- map("n", "<leader>pr", vim.lsp.buf.remove_workspace_folder)
     map("n", keys.lsp_incoming_calls, vim.lsp.buf.incoming_calls)
+
+    for _, cb in ipairs(M.attach_cbs) do
+      if cb ~= nil and type(cb) == "function" then
+        cb()
+      end
+    end
   end
 end
 
