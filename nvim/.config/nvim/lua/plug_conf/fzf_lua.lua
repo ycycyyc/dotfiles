@@ -34,6 +34,16 @@ M.config = function()
       fullscreen = false,
       preview = preview,
     },
+    git = {
+      commits = {
+        actions = {
+          ["ctrl-y"] = function(selected)
+            local res = vim.fn.split(selected[1], " ")
+            vim.fn.setreg(0, res[1])
+          end,
+        },
+      },
+    },
   }
 
   map("n", keys.search_find_files, ":FzfLua files<cr>")
