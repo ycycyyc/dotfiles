@@ -42,6 +42,9 @@ M.config = function()
       },
     },
   }
+end
+
+M.textobj_config = function()
   require("nvim-treesitter.configs").setup {
     textobjects = {
       select = {

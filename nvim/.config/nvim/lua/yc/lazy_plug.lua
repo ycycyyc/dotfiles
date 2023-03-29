@@ -136,6 +136,8 @@ local plugins = {
       },
       {
         "nvim-treesitter/nvim-treesitter-textobjects",
+        config = require("plug_conf.tree_sitter").textobj_config,
+        cond = env.treesitter_textobj == "on",
       },
     },
   },
