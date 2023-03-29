@@ -129,9 +129,14 @@ local plugins = {
     event = { "CursorHold", "CursorHoldI" },
     config = require("plug_conf.tree_sitter").config,
     dependencies = {
-      "nvim-treesitter/nvim-treesitter-context",
-      config = require("plug_conf.tree_sitter").context_config,
-      cond = false, -- disable now
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        config = require("plug_conf.tree_sitter").context_config,
+        cond = false, -- disable now
+      },
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+      },
     },
   },
 

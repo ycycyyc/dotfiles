@@ -42,6 +42,55 @@ M.config = function()
       },
     },
   }
+  require("nvim-treesitter.configs").setup {
+    textobjects = {
+      select = {
+        enable = true,
+
+        -- Automatically jump forward to textobj, similar to targets.vim
+        lookahead = true,
+
+        keymaps = {
+          -- You can use the capture groups defined in textobjects.scm
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["as"] = "@class.outer",
+          ["is"] = "@class.inner",
+          ["ia"] = "@parameter.inner",
+          ["aa"] = "@parameter.outer",
+        },
+      },
+    },
+  }
+
+  require("nvim-treesitter.configs").setup {
+    textobjects = {
+      move = {
+        enable = true,
+        set_jumps = true, -- whether to set jumps in the jumplist
+        goto_next_start = {
+          ["]f"] = "@function.outer",
+          ["]s"] = "@class.outer",
+          ["]a"] = "@parameter.inner",
+        },
+        goto_next_end = {
+          ["]F"] = "@function.outer",
+          ["]S"] = "@class.outer",
+          ["]A"] = "@parameter.inner",
+        },
+        goto_previous_start = {
+          ["[f"] = "@function.outer",
+          ["[s"] = "@class.outer",
+          ["[a"] = "@parameter.inner",
+        },
+        goto_previous_end = {
+          ["[F"] = "@function.outer",
+          ["[S"] = "@class.outer",
+          ["[A"] = "@parameter.inner",
+        },
+      },
+    },
+  }
 end
 
 M.context_config = function()
