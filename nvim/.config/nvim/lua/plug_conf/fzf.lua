@@ -83,7 +83,7 @@ M.config = function()
 
   user_cmd("Find", RgFzf)
   user_cmd("Rg", build_rg_func())
-  user_cmd("RgHidden", build_rg_func { condition = "--hidden" })
+  user_cmd("Rghidden", build_rg_func { condition = "--hidden" })
   user_cmd("Rggo", build_rg_func { condition = "-t go" })
   user_cmd("Rgcpp", build_rg_func { condition = "-t cpp -t c" })
   user_cmd("Rgrust", build_rg_func { condition = "-t rust" })
