@@ -45,4 +45,24 @@ function M.get_visual_selection()
   return { startp, endp }
 end
 
+function M.try_jumpto_qf_window()
+  local wins = vim.api.nvim_list_wins()
+  local qf_win
+  for _, win_num in ipairs(wins) do
+    local buf_num = vim.fn.winbufnr(win_num)
+    local ft = vim.api.nvim_buf_get_option(buf_num, "filetype")
+    if ft == "qf" then
+      qf_win = win_num
+      vim.api.nvim_set_current_win(qf_win)
+      vim.cmd "redraw"
+      return
+    end
+  end
+
+  if qf_win == nil then
+    print "no qf window found"
+    return
+  end
+end
+
 return M

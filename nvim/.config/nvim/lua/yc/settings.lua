@@ -59,6 +59,10 @@ M.setup = function()
     group = file_grp,
   })
 
+  vim.keymap.set("n", keys.jump_to_qf, function()
+    helper.try_jumpto_qf_window()
+  end)
+
   user_cmd("DiffOpen", helper.diff_open, {})
   user_cmd("BufOnly", helper.buf_only, {})
 
