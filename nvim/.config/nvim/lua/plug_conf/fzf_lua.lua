@@ -34,6 +34,9 @@ M.config = function()
       fullscreen = false,
       preview = preview,
     },
+    grep = {
+      no_header_i = true,
+    },
     git = {
       commits = {
         actions = {
@@ -48,6 +51,7 @@ M.config = function()
 
   map("n", keys.search_find_files, ":FzfLua files<cr>")
   map("n", keys.search_buffer, ":FzfLua grep_curbuf<cr>")
+  map("n", keys.switch_buffers, ":FzfLua buffers<cr>")
 
   local build_rg_func = function(opt)
     return function(args)
