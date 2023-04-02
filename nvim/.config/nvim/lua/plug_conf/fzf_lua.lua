@@ -37,6 +37,9 @@ M.config = function()
     grep = {
       no_header_i = true,
     },
+    fzf_opts = {
+      ["--info"] = "default",
+    },
     git = {
       commits = {
         actions = {
