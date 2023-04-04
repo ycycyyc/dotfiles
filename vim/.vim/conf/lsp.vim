@@ -16,6 +16,7 @@ let lspServers = [
 let lspOpts = {'autoHighlightDiags': v:true, 'outlineOnRight': v:true, 'usePopupInCodeAction': v:true, 'ignoreMissingServer': v:true, 'outlineWinSize': 80, 'noNewlineInCompletion': v:true}
 autocmd VimEnter * call LspOptionsSet(lspOpts)
 autocmd VimEnter * call LspAddServer(lspServers)
+hi link LspDiagLine clear
 
 nnoremap gd             :LspGotoDefinition<cr>
 nnoremap gy             :LspGotoTypeDef<cr>
