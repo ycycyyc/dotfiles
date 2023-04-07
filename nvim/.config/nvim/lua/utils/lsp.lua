@@ -53,7 +53,10 @@ M.range_format = function(pos)
 end
 
 M.key_on_attach = function(conf)
-  return function(_, bufnr)
+  return function(client, bufnr)
+    if vim.fn.has "nvim-0.9" == 1 then -- disable semantic
+      client.server_capabilities.semanticTokensProvider = nil
+    end
     local filetype = vim.api.nvim_buf_get_option(0, "filetype")
     local opts = { noremap = true, silent = true, buffer = bufnr }
     local map = helper.build_keymap(opts)
