@@ -1,6 +1,6 @@
 -- load plugin
 local keys = require "basic.keys"
-local env = require "basic.env"
+local env = require("basic.env").env
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
 local M = {}
@@ -74,7 +74,7 @@ local plugins = {
       vim.keymap.set("n", keys.git_blame, ":Git blame<cr>")
       vim.keymap.set("n", keys.git_status, ":G<space>")
     end,
-    cond = env.load_fugitive,
+    cond = not env.neogit,
   },
 
   {
@@ -90,7 +90,7 @@ local plugins = {
       }
       vim.keymap.set("n", keys.git_status, ":Neogit<space>")
     end,
-    cond = env.load_neogit,
+    cond = env.neogit,
   },
 
   {
@@ -100,16 +100,14 @@ local plugins = {
     dependencies = {
       "junegunn/fzf",
     },
-    cond = function()
-      return env.load_fzf_lua() == false
-    end,
+    cond = not env.fzf_lua,
   },
 
   {
     "ibhagwan/fzf-lua",
     event = "VeryLazy",
     config = require("plug_conf.fzf_lua").config,
-    cond = env.load_fzf_lua,
+    cond = env.fzf_lua,
   },
 
   {
@@ -137,7 +135,7 @@ local plugins = {
       {
         "nvim-treesitter/nvim-treesitter-textobjects",
         config = require("plug_conf.tree_sitter").textobj_config,
-        cond = env.treesitter_textobj == "on",
+        cond = env.treesitter_textobj,
       },
     },
   },
@@ -171,9 +169,7 @@ local plugins = {
     dependencies = {
       "junegunn/fzf",
     },
-    cond = function()
-      return env.load_fzf_lua() == false
-    end,
+    cond = not env.fzf_lua,
   },
 
   { "kevinhwang91/nvim-bqf", ft = "qf" },
@@ -197,7 +193,7 @@ local plugins = {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     config = require("plug_conf.line").config,
-    cond = env.load_lualine,
+    cond = env.lualine,
   },
 
   {

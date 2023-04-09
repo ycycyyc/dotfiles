@@ -1,5 +1,8 @@
 local M = {
-  -- public
+  env = {},
+}
+
+local env = {
   clangd_bin = "clangd", -- {path}
   theme = "default", -- default
   lua_ls_bin = "lua-language-server", -- {path}
@@ -7,63 +10,20 @@ local M = {
   cpp_debug_mode = "vscode", -- vscode or lldb
   go_debug_mode = "dlv", -- dlv or vscode
 
-  -- private
-  neogit = "off", -- on or off
-  line = "", -- "" or "lualine"
-  fzf_lua = "off", -- on or off
-  treesitter_textobj = "off", -- on or off
-  semantic_token = "off",
+  lualine = false,
+  neogit = false,
+  fzf_lua = false,
+  treesitter_textobj = false,
+  semantic_token = false,
 }
--- export NVIM_CONF="neogit=off,clangd_bin=clangd,theme=default,lua_ls_root=dir,lua_ls_bin=path"
---
+
 M.setup = function()
-  local conf = vim.env.NVIM_CONF
-  local pairs = vim.fn.split(conf, ",")
-  for _, elem in ipairs(pairs) do
-    local opt = vim.fn.split(elem, "=")
-    M[opt[1]] = opt[2]
-  end
-end
-
-M.load_neogit = function()
-  if M.neogit == "on" then
-    return true
-  end
-  return false
-end
-
-M.load_fugitive = function()
-  if M.load_neogit() == true then
-    return false
+  if vim.fn.has "nvim-0.9" == 1 then
+    local json_conf = vim.env.NVIM_JSON_CONF or "{}"
+    M.env = vim.tbl_extend("force", env, vim.json.decode(json_conf))
   else
-    return true
+    M.env = env
   end
-end
-
-M.load_lualine = function()
-  if M.line == "lualine" then
-    return true
-  end
-  return false
-end
-
-M.load_fzf_lua = function()
-  if M.fzf_lua == "on" then
-    return true
-  end
-  return false
-end
-
-M.use_semantic_token = function()
-  if vim.fn.has "nvim-0.9" == 0 then
-    return false
-  end
-
-  if M.semantic_token ~= "on" then
-    return false
-  end
-
-  return true
 end
 
 return M

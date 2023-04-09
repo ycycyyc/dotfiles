@@ -1,7 +1,7 @@
 local M = {}
 
 local keys = require "basic.keys"
-local env = require "basic.env"
+local env = require("basic.env").env
 local helper = require "utils.helper"
 local api = vim.api
 
@@ -74,7 +74,7 @@ M.key_on_attach = function(conf)
       [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
     }
 
-    if env.use_semantic_token() == false and vim.fn.has "nvim-0.9" == 1 then -- disable semantic
+    if not env.semantic_token == false and vim.fn.has "nvim-0.9" == 1 then -- disable semantic
       client.server_capabilities.semanticTokensProvider = nil
     end
 

@@ -1,7 +1,7 @@
 -- install lsp-server from
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 local key_on_attach = require("utils.lsp").key_on_attach
-local env = require "basic.env"
+local env = require("basic.env").env
 local keys = require "basic.keys"
 local helper = require "utils.helper"
 
@@ -70,7 +70,7 @@ M.load_lsp_config = function()
     on_attach = key_on_attach {
       client_cb = function(client, _, _)
         if
-          env.use_semantic_token() == true
+          env.semantic_token == true
           and client.name == "gopls"
           and not client.server_capabilities.semanticTokensProvider
         then
@@ -90,7 +90,7 @@ M.load_lsp_config = function()
     cmd = { "gopls", "serve" },
     settings = {
       gopls = {
-        semanticTokens = env.use_semantic_token(),
+        semanticTokens = env.semantic_token,
         experimentalPostfixCompletions = true,
         analyses = {
           unusedparams = true,

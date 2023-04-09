@@ -1,7 +1,7 @@
 local M = {}
 
 local hl = vim.api.nvim_set_hl
-local env = require "basic.env"
+local env = require("basic.env").env
 
 local function convert(opt)
   local res = {}
@@ -122,7 +122,7 @@ local function default_theme()
   colors["@constant.builtin"] = { fg = dark_yellow }
   colors["@type.qualifier"] = { fg = purple }
 
-  if env.use_semantic_token() == true then
+  if env.semantic_token == true then
     colors["@lsp.type.variable"] = { fg = white }
     colors["@lsp.type.parameter"] = { fg = white, bold = true }
     colors["@lsp.type.namespace"] = { fg = red }

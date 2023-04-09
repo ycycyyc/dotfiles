@@ -3,7 +3,7 @@ if not has_dap then
   return
 end
 
-local mode = require("basic.env").go_debug_mode
+local mode = require("basic.env").env.go_debug_mode
 
 if mode == "dlv" then
   dap.adapters.go = function(callback, _)
