@@ -10,7 +10,8 @@ M.config = function()
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        require("luasnip").lsp_expand(args.body)
       end,
     },
 
@@ -62,12 +63,25 @@ M.config = function()
     sources = cmp.config.sources({
       { name = "nvim_lua" },
       { name = "nvim_lsp" },
-      { name = "vsnip" }, -- For vsnip users.
+      { name = "luasnip" }, -- For snip users.
     }, { { name = "buffer" } }),
   }
 
   local cmp_autopairs = require "nvim-autopairs.completion.cmp"
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
+
+  local env = require("basic.env").env
+  if env.luasnip then
+    local lazydir = vim.fn.stdpath "data" .. "/lazy/"
+    local snip_dir = lazydir .. "/friendly-snippets"
+    require("luasnip/loaders/from_vscode").load { paths = { snip_dir } }
+    vim.cmd [[
+      imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
+      inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
+      snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
+      snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
+    ]]
+  end
 end
 
 return M

@@ -15,6 +15,7 @@ local env = {
   fzf_lua = false,
   treesitter_textobj = false,
   semantic_token = false,
+  luasnip = false,
 }
 
 M.setup = function()
