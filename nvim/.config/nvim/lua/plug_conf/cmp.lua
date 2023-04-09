@@ -1,6 +1,6 @@
 local M = {}
 
-M.config = function()
+M.config = function(snip_dir)
   local cmp = require "cmp"
   local tool = require "utils.helper"
   vim.o.completeopt = "menu,menuone,noselect"
@@ -72,9 +72,7 @@ M.config = function()
 
   local env = require("basic.env").env
   if env.luasnip then
-    local lazydir = vim.fn.stdpath "data" .. "/lazy/"
-    local snip_dir = lazydir .. "/friendly-snippets"
-    require("luasnip/loaders/from_vscode").load { paths = { snip_dir } }
+    require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_dir } }
     vim.cmd [[
       imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
       inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>

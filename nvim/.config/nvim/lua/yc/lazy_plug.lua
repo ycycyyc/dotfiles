@@ -143,7 +143,10 @@ local plugins = {
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
-    config = require("plug_conf.cmp").config,
+    config = function()
+      local snip_dir = vim.fs.dirname(lazypath) .. "/friendly-snippets"
+      require("plug_conf.cmp").config(snip_dir)
+    end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lua",
