@@ -86,11 +86,11 @@ M.config = function()
   map("n", keys.search_global, ":Rg ")
   map("n", keys.search_git_grep, ":GitGrep ")
 
-  local register_fts = require("yc.settings").register_fts
-  register_fts("go", function()
+  local register_fts_cb = require("yc.settings").register_fts_cb
+  register_fts_cb("go", function()
     bmap("n", keys.search_global, ":Rggo ")
   end)
-  register_fts({ "h", "cpp", "hpp", "c" }, function()
+  register_fts_cb({ "h", "cpp", "hpp", "c" }, function()
     bmap("n", keys.search_global, ":Rgcpp ")
   end)
 

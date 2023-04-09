@@ -4,40 +4,39 @@ local au_group = vim.api.nvim_create_augroup
 local au_cmd = vim.api.nvim_create_autocmd
 
 local M = {
-  fts = {},
+  ft_cbs = {},
 }
 
-M.register_fts = function(fts, cb)
+M.register_fts_cb = function(fts, callback)
   if type(fts) == "string" then
     fts = { fts }
   end
 
-  local rft = function(ft)
-    if M.fts[ft] == nil then
-      M.fts[ft] = {}
+  local register_ft_cb = function(ft)
+    if M.ft_cbs[ft] == nil then
+      M.ft_cbs[ft] = {}
     end
-    table.insert(M.fts[ft], cb)
+    table.insert(M.ft_cbs[ft], callback)
 
     local filetype = vim.api.nvim_buf_get_option(0, "filetype")
     if filetype == ft then
-      cb()
+      callback()
     end
   end
 
   for _, ft in ipairs(fts) do
-    rft(ft)
+    register_ft_cb(ft)
   end
 
   -- refresh
   local file_grp = au_group("setting_ft", { clear = true })
 
-  for ft, _ in pairs(M.fts) do
+  for ft, _ in pairs(M.ft_cbs) do
     au_cmd("FileType", {
       pattern = { ft },
       callback = function()
-        local cbs = M.fts[ft]
-        for _, cbi in ipairs(cbs) do
-          cbi()
+        for _, cb in ipairs(M.ft_cbs[ft]) do
+          cb()
         end
       end,
       group = file_grp,
@@ -59,14 +58,14 @@ M.setup = function()
   local helper = require "utils.helper"
   -- local bmap = helper.build_keymap { noremap = true, buffer = true }
 
-  M.register_fts("lua", function()
+  M.register_fts_cb("lua", function()
     vim.opt.tabstop = 2
     vim.opt.softtabstop = 2
     vim.opt.sw = 2
     vim.opt.expandtab = true -- 在插入模式下，会把按 Tab 键所插入的 tab 字符替换为合适数目的空格。如果确实要插入 tab 字符，需要按 CTRL-V 键，再按 Tab 键
   end)
 
-  M.register_fts("qf", function()
+  M.register_fts_cb("qf", function()
     vim.cmd [[wincmd J]]
   end)
 
