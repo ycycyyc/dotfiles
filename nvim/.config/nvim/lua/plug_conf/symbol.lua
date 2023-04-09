@@ -69,7 +69,6 @@ M.config = function()
   local keys = require "basic.keys"
   map({ "n", "v" }, keys.toggle_symbol, function()
     require("symbols-outline").toggle_outline()
-    -- require'plug_conf.t_win'.refresh_theme()
   end)
 end
 

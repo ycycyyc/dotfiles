@@ -56,7 +56,7 @@ end
 M.key_on_attach = function(conf)
   return function(client, bufnr)
     local opts = { noremap = true, silent = true, buffer = bufnr }
-    local map = helper.build_keymap(opts)
+    local bmap = helper.build_keymap(opts)
 
     local kms = {
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
@@ -88,7 +88,7 @@ M.key_on_attach = function(conf)
 
     for key, action in pairs(kms) do
       if action ~= nil then
-        map(action[2], key, action[1])
+        bmap(action[2], key, action[1])
       end
     end
 

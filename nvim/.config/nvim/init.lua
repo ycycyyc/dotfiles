@@ -1,1 +1,1 @@
-require "yc".setup()
+require("yc").setup()
