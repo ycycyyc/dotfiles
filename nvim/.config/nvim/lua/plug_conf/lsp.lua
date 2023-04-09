@@ -38,6 +38,7 @@ M.load_lsp_config = function()
           function()
             if vim.fn.executable "stylua" == 1 then
               require("stylua").format()
+              vim.cmd "silent! write"
             end
           end,
           "n",
