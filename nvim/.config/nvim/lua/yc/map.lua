@@ -35,7 +35,6 @@ M.setup = function()
   map("n", "<C-Down>", "<cmd>resize -2<cr>")
   map("v", "<bs>", "<esc>")
 
-  -- map("i", "<c-e>", "<esc>A")
   map("i", "<c-e>", helper.i_move_to_end)
 
   map("n", keys.jump_to_qf, helper.try_jumpto_qf_window)

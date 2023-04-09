@@ -5,10 +5,10 @@ local env = require "basic.env"
 local helper = require "utils.helper"
 local api = vim.api
 
-M.attach_cbs = {}
+M.lsp_client_cbs = {}
 
-M.register_attach_cb = function(cb)
-  table.insert(M.attach_cbs, cb)
+M.register_lsp_client_cb = function(cb)
+  table.insert(M.lsp_client_cbs, cb)
 end
 
 M.range_format = function(pos)
@@ -82,7 +82,7 @@ M.key_on_attach = function(conf)
       conf.client_cb(client, bufnr, kms)
     end
 
-    for _, cb in ipairs(M.attach_cbs) do
+    for _, cb in ipairs(M.lsp_client_cbs) do
       cb(client, bufnr, kms)
     end
 
@@ -128,7 +128,6 @@ end
 function M.go_to_cpp() -- not used
   local cur = api.nvim_buf_get_name(0)
   local res = string.gsub(cur, ".h$", ".cpp")
-  -- local res = cur
 
   if res == cur then
     print(cur .. " is not a .h style file")

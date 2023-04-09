@@ -124,7 +124,7 @@ M.config = function()
     }
   end
 
-  require("utils.lsp").register_attach_cb(cb)
+  require("utils.lsp").register_lsp_client_cb(cb)
 end
 
 return M

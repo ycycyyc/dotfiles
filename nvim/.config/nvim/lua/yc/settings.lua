@@ -1,5 +1,3 @@
--- local keys = require "basic.keys"
-
 local au_group = vim.api.nvim_create_augroup
 local au_cmd = vim.api.nvim_create_autocmd
 
@@ -45,7 +43,6 @@ M.register_fts_cb = function(fts, callback)
 end
 
 M.setup = function()
-  -- Highlight on yank
   local yank_grp = au_group("YankHighlight", { clear = true })
   au_cmd("TextYankPost", {
     callback = function()
@@ -54,9 +51,7 @@ M.setup = function()
     group = yank_grp,
   })
 
-  -- file type  group
   local helper = require "utils.helper"
-  -- local bmap = helper.build_keymap { noremap = true, buffer = true }
 
   M.register_fts_cb("lua", function()
     vim.opt.tabstop = 2
