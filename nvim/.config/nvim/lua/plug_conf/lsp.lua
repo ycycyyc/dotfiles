@@ -140,7 +140,7 @@ M.load_lsp_config = function()
         kms[keys.lsp_range_format_cpp] = {
           function()
             local pos = helper.get_visual_selection()
-            M.range_format(pos)
+            require("utils.lsp").range_format(pos)
           end,
           "v",
         }
