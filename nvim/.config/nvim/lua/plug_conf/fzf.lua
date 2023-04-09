@@ -109,6 +109,15 @@ M.config = function()
     vim.fn["fzf#vim#grep"](cmd, 1, preview, args["bang"])
   end)
 
+  local register_fts = require("yc.settings").register_fts
+  local bmap = helper.build_keymap { noremap = true, buffer = true }
+  register_fts("go", function()
+    bmap("n", keys.search_global, ":Rggo ")
+  end)
+  register_fts({ "h", "cpp", "hpp", "c" }, function()
+    bmap("n", keys.search_global, ":Rgcpp ")
+  end)
+
   vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
 
   -- " 让输入上方，搜索列表在下方

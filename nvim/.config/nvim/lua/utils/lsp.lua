@@ -1,6 +1,7 @@
 local M = {}
 
 local keys = require "basic.keys"
+local env = require "basic.env"
 local helper = require "utils.helper"
 local api = vim.api
 
@@ -54,57 +55,44 @@ end
 
 M.key_on_attach = function(conf)
   return function(client, bufnr)
-    if vim.fn.has "nvim-0.9" == 1 then -- disable semantic
-      client.server_capabilities.semanticTokensProvider = nil
-    end
-    local filetype = vim.api.nvim_buf_get_option(0, "filetype")
     local opts = { noremap = true, silent = true, buffer = bufnr }
     local map = helper.build_keymap(opts)
 
-    map("n", keys.lsp_goto_declaration, vim.lsp.buf.declaration)
-    map("n", keys.lsp_goto_definition, vim.lsp.buf.definition)
-    map("n", keys.lsp_goto_references, vim.lsp.buf.references)
-    map("n", keys.lsp_goto_type_definition, vim.lsp.buf.type_definition)
-    if filetype ~= "lua" then
-      map("n", keys.lsp_hover, vim.lsp.buf.hover)
-    end
-    map("n", keys.lsp_impl, vim.lsp.buf.implementation)
-    map("n", keys.lsp_rename, vim.lsp.buf.rename)
-    map("i", keys.lsp_signature_help, vim.lsp.buf.signature_help)
+    local kms = {
+      [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
+      [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
+      [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
+      [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition, "n" },
+      [keys.lsp_hover] = { vim.lsp.buf.hover, "n" },
+      [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
+      [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
+      [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
+      [keys.lsp_format] = { M.format, "n" },
+      [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
+      [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
+      [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
+      [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
+    }
 
-    if conf and conf.diable_format then
-      map("v", keys.lsp_range_format_cpp, function()
-        local pos = helper.get_visual_selection()
-        M.range_format(pos)
-      end)
-    elseif filetype ~= "lua" then
-      map("n", keys.lsp_format, M.format)
-    end
-
-    map("n", keys.lsp_code_action, vim.lsp.buf.code_action)
-    if conf and conf.rust == true then
-      if conf.rt then
-        local rt = conf.rt
-        map("n", keys.lsp_hover, rt.hover_actions.hover_actions)
-        map("n", keys.lsp_code_action, rt.code_action_group.code_action_group)
-      end
+    if env.use_semantic_token() == false and vim.fn.has "nvim-0.9" == 1 then -- disable semantic
+      client.server_capabilities.semanticTokensProvider = nil
     end
 
-    map("n", keys.lsp_err_goto_prev, vim.diagnostic.goto_prev)
-    map("n", keys.lsp_err_goto_next, vim.diagnostic.goto_next)
-
-    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
-    -- map("n", keys.lsp_workspace_symbol, vim.lsp.buf.workspace_symbol)
-    -- map("n", "<leader>pa", vim.lsp.buf.add_workspace_folder)
-    -- map("n", "<leader>pr", vim.lsp.buf.remove_workspace_folder)
-    map("n", keys.lsp_incoming_calls, vim.lsp.buf.incoming_calls)
+    if conf and conf.client_cb and type(conf.client_cb) == "function" then
+      conf.client_cb(client, bufnr, kms)
+    end
 
     for _, cb in ipairs(M.attach_cbs) do
-      if cb ~= nil and type(cb) == "function" then
-        cb()
+      cb(client, bufnr, kms)
+    end
+
+    for key, action in pairs(kms) do
+      if action ~= nil then
+        map(action[2], key, action[1])
       end
     end
+
+    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   end
 end
 

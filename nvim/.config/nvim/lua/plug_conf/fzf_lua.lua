@@ -1,15 +1,14 @@
 local M = {}
 
-local helper = require "utils.helper"
-local map = helper.build_keymap { noremap = true }
-local bmap = helper.build_keymap { noremap = true, buffer = true }
-local user_cmd_bind = vim.api.nvim_create_user_command
-local user_cmd = function(name, cb)
-  local opt = { nargs = "*", bang = true }
-  user_cmd_bind(name, cb, opt)
-end
-
 M.config = function()
+  local helper = require "utils.helper"
+  local map = helper.build_keymap { noremap = true }
+  local bmap = helper.build_keymap { noremap = true, buffer = true }
+  local user_cmd_bind = vim.api.nvim_create_user_command
+  local user_cmd = function(name, cb)
+    local opt = { nargs = "*", bang = true }
+    user_cmd_bind(name, cb, opt)
+  end
   local keys = require "basic.keys"
 
   -- " 让输入上方，搜索列表在下方
@@ -52,9 +51,9 @@ M.config = function()
     },
   }
 
-  map("n", keys.search_find_files, ":FzfLua files<cr>")
-  map("n", keys.search_buffer, ":FzfLua grep_curbuf<cr>")
-  map("n", keys.switch_buffers, ":FzfLua buffers<cr>")
+  map("n", keys.search_find_files, "<cmd>FzfLua files<cr>")
+  map("n", keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>")
+  map("n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>")
 
   local build_rg_func = function(opt)
     return function(args)
@@ -87,19 +86,42 @@ M.config = function()
   map("n", keys.search_global, ":Rg ")
   map("n", keys.search_git_grep, ":GitGrep ")
 
-  local cb = function()
-    bmap("n", keys.lsp_goto_definition, function()
-      require("fzf-lua").lsp_definitions { jump_to_single_result = true }
-    end)
-    bmap("n", keys.lsp_goto_references, function()
-      require("fzf-lua").lsp_references { jump_to_single_result = true }
-    end)
-    bmap("n", keys.lsp_impl, function()
-      require("fzf-lua").lsp_implementations { jump_to_single_result = true }
-    end)
-    bmap("n", keys.lsp_code_action, function()
-      require("fzf-lua").lsp_code_actions()
-    end)
+  local register_fts = require("yc.settings").register_fts
+  register_fts("go", function()
+    bmap("n", keys.search_global, ":Rggo ")
+  end)
+  register_fts({ "h", "cpp", "hpp", "c" }, function()
+    bmap("n", keys.search_global, ":Rgcpp ")
+  end)
+
+  local cb = function(_, _, kms)
+    kms[keys.lsp_goto_definition] = {
+      function()
+        require("fzf-lua").lsp_definitions { jump_to_single_result = true }
+      end,
+      "n",
+    }
+
+    kms[keys.lsp_goto_references] = {
+      function()
+        require("fzf-lua").lsp_references { jump_to_single_result = true }
+      end,
+      "n",
+    }
+
+    kms[keys.lsp_impl] = {
+      function()
+        require("fzf-lua").lsp_implementations { jump_to_single_result = true }
+      end,
+      "n",
+    }
+
+    kms[keys.lsp_code_action] = {
+      function()
+        require("fzf-lua").lsp_code_actions {}
+      end,
+      "n",
+    }
   end
 
   require("utils.lsp").register_attach_cb(cb)

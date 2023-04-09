@@ -24,7 +24,6 @@ end
 local function default_theme()
   -- lua vim.pretty_print(vim.treesitter.get_captures_at_cursor(0))
   local red = { n = 204, gui = "#ff5f87" }
-  -- local dark_red = { n = 196, gui = "#ff0000" }
   local blue = { n = 39, gui = "#00afff" }
   local black = { n = 235, gui = "#262626" }
   local dark_yellow = { n = 173, gui = "#d7875f" }
@@ -117,9 +116,21 @@ local function default_theme()
 
   -- treesitter
   colors["@variable"] = { fg = white }
-  colors["@parameter"] = { fg = white }
+  colors["@parameter"] = { fg = white, bold = true }
   colors["@punctuation.bracket"] = { fg = white }
   colors["@punctuation.delimiter"] = { fg = white }
+  colors["@constant.builtin"] = { fg = dark_yellow }
+  colors["@type.qualifier"] = { fg = purple }
+
+  if env.use_semantic_token() == true then
+    colors["@lsp.type.variable"] = { fg = white }
+    colors["@lsp.type.parameter"] = { fg = white, bold = true }
+    colors["@lsp.type.namespace"] = { fg = red }
+    colors["@lsp.type.namespace.cpp"] = { fg = red, bold = true }
+    colors["@lsp.type.macro.cpp"] = { fg = blue }
+    colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
+    colors["@lsp.mod.readonly.go"] = { fg = cyan }
+  end
 
   for name, opt in pairs(colors) do
     local o = convert(opt)

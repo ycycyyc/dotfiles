@@ -12,6 +12,7 @@ local M = {
   line = "", -- "" or "lualine"
   fzf_lua = "off", -- on or off
   treesitter_textobj = "off", -- on or off
+  semantic_token = "off",
 }
 -- export NVIM_CONF="neogit=off,clangd_bin=clangd,theme=default,lua_ls_root=dir,lua_ls_bin=path"
 --
@@ -51,6 +52,18 @@ M.load_fzf_lua = function()
     return true
   end
   return false
+end
+
+M.use_semantic_token = function()
+  if vim.fn.has "nvim-0.9" == 0 then
+    return false
+  end
+
+  if M.semantic_token ~= "on" then
+    return false
+  end
+
+  return true
 end
 
 return M

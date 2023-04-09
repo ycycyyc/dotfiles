@@ -2,6 +2,8 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 local key_on_attach = require("utils.lsp").key_on_attach
 local env = require "basic.env"
+local keys = require "basic.keys"
+local helper = require "utils.helper"
 
 local M = {}
 
@@ -30,7 +32,18 @@ M.load_lsp_config = function()
   table.insert(runtime_path, "lua/?/init.lua")
 
   lspconfig.lua_ls.setup {
-    on_attach = key_on_attach(),
+    on_attach = key_on_attach {
+      client_cb = function(_, _, kms)
+        kms[keys.lsp_format] = {
+          function()
+            if vim.fn.executable "stylua" == 1 then
+              require("stylua").format()
+            end
+          end,
+          "n",
+        }
+      end,
+    },
     cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
     settings = {
       Lua = {
@@ -54,11 +67,30 @@ M.load_lsp_config = function()
 
   -- 2. gopls
   lspconfig.gopls.setup {
-    on_attach = key_on_attach(),
+    on_attach = key_on_attach {
+      client_cb = function(client, _, _)
+        if
+          env.use_semantic_token() == true
+          and client.name == "gopls"
+          and not client.server_capabilities.semanticTokensProvider
+        then
+          local semantic = client.config.capabilities.textDocument.semanticTokens
+          client.server_capabilities.semanticTokensProvider = {
+            full = true,
+            legend = {
+              tokenModifiers = semantic.tokenModifiers,
+              tokenTypes = semantic.tokenTypes,
+            },
+            range = true,
+          }
+        end
+      end,
+    },
     capabilities = capabilities,
     cmd = { "gopls", "serve" },
     settings = {
       gopls = {
+        semanticTokens = true,
         experimentalPostfixCompletions = true,
         analyses = {
           unusedparams = true,
@@ -102,7 +134,24 @@ M.load_lsp_config = function()
   local clangd_bin = env.clangd_bin
 
   lspconfig.clangd.setup {
-    on_attach = key_on_attach { diable_format = true },
+    on_attach = key_on_attach {
+      client_cb = function(_, _, kms)
+        kms[keys.lsp_format] = nil
+        kms[keys.lsp_range_format_cpp] = {
+          function()
+            local pos = helper.get_visual_selection()
+            M.range_format(pos)
+          end,
+          "v",
+        }
+        kms[keys.switch_source_header] = {
+          function()
+            switch_source_header_splitcmd(0, "edit")
+          end,
+          "n",
+        }
+      end,
+    },
     cmd = {
       clangd_bin,
       "--background-index",
@@ -129,12 +178,6 @@ M.load_lsp_config = function()
     },
     filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
     commands = {
-      ClangdSwitchSourceHeader = {
-        function()
-          switch_source_header_splitcmd(0, "edit")
-        end,
-        description = "Open source/header in current buffer",
-      },
       Format = {
         function()
           require("utils.lsp").format()
@@ -190,7 +233,16 @@ M.rust_config = function()
   --     }
   -- })
   local rt = require "rust-tools"
-  rt.setup { server = { on_attach = key_on_attach { rust = true, rt = rt } } }
+  rt.setup {
+    server = {
+      on_attach = key_on_attach {
+        client_cb = function(_, _, kms)
+          kms[keys.lsp_hover] = { rt.hover_actions.hover_actions, "n" }
+          kms[keys.lsp_code_action] = { rt.code_action_group.code_action_group, "n" }
+        end,
+      },
+    },
+  }
 end
 
 return M
