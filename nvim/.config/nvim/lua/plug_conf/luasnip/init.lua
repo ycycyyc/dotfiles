@@ -23,7 +23,9 @@ local conds = require "luasnip.extras.conditions"
 local conds_expand = require "luasnip.extras.conditions.expand"
 
 vim.keymap.set({ "i", "s" }, "<c-j>", function()
-  require("luasnip").jump(1)
+  if require("luasnip").expand_or_jumpable() then
+    require("luasnip").expand_or_jump()
+  end
 end, { silent = true })
 
 vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
@@ -34,6 +36,16 @@ vim.cmd [[
   imap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
   smap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
 ]]
+
+local contains_n_word = function(n)
+  return function(line_to_cursor)
+    local text = vim.fn.split(line_to_cursor, " ")
+    text = vim.tbl_filter(function(el)
+      return el ~= ""
+    end, text)
+    return #text == n
+  end
+end
 
 local go_snippets = {
   s("json", { t '`json:"', i(0, "text"), t '"`' }),
@@ -49,18 +61,32 @@ local go_snippets = {
       return vim.fn.matchstr(line_to_cursor, "defer ") ~= ""
     end,
   }),
-  -- s("infof", { t 'Infof("', i(1, "string"), t ':%v", ', i(2, "val"), t ")" }, {
-  --   show_condition = function(line_to_cursor)
-  --     return vim.fn.matchstr(line_to_cursor, "log.") ~= ""
-  --   end,
-  -- }),
-  -- s("errorf", { t 'Errorf("', i(1, "msg"), t ' :%v", ', i(2, "err"), t ")" }, {
-  --   show_condition = function(line_to_cursor)
-  --     return vim.fn.matchstr(line_to_cursor, "fmt.") ~= ""
-  --   end,
-  -- }),
+  s("infof", { t 'Infof("', i(1, "msg"), t ':%v", ', i(2, "val"), t ")" }, {
+    show_condition = function(line_to_cursor)
+      return vim.fn.matchstr(line_to_cursor, "log.") ~= ""
+    end,
+  }),
+  s("debugf", { t 'Debugf("', i(1, "msg"), t ':%v", ', i(2, "val"), t ")" }, {
+    show_condition = function(line_to_cursor)
+      return vim.fn.matchstr(line_to_cursor, "log.") ~= ""
+    end,
+  }),
+  s("errorf", { t 'Errorf("', i(1, "msg"), t ' :%v", ', i(2, "err"), t ")" }, {
+    show_condition = function(line_to_cursor)
+      return vim.fn.matchstr(line_to_cursor, "fmt.") ~= "" or vim.fn.matchstr(line_to_cursor, "log.") ~= ""
+    end,
+  }),
+  s("sprintf", { t 'Sprintf("', i(1, "msg"), t ' %v", ', i(2, "msg"), t ")" }, {
+    show_condition = function(line_to_cursor)
+      return vim.fn.matchstr(line_to_cursor, "fmt.") ~= ""
+    end,
+  }),
   s("map", { t "map[", i(1, "type"), t "]", i(0) }),
-  s("pkgm", fmt("package main\n\nfunc main() {}\n\t {} \n{}", { t "{", i(0), t "}" })),
+  s("pkgm", fmt("package main\n\nfunc main() {{\n\t {} \n}}", { i(0) }), {
+    -- show_condition = function(line)
+    --   return line:len() <= 4
+    -- end,
+  }),
   s("chan", fmt("chan {}", { i(0, "type") })),
   s("switch", fmt("switch {} {}\ncase {}:\n\t{}\n{}", { i(1, "exp"), t "{", i(2, "cond"), i(0), t "}" })),
   s("case", fmt("case {}:\n\t{}", { i(1, "cond"), i(0) })),
@@ -138,33 +164,22 @@ local go_snippets = {
     )
   ),
   s(
-    "forrange",
+    "err",
     fmt(
       [[
-      for <>, <> := range <> {
-          <>
+      <> != nil {
+          return <><>
       }
       ]],
-      { i(1, "_"), i(2, "val"), i(3, "obj"), i(0) },
-      { delimiters = "<>" }
-    )
-  ),
-  s(
-    "iferr",
-    fmt(
-      [[
-      if <> != nil {
-          return <>
+      { i(1, "err"), c(2, { i(nil, "nil, "), t "" }), rep(1) },
+      {
+        delimiters = "<>",
+        show_condition = function(line_to_cursor)
+          return vim.fn.matchstr(line_to_cursor, "if") ~= ""
+        end,
       }
-      ]],
-      { i(1, "err"), i(2, "nil, err") },
-      { delimiters = "<>" }
     )
   ),
-
-  s("infof", fmt([[ log.Infof("<>") ]], { i(1, "msg") }, { delimiters = "<>" })),
-  s("debugf", fmt([[ log.Debugf("<>") ]], { i(1, "msg") }, { delimiters = "<>" })),
-  s("errorf", fmt([[ fmt.Errorf("<>"<>) ]], { i(1, "msg"), c(2, { t ", err", t "" }) }, { delimiters = "<>" })),
 }
 
 ls.add_snippets("go", go_snippets)

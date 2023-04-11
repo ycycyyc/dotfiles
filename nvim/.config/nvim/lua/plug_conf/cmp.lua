@@ -3,6 +3,7 @@ local M = {}
 M.config = function(snip_dir)
   local cmp = require "cmp"
   local tool = require "utils.helper"
+  local env = require("basic.env").env
   vim.o.completeopt = "menu,menuone,noselect"
 
   cmp.setup {
@@ -61,16 +62,15 @@ M.config = function(snip_dir)
     },
 
     sources = cmp.config.sources({
-      { name = "nvim_lua" },
-      { name = "nvim_lsp" },
-      { name = "luasnip" }, -- For snip users.
+      { name = "nvim_lua", max_item_count = 10, keyword_length = 2 },
+      { name = "nvim_lsp", max_item_count = 10, keyword_length = 2 },
+      { name = "luasnip", max_item_count = 10, keyword_length = 2 }, -- For snip users.
     }, { { name = "buffer" } }),
   }
 
   local cmp_autopairs = require "nvim-autopairs.completion.cmp"
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
 
-  local env = require("basic.env").env
   if env.luasnip then
     require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_dir } }
     require "plug_conf.luasnip"
