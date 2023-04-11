@@ -73,12 +73,15 @@ M.config = function(snip_dir)
   local env = require("basic.env").env
   if env.luasnip then
     require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_dir } }
-    vim.cmd [[
-      imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
-      inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
-      snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
-      snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
-    ]]
+
+    vim.keymap.set({ "i", "s" }, "<c-j>", function()
+      require("luasnip").jump(1)
+    end, { silent = true })
+
+    vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
+      require("luasnip").jump(-1)
+    end, { silent = true })
+
     require "plug_conf.luasnip"
   end
 end

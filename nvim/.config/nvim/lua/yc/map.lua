@@ -10,7 +10,7 @@ M.setup = function()
   map("n", "<Leader>w", "<cmd>w<cr>")
   map("n", "<Leader>q", "<cmd>q<cr>")
   map("n", "<Leader>m", "`")
-  map("i", "jk", "<ESC>")
+  map({ "i", "s" }, "jk", "<ESC>")
   map("i", "<c-f>", "<right>")
 
   map("n", "<Leader>[", "<cmd>bp<cr>")

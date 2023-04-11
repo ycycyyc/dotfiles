@@ -11,6 +11,7 @@ local r = ls.restore_node
 local events = require "luasnip.util.events"
 local ai = require "luasnip.nodes.absolute_indexer"
 local extras = require "luasnip.extras"
+local rep = require("luasnip.extras").rep
 
 local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
@@ -25,7 +26,7 @@ local function copy(args)
   return args[1]
 end
 
-local snippets = {
+local go_snippets = {
   s("json", { t '`json:"', i(0, "text"), t '"`' }),
   s("bson", { t '`bson:"', i(0, "text"), t '"`' }),
   s("yaml", { t '`yaml:"', i(0, "text"), t '"`' }),
@@ -108,10 +109,10 @@ local snippets = {
       {
         i(1, "i"),
         i(2, "0"),
-        f(copy, 1),
+        rep(1),
         t "<",
         i(3, "count"),
-        f(copy, 1),
+        rep(1),
         i(4, "++"),
         i(5),
       },
@@ -130,9 +131,21 @@ local snippets = {
       { delimiters = "<>" }
     )
   ),
+  s(
+    "iferr",
+    fmt(
+      [[
+      if <> != nil {
+          return <>
+      }
+      ]],
+      { i(1, "err"), i(2, "nil, err") },
+      { delimiters = "<>" }
+    )
+  ),
 }
 
-ls.add_snippets("go", snippets)
+ls.add_snippets("go", go_snippets)
 
 local all_snippets = {
   s("todo", fmt("TODO(yc): {}", { i(0, "text") })),
