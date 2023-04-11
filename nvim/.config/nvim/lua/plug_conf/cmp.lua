@@ -73,15 +73,6 @@ M.config = function(snip_dir)
   local env = require("basic.env").env
   if env.luasnip then
     require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_dir } }
-
-    vim.keymap.set({ "i", "s" }, "<c-j>", function()
-      require("luasnip").jump(1)
-    end, { silent = true })
-
-    vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
-      require("luasnip").jump(-1)
-    end, { silent = true })
-
     require "plug_conf.luasnip"
   end
 end

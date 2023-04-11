@@ -22,15 +22,33 @@ local postfix = require("luasnip.extras.postfix").postfix
 local conds = require "luasnip.extras.conditions"
 local conds_expand = require "luasnip.extras.conditions.expand"
 
-local function copy(args)
-  return args[1]
-end
+vim.keymap.set({ "i", "s" }, "<c-j>", function()
+  require("luasnip").jump(1)
+end, { silent = true })
+
+vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
+  require("luasnip").jump(-1)
+end, { silent = true })
+
+vim.cmd [[
+  imap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
+  smap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
+]]
 
 local go_snippets = {
   s("json", { t '`json:"', i(0, "text"), t '"`' }),
   s("bson", { t '`bson:"', i(0, "text"), t '"`' }),
   s("yaml", { t '`yaml:"', i(0, "text"), t '"`' }),
-  s("wg", { t "wg sync.WaitGroup" }),
+  s("wg", { t "wg sync.WaitGroup" }, {
+    show_condition = function(line_to_cursor)
+      return vim.fn.matchstr(line_to_cursor, "var") ~= ""
+    end,
+  }),
+  s("wg", { t "wg.Done()" }, {
+    show_condition = function(line_to_cursor)
+      return vim.fn.matchstr(line_to_cursor, "defer ") ~= ""
+    end,
+  }),
   -- s("infof", { t 'Infof("', i(1, "string"), t ':%v", ', i(2, "val"), t ")" }, {
   --   show_condition = function(line_to_cursor)
   --     return vim.fn.matchstr(line_to_cursor, "log.") ~= ""
@@ -143,9 +161,20 @@ local go_snippets = {
       { delimiters = "<>" }
     )
   ),
+
+  s("infof", fmt([[ log.Infof("<>") ]], { i(1, "msg") }, { delimiters = "<>" })),
+  s("debugf", fmt([[ log.Debugf("<>") ]], { i(1, "msg") }, { delimiters = "<>" })),
+  s("errorf", fmt([[ fmt.Errorf("<>"<>) ]], { i(1, "msg"), c(2, { t ", err", t "" }) }, { delimiters = "<>" })),
 }
 
 ls.add_snippets("go", go_snippets)
+
+local lua_snippets = {
+  s("require", fmt([[ require("<>") ]], { i(1, "name") }, { delimiters = "<>" })),
+  s("keymap", fmt([[ vim.keymap.set(<>, <>, <>)]], { i(1, '"n"'), i(2, "action"), i(3, "{}") }, { delimiters = "<>" })),
+}
+
+ls.add_snippets("lua", lua_snippets)
 
 local all_snippets = {
   s("todo", fmt("TODO(yc): {}", { i(0, "text") })),
