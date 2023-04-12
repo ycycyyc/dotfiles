@@ -23,9 +23,7 @@ local conds = require "luasnip.extras.conditions"
 local conds_expand = require "luasnip.extras.conditions.expand"
 
 vim.keymap.set({ "i", "s" }, "<c-j>", function()
-  if require("luasnip").expand_or_jumpable() then
-    require("luasnip").expand_or_jump()
-  end
+  require("luasnip").jump(1)
 end, { silent = true })
 
 vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
@@ -174,11 +172,37 @@ local go_snippets = {
       { i(1, "err"), c(2, { i(nil, "nil, "), t "" }), rep(1) },
       {
         delimiters = "<>",
-        show_condition = function(line_to_cursor)
-          return vim.fn.matchstr(line_to_cursor, "if") ~= ""
-        end,
       }
-    )
+    ),
+    {
+      show_condition = function(line_to_cursor)
+        return vim.fn.matchstr(line_to_cursor, "if") ~= ""
+      end,
+    }
+  ),
+  s(
+    "sort",
+    fmt(
+      [[
+    type {SortBy0} []{Type}
+    func ({a0} {SortBy}) Len() int          {{ return len({a}) }}
+    func ({a} {SortBy}) Swap(i, j int)      {{ {a}[i], {a}[j] = {a}[j], {a}[i] }}
+    func ({a} {SortBy}) Less(i, j int) bool {{ return {a}[i] < {a}[j] }}
+      ]],
+      {
+        SortBy0 = i(1, "Sortby"),
+        SortBy = rep(1),
+        Type = i(2, "Type"),
+        a0 = i(3, "a"),
+        a = rep(3),
+      }
+    ),
+    {
+      condition = function(line, trig)
+        vim.print("line:" .. line .. " trig:" .. trig)
+        return true
+      end,
+    }
   ),
 }
 
