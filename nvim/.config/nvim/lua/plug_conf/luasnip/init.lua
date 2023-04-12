@@ -204,6 +204,55 @@ local go_snippets = {
       end,
     }
   ),
+  s(
+    "func",
+    fmt(
+      [[
+  func({para}) {{
+      {code}
+  }}({input})
+  ]],
+      {
+        para = i(1, ""),
+        input = i(2, ""),
+        code = i(3),
+      }
+    ),
+    {
+      show_condition = function(line_to_cursor)
+        return vim.fn.matchstr(line_to_cursor, "go") ~= ""
+      end,
+    }
+  ),
+  s(
+    "import",
+    fmt(
+      [[
+  import (
+      "{}"
+  )
+  ]],
+      { i(1, "package") }
+    )
+  ),
+  s(
+    "funcmethod",
+    fmt(
+      [[
+  func ({receiver} {type}) {method}({para}) {return_type} {{
+      {code}
+  }}
+  ]],
+      {
+        receiver = i(1, "a"),
+        type = i(2, "type"),
+        method = i(3, "method"),
+        para = i(4),
+        return_type = i(5),
+        code = i(0),
+      }
+    )
+  ),
 }
 
 ls.add_snippets("go", go_snippets)

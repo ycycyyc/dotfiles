@@ -72,7 +72,7 @@ M.config = function(snip_dir)
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
 
   if env.luasnip then
-    require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_dir } }
+    -- require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_dir } }
     require "plug_conf.luasnip"
   end
 end
