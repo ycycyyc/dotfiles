@@ -233,12 +233,6 @@ local plugins = {
 
     opts = require("plug_conf.find_and_replace").opts,
   },
-
-  {
-    "max397574/better-escape.nvim",
-    event = "InsertCharPre",
-    opts = { timeout = 300 },
-  },
 }
 
 M.setup = function()
