@@ -32,3 +32,6 @@ let g:EasyMotion_keys = 'fjkoimveldwugnhsrtybc,xaFLMHNEBGzqpDJIYRAQT'
 hi EasyMotionTarget ctermfg=235 ctermbg=170 cterm=bold
 hi link EasyMotionShade cleard
 
+" better esc
+let g:better_escape_shortcut = 'jk'
+let g:better_escape_interval = 250

@@ -22,9 +22,10 @@ Plug 'gcmt/wildfire.vim'
 Plug 'schickling/vim-bufonly'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'easymotion/vim-easymotion'
+Plug 'nvim-zh/better-escape.vim'
 call plug#end()
 
-inoremap jk <ESC>
+"inoremap jk <ESC>
 map <space> <leader>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
