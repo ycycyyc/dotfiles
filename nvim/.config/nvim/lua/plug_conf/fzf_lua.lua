@@ -53,14 +53,24 @@ M.config = function()
 
   map("n", keys.search_find_files, "<cmd>FzfLua files<cr>")
   map("n", keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>")
+  map("n", keys.search_cur_word_cur_buf, function()
+    require("fzf-lua").grep_curbuf {
+      search = vim.fn.expand "<cword>",
+    }
+  end)
+
   map("n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>")
+
+  local rg_cmd = function(opt)
+    return "rg --hidden --glob=!.git/  --column --line-number --no-heading "
+      .. opt
+      .. " --color=always --smart-case -- "
+  end
 
   local build_rg_func = function(opt)
     return function(args)
       require("fzf-lua").grep {
-        cmd = "rg --hidden --glob=!.git/  --column --line-number --no-heading "
-          .. opt
-          .. " --color=always --smart-case -- ",
+        cmd = rg_cmd(opt),
         search = args["args"],
       }
     end
@@ -85,6 +95,7 @@ M.config = function()
 
   map("n", keys.search_global, ":Rg ")
   map("n", keys.search_git_grep, ":GitGrep ")
+  map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
 
   local register_fts_cb = require("yc.settings").register_fts_cb
   register_fts_cb("go", function()

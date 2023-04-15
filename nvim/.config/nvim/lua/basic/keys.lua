@@ -8,6 +8,8 @@ return {
   search_buffer_preview = "<leader>L",
   search_git_grep = "<leader>/",
   search_find_files = "<C-p>", -- 查文件
+  search_cur_word = "gw",
+  search_cur_word_cur_buf = "gW",
   switch_buffers = "<leader>o", -- buffers 切换
   global_find_and_replace = "<leader>R",
   buffer_find_and_replace = "<leader>S",

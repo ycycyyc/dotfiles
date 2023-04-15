@@ -7,7 +7,6 @@ local M = {}
 
 local plugins = {
   "nvim-lua/plenary.nvim",
-  -- "kyazdani42/nvim-web-devicons", // disable web icon
 
   {
     "kyazdani42/nvim-tree.lua",
@@ -27,7 +26,13 @@ local plugins = {
   {
     "windwp/nvim-autopairs",
     event = { "InsertEnter" },
-    opts = {},
+    config = function()
+      require("nvim-autopairs").setup()
+
+      -- setup cmp for autopairs
+      local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+      require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    end,
   },
 
   {
@@ -124,7 +129,7 @@ local plugins = {
 
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "CursorHold", "CursorHoldI" },
+    event = { "VeryLazy" },
     config = require("plug_conf.tree_sitter").config,
     dependencies = {
       {
@@ -143,18 +148,27 @@ local plugins = {
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
-    config = function()
-      local snip_dir = vim.fs.dirname(lazypath) .. "/friendly-snippets"
-      require("plug_conf.cmp").config(snip_dir)
-    end,
+    config = require("plug_conf.cmp").config,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-buffer",
 
-      "L3MON4D3/LuaSnip",
+      {
+        "L3MON4D3/LuaSnip",
+        config = function()
+          if env.luasnip then
+            -- vscode snippets path
+            -- local snip_path = vim.fs.dirname(lazypath) .. "/friendly-snippets"
+            -- require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_path } }
+            require "plug_conf.luasnip"
+          end
+        end,
+        dependencies = {
+          -- "ycycyyc/friendly-snippets",
+        },
+      },
       "saadparwaiz1/cmp_luasnip",
-      "ycycyyc/friendly-snippets",
     },
   },
 
@@ -219,6 +233,12 @@ local plugins = {
 
     opts = require("plug_conf.find_and_replace").opts,
   },
+
+  {
+    "max397574/better-escape.nvim",
+    event = "InsertCharPre",
+    opts = { timeout = 300 },
+  },
 }
 
 M.setup = function()
@@ -234,7 +254,39 @@ M.setup = function()
   end
 
   vim.opt.rtp:prepend(lazypath)
-  require("lazy").setup(plugins)
+  require("lazy").setup(plugins, {
+    performance = {
+      rtp = {
+        ---@type string[] list any plugins you want to disable here
+        disabled_plugins = {
+          "gzip",
+          -- "matchit",
+          -- "matchparen",
+          "netrwPlugin",
+          "tarPlugin",
+          "tohtml",
+          -- "tutor",
+          "zipPlugin",
+        },
+      },
+    },
+    ui = {
+      icons = {
+        cmd = "⌘",
+        config = "🛠",
+        event = "📅",
+        ft = "📂",
+        init = "⚙",
+        keys = "🗝",
+        plugin = "🔌",
+        runtime = "💻",
+        source = "📄",
+        start = "🚀",
+        task = "📌",
+        lazy = "💤 ",
+      },
+    },
+  })
 end
 
 return M

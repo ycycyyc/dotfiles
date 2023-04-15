@@ -80,6 +80,8 @@ M.config = function()
   map("n", keys.switch_buffers, ":Buffers<cr>")
   map("n", keys.search_toggle_rg_mode, toggle_rg_cmd_type)
   map("n", keys.search_git_grep, ":GitGrep ")
+  map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
+  map("n", keys.search_cur_word_cur_buf, ":BLines <c-r><c-w><cr>")
 
   user_cmd("Find", RgFzf)
   user_cmd("Rg", build_rg_func())

@@ -1,8 +1,6 @@
 local M = {}
 
 M.setup = function()
-  vim.cmd [[let loaded_netrwPlugin=1]]
-
   vim.opt.encoding = "UTF-8"
   vim.opt.cmdheight = 1
 

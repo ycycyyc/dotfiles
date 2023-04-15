@@ -32,6 +32,8 @@ let loaded_netrwPlugin=1
 nnoremap <c-p> :GitFiles<CR>
 nnoremap <leader>b :BLines<CR>
 nnoremap <leader>f :Rg<space>
+nnoremap gw :Rg <c-r><c-w><cr>
+nnoremap gW :BLines <c-r><c-w><cr>
 nnoremap <leader>o :Buffers<cr>
 nnoremap <leader>g :G<space>
 nnoremap <leader>l :Git blame<cr>

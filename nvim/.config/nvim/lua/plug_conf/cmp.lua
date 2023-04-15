@@ -1,18 +1,21 @@
 local M = {}
 
-M.config = function(snip_dir)
+M.config = function()
   local cmp = require "cmp"
   local tool = require "utils.helper"
-  local env = require("basic.env").env
   vim.o.completeopt = "menu,menuone,noselect"
 
+  local function has_words_before()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+  end
+
+  local luasnip = require "luasnip"
+
   cmp.setup {
-    -- preselect = 'disable',
     snippet = {
-      -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        require("luasnip").lsp_expand(args.body)
+        luasnip.lsp_expand(args.body)
       end,
     },
 
@@ -40,8 +43,10 @@ M.config = function(snip_dir)
       ["<c-n>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
+        elseif has_words_before() then
+          cmp.complete()
         else
-          fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+          fallback()
         end
       end, { "i", "s" }),
 
@@ -53,12 +58,8 @@ M.config = function(snip_dir)
         end
       end, { "i", "s" }),
 
-      ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-      ["<CR>"] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    },
-
-    experimental = {
-      ghost_text = false, -- this feature conflict to the copilot.vim's preview.
+      ["<C-y>"] = cmp.config.disable,
+      ["<CR>"] = cmp.mapping.confirm { select = true },
     },
 
     sources = cmp.config.sources({
@@ -67,14 +68,6 @@ M.config = function(snip_dir)
       { name = "luasnip", max_item_count = 10, keyword_length = 2 }, -- For snip users.
     }, { { name = "buffer" } }),
   }
-
-  local cmp_autopairs = require "nvim-autopairs.completion.cmp"
-  cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
-
-  if env.luasnip then
-    -- require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_dir } }
-    require "plug_conf.luasnip"
-  end
 end
 
 return M
