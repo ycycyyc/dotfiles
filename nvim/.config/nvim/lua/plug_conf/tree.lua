@@ -15,6 +15,7 @@ M.config = function()
       },
     },
     filters = { dotfiles = false },
+    git = { ignore = false },
 
     on_attach = function(bufnr)
       local api = require "nvim-tree.api"
@@ -32,6 +33,8 @@ M.config = function()
       vim.keymap.set("n", "y", api.fs.copy.filename, opts "Copy Name")
       vim.keymap.set("n", "<C-v>", api.node.open.vertical, opts "Open: Vertical Split")
       vim.keymap.set("n", "d", api.fs.remove, opts "Delete")
+      vim.keymap.set("n", "H", api.tree.toggle_hidden_filter, opts "Toggle Dotfiles")
+      vim.keymap.set("n", "I", api.tree.toggle_gitignore_filter, opts "Toggle Git Ignore")
     end,
   }
   --
