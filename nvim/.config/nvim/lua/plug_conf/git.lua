@@ -48,4 +48,38 @@ M.config = function()
   }
 end
 
+M.fugitive_config = function()
+  local keys = require "basic.keys"
+  vim.keymap.set("n", keys.git_blame, ":Git blame<cr>")
+
+  local function showFugitiveGit()
+    if vim.fn.FugitiveHead() ~= "" then
+      vim.cmd "G"
+      vim.cmd "wincmd L"
+    end
+  end
+
+  local function toggleFugitiveGit()
+    if vim.fn.buflisted(vim.fn.bufname "fugitive:///*/.git//$") ~= 0 then
+      local helper = require "utils.helper"
+
+      --  如果当前window为fugitiv就关闭
+      local winnums = helper.get_winnums_byft "fugitive"
+      local cur_win = vim.api.nvim_get_current_win()
+      for _, winn in ipairs(winnums) do
+        if cur_win == winn then
+          vim.cmd [[ execute ":bdelete" bufname('fugitive:///*/.git//$') ]]
+          return
+        end
+      end
+
+      require("utils.helper").try_jumpto_ft_win "fugitive"
+    else
+      showFugitiveGit()
+    end
+  end
+
+  vim.keymap.set("n", keys.git_status, toggleFugitiveGit, {})
+end
+
 return M

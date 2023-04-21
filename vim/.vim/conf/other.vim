@@ -35,3 +35,16 @@ hi link EasyMotionShade cleard
 " better esc
 " let g:better_escape_shortcut = 'jk'
 " let g:better_escape_interval = 250
+
+" fugitive
+function! ToggleGStatus()
+    if buflisted(bufname('.git/index'))
+        bd .git/index
+    else
+        G
+        wincmd L
+    endif
+endfunction
+command ToggleGStatus :call ToggleGStatus()
+nnoremap <leader>g :ToggleGStatus<CR>
+nnoremap <leader>l :Git blame<cr>

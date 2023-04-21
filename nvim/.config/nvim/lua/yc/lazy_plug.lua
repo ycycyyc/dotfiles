@@ -77,10 +77,7 @@ local plugins = {
     "tpope/vim-fugitive",
     keys = { keys.git_blame, keys.git_status },
     cmd = { "Gw" },
-    config = function()
-      vim.keymap.set("n", keys.git_blame, ":Git blame<cr>")
-      vim.keymap.set("n", keys.git_status, ":G<space>")
-    end,
+    config = require("plug_conf.git").fugitive_config,
     cond = not env.neogit,
   },
 

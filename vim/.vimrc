@@ -35,8 +35,6 @@ nnoremap <leader>f :Rg<space>
 nnoremap gw :Rg <c-r><c-w><cr>
 nnoremap gW :BLines <c-r><c-w><cr>
 nnoremap <leader>o :Buffers<cr>
-nnoremap <leader>g :G<space>
-nnoremap <leader>l :Git blame<cr>
 nnoremap <leader>/ :GitGrep<space>
 inoremap <c-e> <esc>A
 inoremap <c-a> <esc>I

@@ -44,24 +44,30 @@ function M.get_visual_selection()
   return { startp, endp }
 end
 
-function M.try_jumpto_qf_window()
+function M.get_winnums_byft(wanted)
+  local win_nums = {}
   local wins = vim.api.nvim_list_wins()
-  local qf_win
   for _, win_num in ipairs(wins) do
     local buf_num = vim.fn.winbufnr(win_num)
     local ft = vim.api.nvim_buf_get_option(buf_num, "filetype")
-    if ft == "qf" then
-      qf_win = win_num
-      vim.api.nvim_set_current_win(qf_win)
-      vim.cmd "redraw"
-      return
+    if ft == wanted then
+      table.insert(win_nums, win_num)
     end
   end
+  return win_nums
+end
 
-  if qf_win == nil then
-    print "no qf window found"
+function M.try_jumpto_ft_win(wanted)
+  local win_nums = M.get_winnums_byft(wanted)
+
+  if #win_nums == 0 then
+    print("no " .. wanted .. " window found")
     return
   end
+
+  -- jump first window
+  vim.api.nvim_set_current_win(win_nums[1])
+  vim.cmd "redraw"
 end
 
 return M

@@ -10,8 +10,7 @@ M.setup = function()
   map("n", "<Leader>w", "<cmd>w<cr>")
   map("n", "<Leader>q", "<cmd>q<cr>")
   map("n", "<Leader>m", "`")
-  map({ "i", "s"}, "jk", "<ESC>")
-  -- map({ "t" }, "jk", "<c-\\><c-n>:q<cr>")
+  map({ "i", "s" }, "jk", "<ESC>")
 
   map("i", "<c-f>", "<right>")
 
@@ -39,7 +38,9 @@ M.setup = function()
 
   map("i", "<c-e>", helper.i_move_to_end)
 
-  map("n", keys.jump_to_qf, helper.try_jumpto_qf_window)
+  map("n", keys.jump_to_qf, function()
+    helper.try_jumpto_ft_win "qf"
+  end)
 end
 
 return M
