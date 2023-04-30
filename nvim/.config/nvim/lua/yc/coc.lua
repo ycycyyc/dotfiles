@@ -6,15 +6,6 @@ local M = {}
 
 local plugins = {
   {
-    "junegunn/fzf.vim",
-    event = "VeryLazy",
-    config = require("plug_conf.fzf").config,
-    dependencies = {
-      "junegunn/fzf",
-    },
-  },
-
-  {
     "ggandor/leap.nvim",
     keys = { { keys.jump } },
     config = require("plug_conf.move").config,
@@ -44,15 +35,24 @@ local plugins = {
   },
 
   {
-    "neoclide/coc.nvim",
-    branch = "release",
-    config = require("plug_conf.coc").coc_config,
-  },
-
-  {
     "antoinemadec/coc-fzf",
     branch = "release",
     config = require("plug_conf.coc").fzf_config,
+    dependencies = {
+      {
+        "neoclide/coc.nvim",
+        branch = "release",
+        config = require("plug_conf.coc").coc_config,
+      },
+      {
+        "junegunn/fzf.vim",
+        event = "VeryLazy",
+        config = require("plug_conf.fzf").config,
+        dependencies = {
+          "junegunn/fzf",
+        },
+      },
+    },
   },
 
   {

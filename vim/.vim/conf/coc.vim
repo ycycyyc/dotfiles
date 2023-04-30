@@ -1,3 +1,4 @@
+let g:coc_config_home="~/dotfiles/nvim/.config/nvim"
 " coc_fzf
 let g:coc_fzf_opts=['--layout=reverse']
 nnoremap <leader>p :CocFzfList<cr>
