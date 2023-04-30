@@ -16,6 +16,7 @@ local env = {
   treesitter_textobj = false,
   semantic_token = false,
   luasnip = false,
+  coc = false,
 }
 
 M.setup = function()
