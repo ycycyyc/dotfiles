@@ -32,6 +32,9 @@
     "diagnostic.enableMessage": "never",
     "suggest.enablePreselect": true,
     "suggest.noselect": false,
+    "git.addedSign.hlGroup": "GitSignsAdd",
+    "git.changedSign.hlGroup": "GitSignsChange",
+    "git.removedSign.hlGroup": "GitSignsDelete",
     "pairs.enableCharacters": [
         "(",
         "[",
