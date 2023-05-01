@@ -9,23 +9,27 @@ M.fzf_config = function()
   vim.g.coc_fzf_preview_toggle_key = "ctrl-/"
 end
 
+local function show_docs()
+  local cw = vim.fn.expand "<cword>"
+  if vim.fn.index({ "vim", "help" }, vim.bo.filetype) >= 0 then
+    vim.api.nvim_command("h " .. cw)
+  elseif vim.api.nvim_eval "coc#rpc#ready()" then
+    vim.fn.CocActionAsync "doHover"
+  else
+    vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
+  end
+end
+
 M.coc_config = function()
+  -- global plugin
   vim.g.coc_global_extensions = { "coc-git", "coc-pairs", "coc-go", "coc-clangd" }
   local keyset = vim.keymap.set
 
+  -- cmp
   local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
   keyset("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
-
-  local function show_docs()
-    local cw = vim.fn.expand "<cword>"
-    if vim.fn.index({ "vim", "help" }, vim.bo.filetype) >= 0 then
-      vim.api.nvim_command("h " .. cw)
-    elseif vim.api.nvim_eval "coc#rpc#ready()" then
-      vim.fn.CocActionAsync "doHover"
-    else
-      vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
-    end
-  end
+  keyset("i", "<c-k>", [[coc#pum#stop()]], { silent = true, expr = true })
+  keyset("i", "<c-l>", [[CocActionAsync('showSignatureHelp')]], { silent = true, expr = true })
 
   -- lsp
   keyset("n", keys.lsp_hover, show_docs, { silent = true })
@@ -38,6 +42,7 @@ M.coc_config = function()
   keyset("n", keys.lsp_rename, "<Plug>(coc-rename)", { silent = true })
   keyset("n", keys.lsp_code_action, "<Plug>(coc-codeaction-cursor)", opts)
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
+
   -- -- clangd
   keyset("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
   keyset("x", keys.lsp_range_format_cpp, "<Plug>(coc-format-selected)")
@@ -52,7 +57,7 @@ M.coc_config = function()
   keyset("n", keys.toggle_symbol, ":CocOutline<cr>")
 
   -- coc color
-  vim.cmd[[
+  vim.cmd [[
     hi link CocErrorHighlight   clear
     hi link CocWarningHighlight  clear
     hi link CocInfoHighlight  clear
