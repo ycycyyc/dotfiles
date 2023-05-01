@@ -13,16 +13,6 @@ end
 
 local basic_plugins = {
   "nvim-lua/plenary.nvim",
-
-  {
-    "kyazdani42/nvim-tree.lua",
-    keys = { {
-      keys.toggle_dir,
-      ":NvimTreeToggle<cr>",
-    } },
-    config = require("plug_conf.tree").config,
-  },
-
   {
     "ggandor/leap.nvim",
     keys = { { keys.jump } },
@@ -126,6 +116,7 @@ local coc_plugins = {
   {
     "antoinemadec/coc-fzf",
     branch = "release",
+    event = "VeryLazy",
     config = require("plug_conf.coc").fzf_config,
     dependencies = {
       {
@@ -146,6 +137,15 @@ local coc_plugins = {
 }
 
 local lsp_plugins = {
+  {
+    "kyazdani42/nvim-tree.lua",
+    keys = { {
+      keys.toggle_dir,
+      ":NvimTreeToggle<cr>",
+    } },
+    config = require("plug_conf.tree").config,
+  },
+
   {
     "lewis6991/gitsigns.nvim",
     event = { "CursorHold", "CursorHoldI" },

@@ -1,6 +1,7 @@
 local M = {}
 
 local keys = require "basic.keys"
+local helper = require "utils.helper"
 
 M.fzf_config = function()
   vim.g.coc_fzf_opts = { "--layout=reverse" }
@@ -22,8 +23,18 @@ end
 
 M.coc_config = function()
   -- global plugin
-  vim.g.coc_global_extensions = { "coc-git", "coc-pairs", "coc-go", "coc-clangd" }
+  vim.g.coc_global_extensions = {
+    "coc-git",
+    "coc-pairs",
+    "coc-go",
+    "coc-clangd",
+    "coc-marketplace",
+    "coc-yank",
+    "coc-explorer",
+  }
   local keyset = vim.keymap.set
+  local bmap = helper.build_keymap { noremap = true, buffer = true }
+  local register_fts_cb = require("yc.settings").register_fts_cb
 
   -- cmp
   local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
@@ -43,9 +54,16 @@ M.coc_config = function()
   keyset("n", keys.lsp_code_action, "<Plug>(coc-codeaction-cursor)", opts)
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
 
-  -- -- clangd
-  keyset("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
-  keyset("x", keys.lsp_range_format_cpp, "<Plug>(coc-format-selected)")
+  -- go
+  register_fts_cb("go", function()
+    bmap("n", keys.lsp_format, ":Format<cr>:w<cr>")
+  end)
+
+  -- cpp/c
+  register_fts_cb({ "h", "cpp", "hpp", "c" }, function()
+    bmap("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
+    bmap("x", keys.lsp_range_format_cpp, "<Plug>(coc-format-selected)")
+  end)
 
   -- coc-git
   keyset("n", keys.git_next_chunk, "<Plug>(coc-git-nextchunk)")
@@ -55,6 +73,9 @@ M.coc_config = function()
 
   -- coc-outline
   keyset("n", keys.toggle_symbol, ":CocOutline<cr>")
+
+  -- coc-explorer
+  keyset("n", keys.toggle_dir, ":CocCommand explorer<cr>")
 
   -- coc color
   vim.cmd [[

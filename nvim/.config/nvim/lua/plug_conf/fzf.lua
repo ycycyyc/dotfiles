@@ -14,7 +14,7 @@ local map = helper.build_keymap { noremap = true }
 
 local fix_string = true
 -- add --glob=!.git/ git ignore .git/
-local rg_regex_cmd = "rg --column --line-number --no-heading --glob=!.git/ --color=always --smart-case "
+local rg_regex_cmd = "rg --hidden --column --line-number --no-heading --glob=!.git/ --color=always --smart-case "
 local rg_fix_cmd = rg_regex_cmd .. " -F "
 
 local rg_cmd_func = function()
@@ -73,7 +73,7 @@ end
 
 M.config = function()
   map("n", keys.search_find_files, ":Files<cr>")
-  map("n", keys.search_global, ":Rg!<SPACE>")
+  map("n", keys.search_global, ":Rg<SPACE>")
   map("n", keys.run_find, ":Find<space>")
   map("n", keys.search_buffer_preview, ":RgLines ")
   map("n", keys.search_buffer, ":BLines<cr>")
