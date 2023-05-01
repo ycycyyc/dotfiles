@@ -71,6 +71,8 @@ M.setup = function()
     gotags.remove(args["args"])
   end, { nargs = "+" })
 
+  user_cmd("JsonFormat", "%!python -m json.tool", {})
+
   user_cmd("TestCmd", function() end, { range = true })
 end
 
