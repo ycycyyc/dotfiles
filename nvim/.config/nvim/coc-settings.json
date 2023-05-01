@@ -30,8 +30,8 @@
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextCurrentLineOnly": false,
     "diagnostic.enableMessage": "never",
-    "suggest.enablePreselect": false,
-    "suggest.noselect": true,
+    "suggest.enablePreselect": true,
+    "suggest.noselect": false,
     "pairs.enableCharacters": [
         "(",
         "[",

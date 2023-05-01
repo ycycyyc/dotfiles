@@ -1,13 +1,142 @@
--- load plugin
 local keys = require "basic.keys"
 local env = require("basic.env").env
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
 local M = {}
 
-local plugins = {
+local lazypath = function()
+  if env.coc then
+    return vim.fn.stdpath "data" .. "/lazy_coc/lazy.nvim"
+  else
+    return vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+  end
+end
+
+local basic_plugins = {
   "nvim-lua/plenary.nvim",
 
+  {
+    "ggandor/leap.nvim",
+    keys = { { keys.jump } },
+    config = require("plug_conf.move").config,
+  },
+
+  {
+    "tpope/vim-fugitive",
+    keys = { keys.git_blame, keys.git_status },
+    cmd = { "Gw" },
+    config = require("plug_conf.git").fugitive_config,
+    cond = not env.neogit,
+  },
+
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose" },
+    config = require("plug_conf.gitdiff").config,
+  },
+
+  {
+    "tpope/vim-surround",
+    event = { "InsertEnter", "CursorHold", "CursorHoldI" },
+  },
+
+  { "tpope/vim-repeat", event = "VeryLazy" },
+
+  { "kevinhwang91/nvim-bqf", ft = "qf" },
+
+  {
+    "akinsho/toggleterm.nvim",
+    keys = { { keys.toggle_term } },
+    config = require("plug_conf.term").config,
+  },
+
+  {
+    "numToStr/Comment.nvim",
+    keys = {
+      { "gc", mode = { "n", "v" } },
+      { "gcc", mode = { "n", "v" } },
+    },
+    opts = {},
+  },
+
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "VeryLazy" },
+    config = require("plug_conf.tree_sitter").config,
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        config = require("plug_conf.tree_sitter").context_config,
+        cond = false, -- disable now
+      },
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        config = require("plug_conf.tree_sitter").textobj_config,
+        cond = env.treesitter_textobj,
+      },
+    },
+  },
+
+  {
+    "nvim-pack/nvim-spectre",
+    keys = {
+      {
+        keys.global_find_and_replace,
+        function()
+          require("spectre").open()
+        end,
+        desc = "replace global",
+      },
+      {
+        keys.buffer_find_and_replace,
+        function()
+          require("spectre").open_file_search()
+        end,
+        desc = "replace only file",
+      },
+    },
+
+    opts = require("plug_conf.find_and_replace").opts,
+  },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    config = require("plug_conf.line").config,
+    cond = env.lualine,
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    keys = { { keys.dbg_breakpoint } },
+    config = require("plug_conf.debug").config,
+    dependencies = { "mfussenegger/nvim-dap", "theHamsta/nvim-dap-virtual-text" },
+  },
+}
+
+local coc_plugins = {
+  {
+    "antoinemadec/coc-fzf",
+    branch = "release",
+    config = require("plug_conf.coc").fzf_config,
+    dependencies = {
+      {
+        "neoclide/coc.nvim",
+        branch = "release",
+        config = require("plug_conf.coc").coc_config,
+      },
+      {
+        "junegunn/fzf.vim",
+        event = "VeryLazy",
+        config = require("plug_conf.fzf").config,
+        dependencies = {
+          "junegunn/fzf",
+        },
+      },
+    },
+  },
+}
+
+local lsp_plugins = {
   {
     "kyazdani42/nvim-tree.lua",
     keys = { {
@@ -35,50 +164,6 @@ local plugins = {
       local cmp_autopairs = require "nvim-autopairs.completion.cmp"
       require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
-  },
-
-  {
-    "numToStr/Comment.nvim",
-    keys = {
-      { "gc", mode = { "n", "v" } },
-      { "gcc", mode = { "n", "v" } },
-    },
-    opts = {},
-  },
-
-  {
-    "sindrets/diffview.nvim",
-    cmd = { "DiffviewOpen", "DiffviewClose" },
-    config = require("plug_conf.gitdiff").config,
-  },
-
-  {
-    "ggandor/leap.nvim",
-    keys = { { keys.jump } },
-    config = require("plug_conf.move").config,
-  },
-
-  {
-    "tpope/vim-surround",
-    event = { "InsertEnter", "CursorHold", "CursorHoldI" },
-    cond = true,
-  },
-
-  {
-    "kylechui/nvim-surround",
-    event = { "InsertEnter", "CursorHold", "CursorHoldI" },
-    opts = {},
-    cond = false,
-  },
-
-  { "tpope/vim-repeat", event = "VeryLazy", cond = true },
-
-  {
-    "tpope/vim-fugitive",
-    keys = { keys.git_blame, keys.git_status },
-    cmd = { "Gw" },
-    config = require("plug_conf.git").fugitive_config,
-    cond = not env.neogit,
   },
 
   {
@@ -127,24 +212,6 @@ local plugins = {
   },
 
   {
-    "nvim-treesitter/nvim-treesitter",
-    event = { "VeryLazy" },
-    config = require("plug_conf.tree_sitter").config,
-    dependencies = {
-      {
-        "nvim-treesitter/nvim-treesitter-context",
-        config = require("plug_conf.tree_sitter").context_config,
-        cond = false, -- disable now
-      },
-      {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        config = require("plug_conf.tree_sitter").textobj_config,
-        cond = env.treesitter_textobj,
-      },
-    },
-  },
-
-  {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     config = require("plug_conf.cmp").config,
@@ -172,12 +239,6 @@ local plugins = {
   },
 
   {
-    "akinsho/toggleterm.nvim",
-    keys = { { keys.toggle_term } },
-    config = require("plug_conf.term").config,
-  },
-
-  {
     "ycycyyc/nvim-lspfuzzy",
     event = { "CursorHold", "CursorHoldI", "BufReadPost", "BufAdd", "BufNewFile" },
     config = require("plug_conf.lspfuzzy").config,
@@ -187,15 +248,6 @@ local plugins = {
     cond = not env.fzf_lua,
   },
 
-  { "kevinhwang91/nvim-bqf", ft = "qf" },
-
-  {
-    "rcarriga/nvim-dap-ui",
-    keys = { { keys.dbg_breakpoint } },
-    config = require("plug_conf.debug").config,
-    dependencies = { "mfussenegger/nvim-dap", "theHamsta/nvim-dap-virtual-text" },
-  },
-
   {
     "simrat39/rust-tools.nvim",
     ft = "rust",
@@ -203,51 +255,35 @@ local plugins = {
   },
 
   { "wesleimp/stylua.nvim", ft = "lua" },
-
-  {
-    "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
-    config = require("plug_conf.line").config,
-    cond = env.lualine,
-  },
-
-  {
-    "nvim-pack/nvim-spectre",
-    keys = {
-      {
-        keys.global_find_and_replace,
-        function()
-          require("spectre").open()
-        end,
-        desc = "replace global",
-      },
-      {
-        keys.buffer_find_and_replace,
-        function()
-          require("spectre").open_file_search()
-        end,
-        desc = "replace only file",
-      },
-    },
-
-    opts = require("plug_conf.find_and_replace").opts,
-  },
 }
 
 M.setup = function()
-  if not vim.loop.fs_stat(lazypath) then
+  local plugins = basic_plugins
+  local bplugins = {}
+  if env.coc then
+    bplugins = coc_plugins
+  else
+    bplugins = lsp_plugins
+  end
+
+  for _, plug in ipairs(bplugins) do
+    table.insert(plugins, plug)
+  end
+
+  if not vim.loop.fs_stat(lazypath()) then
     vim.fn.system {
       "git",
       "clone",
       "--filter=blob:none",
       "https://github.com/folke/lazy.nvim.git",
       "--branch=stable", -- latest stable release
-      lazypath,
+      lazypath(),
     }
   end
 
-  vim.opt.rtp:prepend(lazypath)
+  vim.opt.rtp:prepend(lazypath())
   require("lazy").setup(plugins, {
+    root = vim.fs.dirname(lazypath()),
     performance = {
       rtp = {
         ---@type string[] list any plugins you want to disable here
