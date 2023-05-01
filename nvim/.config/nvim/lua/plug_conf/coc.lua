@@ -50,6 +50,14 @@ M.coc_config = function()
 
   -- coc-outline
   keyset("n", keys.toggle_symbol, ":CocOutline<cr>")
+
+  -- coc color
+  vim.cmd[[
+    hi link CocErrorHighlight   clear
+    hi link CocWarningHighlight  clear
+    hi link CocInfoHighlight  clear
+    hi link CocHintHighlight   clear
+  ]]
 end
 
 return M
