@@ -10,7 +10,7 @@ M.fzf_config = function()
 end
 
 M.coc_config = function()
-  vim.g.coc_global_extensions = { "coc-git", "coc-pairs", "coc-explorer", "coc-go", "coc-clangd" }
+  vim.g.coc_global_extensions = { "coc-git", "coc-pairs", "coc-go", "coc-clangd" }
   local keyset = vim.keymap.set
 
   local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
@@ -47,9 +47,6 @@ M.coc_config = function()
   keyset("n", keys.git_prev_chunk, "<Plug>(coc-git-prevchunk)")
   keyset("n", keys.git_reset_chunk, ":CocCommand git.chunkUndo<cr>")
   keyset("n", keys.git_preview_hunk, ":CocCommand git.chunkInfo<cr>")
-
-  -- coc-explorer
-  keyset("n", keys.toggle_dir, ":CocCommand explorer<cr>")
 
   -- coc-outline
   keyset("n", keys.toggle_symbol, ":CocOutline<cr>")

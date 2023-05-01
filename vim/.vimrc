@@ -5,12 +5,12 @@ if $VIM_LSP == "lsp"
     Plug 'ycycyyc/lsp'
     Plug 'airblade/vim-gitgutter'
     Plug 'jiangmiao/auto-pairs'
-    Plug 'lambdalisue/fern.vim'
 else
     call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 endif
+Plug 'lambdalisue/fern.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'

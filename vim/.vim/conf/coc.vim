@@ -47,7 +47,7 @@ inoremap <silent><expr> <c-l>  CocActionAsync('showSignatureHelp')
 nnoremap <silent> <leader>t :CocOutline<cr>
 
 " coc-go coc-clangd coc plugin settings
-let g:coc_global_extensions=["coc-git", "coc-pairs", "coc-explorer", "coc-go", "coc-clangd"]
+let g:coc_global_extensions=["coc-git", "coc-pairs", "coc-go", "coc-clangd"]
 
 nnoremap <silent> ]c <Plug>(coc-git-nextchunk)
 nnoremap <silent> [c <Plug>(coc-git-prevchunk)

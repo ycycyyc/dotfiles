@@ -15,6 +15,15 @@ local basic_plugins = {
   "nvim-lua/plenary.nvim",
 
   {
+    "kyazdani42/nvim-tree.lua",
+    keys = { {
+      keys.toggle_dir,
+      ":NvimTreeToggle<cr>",
+    } },
+    config = require("plug_conf.tree").config,
+  },
+
+  {
     "ggandor/leap.nvim",
     keys = { { keys.jump } },
     config = require("plug_conf.move").config,
@@ -137,15 +146,6 @@ local coc_plugins = {
 }
 
 local lsp_plugins = {
-  {
-    "kyazdani42/nvim-tree.lua",
-    keys = { {
-      keys.toggle_dir,
-      ":NvimTreeToggle<cr>",
-    } },
-    config = require("plug_conf.tree").config,
-  },
-
   {
     "lewis6991/gitsigns.nvim",
     event = { "CursorHold", "CursorHoldI" },
