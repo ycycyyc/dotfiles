@@ -62,12 +62,29 @@ function M.try_jumpto_ft_win(wanted)
 
   if #win_nums == 0 then
     print("no " .. wanted .. " window found")
-    return
+    return false
   end
 
   -- jump first window
   vim.api.nvim_set_current_win(win_nums[1])
   vim.cmd "redraw"
+  return true
+end
+
+function M.try_jumpto_next_item()
+  local succ = M.try_jumpto_ft_win "qf"
+  if succ == true then
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("j", true, false, true), "n", true)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<cr>", true, false, true), "n", true)
+  end
+end
+
+function M.try_jumpto_prev_item()
+  local succ = M.try_jumpto_ft_win "qf"
+  if succ == true then
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("k", true, false, true), "n", true)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<cr>", true, false, true), "n", true)
+  end
 end
 
 return M

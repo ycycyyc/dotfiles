@@ -22,7 +22,8 @@ return {
   --term
   toggle_term = "<C-t>", -- 打开/关闭内置终端
   -- jump
-  jump_to_qf = "<leader>u",
+  jump_to_next_qf = "<leader>j",
+  jump_to_prev_qf = "<leader>k",
 
   -- lsp
   lsp_goto_declaration = "gD", -- 声明

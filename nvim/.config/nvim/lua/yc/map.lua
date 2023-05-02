@@ -38,9 +38,8 @@ M.setup = function()
 
   map("i", "<c-e>", helper.i_move_to_end)
 
-  map("n", keys.jump_to_qf, function()
-    helper.try_jumpto_ft_win "qf"
-  end)
+  map("n", keys.jump_to_next_qf, helper.try_jumpto_next_item)
+  map("n", keys.jump_to_prev_qf, helper.try_jumpto_prev_item)
 end
 
 return M
