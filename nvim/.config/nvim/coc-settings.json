@@ -43,6 +43,8 @@
         "\"",
         "`"
     ],
+    "list.height": 25,
+    "list.source.cmdhistory.defaultAction": "",
     "explorer.git.enable": false,
     "explorer.file.reveal.whenOpen": false,
     "explorer.filename.colored.enable": false,

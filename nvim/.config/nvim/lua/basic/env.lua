@@ -17,6 +17,7 @@ local env = {
   semantic_token = false,
   luasnip = false,
   coc = false,
+  coclist =false,
 }
 
 M.setup = function()

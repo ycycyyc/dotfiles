@@ -2,6 +2,7 @@ local M = {}
 
 local keys = require "basic.keys"
 local helper = require "utils.helper"
+local env = require("basic.env").env
 
 M.fzf_config = function()
   vim.g.coc_fzf_opts = { "--layout=reverse" }
@@ -32,6 +33,11 @@ M.coc_config = function()
     "coc-yank",
     "coc-explorer",
   }
+
+  if env.coclist == true then
+    table.insert(vim.g.coc_global_extensions, "coc-lists")
+  end
+
   local keyset = vim.keymap.set
   local bmap = helper.build_keymap { noremap = true, buffer = true }
   local register_fts_cb = require("yc.settings").register_fts_cb
@@ -84,6 +90,18 @@ M.coc_config = function()
     hi link CocInfoHighlight  clear
     hi link CocHintHighlight   clear
   ]]
+
+  -- coc-lists
+  if env.coclist == true then
+    keyset("n", keys.search_resume, ":CocListResume<cr>")
+    keyset("n", keys.jump_to_next_qf, ":CocNext<cr>")
+    keyset("n", keys.jump_to_prev_qf, ":CocPrev<cr>")
+    keyset("n", keys.search_find_files, ":CocList files<cr>")
+    keyset("n", keys.search_global, ":CocList ")
+    keyset("n", keys.search_cur_word, ":CocList grep -i <c-r><c-w><cr>")
+    keyset("n", keys.switch_buffers, ":CocList buffers<cr>")
+    keyset("n", keys.search_buffer, ":CocList lines<cr>")
+  end
 end
 
 return M

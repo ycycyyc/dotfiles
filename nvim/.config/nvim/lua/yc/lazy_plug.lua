@@ -4,7 +4,9 @@ local env = require("basic.env").env
 local M = {}
 
 local lazypath = function()
-  if env.coc then
+  if env.coclist then
+    return vim.fn.stdpath "data" .. "/lazy_coc_list/lazy.nvim"
+  elseif env.coc then
     return vim.fn.stdpath "data" .. "/lazy_coc/lazy.nvim"
   else
     return vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
@@ -136,6 +138,14 @@ local coc_plugins = {
   },
 }
 
+local coc_list_plugins = {
+  {
+    "neoclide/coc.nvim",
+    branch = "release",
+    config = require("plug_conf.coc").coc_config,
+  },
+}
+
 local lsp_plugins = {
   {
     "kyazdani42/nvim-tree.lua",
@@ -260,7 +270,9 @@ local lsp_plugins = {
 M.setup = function()
   local plugins = basic_plugins
   local bplugins = {}
-  if env.coc then
+  if env.coclist then
+    bplugins = coc_list_plugins
+  elseif env.coc then
     bplugins = coc_plugins
   else
     bplugins = lsp_plugins
