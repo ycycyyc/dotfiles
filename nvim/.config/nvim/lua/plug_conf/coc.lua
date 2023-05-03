@@ -24,7 +24,7 @@ end
 
 M.coc_config = function()
   -- global plugin
-  vim.g.coc_global_extensions = {
+  local global_extensions = {
     "coc-git",
     "coc-pairs",
     "coc-go",
@@ -32,11 +32,15 @@ M.coc_config = function()
     "coc-marketplace",
     "coc-yank",
     "coc-explorer",
+    "coc-json",
+    "coc-yaml",
   }
 
   if env.coclist == true then
-    table.insert(vim.g.coc_global_extensions, "coc-lists")
+    table.insert(global_extensions, "coc-lists")
   end
+
+  vim.g.coc_global_extensions = global_extensions
 
   local keyset = vim.keymap.set
   local bmap = helper.build_keymap { noremap = true, buffer = true }
@@ -97,8 +101,8 @@ M.coc_config = function()
     keyset("n", keys.jump_to_next_qf, ":CocNext<cr>")
     keyset("n", keys.jump_to_prev_qf, ":CocPrev<cr>")
     keyset("n", keys.search_find_files, ":CocList files<cr>")
-    keyset("n", keys.search_global, ":CocList ")
-    keyset("n", keys.search_cur_word, ":CocList grep -i <c-r><c-w><cr>")
+    keyset("n", keys.search_global, ":CocList grep ")
+    keyset("n", keys.search_cur_word, ":CocList grep <c-r><c-w><cr>", { silent = false })
     keyset("n", keys.switch_buffers, ":CocList buffers<cr>")
     keyset("n", keys.search_buffer, ":CocList lines<cr>")
   end

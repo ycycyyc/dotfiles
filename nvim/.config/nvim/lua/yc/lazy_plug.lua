@@ -42,7 +42,7 @@ local basic_plugins = {
 
   { "tpope/vim-repeat", event = "VeryLazy" },
 
-  { "kevinhwang91/nvim-bqf", ft = "qf" },
+  -- { "kevinhwang91/nvim-bqf", ft = "qf" },
 
   {
     "akinsho/toggleterm.nvim",

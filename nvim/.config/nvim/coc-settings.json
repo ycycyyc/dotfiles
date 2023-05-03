@@ -40,11 +40,37 @@
         "[",
         "{",
         "'",
-        "\"",
         "`"
     ],
-    "list.height": 25,
-    "list.source.cmdhistory.defaultAction": "",
+    "list.height": 22,
+    "list.source.files.defaultOptions": [
+        "--auto-preview"
+    ],
+    "list.source.lines.defaultOptions": [
+        "--auto-preview",
+        "--interactive",
+        "--ignore-case"
+    ],
+    "list.source.grep.args": [
+        "--smart-case"
+    ],
+    "list.insertMappings": {
+		"<C-r>": "do:refresh",
+        "<C-n>":"normal:j",
+        "<C-p>":"normal:k",
+        "<Tab>":"do:toggle",
+        "<A-a>":"do:selectall",
+        "<c-f>":"do:chooseaction"
+    },
+    "list.normalMappings": {
+		"<C-r>": "do:refresh",
+        "<C-n>":"normal:j",
+        "<C-p>":"normal:k",
+        "q":"do:exit",
+        "<Tab>":"do:toggle",
+        "<A-a>":"do:selectall",
+        "<c-f>":"do:chooseaction"
+    },
     "explorer.git.enable": false,
     "explorer.file.reveal.whenOpen": false,
     "explorer.filename.colored.enable": false,

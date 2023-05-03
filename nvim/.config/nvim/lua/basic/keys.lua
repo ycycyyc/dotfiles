@@ -54,4 +54,5 @@ return {
   git_reset_chunk = "<leader>hu",
   git_preview_hunk = "<leader>hp",
   git_status = "<leader>g",
-  git_blame = "<leader>L", }
+  git_blame = "<leader>L",
+}
