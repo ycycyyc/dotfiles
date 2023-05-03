@@ -5,11 +5,11 @@ return {
   run_find = "<Leader>F",
   search_toggle_rg_mode = "<leader>T", -- 使用fixString 匹配还是 正则
   search_buffer = "<Leader>b", -- search only in buffer use fzf
-  search_buffer_preview = "<leader>L",
   search_git_grep = "<leader>/",
   search_find_files = "<C-p>", -- 查文件
   search_cur_word = "gw",
   search_cur_word_cur_buf = "gW",
+  search_resume = "<leader>l",
   switch_buffers = "<leader>o", -- buffers 切换
   global_find_and_replace = "<leader>R",
   buffer_find_and_replace = "<leader>S",
@@ -40,7 +40,6 @@ return {
   lsp_err_goto_prev = "[g", -- 上个错误
   lsp_err_goto_next = "]g", -- 下个错误
   lsp_incoming_calls = "gl",
-  lsp_workspace_symbol = "<leader>k",
 
   -- debug 调试
   dbg_breakpoint = "<F1>",
@@ -55,5 +54,4 @@ return {
   git_reset_chunk = "<leader>hu",
   git_preview_hunk = "<leader>hp",
   git_status = "<leader>g",
-  git_blame = "<leader>l",
-}
+  git_blame = "<leader>L", }

@@ -38,6 +38,8 @@ M.config = function()
     },
     fzf_opts = {
       ["--info"] = "default",
+      -- ["--delimiter"] = ":",
+      -- ["--nth"] = "4..",
     },
     git = {
       commits = {
@@ -56,10 +58,15 @@ M.config = function()
   map("n", keys.search_cur_word_cur_buf, function()
     require("fzf-lua").grep_curbuf {
       search = vim.fn.expand "<cword>",
+      fzf_opts = {
+        ["--delimiter"] = ":",
+        ["--nth"] = "3..",
+      },
     }
   end)
 
   map("n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>")
+  map("n", keys.search_resume, "<cmd>FzfLua resume<cr>")
 
   local rg_cmd = function(opt)
     return "rg --hidden --glob=!.git/  --column --line-number --no-heading "
