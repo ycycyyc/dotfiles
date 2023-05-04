@@ -40,6 +40,12 @@ M.setup = function()
 
   map("n", keys.jump_to_next_qf, helper.try_jumpto_next_item)
   map("n", keys.jump_to_prev_qf, helper.try_jumpto_prev_item)
+
+  map("c", "<A-b>", "<S-Left>")
+  map("c", "<A-f>", "<S-Right>")
+  map("c", "<c-a>", "<Home>")
+  map("c", "<c-e>", "<End>")
+  map("c", "<c-f>", "<Right>")
 end
 
 return M

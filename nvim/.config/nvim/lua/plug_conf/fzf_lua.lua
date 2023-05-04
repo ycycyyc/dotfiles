@@ -99,6 +99,7 @@ M.config = function()
   user_cmd_bind("Commits", function()
     require("fzf-lua").git_commits()
   end, {})
+  user_cmd_bind("History", ":FzfLua command_history", {})
 
   map("n", keys.search_global, ":Rg ")
   map("n", keys.search_git_grep, ":GitGrep ")

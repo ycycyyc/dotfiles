@@ -64,15 +64,19 @@ M.coc_config = function()
   keyset("n", keys.lsp_code_action, "<Plug>(coc-codeaction-cursor)", opts)
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
 
-  -- go
-  register_fts_cb("go", function()
+  -- lsp format
+  register_fts_cb({ "go", "typescript" }, function()
     bmap("n", keys.lsp_format, ":Format<cr>:w<cr>")
   end)
 
-  -- cpp/c
+  -- lsp range format
+  register_fts_cb({ "h", "cpp", "hpp", "c", "typescript" }, function()
+    bmap("x", keys.lsp_range_format_cpp, "<Plug>(coc-format-selected)")
+  end)
+
+  -- lsp switch source header
   register_fts_cb({ "h", "cpp", "hpp", "c" }, function()
     bmap("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
-    bmap("x", keys.lsp_range_format_cpp, "<Plug>(coc-format-selected)")
   end)
 
   -- coc-git
