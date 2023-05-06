@@ -121,6 +121,7 @@ local function default_theme()
   colors["@punctuation.delimiter"] = { fg = white }
   colors["@constant.builtin"] = { fg = dark_yellow }
   colors["@type.qualifier"] = { fg = purple }
+  colors["@storageclass.cpp"] = { fg = purple }
 
   if env.semantic_token == true then
     colors["@lsp.type.variable"] = { fg = white }

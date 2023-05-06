@@ -4,11 +4,6 @@ M.config = function()
   local helper = require "utils.helper"
   local map = helper.build_keymap { noremap = true }
   local bmap = helper.build_keymap { noremap = true, buffer = true }
-  local user_cmd_bind = vim.api.nvim_create_user_command
-  local user_cmd = function(name, cb)
-    local opt = { nargs = "*", bang = true }
-    user_cmd_bind(name, cb, opt)
-  end
   local keys = require "basic.keys"
 
   -- " 让输入上方，搜索列表在下方
@@ -68,50 +63,64 @@ M.config = function()
   map("n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>")
   map("n", keys.search_resume, "<cmd>FzfLua resume<cr>")
 
-  local rg_cmd = function(opt)
-    return "rg --hidden --glob=!.git/  --column --line-number --no-heading "
-      .. opt
-      .. " --color=always --smart-case -- "
-  end
-
-  local build_rg_func = function(opt)
-    return function(args)
-      require("fzf-lua").grep {
-        cmd = rg_cmd(opt),
-        search = args["args"],
-      }
-    end
-  end
-
-  user_cmd("Rg", build_rg_func "")
-  user_cmd("Rgcpp", build_rg_func " -t cpp -t c ")
-  user_cmd("Rggo", build_rg_func " -t go ")
-  user_cmd("GitGrep", function(args)
-    require("fzf-lua").grep {
-      cmd = "git grep -i --untracked --color=always --line-number --threads=8 -- ",
-      search = args["args"],
-      no_esc = true,
+  vim.api.nvim_create_user_command("Rg", function(args)
+    local rg = {
+      "rg",
+      "-H",
+      "--hidden",
+      "--column",
+      "--line-number",
+      "--no-heading",
+      "--glob=!.git/",
+      "--color=always",
+      "--smart-case",
     }
-  end)
-  user_cmd_bind("Buffers", function()
+
+    local fargs = args["fargs"]
+    local content = {}
+    local ignore = 0
+
+    for i, value in ipairs(fargs) do
+      if ignore > 0 then
+        ignore = 0
+      elseif value == "-t" then
+        ignore = 1
+        if fargs[i + 1] == "go" then
+          table.insert(rg, "-t go")
+        elseif fargs[i + 1] == "cpp" then
+          table.insert(rg, "-t cpp -t c")
+        end
+      elseif value == "-g" then
+        ignore = 1
+        table.insert(rg, "--glob=fargs[i + 1]")
+      else
+        table.insert(content, value)
+      end
+    end
+
+    table.insert(rg, "-- ")
+    local cmd = table.concat(rg, " ")
+
+    local query = table.concat(content, " ")
+
+    require("fzf-lua").grep {
+      cmd = cmd,
+      search = query,
+    }
+  end, { nargs = "*", bang = true })
+
+  vim.api.nvim_create_user_command("Buffers", function()
     require("fzf-lua").buffers()
-  end, {})
-  user_cmd_bind("Commits", function()
+  end, { nargs = "*", bang = true })
+
+  vim.api.nvim_create_user_command("Commits", function()
     require("fzf-lua").git_commits()
   end, {})
-  user_cmd_bind("History", ":FzfLua command_history", {})
+
+  vim.api.nvim_create_user_command("History", ":FzfLua command_history", {})
 
   map("n", keys.search_global, ":Rg ")
-  map("n", keys.search_git_grep, ":GitGrep ")
   map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
-
-  local register_fts_cb = require("yc.settings").register_fts_cb
-  register_fts_cb("go", function()
-    bmap("n", keys.search_global, ":Rggo ")
-  end)
-  register_fts_cb({ "h", "cpp", "hpp", "c" }, function()
-    bmap("n", keys.search_global, ":Rgcpp ")
-  end)
 
   local cb = function(_, _, kms)
     kms[keys.lsp_goto_definition] = {

@@ -1,5 +1,9 @@
 local M = {}
 
+local ts_disable = function(lang, bufnr)
+  return vim.api.nvim_buf_line_count(bufnr) > 3500
+end
+
 M.config = function()
   local ensure_installed = { "cpp", "go", "lua", "c" }
   if vim.fn.has "mac" == 1 then
@@ -8,32 +12,14 @@ M.config = function()
 
   require("nvim-treesitter.configs").setup {
     ensure_installed = ensure_installed, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-    ignore_install = {
-      "dart",
-      "scala",
-      "php",
-      "rst",
-      "svelte",
-      "comment",
-      "vim",
-      "elm",
-      "haskell",
-      "typescript",
-      "tsx",
-      "tlaplus",
-      "javascript",
-    }, -- List of parsers to ignore installing
     highlight = {
       enable = true, -- false will disable the whole extension
-      disable = { "dart", "scala" }, -- list of language that will be disabled
-      -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-      -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-      -- Using this option may slow down your editor, and you may see some duplicate highlights.
-      -- Instead of true it can also be a list of languages
+      disable = ts_disable,
       additional_vim_regex_highlighting = false,
     },
     incremental_selection = {
       enable = true,
+      disable = ts_disable,
       keymaps = {
         init_selection = "<CR>",
         node_incremental = "<CR>",
@@ -47,29 +33,9 @@ end
 M.textobj_config = function()
   require("nvim-treesitter.configs").setup {
     textobjects = {
-      select = {
-        enable = true,
-
-        -- Automatically jump forward to textobj, similar to targets.vim
-        lookahead = true,
-
-        keymaps = {
-          -- You can use the capture groups defined in textobjects.scm
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["as"] = "@class.outer",
-          ["is"] = "@class.inner",
-          ["ia"] = "@parameter.inner",
-          ["aa"] = "@parameter.outer",
-        },
-      },
-    },
-  }
-
-  require("nvim-treesitter.configs").setup {
-    textobjects = {
       move = {
         enable = true,
+        disable = ts_disable,
         set_jumps = true, -- whether to set jumps in the jumplist
         goto_next_start = {
           ["]f"] = "@function.outer",
@@ -90,6 +56,23 @@ M.textobj_config = function()
           ["[F"] = "@function.outer",
           ["[S"] = "@class.outer",
           ["[A"] = "@parameter.inner",
+        },
+      },
+      select = {
+        enable = true,
+        disable = ts_disable,
+
+        -- Automatically jump forward to textobj, similar to targets.vim
+        lookahead = true,
+
+        keymaps = {
+          -- You can use the capture groups defined in textobjects.scm
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["as"] = "@class.outer",
+          ["is"] = "@class.inner",
+          ["ia"] = "@parameter.inner",
+          ["aa"] = "@parameter.outer",
         },
       },
     },

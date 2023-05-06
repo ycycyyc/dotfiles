@@ -13,8 +13,8 @@
             "rangeVariableTypes": true
         }
     },
-    "inlayHint.enable": false,
-    "semanticTokens.enable": false,
+    "inlayHint.enable": true,
+    "semanticTokens.enable": true,
     "clangd.arguments": [
         "--function-arg-placeholders=0",
         "--background-index",
@@ -51,6 +51,10 @@
         "--auto-preview",
         "--interactive",
         "--ignore-case"
+    ],
+    "list.source.grep.defaultOptions": [
+        "--auto-preview",
+        "--interactive"
     ],
     "list.source.grep.args": [
         "--smart-case"

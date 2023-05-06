@@ -109,7 +109,60 @@ M.coc_config = function()
     keyset("n", keys.search_cur_word, ":CocList grep <c-r><c-w><cr>", { silent = false })
     keyset("n", keys.switch_buffers, ":CocList buffers<cr>")
     keyset("n", keys.search_buffer, ":CocList lines<cr>")
+  else
+    vim.fn["coc_fzf#common#add_list_source"]("fzf-grep", "search global", "Rg")
+
+    keyset("n", keys.search_resume, ":CocFzfListResume<cr>")
+    keyset("n", keys.search_cur_word, ":CocFzfList fzf-grep <c-r><c-w><cr>")
+    keyset("n", keys.search_global, ":CocFzfList fzf-grep ")
   end
+
+  -- coc semantic token
+  vim.g.coc_default_semantic_highlight_groups = 0
+  local hlMap = {
+    Namespace = { "@namespace", "Include" },
+    Type = { "@type", "Type" },
+    Enum = { "@type", "Type" },
+    Interface = { "@type", "Type" },
+    Struct = { "@structure", "Identifier" },
+    Class = { "@not_exit", "Type" },
+    EnumMember = { "@not_exists", "Constant" },
+    TypeParameter = { "@parameter", "Identifier" },
+    Parameter = { "@parameter", "Identifier" },
+    Variable = { "@variable", "Identifier" },
+    Property = { "@property", "Identifier" },
+    Event = { "@keyword", "Keyword" },
+    Function = { "@function", "Function" },
+    Method = { "@method", "Function" },
+    Macro = { "@constant.macro", "Define" },
+    Keyword = { "@keyword", "Keyword" },
+    Modifier = { "@storageclass", "StorageClass" },
+    Comment = { "@comment", "Comment" },
+    String = { "@string", "String" },
+    Number = { "@number", "Number" },
+    Boolean = { "@boolean", "Boolean" },
+    Regexp = { "@string.regex", "String" },
+    Operator = { "@operator", "Operator" },
+    Decorator = { "@symbol", "Identifier" },
+    Deprecated = { "@text.strike", "CocDeprecatedHighlight" },
+  }
+
+  for key, value in pairs(hlMap) do
+    local ts = value[1]
+    local fallback = value[2]
+    local link = fallback
+
+    if vim.fn["coc#highlight#valid"](ts) == 1 then
+      link = ts
+    end
+
+    vim.api.nvim_set_hl(0, "CocSem" .. key, { link = link, default = true })
+  end
+
+  vim.api.nvim_set_hl(0, "cppStructure", { link = "Keyword" })
+  vim.api.nvim_set_hl(0, "cStorageClass", { link = "Keyword" })
+  vim.api.nvim_set_hl(0, "cppModifier", { link = "Keyword" })
+  vim.api.nvim_set_hl(0, "cStorageClass", { link = "Keyword" })
 end
 
 return M

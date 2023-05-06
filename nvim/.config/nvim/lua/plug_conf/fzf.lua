@@ -3,129 +3,112 @@ local M = {}
 
 local helper = require "utils.helper"
 local keys = require "basic.keys"
-
-local user_cmd_bind = vim.api.nvim_create_user_command
-local user_cmd = function(name, cb)
-  local opt = { nargs = "*", bang = true }
-  user_cmd_bind(name, cb, opt)
-end
-
+local env = require("basic.env").env
 local map = helper.build_keymap { noremap = true }
 
-local fix_string = true
--- add --glob=!.git/ git ignore .git/
-local rg_regex_cmd = "rg --hidden --column --line-number --no-heading --glob=!.git/ --color=always --smart-case "
-local rg_fix_cmd = rg_regex_cmd .. " -F "
-
-local rg_cmd_func = function()
-  if fix_string == true then
-    return rg_fix_cmd
-  end
-  return rg_regex_cmd
-end
-
-local toggle_rg_cmd_type = function()
-  if fix_string == true then
-    fix_string = false
-    print "use rg_regix_cmd"
-  else
-    fix_string = true
-    print "use rg_fix_cmd"
-  end
-end
-
-local build_rg_func = function(opt)
-  local preview_func = vim.fn["fzf#vim#with_preview"]
-  local grep_func = vim.fn["fzf#vim#grep"]
-  return function(args)
-    if opt == nil then
-      opt = { condition = "" }
-    end
-
-    local cmd
-    if opt.rg_cmd_build ~= nil then
-      cmd = opt.rg_cmd_build(args["args"])
-    else
-      cmd = string.format("%s %s -- '%s'", rg_cmd_func(), opt.condition, args["args"]) -- default build
-    end
-
-    local preview = preview_func()
-    if args["bang"] ~= nil and args["bang"] == true then
-      preview = preview_func "up:60%"
-    end
-
-    grep_func(cmd, 1, preview, args["bang"])
-  end
-end
-
-local RgFzf = function(args)
-  local preview_func = vim.fn["fzf#vim#with_preview"]
-  local grep_func = vim.fn["fzf#vim#grep"]
-  local query = args["args"]
-  local prefix = rg_cmd_func() .. " -- "
-  local init_cmd = prefix .. query .. " || true"
-  local reload_cmd = prefix .. " {q} || true"
-
-  local spec = { options = { "--phony", "--query", query, "--bind", "change:reload:" .. reload_cmd } }
-
-  grep_func(init_cmd, 1, preview_func(spec), args["bang"])
-end
-
 M.config = function()
-  map("n", keys.search_find_files, ":Files<cr>")
-  map("n", keys.search_global, ":Rg<SPACE>")
-  map("n", keys.run_find, ":Find<space>")
-  map("n", keys.search_buffer, ":BLines<cr>")
-  map("n", keys.switch_buffers, ":Buffers<cr>")
-  map("n", keys.search_toggle_rg_mode, toggle_rg_cmd_type)
-  map("n", keys.search_git_grep, ":GitGrep ")
-  map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
-  map("n", keys.search_cur_word_cur_buf, ":BLines <c-r><c-w><cr>")
-
-  user_cmd("Find", RgFzf)
-  user_cmd("Rg", build_rg_func())
-  user_cmd("Rghidden", build_rg_func { condition = "--hidden" })
-  user_cmd("Rggo", build_rg_func { condition = "-t go" })
-  user_cmd("Rgcpp", build_rg_func { condition = "-t cpp -t c" })
-  user_cmd("Rgrust", build_rg_func { condition = "-t rust" })
-  user_cmd("Rglua", build_rg_func { condition = "-t lua" })
-  user_cmd("Rglines", function(args)
-    local rg_cmd_build = function(word)
-      local file_name = vim.fn.fnameescape(vim.fn.expand "%")
-      if word == nil or word == "" then
-        word = "."
-      end
-      local cmd = "rg --column --with-filename --line-number --no-heading --color=always --smart-case "
-        .. word
-        .. " "
-        .. file_name
-      return cmd
-    end
-    build_rg_func { rg_cmd_build = rg_cmd_build }(args)
-  end)
-
-  user_cmd("GitGrep", function(args)
-    local cmd = "git grep -i --untracked --color=always --line-number --threads=8 -- " .. args["args"]
-    local preview = vim.fn["fzf#vim#with_preview"] "up:60%"
-    vim.fn["fzf#vim#grep"](cmd, 1, preview, args["bang"])
-  end)
-
-  local register_fts_cb = require("yc.settings").register_fts_cb
-  local bmap = helper.build_keymap { noremap = true, buffer = true }
-  register_fts_cb("go", function()
-    bmap("n", keys.search_global, ":Rggo ")
-  end)
-  register_fts_cb({ "h", "cpp", "hpp", "c" }, function()
-    bmap("n", keys.search_global, ":Rgcpp ")
-  end)
-
-  vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
-
-  -- " 让输入上方，搜索列表在下方
   vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
 
+  vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
   vim.g.fzf_layout = { window = { width = 0.95, height = 0.85 } }
   vim.g.fzf_commits_log_options =
     "--color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'"
+
+  map("n", keys.search_find_files, ":Files<cr>")
+  map("n", keys.search_buffer, ":BLines<cr>")
+  map("n", keys.switch_buffers, ":Buffers<cr>")
+  map("n", keys.search_cur_word_cur_buf, ":BLines <c-r><c-w><cr>")
+
+  vim.api.nvim_create_user_command("Rg", function(args)
+    local rg = {
+      "rg",
+      "-H",
+      "--hidden",
+      "--column",
+      "--line-number",
+      "--no-heading",
+      "--glob=!.git/",
+      "--color=always",
+      "--smart-case",
+    }
+
+    local fargs = args["fargs"]
+
+    local suffix = ""
+    local content = {}
+    local ignore = 0
+    local interactive = false
+    for i, value in ipairs(fargs) do
+      if ignore > 0 then
+        ignore = 0
+      elseif value == "-t" then
+        ignore = 1
+        if fargs[i + 1] == "go" then
+          table.insert(rg, "-t go")
+        elseif fargs[i + 1] == "cpp" then
+          table.insert(rg, "-t cpp -t c")
+        end
+      elseif value == "--" then
+        ignore = 1
+        suffix = "-- " .. fargs[i + 1]
+      elseif value == "-g" then
+        ignore = 1
+        table.insert(rg, "--glob='" .. fargs[i + 1] .. "'")
+      elseif value == "-i" then
+        interactive = true
+      else
+        table.insert(content, value)
+      end
+    end
+
+    local preview_func = vim.fn["fzf#vim#with_preview"]
+    local grep_func = vim.fn["fzf#vim#grep"]
+
+    -- query content
+    local contents = "'" .. table.concat(content, " ") .. "'"
+    -- contents
+    table.insert(rg, "-F")
+    if #content == 0 or interactive then
+      local query = ""
+      local show_query = ""
+      if #content >= 1 then
+        query = table.concat(content, " ")
+        show_query = query
+      end
+
+      if #content > 1 then
+        query = "'" .. query .. "'"
+      end
+
+      table.insert(rg, "-- ")
+
+      local prefix = table.concat(rg, " ")
+
+      local init_cmd = prefix .. query .. " || true"
+      local reload_cmd = prefix .. " {q} || true"
+      local spec = { options = { "--phony", "--query", show_query, "--bind", "change:reload:" .. reload_cmd } }
+      grep_func(init_cmd, 1, preview_func(spec), args["bang"])
+      return
+    end
+
+    table.insert(rg, contents)
+
+    -- suffix dir name
+    if suffix ~= "" then
+      table.insert(rg, suffix)
+    end
+
+    local preview = preview_func "up:60%"
+    local rgcmd = table.concat(rg, " ")
+
+    grep_func(rgcmd, 1, preview, args["bang"])
+  end, { nargs = "*", bang = true })
+
+  if not env.coc then
+    map("n", keys.search_global, ":Rg<SPACE>")
+    map("n", keys.search_git_grep, ":GitGrep ")
+    map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
+  end
 end
+
 return M

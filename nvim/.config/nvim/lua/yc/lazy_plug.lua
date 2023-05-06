@@ -60,24 +60,6 @@ local basic_plugins = {
   },
 
   {
-    "nvim-treesitter/nvim-treesitter",
-    event = { "VeryLazy" },
-    config = require("plug_conf.tree_sitter").config,
-    dependencies = {
-      {
-        "nvim-treesitter/nvim-treesitter-context",
-        config = require("plug_conf.tree_sitter").context_config,
-        cond = false, -- disable now
-      },
-      {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        config = require("plug_conf.tree_sitter").textobj_config,
-        cond = env.treesitter_textobj,
-      },
-    },
-  },
-
-  {
     "nvim-pack/nvim-spectre",
     keys = {
       {
@@ -118,7 +100,6 @@ local coc_plugins = {
   {
     "antoinemadec/coc-fzf",
     branch = "release",
-    event = "VeryLazy",
     config = require("plug_conf.coc").fzf_config,
     dependencies = {
       {
@@ -265,6 +246,24 @@ local lsp_plugins = {
   },
 
   { "wesleimp/stylua.nvim", ft = "lua" },
+
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "VeryLazy" },
+    config = require("plug_conf.tree_sitter").config,
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        config = require("plug_conf.tree_sitter").context_config,
+        cond = false, -- disable now
+      },
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        config = require("plug_conf.tree_sitter").textobj_config,
+        cond = env.treesitter_textobj,
+      },
+    },
+  },
 }
 
 M.setup = function()
