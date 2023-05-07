@@ -22,7 +22,7 @@ Plug 'tpope/vim-commentary'
 Plug 'voldikss/vim-floaterm'
 Plug 'gcmt/wildfire.vim'
 Plug 'schickling/vim-bufonly'
-" Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'easymotion/vim-easymotion'
 call plug#end()
 
