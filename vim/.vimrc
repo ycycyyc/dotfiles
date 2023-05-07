@@ -31,7 +31,7 @@ map <space> <leader>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
 let loaded_netrwPlugin=1
-nnoremap <c-p> :GitFiles<CR>
+nnoremap <c-p> :Files<CR>
 nnoremap <leader>b :BLines<CR>
 nnoremap <leader>f :Rg<space>
 nnoremap gw :Rg <c-r><c-w><cr>

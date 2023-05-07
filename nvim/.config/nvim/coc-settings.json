@@ -26,6 +26,7 @@
         "--header-insertion=iwyu",
         "--pch-storage=memory"
     ],
+    "rust-analyzer.server.path": "~/.cargo/bin/rust-analyzer",
     "suggest.virtualText": false,
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextCurrentLineOnly": false,

@@ -62,7 +62,7 @@ M.coc_config = function()
   keyset("n", keys.lsp_err_goto_prev, "<Plug>(coc-diagnostic-prev)", { silent = true })
   keyset("n", keys.lsp_err_goto_next, "<Plug>(coc-diagnostic-next)", { silent = true })
   keyset("n", keys.lsp_rename, "<Plug>(coc-rename)", { silent = true })
-  keyset("n", keys.lsp_code_action, "<Plug>(coc-codeaction-cursor)", opts)
+  keyset("n", keys.lsp_code_action, "<Plug>(coc-codeaction-cursor)", { silent = true })
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
 
   -- lsp format
@@ -125,7 +125,7 @@ M.coc_config = function()
     Type = { "@type", "Type" },
     Enum = { "@type", "Type" },
     Interface = { "@type", "Type" },
-    Struct = { "@structure", "Identifier" },
+    Struct = { "@structure", "Type" },
     Class = { "@not_exit", "Type" },
     EnumMember = { "@not_exists", "Constant" },
     TypeParameter = { "@parameter", "Identifier" },
