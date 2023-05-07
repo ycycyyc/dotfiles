@@ -267,6 +267,12 @@ local lsp_plugins = {
 }
 
 M.setup = function()
+  if env.coclist == true then
+    vim.g.coc_data_home = "~/.config/coc_list/"
+  else
+    vim.g.coc_data_home = "~/.config/coc_fzf/"
+  end
+
   local plugins = basic_plugins
   local bplugins = {}
   if env.coclist then

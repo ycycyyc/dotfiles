@@ -1,5 +1,7 @@
 set nocompatible
 
+let g:coc_data_home = "~/.config/coc_vim/"
+
 if $VIM_LSP == "lsp"
     call plug#begin('~/.vim/lsp_plugged')
     Plug 'ycycyyc/lsp'
@@ -20,7 +22,7 @@ Plug 'tpope/vim-commentary'
 Plug 'voldikss/vim-floaterm'
 Plug 'gcmt/wildfire.vim'
 Plug 'schickling/vim-bufonly'
-Plug 'octol/vim-cpp-enhanced-highlight'
+" Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'easymotion/vim-easymotion'
 call plug#end()
 
@@ -102,3 +104,13 @@ endif
 
 exe 'source' "~/.vim/conf/fzf.vim"
 exe 'source' "~/.vim/conf/other.vim"
+
+function! SynStack ()
+    for i1 in synstack(line("."), col("."))
+        let i2 = synIDtrans(i1)
+        let n1 = synIDattr(i1, "name")
+        let n2 = synIDattr(i2, "name")
+        echo n1 "->" n2
+    endfor
+endfunction
+map gm :call SynStack()<CR>

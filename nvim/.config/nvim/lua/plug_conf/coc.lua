@@ -49,6 +49,7 @@ M.coc_config = function()
   -- cmp
   local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
   keyset("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+  keyset("i", "<c-j>", [["\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
   keyset("i", "<c-k>", [[coc#pum#stop()]], { silent = true, expr = true })
   keyset("i", "<c-l>", [[CocActionAsync('showSignatureHelp')]], { silent = true, expr = true })
 

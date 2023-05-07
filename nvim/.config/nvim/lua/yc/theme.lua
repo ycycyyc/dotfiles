@@ -122,6 +122,7 @@ local function default_theme()
   colors["@constant.builtin"] = { fg = dark_yellow }
   colors["@type.qualifier"] = { fg = purple }
   colors["@storageclass.cpp"] = { fg = purple }
+  colors["@variable.builtin.lua"] = { fg = red }
 
   if env.semantic_token == true then
     colors["@lsp.type.variable"] = { fg = white }

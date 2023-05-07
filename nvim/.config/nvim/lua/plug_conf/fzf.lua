@@ -106,7 +106,6 @@ M.config = function()
 
   if not env.coc then
     map("n", keys.search_global, ":Rg<SPACE>")
-    map("n", keys.search_git_grep, ":GitGrep ")
     map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
   end
 end
