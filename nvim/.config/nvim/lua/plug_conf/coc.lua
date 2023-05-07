@@ -159,11 +159,6 @@ M.coc_config = function()
 
     vim.api.nvim_set_hl(0, "CocSem" .. key, { link = link, default = true })
   end
-
-  vim.api.nvim_set_hl(0, "cppStructure", { link = "Keyword" })
-  vim.api.nvim_set_hl(0, "cStorageClass", { link = "Keyword" })
-  vim.api.nvim_set_hl(0, "cppModifier", { link = "Keyword" })
-  vim.api.nvim_set_hl(0, "cStorageClass", { link = "Keyword" })
 end
 
 return M

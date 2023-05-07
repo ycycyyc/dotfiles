@@ -17,7 +17,7 @@ local env = {
   semantic_token = false,
   luasnip = false,
   coc = false,
-  coclist =false,
+  coclist = false,
 }
 
 M.setup = function()
@@ -26,6 +26,10 @@ M.setup = function()
     M.env = vim.tbl_extend("force", env, vim.json.decode(json_conf))
   else
     M.env = env
+  end
+
+  if M.env.semantic_token then
+    vim.g.custom_define_highlight = 1
   end
 end
 

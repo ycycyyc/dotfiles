@@ -112,6 +112,13 @@ local function default_theme()
     TabLine = { bg = menu_grey, fg = white },
 
     NvimTreeCursorLine = { bg = menu_grey },
+
+    cStructure = { fg = purple },
+    cBlock = { fg = white },
+
+    -- self define
+    YcNameSpace = { fg = red },
+    YcCppStructure = { fg = yellow },
   }
 
   -- treesitter
@@ -132,6 +139,12 @@ local function default_theme()
     colors["@lsp.type.macro.cpp"] = { fg = blue }
     colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
     colors["@lsp.mod.readonly.go"] = { fg = cyan }
+
+    hl(0, "cppStructure", { link = "Keyword" })
+    hl(0, "cStorageClass", { link = "Keyword" })
+    hl(0, "cppModifier", { link = "Keyword" })
+    hl(0, "cppStorageClass", { link = "Keyword" })
+    hl(0, "goBlock", { link = "@variable" })
   end
 
   for name, opt in pairs(colors) do
