@@ -13,6 +13,7 @@ local env = {
   lualine = false,
   neogit = false,
   fzf_lua = false,
+  ts = true,
   treesitter_textobj = false,
   semantic_token = false,
   luasnip = false,
@@ -28,8 +29,12 @@ M.setup = function()
     M.env = env
   end
 
-  if M.env.semantic_token then
-    vim.g.custom_define_highlight = 1
+  if not M.env.ts then
+    if M.env.coc or M.env.coclist then
+      vim.g.custom_define_highlight = 1
+    end
+  else
+    vim.cmd [[syntax off]]
   end
 end
 

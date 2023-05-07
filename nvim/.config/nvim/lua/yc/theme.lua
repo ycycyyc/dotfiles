@@ -139,13 +139,22 @@ local function default_theme()
     colors["@lsp.type.macro.cpp"] = { fg = blue }
     colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
     colors["@lsp.mod.readonly.go"] = { fg = cyan }
-
-    hl(0, "cppStructure", { link = "Keyword" })
-    hl(0, "cStorageClass", { link = "Keyword" })
-    hl(0, "cppModifier", { link = "Keyword" })
-    hl(0, "cppStorageClass", { link = "Keyword" })
-    hl(0, "goBlock", { link = "@variable" })
   end
+
+  -- cpp
+  hl(0, "cppStructure", { link = "Keyword" })
+  hl(0, "cStorageClass", { link = "Keyword" })
+  hl(0, "cppModifier", { link = "Keyword" })
+  hl(0, "cppStorageClass", { link = "Keyword" })
+  -- go
+  hl(0, "goBlock", { link = "@variable" })
+  -- ts
+  hl(0, "typescriptTry", { link = "Keyword" })
+  hl(0, "typescriptExceptions", { link = "Keyword" })
+  hl(0, "typescriptTypeReference", { link = "Type" })
+  hl(0, "typescriptVariable", { link = "Keyword" })
+  hl(0, "typescriptOperator", { link = "Keyword" })
+  hl(0, "typescriptImport", { link = "Keyword" })
 
   for name, opt in pairs(colors) do
     local o = convert(opt)

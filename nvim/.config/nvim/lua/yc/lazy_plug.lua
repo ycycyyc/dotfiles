@@ -94,6 +94,25 @@ local basic_plugins = {
     config = require("plug_conf.debug").config,
     dependencies = { "mfussenegger/nvim-dap", "theHamsta/nvim-dap-virtual-text" },
   },
+
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "VeryLazy" },
+    config = require("plug_conf.tree_sitter").config,
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        config = require("plug_conf.tree_sitter").context_config,
+        cond = false, -- disable now
+      },
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        config = require("plug_conf.tree_sitter").textobj_config,
+        cond = env.treesitter_textobj,
+      },
+    },
+    cond = env.ts,
+  },
 }
 
 local coc_plugins = {
@@ -246,24 +265,6 @@ local lsp_plugins = {
   },
 
   { "wesleimp/stylua.nvim", ft = "lua" },
-
-  {
-    "nvim-treesitter/nvim-treesitter",
-    event = { "VeryLazy" },
-    config = require("plug_conf.tree_sitter").config,
-    dependencies = {
-      {
-        "nvim-treesitter/nvim-treesitter-context",
-        config = require("plug_conf.tree_sitter").context_config,
-        cond = false, -- disable now
-      },
-      {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        config = require("plug_conf.tree_sitter").textobj_config,
-        cond = env.treesitter_textobj,
-      },
-    },
-  },
 }
 
 M.setup = function()
