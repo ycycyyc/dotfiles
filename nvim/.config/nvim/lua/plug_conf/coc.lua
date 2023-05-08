@@ -159,6 +159,9 @@ M.coc_config = function()
 
     vim.api.nvim_set_hl(0, "CocSem" .. key, { link = link, default = true })
   end
+
+  -- coc settings
+  vim.opt.pumheight = 10
 end
 
 return M
