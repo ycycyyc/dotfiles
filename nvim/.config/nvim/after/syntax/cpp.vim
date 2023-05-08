@@ -34,7 +34,7 @@ if exists('g:custom_define_highlight')
     syntax keyword cppSTLnamespace boost
     hi def link cppSTLnamespace YcNameSpace
 
-    syntax keyword cppSTLfunctional function
+    syntax keyword cppSTLfunctional function unique_ptr shared_ptr
     hi def link cppSTLfunctional Type
 
     syntax keyword cppBuiltIn namespace template typename

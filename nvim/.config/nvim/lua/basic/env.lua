@@ -34,7 +34,7 @@ M.setup = function()
       vim.g.custom_define_highlight = 1
     end
   else
-    vim.cmd [[syntax off]]
+    vim.opt.syntax = "off"
   end
 end
 
