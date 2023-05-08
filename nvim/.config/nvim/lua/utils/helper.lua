@@ -87,4 +87,17 @@ function M.try_jumpto_prev_item()
   end
 end
 
+function M.win_only()
+  local cur_win = vim.api.nvim_get_current_win()
+  local wins = vim.api.nvim_list_wins()
+  if #wins <= 1 then
+    return
+  end
+  for _, win in ipairs(wins) do
+    if win ~= cur_win then
+      vim.api.nvim_win_close(win, true)
+    end
+  end
+end
+
 return M
