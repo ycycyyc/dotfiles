@@ -24,6 +24,7 @@ Plug 'gcmt/wildfire.vim'
 Plug 'schickling/vim-bufonly'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'easymotion/vim-easymotion'
+Plug 'tomasiser/vim-code-dark'
 call plug#end()
 
 inoremap jk <ESC>
@@ -80,18 +81,23 @@ set incsearch
 function! s:default_theme() 
 
     hi SignColumn ctermbg=237
-    hi DiffAdd ctermfg=114 ctermbg=237
-    hi DiffDelete ctermfg=204 ctermbg=237
-    hi DiffChange ctermbg=237 ctermfg=180
     hi Pmenu ctermbg=237 ctermfg=145
     hi PmenuSel ctermbg=39 ctermfg=236
     hi MatchParen ctermfg=204 cterm=underline ctermbg=None
-    set statusline=%f%m%h\ total:\ %L\ row:\ %l
     set background=light
 
 endfunction
 
-call s:default_theme()
+" call s:default_theme()
+colorscheme codedark
+hi DiffAdd ctermfg=114 ctermbg=237
+hi DiffDelete ctermfg=204 ctermbg=237
+hi DiffChange ctermbg=237 ctermfg=180
+hi default link cCustomClass Type
+hi default link GitSignsAdd DiffAdd
+hi default link GitSignsChange DiffChange
+hi default link GitSignsDelete GitSignsDelete
+set statusline=%f%m%h\ total:\ %L\ row:\ %l
 
 " my settings
 au FileType qf wincmd J
