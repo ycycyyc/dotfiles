@@ -90,6 +90,8 @@ endfunction
 
 " call s:default_theme()
 colorscheme codedark
+hi Type ctermfg=43 guifg=#4EC9B0
+
 hi DiffAdd ctermfg=114 ctermbg=237
 hi DiffDelete ctermfg=204 ctermbg=237
 hi DiffChange ctermbg=237 ctermfg=180
