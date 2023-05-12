@@ -24,7 +24,7 @@ Plug 'gcmt/wildfire.vim'
 Plug 'schickling/vim-bufonly'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'easymotion/vim-easymotion'
-Plug 'tomasiser/vim-code-dark'
+" Plug 'tomasiser/vim-code-dark'
 call plug#end()
 
 inoremap jk <ESC>
@@ -79,18 +79,16 @@ set incsearch
 
 " theme
 function! s:default_theme() 
-
     hi SignColumn ctermbg=237
     hi Pmenu ctermbg=237 ctermfg=145
     hi PmenuSel ctermbg=39 ctermfg=236
     hi MatchParen ctermfg=204 cterm=underline ctermbg=None
-    set background=light
-
+    set background=dark
 endfunction
 
-" call s:default_theme()
-colorscheme codedark
-hi Type ctermfg=43 guifg=#4EC9B0
+call s:default_theme()
+" colorscheme codedark
+" hi Type ctermfg=43 guifg=#4EC9B0
 
 hi DiffAdd ctermfg=114 ctermbg=237
 hi DiffDelete ctermfg=204 ctermbg=237
