@@ -79,11 +79,12 @@ set incsearch
 
 " theme
 function! s:default_theme() 
+    set background=dark
     hi SignColumn ctermbg=237
     hi Pmenu ctermbg=237 ctermfg=145
     hi PmenuSel ctermbg=39 ctermfg=236
     hi MatchParen ctermfg=204 cterm=underline ctermbg=None
-    set background=dark
+    hi Comment ctermfg=59
 endfunction
 
 call s:default_theme()
