@@ -38,6 +38,11 @@ def GlobalSearch(...args: list<string>)
         index = index + 1
     endfor
 
+    if querys->len() == 0 
+        RipgrepFzf("", 0)
+        return
+    endif
+
     var query = ""
     for q in querys
         query = query .. " " .. q 
