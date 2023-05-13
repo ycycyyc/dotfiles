@@ -42,7 +42,7 @@ M.setup = function()
   map("n", keys.jump_to_prev_qf, helper.try_jumpto_prev_item)
 
   map("c", "<A-b>", "<S-Left>")
-  map("c", "<A-f>", "<S-Right>")
+  map({ "c", "i" }, "<A-f>", "<S-Right>")
   map("c", "<c-a>", "<Home>")
   map("c", "<c-e>", "<End>")
   map("c", "<c-f>", "<Right>")
@@ -51,7 +51,7 @@ M.setup = function()
   map("v", "<leader>x", "<ESC>`.``gvp``P")
   map("n", "<leader>x", "viw<ESC>`.``gvp``P<c-o>")
 
-  map("n", "<c-w>m", helper.win_only)
+  map("v", "<leader>s", ":s/.*'\\(.*\\)'.*/\\1")
 end
 
 return M

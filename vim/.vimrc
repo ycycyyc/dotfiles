@@ -53,6 +53,14 @@ nnoremap Y y$
 vnoremap <bs> <esc>
 nnoremap <leader>[ :bp<cr>
 nnoremap <leader>] :bn<cr>
+xnoremap <leader>s :s/.*'\(.*\)'.*/\1
+
+" -- 交换内容，先删除内容1，再选中内容2，然后用<leader>x交换
+xnoremap <leader>x <ESC>`.``gvp``P
+nnoremap <leader>x viw<ESC>`.``gvp``P<c-o>
+
+cnoremap <c-e> <End>
+cnoremap <c-a> <Home>
 
 set tabstop=4
 set softtabstop=4
@@ -120,4 +128,4 @@ function! SynStack ()
         echo n1 "->" n2
     endfor
 endfunction
-map gm :call SynStack()<CR>
+" map gm :call SynStack()<CR>
