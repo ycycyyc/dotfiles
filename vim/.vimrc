@@ -11,7 +11,7 @@ if $VIM_LSP == "lsp"
 else
     call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
+    Plug 'antoinemadec/coc-fzf', {'branch': 'master'}
 endif
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
