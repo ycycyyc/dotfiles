@@ -1,6 +1,8 @@
 let g:coc_config_home="~/dotfiles/nvim/.config/nvim"
 " coc_fzf
 let g:coc_fzf_opts=['--layout=reverse']
+let g:coc_fzf_location_delay=20
+
 call coc_fzf#common#add_list_source('fzf-grep', 'display open buffers', 'Rg')
 nnoremap <leader>f :CocFzfList fzf-grep<space> 
 nnoremap <leader>l :CocFzfListResume<cr>
@@ -51,7 +53,7 @@ inoremap <silent><expr> <c-l>  CocActionAsync('showSignatureHelp')
 nnoremap <silent> <leader>t :CocOutline<cr>
 
 " coc-go coc-clangd coc plugin settings
-let g:coc_global_extensions=["coc-git", "coc-pairs", "coc-go", "coc-clangd", "coc-json", "coc-explorer", "coc-marketplace", "coc-yank"]
+let g:coc_global_extensions=["coc-git", "coc-pairs", "coc-go", "coc-clangd", "coc-json", "coc-explorer", "coc-marketplace", "coc-yank", "coc-vimlsp", "coc-tsserver"]
 nnoremap <silent> ]c <Plug>(coc-git-nextchunk)
 nnoremap <silent> [c <Plug>(coc-git-prevchunk)
 nnoremap <silent> <leader>hu :CocCommand git.chunkUndo<cr>

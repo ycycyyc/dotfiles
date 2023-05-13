@@ -38,8 +38,22 @@ hi link EasyMotionShade cleard
 
 " fugitive
 function! ToggleGStatus()
-    if buflisted(bufname('.git/index'))
-        bd .git/index
+    let s:buf_name = bufname('/.git//')
+    if buflisted(bufname(s:buf_name))
+        let s:git_buf_nr = bufnr(s:buf_name)
+        let s:cur_win_buf_nr = winbufnr(winnr())
+        if s:cur_win_buf_nr == s:git_buf_nr 
+            bd /.git//
+        else
+            let s:win_list = getwininfo()
+            for win in s:win_list
+                if win.bufnr == s:git_buf_nr 
+                    execute win.winnr . "wincmd w"
+                    redraw
+                    return
+                endif
+            endfor 
+        endif
     else
         G
         wincmd L
