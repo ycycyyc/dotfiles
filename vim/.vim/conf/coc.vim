@@ -4,7 +4,7 @@ let g:coc_fzf_opts=['--layout=reverse']
 let g:coc_fzf_location_delay=20
 
 call coc_fzf#common#add_list_source('fzf-grep', 'display open buffers', 'Rg')
-nnoremap <leader>f :CocFzfList fzf-grep<space> 
+nnoremap <leader>f :CocFzfList fzf-grep<space>
 nnoremap <leader>l :CocFzfListResume<cr>
 nnoremap gw :CocFzfList fzf-grep <c-r><c-w><cr>
 

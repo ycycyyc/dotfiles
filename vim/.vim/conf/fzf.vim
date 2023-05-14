@@ -31,8 +31,10 @@ def GlobalSearch(...args: list<string>)
             elseif args[ index + 1 ] == "cpp"
                 rg = rg .. " -t c -t cpp"
             endif
+        elseif arg == "-g" 
+            ignore = 1
+            rg = rg .. " -g " .. "'" .. args[ index + 1 ] .. "'"
         else
-            echo arg
             querys->add(arg)
         endif
         index = index + 1

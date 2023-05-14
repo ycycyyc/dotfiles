@@ -118,7 +118,7 @@ local basic_plugins = {
 local coc_plugins = {
   {
     "antoinemadec/coc-fzf",
-    branch = "release",
+    branch = "master",
     config = require("plug_conf.coc").fzf_config,
     dependencies = {
       {
