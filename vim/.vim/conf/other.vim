@@ -39,7 +39,7 @@ hi link EasyMotionShade cleard
 " fugitive
 function! ToggleGStatus()
     let s:buf_name = bufname('/.git//')
-    if buflisted(bufname(s:buf_name))
+    if buflisted(s:buf_name) == 1
         let s:git_buf_nr = bufnr(s:buf_name)
         let s:cur_win_buf_nr = winbufnr(winnr())
         if s:cur_win_buf_nr == s:git_buf_nr 
