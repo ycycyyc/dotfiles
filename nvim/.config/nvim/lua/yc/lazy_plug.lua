@@ -26,7 +26,6 @@ local basic_plugins = {
     keys = { keys.git_blame, keys.git_status },
     cmd = { "Gw" },
     config = require("plug_conf.git").fugitive_config,
-    cond = not env.neogit,
   },
 
   {
@@ -174,22 +173,6 @@ local lsp_plugins = {
       local cmp_autopairs = require "nvim-autopairs.completion.cmp"
       require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
-  },
-
-  {
-    "TimUntersberger/neogit",
-    keys = { keys.git_status },
-    config = function()
-      local neogit = require "neogit"
-      neogit.setup {
-        kind = "split_above",
-        integrations = {
-          diffview = true,
-        },
-      }
-      vim.keymap.set("n", keys.git_status, ":Neogit<space>")
-    end,
-    cond = env.neogit,
   },
 
   {

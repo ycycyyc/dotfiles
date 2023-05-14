@@ -11,7 +11,6 @@ local env = {
   go_debug_mode = "dlv", -- dlv or vscode
 
   lualine = false,
-  neogit = false,
   fzf_lua = false,
   ts = true,
   treesitter_textobj = false,

@@ -92,7 +92,7 @@ M.config = function()
         end
       elseif value == "-g" then
         ignore = 1
-        table.insert(rg, "--glob=fargs[i + 1]")
+        table.insert(rg, "--glob='" .. fargs[i + 1] .. "'")
       else
         table.insert(content, value)
       end
