@@ -79,7 +79,10 @@ M.config = function()
     local fargs = args["fargs"]
     local content = {}
     local ignore = 0
+    local islive = false
+    local filepath = ""
 
+    -- TODO(yc) grep 'main -t' 怎么处理?
     for i, value in ipairs(fargs) do
       if ignore > 0 then
         ignore = 0
@@ -89,10 +92,17 @@ M.config = function()
           table.insert(rg, "-t go")
         elseif fargs[i + 1] == "cpp" then
           table.insert(rg, "-t cpp -t c")
+        elseif fargs[i + 1] == "lua" then
+          table.insert(rg, "-t lua")
         end
       elseif value == "-g" then
         ignore = 1
         table.insert(rg, "--glob='" .. fargs[i + 1] .. "'")
+      elseif value == "-i" then
+        islive = true
+      elseif value == "--" then
+        ignore = 1
+        filepath = fargs[i + 1]
       else
         table.insert(content, value)
       end
@@ -103,9 +113,19 @@ M.config = function()
 
     local query = table.concat(content, " ")
 
+    if islive then
+      require("fzf-lua").live_grep {
+        cmd = cmd,
+        search = query,
+        filespec = filepath,
+      }
+      return
+    end
+
     require("fzf-lua").grep {
       cmd = cmd,
       search = query,
+      filespec = filepath,
     }
   end, { nargs = "*", bang = true })
 
