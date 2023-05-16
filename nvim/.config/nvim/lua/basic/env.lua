@@ -18,6 +18,8 @@ local env = {
   luasnip = false,
   coc = false,
   coclist = false,
+  coq = false,
+  python3 = "",
 }
 
 M.setup = function()

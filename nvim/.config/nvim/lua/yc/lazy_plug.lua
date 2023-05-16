@@ -165,13 +165,14 @@ local lsp_plugins = {
     "windwp/nvim-autopairs",
     event = { "InsertEnter" },
     config = function()
-      require("nvim-autopairs").setup {
-        map_c_w = true,
-      }
-
       -- setup cmp for autopairs
-      local cmp_autopairs = require "nvim-autopairs.completion.cmp"
-      require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+      if not env.coq then
+        require("nvim-autopairs").setup {
+          map_c_w = true,
+        }
+        local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+        require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+      end
     end,
   },
 
@@ -229,6 +230,15 @@ local lsp_plugins = {
       },
       "saadparwaiz1/cmp_luasnip",
     },
+    cond = not env.coq,
+  },
+
+  {
+    "ms-jpq/coq_nvim",
+    branch = "coq",
+    init = require("plug_conf.coq").init,
+    config = require("plug_conf.coq").config,
+    cond = env.coq,
   },
 
   {
