@@ -17,10 +17,20 @@ M.init = function()
       jump_to_mark = "<c-]>",
     },
     clients = {
+      tmux = {
+        enabled = true,
+      },
+      tree_sitter = {
+        enabled = true,
+      },
+      buffers = {
+        enabled = true,
+      },
       snippets = {
         warn = {}, -- delete warn msg
       },
     },
+    completion = { skip_after = { "{", "[", "}", "]" } },
     display = {
       preview = { enabled = false },
       pum = { y_max_len = 8 },
