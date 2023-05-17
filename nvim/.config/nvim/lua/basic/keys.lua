@@ -33,7 +33,7 @@ return {
   lsp_impl = "<leader>i", -- 实现
   lsp_rename = "<leader>rn", -- 变量重命名
   lsp_signature_help = "<C-l>",
-  lsp_range_format_cpp = "f", -- 范围格式化
+  lsp_range_format = "f", -- 范围格式化
   lsp_format = "<leader><leader>", -- 格式化
   lsp_code_action = "<leader>d", -- 代码修复提示
   lsp_err_goto_prev = "[g", -- 上个错误

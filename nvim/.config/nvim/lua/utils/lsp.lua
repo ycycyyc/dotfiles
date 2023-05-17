@@ -53,6 +53,11 @@ M.range_format = function(pos)
   end
 end
 
+M.v_range_format = function()
+  local pos = helper.get_visual_selection()
+  require("utils.lsp").range_format(pos)
+end
+
 M.key_on_attach = function(conf)
   return function(client, bufnr)
     local opts = { noremap = true, silent = true, buffer = bufnr }

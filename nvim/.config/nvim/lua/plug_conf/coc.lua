@@ -72,7 +72,7 @@ M.coc_config = function()
 
   -- lsp range format
   register_fts_cb({ "h", "cpp", "hpp", "c", "typescript" }, function()
-    bmap("x", keys.lsp_range_format_cpp, "<Plug>(coc-format-selected)")
+    bmap("x", keys.lsp_range_format, "<Plug>(coc-format-selected)")
   end)
 
   -- lsp switch source header

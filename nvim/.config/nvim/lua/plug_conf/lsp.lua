@@ -138,13 +138,7 @@ M.load_lsp_config = function()
     on_attach = key_on_attach {
       client_cb = function(_, _, kms)
         kms[keys.lsp_format] = nil
-        kms[keys.lsp_range_format_cpp] = {
-          function()
-            local pos = helper.get_visual_selection()
-            require("utils.lsp").range_format(pos)
-          end,
-          "v",
-        }
+        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "v" }
         kms[keys.switch_source_header] = {
           function()
             switch_source_header_splitcmd(0, "edit")
@@ -211,7 +205,13 @@ M.load_lsp_config = function()
     filetypes = { "cmake" },
   }
 
-  lspconfig.tsserver.setup { on_attach = key_on_attach() }
+  lspconfig.tsserver.setup {
+    on_attach = key_on_attach {
+      client_cb = function(_, _, kms)
+        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "v" }
+      end,
+    },
+  }
   -- lspconfig.denols.setup {
   --   on_attach = key_on_attach(),
   -- }
