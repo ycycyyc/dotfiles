@@ -3,6 +3,10 @@ local M = {}
 local env = require("basic.env").env
 
 M.init = function()
+  if not env.coq then
+    return
+  end
+
   if env.python3 ~= "" then
     vim.g.python3_host_prog = env.python3
   end
