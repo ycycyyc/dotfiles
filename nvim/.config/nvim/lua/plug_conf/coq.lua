@@ -25,16 +25,21 @@ M.init = function()
         enabled = false,
       },
       tree_sitter = {
-        enabled = true,
+        enabled = false,
+        weight_adjust = -2,
       },
       buffers = {
-        enabled = true,
+        enabled = false,
+        weight_adjust = -2,
       },
       snippets = {
         warn = {}, -- delete warn msg
       },
+      lsp = {
+        weight_adjust = 2,
+      },
     },
-    completion = { skip_after = { "{", "[", "}", "]" } },
+    completion = { skip_after = { "{", "[", "}", "]", "=" } },
     display = {
       preview = { enabled = true },
       pum = { y_max_len = 8 },

@@ -22,17 +22,13 @@ local postfix = require("luasnip.extras.postfix").postfix
 local conds = require "luasnip.extras.conditions"
 local conds_expand = require "luasnip.extras.conditions.expand"
 
-vim.keymap.set({ "i", "s" }, "<c-j>", function()
-  require("luasnip").jump(1)
-end, { silent = true })
-
-vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
-  require("luasnip").jump(-1)
-end, { silent = true })
-
 vim.cmd [[
-  imap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
-  smap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
+  imap <silent><expr> <c-d> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-d>' 
+  inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
+  snoremap <silent> <c-d> <cmd>lua require('luasnip').jump(1)<Cr>
+  snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
+  " imap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
+  " smap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
 ]]
 
 local contains_n_word = function(n)
