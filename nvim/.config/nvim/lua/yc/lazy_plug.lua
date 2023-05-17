@@ -165,13 +165,20 @@ local lsp_plugins = {
     "windwp/nvim-autopairs",
     event = { "InsertEnter" },
     config = function()
-      -- setup cmp for autopairs
-      if not env.coq then
-        require("nvim-autopairs").setup {
-          map_c_w = true,
-        }
+      if not env.coq then -- setup cmp for autopairs
+        local npairs = require "nvim-autopairs"
+        npairs.setup { map_c_w = true }
         local cmp_autopairs = require "nvim-autopairs.completion.cmp"
         require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
+        local cj = function()
+          if vim.fn.pumvisible() ~= 0 then
+            return npairs.esc "<c-j>" .. npairs.autopairs_cr()
+          else
+            return npairs.autopairs_cr()
+          end
+        end
+        vim.keymap.set("i", "<c-j>", cj, { expr = true, noremap = true })
       end
     end,
   },

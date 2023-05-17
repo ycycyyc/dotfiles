@@ -22,7 +22,7 @@ M.init = function()
     },
     clients = {
       tmux = {
-        enabled = true,
+        enabled = false,
       },
       tree_sitter = {
         enabled = true,
@@ -36,7 +36,7 @@ M.init = function()
     },
     completion = { skip_after = { "{", "[", "}", "]" } },
     display = {
-      preview = { enabled = false },
+      preview = { enabled = true },
       pum = { y_max_len = 8 },
       ghost_text = { enabled = false },
       icons = {
@@ -58,7 +58,8 @@ M.config = function()
       if vim.fn.complete_info({ "selected" }).selected ~= -1 then
         return npairs.esc "<c-y>"
       else
-        return npairs.esc "<c-e>" .. npairs.autopairs_cr()
+        -- return npairs.esc "<c-e>" .. npairs.autopairs_cr()
+        return npairs.esc "<c-n>" .. npairs.esc "<c-y>"
       end
     else
       return npairs.autopairs_cr()
@@ -75,10 +76,16 @@ M.config = function()
   end
   remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })
 
-  vim.cmd [[
-        ino <silent><expr> <c-j>    pumvisible() ? (complete_info().selected == -1 ? "\<c-n><c-y>" : "\<c-y>") : "\<c-j>"
-        ino <silent><expr> <c-k>    pumvisible() ? Preview_preview() : '<C-X><C-U>'
-      ]]
+  MUtils.CJ = function()
+    if vim.fn.pumvisible() ~= 0 then
+      return npairs.esc "<c-j>" .. npairs.autopairs_cr()
+    else
+      return npairs.autopairs_cr()
+    end
+  end
+  remap("i", "<c-j>", "v:lua.MUtils.CJ()", { expr = true, noremap = true })
+
+  vim.cmd [[ ino <silent><expr> <c-k>    pumvisible() ? Preview_preview() : '<C-X><C-U>' ]]
 end
 
 return M
