@@ -61,4 +61,4 @@ function! ToggleGStatus()
 endfunction
 command ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>g :ToggleGStatus<CR>
-nnoremap <leader>L :Git blame<cr>
+nnoremap <leader>hl :Git blame<cr>

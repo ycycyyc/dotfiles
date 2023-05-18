@@ -30,7 +30,13 @@ local basic_plugins = {
 
   {
     "sindrets/diffview.nvim",
-    cmd = { "DiffviewOpen", "DiffviewClose" },
+    keys = {
+      { keys.git_diff, ":DiffOpen<cr>" },
+      { keys.git_diff_close, ":DiffviewClose<cr>" },
+      { keys.git_diff_open, ":DiffviewOpen<cr>" },
+      { keys.git_diff_file, ":DiffviewFileHistory " },
+    },
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewFocusFiles" },
     config = require("plug_conf.gitdiff").config,
   },
 
