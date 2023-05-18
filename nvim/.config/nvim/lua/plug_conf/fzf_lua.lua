@@ -114,6 +114,10 @@ M.config = function()
 
     local query = table.concat(content, " ")
 
+    if query == "" then
+      islive = true
+    end
+
     if islive then
       require("fzf-lua").live_grep {
         cmd = cmd,
