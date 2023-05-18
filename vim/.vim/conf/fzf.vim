@@ -55,3 +55,5 @@ def GlobalSearch(...args: list<string>)
 enddef
 
 command! -nargs=* Rg GlobalSearch(<f-args>)
+
+nnoremap <silent> <leader>C :Commits<cr>

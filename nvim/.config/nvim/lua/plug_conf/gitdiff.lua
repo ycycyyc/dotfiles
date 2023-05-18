@@ -4,6 +4,14 @@ local M = {}
 M.config = function()
   local cb = require("diffview.config").diffview_callback
 
+  local helper = require "utils.helper"
+  local register_fts_cb = require("yc.settings").register_fts_cb
+  local bmap = helper.build_keymap { noremap = true, buffer = true }
+
+  register_fts_cb({ "DiffviewFiles" }, function()
+    bmap("n", "<leader>q", "::DiffviewClose<cr>")
+  end)
+
   require("diffview").setup {
     diff_binaries = false, -- Show diffs for binaries
     enhanced_diff_hl = false, -- See ':h diffview-config-enhanced_diff_hl'

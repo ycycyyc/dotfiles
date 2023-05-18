@@ -32,7 +32,6 @@ local basic_plugins = {
     "sindrets/diffview.nvim",
     keys = {
       { keys.git_diff, ":DiffOpen<cr>" },
-      { keys.git_diff_close, ":DiffviewClose<cr>" },
       { keys.git_diff_open, ":DiffviewOpen<cr>" },
       { keys.git_diff_file, ":DiffviewFileHistory " },
     },

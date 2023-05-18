@@ -48,6 +48,7 @@ return {
   dbg_eval = "<F5>",
 
   -- git
+  git_commits = "<leader>C",
   git_next_chunk = "]c",
   git_prev_chunk = "[c",
   git_reset_chunk = "<leader>hu",
@@ -56,6 +57,5 @@ return {
   git_blame = "<leader>hl",
   git_diff = "<leader>hd",
   git_diff_open = "<leader>ho",
-  git_diff_close = "<leader>hc",
   git_diff_file = "<leader>hf",
 }

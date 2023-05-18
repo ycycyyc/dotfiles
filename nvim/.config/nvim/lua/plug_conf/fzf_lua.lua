@@ -137,6 +137,9 @@ M.config = function()
   vim.api.nvim_create_user_command("Commits", function()
     require("fzf-lua").git_commits()
   end, {})
+  vim.keymap.set("n", keys.git_commits, function()
+    require("fzf-lua").git_commits()
+  end, { silent = false })
 
   vim.api.nvim_create_user_command("History", ":FzfLua command_history", {})
 
