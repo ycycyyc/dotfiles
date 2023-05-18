@@ -9,7 +9,7 @@ M.config = function()
   local bmap = helper.build_keymap { noremap = true, buffer = true }
 
   register_fts_cb({ "DiffviewFiles" }, function()
-    bmap("n", "<leader>q", "::DiffviewClose<cr>")
+    bmap("n", "<leader>q", ":DiffviewClose<cr>")
   end)
 
   require("diffview").setup {
