@@ -5,6 +5,14 @@ local env = require("basic.env").env
 local helper = require "utils.helper"
 local api = vim.api
 
+AUTO_FORMATTING_ENABLED = false
+local toggle_auto_formatting = function()
+  AUTO_FORMATTING_ENABLED = not AUTO_FORMATTING_ENABLED
+  print(string.format("auto_formatting: %s", AUTO_FORMATTING_ENABLED))
+end
+
+local formatting_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
 M.lsp_client_cbs = {}
 
 M.register_lsp_client_cb = function(cb)
@@ -63,6 +71,11 @@ M.key_on_attach = function(conf)
     local opts = { noremap = true, silent = true, buffer = bufnr }
     local bmap = helper.build_keymap(opts)
 
+    local lsp_config = {
+      auto_format = false,
+      -- auto_format_func custom define func
+    }
+
     local kms = {
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
       [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
@@ -84,11 +97,32 @@ M.key_on_attach = function(conf)
     end
 
     if conf and conf.client_cb and type(conf.client_cb) == "function" then
-      conf.client_cb(client, bufnr, kms)
+      conf.client_cb(client, bufnr, kms, lsp_config)
     end
 
     for _, cb in ipairs(M.lsp_client_cbs) do
       cb(client, bufnr, kms)
+    end
+
+    if client.supports_method "textDocument/formatting" and lsp_config.auto_format then
+      kms[keys.lsp_toggle_autoformat] = { toggle_auto_formatting, "n" }
+
+      vim.api.nvim_clear_autocmds { group = formatting_augroup, buffer = bufnr }
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = formatting_augroup,
+        buffer = bufnr,
+        callback = function()
+          if not AUTO_FORMATTING_ENABLED then
+            return
+          end
+
+          if lsp_config.auto_format_func ~= nil then
+            lsp_config.auto_format_func()
+          else
+            vim.lsp.buf.format()
+          end
+        end,
+      })
     end
 
     for key, action in pairs(kms) do

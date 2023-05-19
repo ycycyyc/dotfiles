@@ -39,6 +39,7 @@ return {
   lsp_err_goto_prev = "[g", -- 上个错误
   lsp_err_goto_next = "]g", -- 下个错误
   lsp_incoming_calls = "gl",
+  lsp_toggle_autoformat = "<leader>T",
 
   -- debug 调试
   dbg_breakpoint = "<F1>",

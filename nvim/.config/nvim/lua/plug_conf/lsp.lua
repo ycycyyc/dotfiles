@@ -69,7 +69,9 @@ M.load_lsp_config = function()
   -- 2. gopls
   lspconfig.gopls.setup {
     on_attach = key_on_attach {
-      client_cb = function(client, _, _)
+      client_cb = function(client, _, _, lsp_config)
+        lsp_config.auto_format = true
+        lsp_config.auto_format_func = require("utils.lsp").go_import
         if
           env.semantic_token == true
           and client.name == "gopls"
@@ -207,7 +209,8 @@ M.load_lsp_config = function()
 
   lspconfig.tsserver.setup {
     on_attach = key_on_attach {
-      client_cb = function(_, _, kms)
+      client_cb = function(_, _, kms, lsp_config)
+        lsp_config.auto_format = true
         kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "v" }
       end,
     },
