@@ -73,7 +73,6 @@ M.key_on_attach = function(conf)
 
     local lsp_config = {
       auto_format = false,
-      -- auto_format_func custom define func
     }
 
     local kms = {
@@ -116,11 +115,7 @@ M.key_on_attach = function(conf)
             return
           end
 
-          if lsp_config.auto_format_func ~= nil then
-            lsp_config.auto_format_func()
-          else
-            vim.lsp.buf.format()
-          end
+          vim.lsp.buf.format()
         end,
       })
     end
@@ -139,7 +134,7 @@ function M.format()
   if vim.fn.has "nvim-0.8" == 1 then
     vim.lsp.buf.format { async = true }
   else
-    vim.lsp.buf.formatting()
+    vim.lsp.buf.format()
   end
 end
 

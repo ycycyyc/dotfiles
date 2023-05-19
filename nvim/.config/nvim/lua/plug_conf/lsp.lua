@@ -71,7 +71,6 @@ M.load_lsp_config = function()
     on_attach = key_on_attach {
       client_cb = function(client, _, _, lsp_config)
         lsp_config.auto_format = true
-        lsp_config.auto_format_func = require("utils.lsp").go_import
         if
           env.semantic_token == true
           and client.name == "gopls"
