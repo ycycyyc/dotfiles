@@ -38,8 +38,10 @@ M.setup = function()
 
   map("i", "<c-e>", helper.i_move_to_end)
 
-  map("n", keys.jump_to_next_qf, helper.try_jumpto_next_item)
-  map("n", keys.jump_to_prev_qf, helper.try_jumpto_prev_item)
+  -- map("n", keys.jump_to_next_qf, helper.try_jumpto_next_item)
+  -- map("n", keys.jump_to_prev_qf, helper.try_jumpto_prev_item)
+  map("n", keys.jump_to_next_qf, "<cmd>cnext<cr>")
+  map("n", keys.jump_to_prev_qf, "<cmd>cprev<cr>")
 
   map("c", "<A-b>", "<S-Left>")
   map({ "c", "i" }, "<A-f>", "<S-Right>")

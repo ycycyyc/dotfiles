@@ -62,6 +62,9 @@ nnoremap <leader>x viw<ESC>`.``gvp``P<c-o>
 cnoremap <c-e> <End>
 cnoremap <c-a> <Home>
 
+nnoremap <silent> <leader>j :cnext<cr>
+nnoremap <silent> <leader>k :cprev<cr>
+
 set tabstop=4
 set softtabstop=4
 set sw=4
