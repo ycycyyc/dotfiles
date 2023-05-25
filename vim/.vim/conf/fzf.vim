@@ -16,7 +16,7 @@ enddef
 command! -nargs=* -bang Find RipgrepFzf(<q-args>, <bang>0)
 
 def GlobalSearch(...args: list<string>)
-    var rg = "rg -H --hidden --column --line-number --no-heading --color=always --smart-case "
+    var rg = "rg -H --hidden --column --line-number --no-heading --color=always --smart-case -F "
     var ignore = 0
     var index = 0
     var querys: list<string>
@@ -46,11 +46,17 @@ def GlobalSearch(...args: list<string>)
     endif
 
     var query = ""
+    var firstWord = true
     for q in querys
-        query = query .. " " .. q 
+        if firstWord
+            firstWord = false
+            query = q
+        else
+            query = query .. " " .. q 
+        endif
     endfor
 
-    rg = rg .. " --" .. query
+    rg = rg .. " -- " .. "'" .. query .. "'"
     fzf#vim#grep(rg, 1, fzf#vim#with_preview(), 0)
 enddef
 
