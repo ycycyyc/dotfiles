@@ -41,7 +41,7 @@ xmap f  <Plug>(coc-format-selected)
 augroup mygroup
   autocmd!
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  autocmd FileType go nnoremap <buffer> <leader><space> :Format<cr>:w<cr>
+  autocmd FileType go,typescript nnoremap <buffer> <leader><space> :Format<cr>:w<cr>
   " autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp') 
 augroup end
 
