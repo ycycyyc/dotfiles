@@ -113,6 +113,7 @@ set statusline=%f%m%h\ total:\ %L\ row:\ %l
 
 " my settings
 au FileType qf wincmd J
+au FileType * set fo-=o
 
 if $VIM_LSP == "lsp"
     exe 'source' "~/.vim/conf/lsp.vim"

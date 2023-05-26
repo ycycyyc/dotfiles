@@ -51,6 +51,9 @@ M.setup = function()
     group = yank_grp,
   })
 
+  -- 关闭换行时， 自动注释
+  vim.cmd [[ autocmd FileType * set fo-=o ]]
+
   local helper = require "utils.helper"
 
   M.register_fts_cb("qf", function()
