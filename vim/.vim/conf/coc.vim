@@ -14,6 +14,8 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 
 inoremap <silent><expr> <c-j>  "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+set pumheight=10
+
 inoremap  <expr> <c-k> coc#pum#stop()
 
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
