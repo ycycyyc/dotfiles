@@ -140,14 +140,6 @@ local coc_plugins = {
   },
 }
 
-local coc_list_plugins = {
-  {
-    "neoclide/coc.nvim",
-    branch = "release",
-    config = require("plug_conf.coc").coc_config,
-  },
-}
-
 local lsp_plugins = {
   {
     "kyazdani42/nvim-tree.lua",
