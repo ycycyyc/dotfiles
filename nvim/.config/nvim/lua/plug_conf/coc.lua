@@ -36,10 +36,6 @@ M.coc_config = function()
     "coc-yaml",
   }
 
-  if env.coclist == true then
-    table.insert(global_extensions, "coc-lists")
-  end
-
   vim.g.coc_global_extensions = global_extensions
 
   local keyset = vim.keymap.set
@@ -100,23 +96,11 @@ M.coc_config = function()
     hi link CocHintHighlight   clear
   ]]
 
-  -- coc-lists
-  if env.coclist == true then
-    keyset("n", keys.search_resume, ":CocListResume<cr>")
-    keyset("n", keys.jump_to_next_qf, ":CocNext<cr>")
-    keyset("n", keys.jump_to_prev_qf, ":CocPrev<cr>")
-    keyset("n", keys.search_find_files, ":CocList files<cr>")
-    keyset("n", keys.search_global, ":CocList grep ")
-    keyset("n", keys.search_cur_word, ":CocList grep <c-r><c-w><cr>", { silent = false })
-    keyset("n", keys.switch_buffers, ":CocList buffers<cr>")
-    keyset("n", keys.search_buffer, ":CocList lines<cr>")
-  else
-    vim.fn["coc_fzf#common#add_list_source"]("fzf-grep", "search global", "Rg")
+  vim.fn["coc_fzf#common#add_list_source"]("fzf-grep", "search global", "Rg")
 
-    keyset("n", keys.search_resume, ":CocFzfListResume<cr>")
-    keyset("n", keys.search_cur_word, ":CocFzfList fzf-grep <c-r><c-w><cr>")
-    keyset("n", keys.search_global, ":CocFzfList fzf-grep ")
-  end
+  keyset("n", keys.search_resume, ":CocFzfListResume<cr>")
+  keyset("n", keys.search_cur_word, ":CocFzfList fzf-grep <c-r><c-w><cr>")
+  keyset("n", keys.search_global, ":CocFzfList fzf-grep ")
 
   -- coc semantic token
   vim.g.coc_default_semantic_highlight_groups = 0

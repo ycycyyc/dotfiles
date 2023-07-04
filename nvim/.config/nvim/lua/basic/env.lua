@@ -17,7 +17,6 @@ local env = {
   semantic_token = false,
   luasnip = false,
   coc = false,
-  coclist = false,
   python3 = "",
 }
 
@@ -30,7 +29,7 @@ M.setup = function()
   end
 
   if not M.env.ts then
-    if M.env.coc or M.env.coclist then
+    if M.env.coc then
       vim.g.custom_define_highlight = 1
     end
   else
