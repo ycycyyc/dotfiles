@@ -200,6 +200,17 @@ local lsp_plugins = {
   },
 
   {
+    "utilyre/barbecue.nvim",
+    name = "barbecue",
+    version = "*",
+    dependencies = {
+      "SmiteshP/nvim-navic",
+    },
+    opts = require("plug_conf.winbar").opts,
+    cond = env.winbar,
+  },
+
+  {
     "simrat39/symbols-outline.nvim",
     keys = { { keys.toggle_symbol } },
     config = require("plug_conf.symbol").config,
