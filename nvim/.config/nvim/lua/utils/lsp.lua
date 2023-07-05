@@ -103,6 +103,10 @@ M.key_on_attach = function(conf)
       cb(client, bufnr, kms)
     end
 
+    if vim.fn.has "nvim-0.10" == 1 and env.inlayhint then
+      vim.lsp.inlay_hint(bufnr)
+    end
+
     if client.supports_method "textDocument/formatting" and lsp_config.auto_format then
       kms[keys.lsp_toggle_autoformat] = { toggle_auto_formatting, "n" }
 

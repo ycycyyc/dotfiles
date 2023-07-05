@@ -119,6 +119,8 @@ local function default_theme()
     -- self define
     YcNameSpace = { fg = red },
     YcCppStructure = { fg = yellow },
+
+    LspInlayHint = { fg = comment_grey, bg = cursor_grey },
   }
 
   -- treesitter

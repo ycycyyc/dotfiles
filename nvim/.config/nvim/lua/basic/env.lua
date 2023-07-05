@@ -18,7 +18,8 @@ local env = {
   luasnip = false,
   coc = false,
   python3 = "",
-  winbar = false,
+  winbar = true,
+  inlayhint = true,
 }
 
 M.setup = function()
