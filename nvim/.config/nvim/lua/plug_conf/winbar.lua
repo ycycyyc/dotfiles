@@ -78,6 +78,9 @@ M.opts = {
     separator = "▸",
   },
   context_follow_icon_color = true,
+
+  show_modified = true,
+
   kinds = {
     File = "file:",
     Module = "module:",
