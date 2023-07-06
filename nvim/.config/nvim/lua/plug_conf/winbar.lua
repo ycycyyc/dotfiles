@@ -7,6 +7,8 @@ local red = 204
 local yellow = 180
 local purple = 170
 local cyan = 38
+local green = 114
+local black = 235
 
 M.opts = {
   modifiers = {
@@ -28,7 +30,7 @@ M.opts = {
   theme = {
     normal = { ctermbg = bg },
     dirname = { bold = false, ctermfg = white, ctermbg = bg },
-    basename = { bold = true, ctermfg = yellow, ctermbg = bg },
+    basename = { bold = true, ctermfg = black, ctermbg = green },
     context_method = { bold = false, ctermfg = blue, ctermbg = bg },
     context_function = { bold = true, ctermfg = blue, ctermbg = bg },
     context_field = { bold = false, ctermfg = red, ctermbg = bg },
