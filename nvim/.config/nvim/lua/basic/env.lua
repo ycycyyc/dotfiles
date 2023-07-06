@@ -20,6 +20,7 @@ local env = {
   python3 = "",
   winbar = true,
   inlayhint = true,
+  noice = true,
 }
 
 M.setup = function()

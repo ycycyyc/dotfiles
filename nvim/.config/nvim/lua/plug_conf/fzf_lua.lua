@@ -3,6 +3,7 @@ local M = {}
 M.config = function()
   local helper = require "utils.helper"
   local map = helper.build_keymap { noremap = true }
+  local silent_map = helper.build_keymap { noremap = true, silent = true }
   local bmap = helper.build_keymap { noremap = true, buffer = true }
   local keys = require "basic.keys"
 
@@ -148,7 +149,7 @@ M.config = function()
   vim.api.nvim_create_user_command("History", ":FzfLua command_history", {})
 
   map("n", keys.search_global, ":Rg ")
-  map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
+  silent_map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
 
   local cb = function(_, _, kms)
     kms[keys.lsp_goto_definition] = {

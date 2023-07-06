@@ -107,4 +107,8 @@ M.opts = {
   },
 }
 
+M.config = function()
+  require("barbecue").setup(M.opts)
+end
+
 return M

@@ -206,7 +206,7 @@ local lsp_plugins = {
     dependencies = {
       "SmiteshP/nvim-navic",
     },
-    opts = require("plug_conf.winbar").opts,
+    config = require("plug_conf.winbar").config,
     cond = env.winbar,
   },
 
@@ -260,6 +260,16 @@ local lsp_plugins = {
   },
 
   { "wesleimp/stylua.nvim", ft = "lua" },
+
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    },
+    config = require("plug_conf.noice").config,
+    cond = env.noice,
+  },
 }
 
 M.setup = function()
