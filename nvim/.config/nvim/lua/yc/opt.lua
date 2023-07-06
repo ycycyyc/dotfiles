@@ -1,3 +1,5 @@
+local env = require("basic.env").env
+
 local M = {}
 
 M.setup = function()
@@ -39,6 +41,15 @@ M.setup = function()
   -- vim.opt.splitbelow = true -- Prefer windows splitting to the bottom
 
   vim.opt.guicursor = "n-v-c-i:block"
+
+  if env.noice then
+    vim.cmd [[
+      set laststatus=0
+      hi! link StatusLine Normal
+      hi! link StatusLineNC Normal
+      set statusline=%{repeat('─',winwidth('.'))}
+    ]]
+  end
 end
 
 return M
