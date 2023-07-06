@@ -23,6 +23,11 @@ M.config = function()
         -- lua = false, -- to disable a format, set to `false`
       },
     },
+    lsp = {
+      signature = {
+        enabled = false,
+      },
+    },
   }
 
   require("noice").setup(opts)
