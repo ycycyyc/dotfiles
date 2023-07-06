@@ -6,8 +6,9 @@ M.setup = function()
 
   local helper = require "utils.helper"
   local map = helper.build_keymap { noremap = true }
+  local slient_map = helper.build_keymap { noremap = true, silent = true }
 
-  map("n", "<Leader>w", "<cmd>w<cr>")
+  slient_map("n", "<Leader>w", "<cmd>silent w<cr>")
   map("n", "<Leader>q", "<cmd>q<cr>")
   map("n", "<Leader>m", "`")
   map({ "i", "s" }, "jk", "<ESC>")
