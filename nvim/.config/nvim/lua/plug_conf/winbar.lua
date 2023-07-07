@@ -32,6 +32,7 @@ M.opts = {
     normal = { ctermbg = bg },
     dirname = { bold = false, ctermfg = white, ctermbg = bg },
     basename = { bold = true, ctermfg = black, ctermbg = green },
+    modified = { bold = true, ctermfg = red },
     context_method = { bold = false, ctermfg = blue, ctermbg = bg },
     context_function = { bold = true, ctermfg = blue, ctermbg = bg },
     context_field = { bold = false, ctermfg = red, ctermbg = bg },
@@ -65,7 +66,7 @@ M.opts = {
     ---Modification indicator.
     ---
     ---@type string
-    modified = "●",
+    modified = "[+]",
 
     ---Truncation indicator.
     ---
