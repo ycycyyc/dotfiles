@@ -145,7 +145,7 @@ local lsp_plugins = {
     "kyazdani42/nvim-tree.lua",
     keys = { {
       keys.toggle_dir,
-      ":NvimTreeToggle<cr>",
+      "<cmd>NvimTreeToggle<cr>",
     } },
     config = require("plug_conf.tree").config,
   },
