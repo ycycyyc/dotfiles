@@ -36,6 +36,7 @@ local function default_theme()
   local cyan = { n = 38, gui = "#00afd7" }
   local purple = { n = 170, gui = "#d75fd7" }
   local cursor_grey = { n = 236, gui = "#303030" }
+  local cmdlinebg = { n = 235, gui = "#303030" }
   local curent_line = { n = 11, gui = "#ffff00" }
 
   local colors = {
@@ -121,6 +122,8 @@ local function default_theme()
     YcCppStructure = { fg = yellow },
 
     LspInlayHint = { fg = comment_grey, bg = cursor_grey },
+
+    MsgArea = { fg = white, bg = cmdlinebg },
   }
 
   -- treesitter
@@ -157,6 +160,10 @@ local function default_theme()
   hl(0, "typescriptVariable", { link = "Keyword" })
   hl(0, "typescriptOperator", { link = "Keyword" })
   hl(0, "typescriptImport", { link = "Keyword" })
+
+  -- remove statusline
+  hl(0, "StatusLine", { link = "Normal" })
+  hl(0, "StatusLineNC", { link = "Normal" })
 
   for name, opt in pairs(colors) do
     local o = convert(opt)
