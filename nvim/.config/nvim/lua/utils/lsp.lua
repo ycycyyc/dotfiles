@@ -84,7 +84,7 @@ M.key_on_attach = function(conf)
       [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
       [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
       [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
-      [keys.lsp_format] = { M.format, "n" },
+      [keys.lsp_format] = { M.sync_format_save, "n" },
       [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
       [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
@@ -134,12 +134,13 @@ M.key_on_attach = function(conf)
   end
 end
 
+function M.sync_format_save()
+  vim.lsp.buf.format { async = false }
+  vim.cmd "silent write"
+end
+
 function M.format()
-  if vim.fn.has "nvim-0.8" == 1 then
-    vim.lsp.buf.format { async = true }
-  else
-    vim.lsp.buf.format()
-  end
+  vim.lsp.buf.format()
 end
 
 function M.go_import()
@@ -159,8 +160,7 @@ function M.go_import()
       vim.lsp.util.apply_workspace_edit(edit, "utf-8")
     end
   end
-  M.format()
-  print "import go and format done!!!"
+  M.sync_format_save()
 end
 
 function M.go_to_cpp() -- not used
