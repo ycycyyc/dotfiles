@@ -100,4 +100,26 @@ function M.win_only()
   end
 end
 
+function M.since_nvim(major, minor, patch)
+  minor = minor or 0
+  patch = patch or 0
+
+  local v = vim.version()
+  if v.major > major then
+    return true
+  end
+  if v.major == major then
+    if v.minor > minor then
+      return true
+    end
+    if v.minor == minor then
+      if v.patch >= patch then
+        return true
+      end
+    end
+  end
+
+  return false
+end
+
 return M

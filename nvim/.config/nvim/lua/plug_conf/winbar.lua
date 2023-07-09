@@ -71,7 +71,7 @@ M.opts = {
     ---Truncation indicator.
     ---
     ---@type string
-    ellipsis = "…",
+    ellipsis = "…" ,
 
     ---Entry separator.
     ---
@@ -113,8 +113,9 @@ M.opts = {
 }
 
 M.config = function()
+  local helper = require "utils.helper"
   vim.api.nvim_create_autocmd({
-    "WinScrolled", -- or WinResized on NVIM-v0.9 and higher
+    helper.since_nvim(0, 9) and "WinResized" or "WinScrolled",
     "BufWinEnter",
     "CursorHold",
     "InsertLeave",
