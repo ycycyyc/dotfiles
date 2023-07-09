@@ -19,7 +19,7 @@ local env = {
   coc = false,
   python3 = "",
   winbar = true,
-  inlayhint = true,
+  inlayhint = false, -- wait for nvim0.10 stable version
   noice = false,
 }
 
@@ -29,6 +29,11 @@ M.setup = function()
     M.env = vim.tbl_extend("force", env, vim.json.decode(json_conf))
   else
     M.env = env
+  end
+
+  if vim.fn.has "nvim-0.10" == 0 and M.env.inlayhint then
+    M.env.inlayhint = false
+    print "inlay hint only used in nvim-0.10"
   end
 
   if not M.env.ts then

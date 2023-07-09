@@ -103,7 +103,7 @@ M.key_on_attach = function(conf)
       cb(client, bufnr, kms)
     end
 
-    if vim.fn.has "nvim-0.10" == 1 and env.inlayhint then
+    if env.inlayhint then
       vim.lsp.inlay_hint(bufnr)
     end
 
