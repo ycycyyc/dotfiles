@@ -51,8 +51,8 @@ M.setup = function()
   map("c", "<c-f>", "<Right>")
 
   -- 交换内容，先删除内容1，再选中内容2，然后用<leader>x交换
-  map("v", "<leader>x", "<ESC>`.``gvp``P")
-  map("n", "<leader>x", "viw<ESC>`.``gvp``P<c-o>")
+  -- map("v", "<leader>x", "<ESC>`.``gvp``P")
+  -- map("n", "<leader>x", "viw<ESC>`.``gvp``P<c-o>")
 
   map("v", "<leader>s", ":s/.*'\\(.*\\)'.*/\\1")
 end
