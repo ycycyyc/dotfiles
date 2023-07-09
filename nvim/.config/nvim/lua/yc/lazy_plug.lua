@@ -205,6 +205,9 @@ local lsp_plugins = {
     version = "*",
     dependencies = {
       "SmiteshP/nvim-navic",
+      opts = {
+        lazy_update_context = true,
+      },
     },
     config = require("plug_conf.winbar").config,
     cond = env.winbar,
