@@ -118,6 +118,7 @@ M.load_lsp_config = function()
       GoImportAndFormat = {
         function()
           require("utils.lsp").go_import()
+          require("utils.lsp").sync_format_save()
         end,
       },
     },

@@ -160,7 +160,6 @@ function M.go_import()
       vim.lsp.util.apply_workspace_edit(edit, "utf-8")
     end
   end
-  M.sync_format_save()
 end
 
 function M.go_to_cpp() -- not used
