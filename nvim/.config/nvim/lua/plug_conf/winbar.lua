@@ -30,7 +30,7 @@ M.opts = {
 
   theme = {
     normal = { ctermbg = bg },
-    dirname = { bold = false, ctermfg = white, ctermbg = bg },
+    dirname = { bold = true, ctermfg = white, ctermbg = bg },
     basename = { bold = true, ctermfg = black, ctermbg = green },
     modified = { bold = true, ctermfg = red },
     context_method = { bold = false, ctermfg = blue, ctermbg = bg },
