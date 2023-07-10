@@ -71,7 +71,7 @@ M.opts = {
     ---Truncation indicator.
     ---
     ---@type string
-    ellipsis = "…" ,
+    ellipsis = "…",
 
     ---Entry separator.
     ---
@@ -81,6 +81,7 @@ M.opts = {
   context_follow_icon_color = true,
 
   show_modified = true,
+  show_dirname = false,
 
   kinds = {
     File = "file:",

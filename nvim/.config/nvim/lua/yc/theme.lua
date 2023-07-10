@@ -93,7 +93,6 @@ local function default_theme()
     MatchParen = { fg = white, underline = true },
     CursorLineNr = { bg = menu_grey, fg = curent_line, cterm = {} },
 
-    StatusLineNC = { bg = white },
     diffAdded = { fg = green },
     diffRemoved = { fg = red },
 
@@ -161,14 +160,15 @@ local function default_theme()
   hl(0, "typescriptOperator", { link = "Keyword" })
   hl(0, "typescriptImport", { link = "Keyword" })
 
-  -- remove statusline
-  hl(0, "StatusLine", { link = "Normal" })
-  hl(0, "StatusLineNC", { link = "Normal" })
-
   for name, opt in pairs(colors) do
     local o = convert(opt)
     hl(0, name, o)
   end
+
+  vim.cmd [[
+      hi! StatusLine ctermfg=236 ctermbg=145
+      hi! StatusLineNC ctermfg=236 ctermbg=236
+  ]]
 end
 
 local function other_theme()

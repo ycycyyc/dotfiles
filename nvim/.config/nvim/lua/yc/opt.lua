@@ -42,9 +42,7 @@ M.setup = function()
 
   vim.opt.guicursor = "n-v-c-i:block"
 
-  -- remove statusline
-  vim.opt.laststatus = 0
-  vim.opt.statusline = "%{repeat('─',winwidth('.'))}"
+  vim.opt.statusline = "%f%m%h  %l of %L "
 end
 
 return M
