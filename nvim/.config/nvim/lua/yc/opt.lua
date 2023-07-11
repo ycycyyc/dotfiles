@@ -42,7 +42,14 @@ M.setup = function()
 
   vim.opt.guicursor = "n-v-c-i:block"
 
-  vim.opt.statusline = vim.opt.statusline + "%{expand('%:~:.')}%m%h  %l of %L "
+  vim.cmd [[
+      hi! StatusLine1 ctermfg=145 ctermbg=239 cterm=bold
+      hi! StatusLine2 ctermfg=39 ctermbg=238
+      hi! StatusLine3 ctermfg=145 ctermbg=236 
+  ]]
+
+  vim.opt.statusline = vim.opt.statusline
+    + "%#StatusLine1# %{expand('%:~:.')}%m%h  %#StatusLine2# %l of %L %#StatusLine3#"
 end
 
 return M
