@@ -42,7 +42,7 @@ M.setup = function()
 
   vim.opt.guicursor = "n-v-c-i:block"
 
-  vim.opt.statusline = "%f%m%h  %l of %L "
+  vim.opt.statusline = vim.opt.statusline + "%{expand('%:~:.')}%m%h  %l of %L "
 end
 
 return M
