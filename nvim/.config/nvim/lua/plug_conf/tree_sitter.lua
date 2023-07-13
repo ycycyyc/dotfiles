@@ -1,6 +1,10 @@
 local M = {}
 
 local ts_disable = function(lang, bufnr)
+  if vim.tbl_contains({ "cpp", "go" }, lang) then
+    return false
+  end
+
   return vim.api.nvim_buf_line_count(bufnr) > 3500
 end
 

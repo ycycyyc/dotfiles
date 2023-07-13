@@ -148,7 +148,7 @@ M.load_lsp_config = function()
   lspconfig.clangd.setup {
     on_attach = key_on_attach {
       client_cb = function(_, _, kms)
-        kms[keys.lsp_format] = nil
+        kms[keys.lsp_format] = { function() end, "n" }
         kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "v" }
         kms[keys.switch_source_header] = {
           function()
