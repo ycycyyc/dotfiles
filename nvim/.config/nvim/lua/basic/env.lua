@@ -21,6 +21,7 @@ local env = {
   winbar = true,
   inlayhint = false, -- wait for nvim0.10 stable version
   noice = false,
+  flash = true,
 }
 
 M.setup = function()

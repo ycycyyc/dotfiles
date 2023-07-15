@@ -168,6 +168,7 @@ local function default_theme()
   vim.cmd [[
       hi! StatusLine ctermfg=236 ctermbg=145
       hi! StatusLineNC ctermfg=236 ctermbg=236
+      hi! FlashLabel cterm=nocombine ctermfg=0 ctermbg=9 gui=nocombine guifg=Black guibg=#ccff88
   ]]
 end
 

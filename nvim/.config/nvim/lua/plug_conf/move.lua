@@ -30,4 +30,12 @@ M.config = function()
   nnoremap(keys.jump, jump)
 end
 
+M.flash_opts = {
+  modes = {
+    char = {
+      enabled = false,
+    },
+  },
+}
+
 return M

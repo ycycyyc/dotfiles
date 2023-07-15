@@ -17,6 +17,24 @@ local basic_plugins = {
     "ggandor/leap.nvim",
     keys = { { keys.jump } },
     config = require("plug_conf.move").config,
+    cond = not env.flash,
+  },
+
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = require("plug_conf.move").flash_opts,
+    keys = {
+      {
+        "<c-g>",
+        mode = { "c" },
+        function()
+          require("flash").toggle()
+        end,
+        desc = "Toggle Flash Search",
+      },
+    },
+    cond = env.flash,
   },
 
   {
