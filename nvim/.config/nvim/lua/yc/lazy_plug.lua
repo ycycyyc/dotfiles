@@ -21,7 +21,8 @@ local basic_plugins = {
   },
 
   {
-    "folke/flash.nvim",
+    "ycycyyc/flash.nvim",
+    branch = "main",
     event = "VeryLazy",
     opts = require("plug_conf.move").flash_opts,
     keys = {

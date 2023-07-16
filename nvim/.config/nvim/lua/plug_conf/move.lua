@@ -38,8 +38,8 @@ M.flash_opts = {
   },
   label = {
     after = false, ---@type boolean|number[]
-    -- before = { 0, 0 }, ---@type boolean|number[]
-    before = true,
+    before = { 0, 0 }, ---@type boolean|number[]
+    -- before = true,
   },
 }
 
