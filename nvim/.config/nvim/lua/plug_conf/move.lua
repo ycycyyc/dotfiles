@@ -36,6 +36,11 @@ M.flash_opts = {
       enabled = false,
     },
   },
+  label = {
+    after = false, ---@type boolean|number[]
+    -- before = { 0, 0 }, ---@type boolean|number[]
+    before = true,
+  },
 }
 
 return M
