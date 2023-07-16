@@ -22,7 +22,7 @@ M.setup = function()
   vim.opt.smartindent = true
 
   vim.opt.shortmess = vim.opt.shortmess + "c" + "s" -- 简写
-  vim.opt.scrolloff = 2 -- 滚动时， 底部留俩行
+  vim.opt.scrolloff = 1 -- 滚动时， 底部留俩行
 
   vim.opt.tabstop = 4
   vim.opt.softtabstop = 4
