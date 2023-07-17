@@ -13,12 +13,6 @@ end
 
 local basic_plugins = {
   "nvim-lua/plenary.nvim",
-  {
-    "ggandor/leap.nvim",
-    keys = { { keys.jump } },
-    config = require("plug_conf.move").config,
-    cond = not env.flash,
-  },
 
   {
     "ycycyyc/flash.nvim",
@@ -34,8 +28,15 @@ local basic_plugins = {
         end,
         desc = "Toggle Flash Search",
       },
+      {
+        keys.jump,
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").jump()
+        end,
+        desc = "Flash",
+      },
     },
-    cond = env.flash,
   },
 
   {

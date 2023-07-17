@@ -1,4 +1,6 @@
 local M = {}
+
+-- remove leap plugin
 M.config = function()
   local tool = require "utils.helper"
   local keys = require "basic.keys"
@@ -40,6 +42,9 @@ M.flash_opts = {
     after = false, ---@type boolean|number[]
     before = { 0, 0 }, ---@type boolean|number[]
     -- before = true,
+  },
+  highlight = {
+    backdrop = false,
   },
 }
 
