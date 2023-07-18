@@ -85,6 +85,13 @@ M.key_on_attach = function(conf)
       [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
       [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
       [keys.lsp_format] = { M.sync_format_save, "n" },
+      [keys.lsp_range_format] = {
+        function()
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+          M.sync_format_save()
+        end,
+        "v",
+      },
       [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
       [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
