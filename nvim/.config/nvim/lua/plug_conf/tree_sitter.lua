@@ -25,9 +25,9 @@ M.config = function()
       enable = true,
       disable = ts_disable,
       keymaps = {
-        init_selection = "<CR>",
-        node_incremental = "<CR>",
-        node_decremental = "<TAB>",
+        init_selection = "<TAB>",
+        node_incremental = "<TAB>",
+        node_decremental = "<S-TAB>",
         -- scope_incremental = "<TAB>",
       },
     },
