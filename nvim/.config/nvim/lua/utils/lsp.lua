@@ -87,7 +87,7 @@ M.key_on_attach = function(conf)
       [keys.lsp_format] = { M.sync_format_save, "n" },
       [keys.lsp_range_format] = {
         function()
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+          vim.cmd("normal w!")
           M.sync_format_save()
         end,
         "v",
