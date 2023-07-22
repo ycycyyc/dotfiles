@@ -32,7 +32,12 @@ local basic_plugins = {
         keys.jump,
         mode = { "n", "x", "o" },
         function()
-          require("flash").jump()
+          require("flash").jump {
+            label = {
+              after = false, ---@type boolean|number[]
+              before = { 0, 0 },
+            },
+          }
         end,
         desc = "Flash",
       },
