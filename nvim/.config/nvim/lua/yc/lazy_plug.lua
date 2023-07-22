@@ -68,8 +68,6 @@ local basic_plugins = {
     opts = {},
   },
 
-  { "tpope/vim-repeat", event = "VeryLazy" },
-
   {
     "akinsho/toggleterm.nvim",
     keys = { { keys.toggle_term } },
