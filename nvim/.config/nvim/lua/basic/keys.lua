@@ -15,6 +15,7 @@ return {
 
   -- op
   toggle_dir = "<Leader>n", -- 打开目录树
+  toggle_dir_open_file = "<leader>N",
   toggle_symbol = "<Leader>t", -- symbol
   switch_source_header = "<Leader>c", -- cpp h 文件切换
   jump = "<Leader>e", -- 跳转
