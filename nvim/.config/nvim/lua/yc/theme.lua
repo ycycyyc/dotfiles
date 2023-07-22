@@ -75,7 +75,7 @@ local function default_theme()
     Macro = { fg = purple },
     Todo = { fg = purple },
     --
-    Cursor = { fg = black, bg = blue },
+    -- Cursor = { fg = black, bg = blue },
     Search = { fg = black, bg = yellow },
     Directory = { fg = blue },
 
