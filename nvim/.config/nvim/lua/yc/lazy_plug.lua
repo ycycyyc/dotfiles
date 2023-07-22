@@ -63,13 +63,12 @@ local basic_plugins = {
   },
 
   {
-    "tpope/vim-surround",
+    "kylechui/nvim-surround",
     event = { "InsertEnter", "CursorHold", "CursorHoldI" },
+    opts = {},
   },
 
   { "tpope/vim-repeat", event = "VeryLazy" },
-
-  -- { "kevinhwang91/nvim-bqf", ft = "qf" },
 
   {
     "akinsho/toggleterm.nvim",
