@@ -35,7 +35,8 @@ local basic_plugins = {
           require("flash").jump {
             label = {
               after = false, ---@type boolean|number[]
-              before = { 0, 0 },
+              -- before = { 0, 0 },
+              before = true,
             },
           }
         end,
