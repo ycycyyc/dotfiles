@@ -1,6 +1,14 @@
 local M = {}
 
 M.opts = {
+  line_sep_start = "┌-----------------------------------------",
+  result_padding = "¦  ",
+  line_sep = "└-----------------------------------------",
+  highlight = {
+    ui = "String",
+    search = "DiffChange",
+    replace = "DiffDelete",
+  },
   mapping = {
     ["send_to_qf"] = {
       map = "<leader>x",
