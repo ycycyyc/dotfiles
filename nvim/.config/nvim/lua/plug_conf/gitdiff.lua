@@ -8,8 +8,9 @@ M.config = function()
   local register_fts_cb = require("yc.settings").register_fts_cb
   local bmap = helper.build_keymap { noremap = true, buffer = true }
 
-  register_fts_cb({ "DiffviewFiles" }, function()
+  register_fts_cb({ "DiffviewFiles", "DiffviewFileHistory" }, function()
     bmap("n", "<leader>q", ":DiffviewClose<cr>")
+    bmap("n", "q", ":DiffviewClose<cr>")
   end)
 
   require("diffview").setup {
