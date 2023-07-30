@@ -20,6 +20,12 @@ M.config = function()
     preview["default"] = "bat"
   end
 
+  local diff = function(selected)
+    local res = vim.fn.split(selected[1], " ")
+    vim.fn.setreg(0, res[1])
+    helper.diff_open()
+  end
+
   require("fzf-lua").setup {
     winopts = {
       row = 0.25,
@@ -40,11 +46,8 @@ M.config = function()
     git = {
       commits = {
         actions = {
-          ["ctrl-y"] = function(selected)
-            local res = vim.fn.split(selected[1], " ")
-            vim.fn.setreg(0, res[1])
-            helper.diff_open()
-          end,
+          ["ctrl-y"] = diff,
+          ["default"] = diff,
         },
       },
     },

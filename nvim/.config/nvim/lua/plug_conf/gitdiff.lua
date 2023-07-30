@@ -11,6 +11,7 @@ M.config = function()
   register_fts_cb({ "DiffviewFiles", "DiffviewFileHistory" }, function()
     bmap("n", "<leader>q", ":DiffviewClose<cr>")
     bmap("n", "q", ":DiffviewClose<cr>")
+    bmap("n", "<esc>", ":DiffviewClose<cr>")
   end)
 
   require("diffview").setup {
