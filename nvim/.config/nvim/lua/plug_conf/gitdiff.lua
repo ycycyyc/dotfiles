@@ -3,10 +3,10 @@ local M = {}
 
 M.config = function()
   local cb = require("diffview.config").diffview_callback
-
+  local keys = require "basic.keys"
   local helper = require "utils.helper"
   local register_fts_cb = require("yc.settings").register_fts_cb
-  local bmap = helper.build_keymap { noremap = true, buffer = true }
+  local bmap = helper.build_keymap { noremap = true, buffer = true, silent = true }
 
   register_fts_cb({ "DiffviewFiles", "DiffviewFileHistory" }, function()
     bmap("n", "<leader>q", ":DiffviewClose<cr>")
@@ -115,6 +115,11 @@ M.config = function()
       option_panel = { ["<tab>"] = cb "select", ["q"] = cb "close" },
     },
   }
+
+  vim.keymap.set("n", keys.git_diff_file, function()
+    local file = vim.fn.expand "%:~:."
+    vim.cmd("DiffviewFileHistory " .. file)
+  end)
 end
 
 return M

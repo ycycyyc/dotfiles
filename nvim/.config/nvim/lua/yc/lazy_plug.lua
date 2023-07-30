@@ -57,7 +57,7 @@ local basic_plugins = {
     keys = {
       { keys.git_diff, ":DiffOpen<cr>" },
       { keys.git_diff_open, ":DiffviewOpen<cr>" },
-      { keys.git_diff_file, ":DiffviewFileHistory " },
+      { keys.git_diff_file },
     },
     cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewFocusFiles" },
     config = require("plug_conf.gitdiff").config,
