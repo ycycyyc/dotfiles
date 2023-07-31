@@ -50,12 +50,12 @@ return {
   dbg_eval = "<F5>",
 
   -- git
-  git_commits = "<leader>hh",
+  git_status = "<leader>g",
   git_next_chunk = "]c",
   git_prev_chunk = "[c",
+  git_commits = "<leader>hh",
   git_reset_chunk = "<leader>hu",
   git_preview_hunk = "<leader>hp",
-  git_status = "<leader>g",
   git_blame = "<leader>hl",
   git_diff = "<leader>hd",
   git_diff_open = "<leader>ho",
