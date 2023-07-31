@@ -73,7 +73,9 @@ M.config = function()
       log_options = { -- See ':h diffview-config-log_options'
         git = {
           single_file = {
-            diff_merges = "combined",
+            -- max_count = 1024,
+            -- follow = true,
+            -- diff_merges = "combined", -- what???
           },
           multi_file = {
             diff_merges = "first-parent",
