@@ -288,14 +288,22 @@ local lsp_plugins = {
             -- vscode snippets path
             -- local snip_path = vim.fs.dirname(lazypath) .. "/friendly-snippets"
             -- require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_path } }
-            require "plug_conf.luasnip"
+            -- require "plug_conf.luasnip"
           end
         end,
         dependencies = {
-          -- "ycycyyc/friendly-snippets",
+          "saadparwaiz1/cmp_luasnip",
         },
+        cond = env.luasnip,
       },
-      "saadparwaiz1/cmp_luasnip",
+
+      {
+        "dcampos/nvim-snippy",
+        dependencies = {
+          "dcampos/cmp-snippy",
+        },
+        cond = not env.luasnip,
+      },
     },
   },
 

@@ -3,6 +3,8 @@ local M = {}
 M.config = function()
   local cmp = require "cmp"
   local tool = require "utils.helper"
+  local env = require("basic.env").env
+
   vim.o.completeopt = "menu,menuone,noselect"
 
   local function has_words_before()
@@ -13,8 +15,12 @@ M.config = function()
   cmp.setup {
     snippet = {
       expand = function(args)
-        local luasnip = require "luasnip"
-        luasnip.lsp_expand(args.body)
+        if env.luasnip then
+          local luasnip = require "luasnip"
+          luasnip.lsp_expand(args.body)
+        else
+          require("snippy").expand_snippet(args.body) -- For `snippy` users.
+        end
       end,
     },
 
@@ -64,7 +70,8 @@ M.config = function()
     sources = cmp.config.sources({
       { name = "nvim_lua", max_item_count = 10, keyword_length = 2 },
       { name = "nvim_lsp", max_item_count = 10, keyword_length = 2 },
-      { name = "luasnip", max_item_count = 10, keyword_length = 2 }, -- For snip users.
+      env.luasnip and { name = "luasnip", max_item_count = 10, keyword_length = 2 }
+        or { name = "snippy", max_item_count = 10, keyword_length = 2 },
     }, { { name = "buffer" } }),
   }
 end
