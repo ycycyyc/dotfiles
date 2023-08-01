@@ -250,6 +250,7 @@ local lsp_plugins = {
     "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufAdd", "BufNewFile" },
     config = require("plug_conf.lsp").load_lsp_config,
+    dependencies = "hrsh7th/cmp-nvim-lsp",
   },
 
   {
@@ -299,6 +300,14 @@ local lsp_plugins = {
 
       {
         "dcampos/nvim-snippy",
+        opts = {
+          mappings = {
+            is = {
+              ["<Tab>"] = "expand_or_advance",
+              ["<S-Tab>"] = "previous",
+            },
+          },
+        },
         dependencies = {
           "dcampos/cmp-snippy",
         },

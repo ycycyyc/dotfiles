@@ -3,7 +3,6 @@
 local key_on_attach = require("utils.lsp").key_on_attach
 local env = require("basic.env").env
 local keys = require "basic.keys"
-local helper = require "utils.helper"
 
 local M = {}
 
@@ -12,16 +11,13 @@ local M = {}
 M.load_lsp_config = function()
   -- 0. base cofig
   local lspconfig = require "lspconfig"
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
+  local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
   vim.lsp.set_log_level "OFF"
   vim.lsp.handlers["textDocument/publishDiagnostics"] =
     vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { underline = false })
 
   -- 1. lua
-  -- /lib64/libm.so.6.old remember that
-  -- https://www.chrisatmachine.com/Neovim/28-neovim-lua-development/
   USER = vim.fn.expand "$USER"
 
   local sumneko_root_path = env.lua_ls_root
@@ -32,6 +28,7 @@ M.load_lsp_config = function()
   table.insert(runtime_path, "lua/?/init.lua")
 
   lspconfig.lua_ls.setup {
+    capabilities = capabilities,
     on_attach = key_on_attach {
       client_cb = function(_, _, kms)
         kms[keys.lsp_format] = {
@@ -146,6 +143,7 @@ M.load_lsp_config = function()
   local clangd_bin = env.clangd_bin
 
   lspconfig.clangd.setup {
+    capabilities = capabilities,
     on_attach = key_on_attach {
       client_cb = function(_, _, kms)
         kms[keys.lsp_format] = { function() end, "n" }
