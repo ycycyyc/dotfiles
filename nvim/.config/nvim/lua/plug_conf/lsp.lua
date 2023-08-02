@@ -91,6 +91,7 @@ M.load_lsp_config = function()
       gopls = {
         semanticTokens = env.semantic_token,
         experimentalPostfixCompletions = true,
+        usePlaceholders = env.usePlaceholders,
         analyses = {
           unusedparams = true,
           shadow = true,
