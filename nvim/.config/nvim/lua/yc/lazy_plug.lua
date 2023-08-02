@@ -285,12 +285,12 @@ local lsp_plugins = {
       {
         "L3MON4D3/LuaSnip",
         config = function()
-          if env.luasnip then
-            -- vscode snippets path
-            -- local snip_path = vim.fs.dirname(lazypath) .. "/friendly-snippets"
-            -- require("luasnip.loaders.from_vscode").lazy_load { paths = { snip_path } }
-            -- require "plug_conf.luasnip"
-          end
+          vim.cmd [[
+              imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
+              inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
+              snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
+              snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
+          ]]
         end,
         dependencies = {
           "saadparwaiz1/cmp_luasnip",
