@@ -40,7 +40,7 @@ build type: Release
 1. clangd (needed)
 
 ## neovim env
-1. export NVIM_CONF="neogit=on,clangd_bin=clangd,theme=default,lua_ls_bin={path},lua_ls_root={path},line=lualine"
+1. export NVIM_CONF="clangd_bin=clangd,theme=default,lua_ls_bin={path},lua_ls_root={path}"
 
 ## clang/clangd/lldb build
 1. git clone https://github.com/llvm/llvm-project
