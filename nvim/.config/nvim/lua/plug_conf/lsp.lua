@@ -177,7 +177,7 @@ M.load_lsp_config = function()
       "--completion-style=detailed", -- 补充头文件的形式
       "--header-insertion=iwyu", -- pch优化的位置
       "--pch-storage=memory", -- "--query-driver=/data/opt/gcc-5.4.0/bin/g++",
-      "--function-arg-placeholders",
+      env.usePlaceholders and "--function-arg-placeholders" or "--function-arg-placeholders=0",
       -- "-Wuninitialized",
       -- '--query-driver="/usr/local/opt/gcc-arm-none-eabi-8-2019-q3-update/bin/arm-none-eabi-gcc"'
     },
