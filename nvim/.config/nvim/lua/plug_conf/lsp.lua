@@ -193,7 +193,21 @@ M.load_lsp_config = function()
   }
 
   -- 4. other python json yaml cmake ts bash vimls
-  lspconfig.pyright.setup { on_attach = key_on_attach() }
+  lspconfig.pyright.setup {
+    capabilities = capabilities,
+    filetypes = { "python" },
+    on_attach = key_on_attach(),
+    settings = {
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          diagnosticMode = "workspace",
+          useLibraryCodeForTypes = true,
+        },
+      },
+    },
+    single_file_support = true,
+  }
 
   -- json format :%!python -m json.tool
   lspconfig.jsonls.setup {
