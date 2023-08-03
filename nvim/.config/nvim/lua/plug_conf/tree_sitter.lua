@@ -22,7 +22,7 @@ M.config = function()
       additional_vim_regex_highlighting = false,
     },
     incremental_selection = {
-      enable = true,
+      enable = false,
       disable = ts_disable,
       keymaps = {
         init_selection = "<TAB>",
