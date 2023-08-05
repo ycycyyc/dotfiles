@@ -3,6 +3,8 @@ local M = {}
 local api = vim.api
 local Job = require "plenary.job"
 
+---@return string
+---@return string
 local function get_ty_and_range()
   -- type string
   local cur_line_content = api.nvim_get_current_line()
@@ -22,6 +24,9 @@ local function get_ty_and_range()
   end
   error "get tag range failed"
 end
+
+---@param tags_op string
+---@param tags_type string
 local function op_go_tags(tags_op, tags_type)
   local file_name = api.nvim_buf_get_name(0)
   local type, range = get_ty_and_range()
@@ -53,10 +58,12 @@ local function op_go_tags(tags_op, tags_type)
   api.nvim_buf_set_lines(0, 0, -1, false, output)
 end
 
+---@param tags string
 function M.add(tags)
   op_go_tags("-add-tags", tags)
 end
 
+---@param tags string
 function M.remove(tags)
   op_go_tags("-remove-tags", tags)
 end

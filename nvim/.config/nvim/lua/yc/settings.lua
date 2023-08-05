@@ -5,11 +5,14 @@ local M = {
   ft_cbs = {},
 }
 
+---@param fts string | string[]
+---@param callback function
 M.register_fts_cb = function(fts, callback)
   if type(fts) == "string" then
     fts = { fts }
   end
 
+  ---@param ft string
   local register_ft_cb = function(ft)
     if M.ft_cbs[ft] == nil then
       M.ft_cbs[ft] = {}

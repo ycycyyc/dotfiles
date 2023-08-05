@@ -44,6 +44,8 @@ function M.get_visual_selection()
   return { startp, endp }
 end
 
+---@param wanted string
+---@return number[]
 function M.get_winnums_byft(wanted)
   local win_nums = {}
   local wins = vim.api.nvim_list_wins()
@@ -57,6 +59,8 @@ function M.get_winnums_byft(wanted)
   return win_nums
 end
 
+---@param wanted string
+---@return boolean
 function M.try_jumpto_ft_win(wanted)
   local win_nums = M.get_winnums_byft(wanted)
 
@@ -100,6 +104,10 @@ function M.win_only()
   end
 end
 
+---@param major number
+---@param minor number?
+---@param patch number?
+---@return boolean
 function M.since_nvim(major, minor, patch)
   minor = minor or 0
   patch = patch or 0
