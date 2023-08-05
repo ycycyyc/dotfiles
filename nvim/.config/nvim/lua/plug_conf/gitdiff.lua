@@ -470,9 +470,14 @@ M.config = function()
   }
 
   register_fts_cb({ "DiffviewFiles", "DiffviewFileHistory" }, function()
-    bmap("n", "<leader>q", ":DiffviewClose<cr>")
-    bmap("n", "q", ":DiffviewClose<cr>")
-    bmap("n", "<esc>", ":DiffviewClose<cr>")
+    local close = function()
+      vim.cmd "DiffviewClose"
+      vim.cmd "silent! checktime"
+    end
+
+    bmap("n", "<leader>q", close)
+    bmap("n", "q", close)
+    bmap("n", "<esc>", close)
   end)
 
   vim.keymap.set("n", keys.git_diff_file, function()
