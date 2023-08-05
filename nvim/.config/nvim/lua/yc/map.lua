@@ -18,6 +18,9 @@ M.setup = function()
   map("n", "<Leader>[", "<cmd>bp<cr>")
   map("n", "<Leader>]", "<cmd>bn<cr>")
 
+  map("n", "]t", "<cmd>tabNext<cr>")
+  map("n", "[t", "<cmd>tabprevious<cr>")
+
   map({ "n", "v" }, "H", "^")
   map({ "n", "v" }, "L", "$")
 
