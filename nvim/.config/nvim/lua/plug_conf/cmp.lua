@@ -68,11 +68,10 @@ M.config = function()
     },
 
     sources = cmp.config.sources({
-      { name = "nvim_lua", max_item_count = 10, keyword_length = 2 },
-      { name = "nvim_lsp", max_item_count = 10, keyword_length = 2 },
-      env.luasnip and { name = "luasnip", max_item_count = 10, keyword_length = 2 }
-        or { name = "snippy", max_item_count = 10, keyword_length = 2 },
-    }, { { name = "buffer" } }),
+      { name = "nvim_lua", max_item_count = 10 },
+      { name = "nvim_lsp", max_item_count = 10 },
+      env.luasnip and { name = "luasnip", max_item_count = 10 } or { name = "snippy", max_item_count = 10 },
+    }, { { name = "buffer", max_item_count = 10 } }),
   }
 end
 
