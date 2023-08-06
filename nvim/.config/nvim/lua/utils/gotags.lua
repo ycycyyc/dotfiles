@@ -6,12 +6,13 @@ local Job = require "plenary.job"
 ---@return string
 ---@return string
 local function get_ty_and_range()
-  -- type string
+  ---@type string
   local cur_line_content = api.nvim_get_current_line()
   local struct_word_pos = string.find(cur_line_content, "struct")
   local type_word_pos = string.find(cur_line_content, "type")
 
   if struct_word_pos ~= nil and type_word_pos ~= nil then
+    ---@type string[]
     local words = {}
     for w in string.gmatch(cur_line_content, "%S+") do
       table.insert(words, w)

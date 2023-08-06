@@ -87,7 +87,7 @@ M.key_on_attach = function(conf)
       [keys.lsp_format] = { M.sync_format_save, "n" },
       [keys.lsp_range_format] = {
         function()
-          vim.cmd("normal w!")
+          vim.cmd "normal w!"
           M.sync_format_save()
         end,
         "x",

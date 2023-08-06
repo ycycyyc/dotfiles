@@ -3,10 +3,13 @@ local M = {}
 local api = vim.api
 
 function M.buf_only()
+  ---@type number
   local cur = api.nvim_get_current_buf()
+
+  ---@type number[]
   local list = api.nvim_list_bufs()
 
-  for _, i in pairs(list) do
+  for _, i in ipairs(list) do
     if vim.fn.buflisted(i) == 1 then
       if i ~= cur then
         api.nvim_buf_delete(i, { force = false })
@@ -36,11 +39,16 @@ function M.i_move_to_end()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("A", true, false, true), "n", true)
 end
 
+---@return number[]
 function M.get_visual_selection()
-  local startp = vim.fn.getpos "v"
+  ---@type number[] | number
+  local startp = vim.fn.getpos "v" -- len == 4
   startp = startp[2]
-  local endp = vim.fn.getpos "."
+
+  ---@type number[] | number
+  local endp = vim.fn.getpos "." -- len == 4
   endp = endp[2]
+
   return { startp, endp }
 end
 
@@ -65,7 +73,7 @@ function M.try_jumpto_ft_win(wanted)
   local win_nums = M.get_winnums_byft(wanted)
 
   if #win_nums == 0 then
-    print("no " .. wanted .. " window found")
+    vim.print("no " .. wanted .. " window found")
     return false
   end
 
