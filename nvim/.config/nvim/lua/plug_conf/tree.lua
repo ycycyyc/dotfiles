@@ -35,6 +35,7 @@ M.config = function()
       vim.keymap.set("n", "d", api.fs.remove, opts "Delete")
       vim.keymap.set("n", "H", api.tree.toggle_hidden_filter, opts "Toggle Dotfiles")
       vim.keymap.set("n", "I", api.tree.toggle_gitignore_filter, opts "Toggle Git Ignore")
+      vim.keymap.set("n", "q", api.tree.close, opts "Close the tree")
     end,
   }
   --
