@@ -67,7 +67,7 @@ M.config = function()
 
   local map = helper.build_keymap { noremap = true }
   local keys = require "basic.keys"
-  map({ "n", "v" }, keys.toggle_symbol, function()
+  map({ "n" }, keys.toggle_symbol, function()
     require("symbols-outline").toggle_outline()
   end)
 end

@@ -21,13 +21,13 @@ M.setup = function()
   map("n", "]t", "<cmd>tabNext<cr>")
   map("n", "[t", "<cmd>tabprevious<cr>")
 
-  map({ "n", "v" }, "H", "^")
-  map({ "n", "v" }, "L", "$")
+  map({ "n", "x" }, "H", "^")
+  map({ "n", "x" }, "L", "$")
 
   map("n", "<BackSpace>", "<cmd>noh<cr>")
 
-  map("v", "<", "<gv")
-  map("v", ">", ">gv")
+  map("x", "<", "<gv")
+  map("x", ">", ">gv")
 
   map("n", "<c-d>", "10j")
   map("n", "<c-u>", "10k")
@@ -54,10 +54,10 @@ M.setup = function()
   map("c", "<c-f>", "<Right>")
 
   -- 交换内容，先删除内容1，再选中内容2，然后用<leader>x交换
-  -- map("v", "<leader>x", "<ESC>`.``gvp``P")
+  -- map("x", "<leader>x", "<ESC>`.``gvp``P")
   -- map("n", "<leader>x", "viw<ESC>`.``gvp``P<c-o>")
 
-  map("v", "<leader>s", ":s/.*'\\(.*\\)'.*/\\1")
+  map("x", "<leader>s", ":s/.*'\\(.*\\)'.*/\\1")
 end
 
 return M

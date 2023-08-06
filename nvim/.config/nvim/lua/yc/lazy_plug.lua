@@ -78,7 +78,7 @@ local basic_plugins = {
   {
     "numToStr/Comment.nvim",
     keys = {
-      { "gc", mode = { "v" } },
+      { "gc", mode = { "x" } },
       { "gcc", mode = { "n" } },
     },
     opts = {},
