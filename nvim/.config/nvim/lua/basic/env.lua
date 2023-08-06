@@ -22,6 +22,7 @@ local env = {
   inlayhint = false, -- wait for nvim0.10 stable version
   noice = false,
   usePlaceholders = true,
+  cmp_ghost_text = true,
 }
 
 M.setup = function()
