@@ -69,6 +69,7 @@ M.config = function()
   map("n", keys.search_resume, "<cmd>FzfLua resume<cr>")
 
   vim.api.nvim_create_user_command("Rg", function(args)
+    ---@type string[]
     local rg = {
       "rg",
       "-H",
@@ -81,10 +82,15 @@ M.config = function()
       "--smart-case",
     }
 
+    ---@type string[]
     local fargs = args["fargs"]
+    ---@type string[]
     local content = {}
+    ---@type 0 | 1
     local ignore = 0
+    ---@type boolean
     local islive = false
+    ---@type string
     local filepath = ""
 
     -- TODO(yc) grep 'main -t' 怎么处理?
@@ -114,8 +120,10 @@ M.config = function()
     end
 
     table.insert(rg, "-- ")
+    ---@type string
     local cmd = table.concat(rg, " ")
 
+    ---@type string
     local query = table.concat(content, " ")
 
     if query == "" then
