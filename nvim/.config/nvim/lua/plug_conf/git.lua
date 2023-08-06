@@ -80,6 +80,12 @@ M.fugitive_config = function()
   end
 
   vim.keymap.set("n", keys.git_status, toggleFugitiveGit, {})
+
+  require("yc.settings").register_fts_cb("fugitive", function()
+    local helper = require "utils.helper"
+    local bmap = helper.build_keymap { noremap = true, buffer = true }
+    bmap("n", "q", ":q<cr>")
+  end)
 end
 
 return M

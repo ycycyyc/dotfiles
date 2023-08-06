@@ -4,7 +4,6 @@ M.config = function()
   local helper = require "utils.helper"
   local map = helper.build_keymap { noremap = true }
   local silent_map = helper.build_keymap { noremap = true, silent = true }
-  local bmap = helper.build_keymap { noremap = true, buffer = true }
   local keys = require "basic.keys"
 
   -- " 让输入上方，搜索列表在下方
