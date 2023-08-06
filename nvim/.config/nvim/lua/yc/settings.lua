@@ -2,11 +2,12 @@ local au_group = vim.api.nvim_create_augroup
 local au_cmd = vim.api.nvim_create_autocmd
 
 local M = {
+  ---@type table<string, function[]>
   ft_cbs = {},
 }
 
 ---@param fts string | string[]
----@param callback function
+---@param callback fun()
 M.register_fts_cb = function(fts, callback)
   if type(fts) == "string" then
     fts = { fts }

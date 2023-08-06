@@ -30,7 +30,7 @@ local function default_theme()
   local yellow = { n = 180, gui = "#d7af87" }
   local comment_grey = { n = 59, gui = "#5f5f5f" }
   local menu_grey = { n = 237, gui = "#3a3a3a" }
-  local menu_grey2 = { n = 233, gui = "#121212" }
+  -- local menu_grey2 = { n = 233, gui = "#121212" }
   local green = { n = 114, gui = "#87d787" }
   local white = { n = 145, gui = "#afafaf" }
   local cyan = { n = 38, gui = "#00afd7" }

@@ -20,9 +20,12 @@ M.load_lsp_config = function()
   -- 1. lua
   USER = vim.fn.expand "$USER"
 
+  ---@type string
   local sumneko_root_path = env.lua_ls_root
+  ---@type string
   local sumneko_binary = env.lua_ls_bin
 
+  ---@type string[]
   local runtime_path = vim.split(package.path, ";")
   table.insert(runtime_path, "lua/?.lua")
   table.insert(runtime_path, "lua/?/init.lua")
@@ -126,6 +129,8 @@ M.load_lsp_config = function()
   }
 
   -- 3. clangd
+  ---@param bufnr number
+  ---@param splitcmd string
   local function switch_source_header_splitcmd(bufnr, splitcmd)
     bufnr = lspconfig.util.validate_bufnr(bufnr)
     local params = { uri = vim.uri_from_bufnr(bufnr) }
@@ -141,6 +146,7 @@ M.load_lsp_config = function()
     end)
   end
 
+  ---@type string
   local clangd_bin = env.clangd_bin
 
   lspconfig.clangd.setup {

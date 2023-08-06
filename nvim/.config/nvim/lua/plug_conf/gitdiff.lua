@@ -2,7 +2,6 @@
 local M = {}
 
 M.config = function()
-  local cb = require("diffview.config").diffview_callback
   local keys = require "basic.keys"
   local helper = require "utils.helper"
   local register_fts_cb = require("yc.settings").register_fts_cb
