@@ -148,7 +148,7 @@ M.load_lsp_config = function()
     on_attach = key_on_attach {
       client_cb = function(_, _, kms)
         kms[keys.lsp_format] = { function() end, "n" }
-        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "v" }
+        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
         kms[keys.switch_source_header] = {
           function()
             switch_source_header_splitcmd(0, "edit")
@@ -233,7 +233,7 @@ M.load_lsp_config = function()
     on_attach = key_on_attach {
       client_cb = function(_, _, kms, lsp_config)
         lsp_config.auto_format = true
-        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "v" }
+        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
       end,
     },
   }

@@ -90,7 +90,7 @@ M.key_on_attach = function(conf)
           vim.cmd("normal w!")
           M.sync_format_save()
         end,
-        "v",
+        "x",
       },
       [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
