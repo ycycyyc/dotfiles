@@ -41,6 +41,7 @@ return {
   lsp_err_goto_next = "]g", -- 下个错误
   lsp_incoming_calls = "gl",
   lsp_toggle_autoformat = "<leader>T",
+  lsp_symbols = "<leader>s",
 
   -- debug 调试
   dbg_breakpoint = "<F1>",
