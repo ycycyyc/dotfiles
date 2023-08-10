@@ -90,7 +90,7 @@ set incsearch
 
 " theme
 function! s:default_theme() 
-    set background=dark
+    " set background=dark
     hi SignColumn ctermbg=237
     hi Pmenu ctermbg=237 ctermfg=145
     hi PmenuSel ctermbg=39 ctermfg=236
@@ -109,7 +109,7 @@ hi default link cCustomClass Type
 hi default link GitSignsAdd DiffAdd
 hi default link GitSignsChange DiffChange
 hi default link GitSignsDelete GitSignsDelete
-set statusline=%f%m%h\ total:\ %L\ row:\ %l
+set statusline=%f%m%h\ \ %l\ of\ %L
 
 " my settings
 au FileType qf wincmd J
