@@ -74,8 +74,8 @@ let g:coc_default_semantic_highlight_groups=0
 hi default link CocSemType Type
 hi default link CocSemClass Type
 hi default link CocSemEnum Type
-" hi default CocSemNamespace ctermfg=204
-hi default CocSemNamespace ctermfg=170
+hi default CocSemNamespace ctermfg=204
+" hi default CocSemNamespace ctermfg=170
 hi default link CocSemFunction Function
 hi default link CocSemMethod Function
 hi default link CocSemKeyword Keyword

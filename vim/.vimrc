@@ -98,7 +98,7 @@ function! s:default_theme()
     hi Comment ctermfg=59
 endfunction
 
-call s:default_theme()
+" call s:default_theme()
 " colorscheme codedark
 " hi Type ctermfg=43 guifg=#4EC9B0
 
@@ -123,6 +123,7 @@ endif
 
 exe 'source' "~/.vim/conf/fzf.vim"
 exe 'source' "~/.vim/conf/other.vim"
+exe 'source' "~/.vim/conf/theme.vim"
 
 function! SynStack ()
     for i1 in synstack(line("."), col("."))
