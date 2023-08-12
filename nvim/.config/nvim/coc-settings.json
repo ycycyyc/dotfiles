@@ -3,6 +3,7 @@
     "go.goplsUseDaemon": false,
     "go.goplsOptions": {
         "semanticTokens": true,
+        "usePlaceholders": true,
         "hints": {
             "compositeLiteralFields": true,
             "compositeLiteralTypes": true,
@@ -13,7 +14,7 @@
             "rangeVariableTypes": true
         }
     },
-    "inlayHint.enable": false,
+    "inlayHint.enable": true,
     "semanticTokens.enable": true,
     "clangd.arguments": [
         "--function-arg-placeholders=0",
@@ -24,6 +25,7 @@
         "--all-scopes-completion",
         "--completion-style=detailed",
         "--header-insertion=iwyu",
+        "--function-arg-placeholders",
         "--pch-storage=memory"
     ],
     "rust-analyzer.server.path": "~/.cargo/bin/rust-analyzer",
