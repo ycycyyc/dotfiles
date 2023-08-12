@@ -81,6 +81,12 @@ function! s:onedark_theme()
     set nu
     set relativenumber
 
+    hi! StatusLine1 ctermfg=145 ctermbg=239 cterm=bold
+    hi! StatusLine2 ctermfg=39 ctermbg=238
+    hi! StatusLine3 ctermfg=145 ctermbg=236 
+
+    set stl=%#StatusLine1#\ %{expand('%:~:.')}%m%h\ \ %#StatusLine2#\ %l\ of\ %L\ %#StatusLine3#
+
 endfunction
 
 call s:onedark_theme()
