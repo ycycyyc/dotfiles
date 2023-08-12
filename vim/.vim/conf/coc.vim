@@ -14,6 +14,13 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 
 inoremap <silent><expr> <c-j>  "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+" map for coc-snippets
+" inoremap <silent><expr> <TAB>
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : "\<TAB>" 
+
+let g:coc_snippet_next = '<TAB>'
+let g:coc_snippet_prev = '<S-TAB>'
+
 set pumheight=10
 
 inoremap  <expr> <c-k> coc#pum#stop()
