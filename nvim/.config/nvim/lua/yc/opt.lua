@@ -37,19 +37,7 @@ M.setup = function()
   vim.opt.cursorline = true
   vim.opt.cursorlineopt = "number"
 
-  -- vim.opt.splitright = true -- Prefer windows splitting to the right
-  -- vim.opt.splitbelow = true -- Prefer windows splitting to the bottom
-
   vim.opt.guicursor = "n-v-c-i:block"
-
-  vim.cmd [[
-      hi! StatusLine1 ctermfg=145 ctermbg=239 cterm=bold
-      hi! StatusLine2 ctermfg=39 ctermbg=238
-      hi! StatusLine3 ctermfg=145 ctermbg=236 
-  ]]
-
-  vim.opt.statusline = vim.opt.statusline
-    + "%#StatusLine1# %{expand('%:~:.')}%m%h  %#StatusLine2# %l of %L %#StatusLine3#"
 end
 
 return M

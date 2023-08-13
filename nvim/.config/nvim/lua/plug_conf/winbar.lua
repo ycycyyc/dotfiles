@@ -81,7 +81,7 @@ M.opts = {
   context_follow_icon_color = true,
 
   show_modified = true,
-  show_dirname = false,
+  show_dirname = true,
 
   kinds = {
     File = "file:",

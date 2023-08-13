@@ -67,7 +67,10 @@ M.setup = function()
   local user_cmd = vim.api.nvim_create_user_command
 
   user_cmd("DiffOpen", helper.diff_open, {})
-  user_cmd("BufOnly", helper.buf_only, {})
+  user_cmd("BufOnly", function()
+    helper.buf_only()
+    require("yc.statusline").refresh()
+  end, {})
 
   local gotags = require "utils.gotags"
   user_cmd("GoAddTags", function(args)
