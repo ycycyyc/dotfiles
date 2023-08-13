@@ -59,6 +59,8 @@ function! s:onedark_theme()
     hi ColorColumn ctermbg=236  
     hi MatchParen ctermfg=145 cterm=underline ctermbg=None
 
+    highlight VertSplit guibg=NONE cterm=NONE ctermbg=237
+
     " hi CocMenuSel ctermbg=237
     hi CocMenuSel ctermbg=39 ctermfg=236
     hi CursorLineNr ctermbg=237 ctermfg=11 cterm=None
@@ -80,6 +82,8 @@ function! s:onedark_theme()
     set colorcolumn=80
     set nu
     set relativenumber
+
+    set fillchars=vert:\ "
 
     hi! StatusLine1 ctermfg=145 ctermbg=239 cterm=bold
     hi! StatusLine2 ctermfg=39 ctermbg=238
