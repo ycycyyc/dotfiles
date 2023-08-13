@@ -47,10 +47,11 @@ endfunction
 nmap <leader>rn <Plug>(coc-rename)
 xmap f  <Plug>(coc-format-selected)
 
-augroup mygroup
+augroup cocVim
   autocmd!
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   autocmd FileType go,typescript nnoremap <buffer> <leader><space> :Format<cr>:w<cr>
+  autocmd FileType coctree nnoremap <buffer> q :q<cr>
   " autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp') 
 augroup end
 

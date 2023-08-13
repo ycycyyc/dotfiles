@@ -62,3 +62,9 @@ endfunction
 command ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>g :ToggleGStatus<CR>
 nnoremap <leader>hl :Git blame<cr>
+
+augroup otherVim
+  autocmd!
+  autocmd FileType fugitive nnoremap <buffer> q :q<cr>
+  autocmd FileType fugitiveblame nnoremap <buffer> q :q<cr>
+augroup end
