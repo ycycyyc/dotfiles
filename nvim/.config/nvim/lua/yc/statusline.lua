@@ -1,20 +1,17 @@
 local api, fn = vim.api, vim.fn
 
-local M = {
-  refresh_count = 0,
-  max_cost = 0.0,
-}
-
 local fileAndNum = "%#StatusLine1# %{expand('%:~:.')}%m%h  %#StatusLine2# %l of %L %#StatusLine3#"
 local rfileAndNum = "%=" .. fileAndNum
 
-local statusline = fileAndNum
+local M = {
+  refresh_count = 0, ---@type number
+  max_cost = 0.0, ---@type number
+  line = fileAndNum, ---@type string
+}
 
-local count = 1
-
----@return string
-local function tabline()
-  count = count + 1
+function M.update_line()
+  ---@type number
+  local cur_buf_is_listed = 0
 
   local cur_bufnr = api.nvim_get_current_buf() ---@type number
   local abufnr_list = api.nvim_list_bufs() ---@type number[]
@@ -23,8 +20,15 @@ local function tabline()
   local bufnr_list = {} ---@type number[]
   for _, bufnr in ipairs(abufnr_list) do
     if buflisted(bufnr) == 1 then
+      if cur_bufnr == bufnr then
+        cur_buf_is_listed = 1
+      end
       table.insert(bufnr_list, bufnr)
     end
+  end
+
+  if cur_buf_is_listed == 0 then
+    return
   end
 
   local find_cur_buf ---@type nil|number
@@ -95,17 +99,19 @@ local function tabline()
       end
     end
 
-    return nbuffers_str .. table.concat(buf_items, "", l, r) .. "%#TabLineFill#"
+    M.line = nbuffers_str .. table.concat(buf_items, "", l, r) .. "%#TabLineFill#" .. rfileAndNum
   else
+    table.insert(buf_items, 1, nbuffers_str)
     table.insert(buf_items, "%#TabLineFill#")
-    return nbuffers_str .. table.concat(buf_items)
+    table.insert(buf_items, rfileAndNum)
+    M.line = table.concat(buf_items)
   end
 end
 
 M.refresh = function()
   local start = vim.fn.reltime()
 
-  statusline = tabline() .. rfileAndNum
+  M.update_line()
 
   M.refresh_count = M.refresh_count + 1
   local cost = vim.fn.reltimestr(vim.fn.reltime(start))
@@ -123,7 +129,7 @@ M.setup = function()
       hi! StatusLine1 ctermfg=145 ctermbg=239 cterm=bold
       hi! StatusLine2 ctermfg=39 ctermbg=238
       hi! StatusLine3 ctermfg=145 ctermbg=236
-      hi! NumberBuffers ctermfg=235 ctermbg=173 cterm=bold
+      hi! NumberBuffers ctermfg=235 ctermbg=39 cterm=bold
       hi! WinSeparator ctermbg=237
       augroup nobuflisted
         autocmd!
@@ -132,7 +138,7 @@ M.setup = function()
       augroup END
   ]]
 
-  api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufDelete" }, {
+  api.nvim_create_autocmd({ "BufEnter", "BufDelete" }, {
     callback = function()
       M.refresh()
     end,
@@ -143,7 +149,7 @@ M.setup = function()
   end, {})
 
   function _G.yc_statusline()
-    return statusline
+    return M.line
   end
 
   vim.opt.statusline = "%!v:lua.yc_statusline()"
