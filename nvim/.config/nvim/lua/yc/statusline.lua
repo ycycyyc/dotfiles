@@ -1,15 +1,94 @@
 local api, fn = vim.api, vim.fn
 
-local fileAndNum = "%#StatusLine1# %{expand('%:~:.')}%m%h  %#StatusLine2# %l of %L %#StatusLine3#"
-local rfileAndNum = "%=" .. fileAndNum
+local M = {
+  refresh_buflist_count = 0, ---@type number
+  refresh_mode_count = 0,
+  max_cost = 0.0, ---@type number
+  line = "", ---@type string
+  mode = "",
+}
 
 local originFileAndNum = "%{expand('%:~:.')}%m%h %#StatusLine2# %l of %L "
 
-local M = {
-  refresh_count = 0, ---@type number
-  max_cost = 0.0, ---@type number
-  line = fileAndNum, ---@type string
+local current_mode = {
+  n = "%#StatusNormalMode# NORMAL %#StatusLine1#",
+  v = "%#StatusVisMode# VISUAL %#StatusLine1#",
+  V = "%#StatusVlMode# VI LINE %#StatusLine1#",
+  i = "%#StatusInsertMode# INSERT %#StatusLine1#",
+  c = "%#StatusCmdMode# COMMAND %#StatusLine1#",
+  t = "%#StatusTermMode# TERMINAL %#StatusLine1#",
+  s = "%#StatusSelMode# SELECT %#StatusLine1#",
+  S = "%#StatusSelMode# SELECT %#StatusLine1#",
 }
+
+
+-- stylua: ignore
+local modemap = {
+  ['n']      = 'NORMAL',
+  ['no']     = 'O-PENDING',
+  ['nov']    = 'O-PENDING',
+  ['noV']    = 'O-PENDING',
+  ['no\22'] = 'O-PENDING',
+  ['niI']    = 'NORMAL',
+  ['niR']    = 'NORMAL',
+  ['niV']    = 'NORMAL',
+  ['nt']     = 'NORMAL',
+  ['ntT']    = 'NORMAL',
+  ['v']      = 'VISUAL',
+  ['vs']     = 'VISUAL',
+  ['V']      = 'V-LINE',
+  ['Vs']     = 'V-LINE',
+  ['\22']   = 'V-BLOCK',
+  ['\22s']  = 'V-BLOCK',
+  ['s']      = 'SELECT',
+  ['S']      = 'S-LINE',
+  ['\19']   = 'S-BLOCK',
+  ['i']      = 'INSERT',
+  ['ic']     = 'INSERT',
+  ['ix']     = 'INSERT',
+  ['R']      = 'REPLACE',
+  ['Rc']     = 'REPLACE',
+  ['Rx']     = 'REPLACE',
+  ['Rv']     = 'V-REPLACE',
+  ['Rvc']    = 'V-REPLACE',
+  ['Rvx']    = 'V-REPLACE',
+  ['c']      = 'COMMAND',
+  ['cv']     = 'EX',
+  ['ce']     = 'EX',
+  ['r']      = 'REPLACE',
+  ['rm']     = 'MORE',
+  ['r?']     = 'CONFIRM',
+  ['!']      = 'SHELL',
+  ['t']      = 'TERMINAL',
+}
+
+current_mode["CTRL-V"] = "%#StatusVisMode# VIRTUAL %#StatusLine1#"
+
+---@return number
+local widthModef = function()
+  local res = 0
+  for _, mo in pairs(current_mode) do
+    local w = api.nvim_eval_statusline(mo, { use_tabline = true }).width ---@type number
+    if w > res then
+      res = w
+    end
+  end
+  return res
+end
+
+---@type number
+local widthMode = widthModef()
+
+M.refresh_mode = function()
+  M.refresh_mode_count = M.refresh_mode_count + 1
+  local m = vim.fn.mode()
+  if current_mode[m] ~= nil then
+    M.mode = current_mode[m]
+  else
+    local msg = modemap[m]
+    M.mode = "%#StatusNormalMode# " .. msg .. " %#StatusLine1#"
+  end
+end
 
 function M.update_line()
   ---@type number
@@ -41,10 +120,10 @@ function M.update_line()
   ---@type string
   local nbuffers_str = string.format("%%#NumberBuffers# %d Buffers ", #bufnr_list)
 
-  local width1 = api.nvim_eval_statusline(fileAndNum, { use_tabline = true }).width ---@type number
-  local width2 = api.nvim_eval_statusline(nbuffers_str, { use_tabline = true }).width ---@type number
-  -- local max_len = vim.o.columns - width1 - width2 - 5 ---@type number
-  local max_len = vim.o.columns - width2
+  -- local widthRighFile = api.nvim_eval_statusline(fileAndNum, { use_tabline = true }).width ---@type number
+  local widthBuf = api.nvim_eval_statusline(nbuffers_str, { use_tabline = true }).width ---@type number
+  ---@type number
+  local max_len = vim.o.columns - widthBuf - widthMode -- -widthRighFile
 
   ---@type number[]
   local buf_lens = {}
@@ -106,11 +185,12 @@ function M.update_line()
       end
     end
 
-    M.line = nbuffers_str .. table.concat(buf_items, "", l, r) .. "%#TabLineFill#" --.. rfileAndNum
+    --  mode %=  bustlist %= numberbuffer
+    M.line = "%=" .. table.concat(buf_items, "", l, r) .. "%=" .. nbuffers_str
   else
-    table.insert(buf_items, 1, nbuffers_str .. "%#StatusLine1#%=")
-    table.insert(buf_items, "%=%#TabLineFill#")
-    -- table.insert(buf_items, rfileAndNum)
+    --  mode %=  bustlist %= numberbuffer
+    table.insert(buf_items, 1, "%=")
+    table.insert(buf_items, "%=" .. nbuffers_str)
     M.line = table.concat(buf_items)
   end
 end
@@ -120,7 +200,7 @@ M.refresh = function()
 
   M.update_line()
 
-  M.refresh_count = M.refresh_count + 1
+  M.refresh_buflist_count = M.refresh_buflist_count + 1
   local cost = vim.fn.reltimestr(vim.fn.reltime(start))
 
   if tonumber(cost) > M.max_cost then
@@ -130,6 +210,7 @@ end
 
 M.setup = function()
   vim.opt.laststatus = 3
+  vim.opt.showmode = false
 
   -- create statueline theme
   vim.cmd [[
@@ -141,6 +222,15 @@ M.setup = function()
       hi! StatusLine3 ctermfg=145 ctermbg=239
       hi! NumberBuffers ctermfg=235 ctermbg=39 cterm=bold
       hi! WinSeparator ctermbg=237
+
+      hi! StatusNormalMode ctermfg=235 ctermbg=39 cterm=bold
+      hi! StatusInsertMode ctermfg=235 ctermbg=204 cterm=bold
+      hi! StatusTermMode ctermfg=235 ctermbg=180 cterm=bold
+      hi! StatusVisMode ctermfg=235 ctermbg=173 cterm=bold
+      hi! StatusVlMode ctermfg=235 ctermbg=173 cterm=bold
+      hi! StatusSelMode ctermfg=235 ctermbg=200 cterm=bold
+      hi! StatusCmdMode ctermfg=235 ctermbg=39 cterm=bold
+
       augroup nobuflisted
         autocmd!
         autocmd FileType qf set nobuflisted
@@ -154,12 +244,28 @@ M.setup = function()
     end,
   })
 
+  api.nvim_create_autocmd("ModeChanged", {
+    callback = function()
+      M.refresh_mode()
+    end,
+  })
+
   api.nvim_create_user_command("ShowStatuslineStat", function()
-    vim.print("[StatusLine] refresh cnt:" .. M.refresh_count .. " max cost:" .. M.max_cost)
+    vim.print(
+      "[StatusLine] refresh buflist cnt:"
+        .. M.refresh_buflist_count
+        .. " max cost:"
+        .. M.max_cost
+        .. " refresh mode cnt:"
+        .. M.refresh_mode_count
+    )
   end, {})
 
   function _G.yc_statusline()
-    return M.line
+    if M.mode == "" then
+      M.refresh_mode()
+    end
+    return M.mode .. M.line
   end
 
   vim.opt.statusline = "%!v:lua.yc_statusline()"
