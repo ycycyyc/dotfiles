@@ -39,7 +39,7 @@ function M.update_line()
   ---@type string[]
   local buf_items = {}
   ---@type string
-  local nbuffers_str = string.format("%%#NumberBuffers# %d Buffers:", #bufnr_list)
+  local nbuffers_str = string.format("%%#NumberBuffers# %d Buffers ", #bufnr_list)
 
   local width1 = api.nvim_eval_statusline(fileAndNum, { use_tabline = true }).width ---@type number
   local width2 = api.nvim_eval_statusline(nbuffers_str, { use_tabline = true }).width ---@type number
@@ -52,7 +52,7 @@ function M.update_line()
   local bufname_of = fn.bufname
 
   for _, bufnr in ipairs(bufnr_list) do
-    local sel = "%#StatusLine1#"
+    local sel = "%#StatusLine3#"
 
     if bufnr == cur_bufnr then
       sel = "%#StatusLineCurFile#"
@@ -69,7 +69,7 @@ function M.update_line()
       filename = originFileAndNum
     end
 
-    local item = string.format(" %%%dT%s %d %s ", bufnr, sel, bufnr, filename)
+    local item = string.format(" %%%dT%s %d %s %%#StatusLine1#", bufnr, sel, bufnr, filename)
     local l = api.nvim_eval_statusline(item, { use_tabline = true }).width
 
     table.insert(buf_items, item)
@@ -108,8 +108,8 @@ function M.update_line()
 
     M.line = nbuffers_str .. table.concat(buf_items, "", l, r) .. "%#TabLineFill#" --.. rfileAndNum
   else
-    table.insert(buf_items, 1, nbuffers_str)
-    table.insert(buf_items, "%#TabLineFill#")
+    table.insert(buf_items, 1, nbuffers_str .. "%#StatusLine1#%=")
+    table.insert(buf_items, "%=%#TabLineFill#")
     -- table.insert(buf_items, rfileAndNum)
     M.line = table.concat(buf_items)
   end
@@ -133,12 +133,12 @@ M.setup = function()
 
   -- create statueline theme
   vim.cmd [[
-      hi! StatusLine1 ctermfg=145 ctermbg=239
+      hi! StatusLine1 ctermfg=145 ctermbg=237
 
       hi! StatusLineCurFile ctermfg=235 ctermbg=114 cterm=bold
       hi! StatusLine2 ctermfg=235 ctermbg=114 cterm=bold
 
-      hi! StatusLine3 ctermfg=145 ctermbg=236
+      hi! StatusLine3 ctermfg=145 ctermbg=239
       hi! NumberBuffers ctermfg=235 ctermbg=39 cterm=bold
       hi! WinSeparator ctermbg=237
       augroup nobuflisted
