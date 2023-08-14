@@ -1,4 +1,5 @@
 local api, fn = vim.api, vim.fn
+local buflisted = fn.buflisted ---@type fun(number:number):number
 
 local M = {
   refresh_buflist_count = 0, ---@type number
@@ -124,11 +125,9 @@ function M.update_line()
   local cur_buf_is_listed = 0
 
   local cur_bufnr = api.nvim_get_current_buf() ---@type number
-  local abufnr_list = api.nvim_list_bufs() ---@type number[]
-  local buflisted = fn.buflisted
 
   local bufnr_list = {} ---@type number[]
-  for _, bufnr in ipairs(abufnr_list) do
+  for bufnr = 1, vim.fn.bufnr "$" do
     if buflisted(bufnr) == 1 then
       if cur_bufnr == bufnr then
         cur_buf_is_listed = 1
