@@ -3,6 +3,8 @@ local api, fn = vim.api, vim.fn
 local fileAndNum = "%#StatusLine1# %{expand('%:~:.')}%m%h  %#StatusLine2# %l of %L %#StatusLine3#"
 local rfileAndNum = "%=" .. fileAndNum
 
+local originFileAndNum = "%{expand('%:~:.')}%m%h %#StatusLine2# %l of %L "
+
 local M = {
   refresh_count = 0, ---@type number
   max_cost = 0.0, ---@type number
@@ -41,7 +43,8 @@ function M.update_line()
 
   local width1 = api.nvim_eval_statusline(fileAndNum, { use_tabline = true }).width ---@type number
   local width2 = api.nvim_eval_statusline(nbuffers_str, { use_tabline = true }).width ---@type number
-  local max_len = vim.o.columns - width1 - width2 - 5 ---@type number
+  -- local max_len = vim.o.columns - width1 - width2 - 5 ---@type number
+  local max_len = vim.o.columns - width2
 
   ---@type number[]
   local buf_lens = {}
@@ -52,17 +55,21 @@ function M.update_line()
     local sel = "%#StatusLine1#"
 
     if bufnr == cur_bufnr then
-      sel = "%#TabLineSel#"
+      sel = "%#StatusLineCurFile#"
       find_cur_buf = #buf_items + 1
     end
 
     local bufname = bufname_of(bufnr)
-    local filename = fn.fnamemodify(bufname, ":t")
+    local filename = fn.fnamemodify(bufname, ":t") ---@type string
     if bufname == "" then
       filename = "[no name]"
     end
 
-    local item = string.format(" %%%dT%s %d:%s ", bufnr, sel, bufnr, filename)
+    if bufnr == cur_bufnr then
+      filename = originFileAndNum
+    end
+
+    local item = string.format(" %%%dT%s %d %s ", bufnr, sel, bufnr, filename)
     local l = api.nvim_eval_statusline(item, { use_tabline = true }).width
 
     table.insert(buf_items, item)
@@ -99,11 +106,11 @@ function M.update_line()
       end
     end
 
-    M.line = nbuffers_str .. table.concat(buf_items, "", l, r) .. "%#TabLineFill#" .. rfileAndNum
+    M.line = nbuffers_str .. table.concat(buf_items, "", l, r) .. "%#TabLineFill#" --.. rfileAndNum
   else
     table.insert(buf_items, 1, nbuffers_str)
     table.insert(buf_items, "%#TabLineFill#")
-    table.insert(buf_items, rfileAndNum)
+    -- table.insert(buf_items, rfileAndNum)
     M.line = table.concat(buf_items)
   end
 end
@@ -126,8 +133,11 @@ M.setup = function()
 
   -- create statueline theme
   vim.cmd [[
-      hi! StatusLine1 ctermfg=145 ctermbg=239 cterm=bold
-      hi! StatusLine2 ctermfg=39 ctermbg=238
+      hi! StatusLine1 ctermfg=145 ctermbg=239
+
+      hi! StatusLineCurFile ctermfg=235 ctermbg=114 cterm=bold
+      hi! StatusLine2 ctermfg=235 ctermbg=114 cterm=bold
+
       hi! StatusLine3 ctermfg=145 ctermbg=236
       hi! NumberBuffers ctermfg=235 ctermbg=39 cterm=bold
       hi! WinSeparator ctermbg=237
