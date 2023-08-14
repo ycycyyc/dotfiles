@@ -1,6 +1,9 @@
 local api, fn = vim.api, vim.fn
 
-local M = {}
+local M = {
+  refresh_count = 0,
+  max_cost = 0.0,
+}
 
 local fileAndNum = "%#StatusLine1# %{expand('%:~:.')}%m%h  %#StatusLine2# %l of %L %#StatusLine3#"
 local rfileAndNum = "%=" .. fileAndNum
@@ -34,7 +37,7 @@ local function tabline()
 
   local width1 = api.nvim_eval_statusline(fileAndNum, { use_tabline = true }).width ---@type number
   local width2 = api.nvim_eval_statusline(nbuffers_str, { use_tabline = true }).width ---@type number
-  local max_len = vim.o.columns - width1 - width2 ---@type number
+  local max_len = vim.o.columns - width1 - width2 - 5 ---@type number
 
   ---@type number[]
   local buf_lens = {}
@@ -42,7 +45,7 @@ local function tabline()
   local bufname_of = fn.bufname
 
   for _, bufnr in ipairs(bufnr_list) do
-    local sel = "%#TabLine#"
+    local sel = "%#StatusLine1#"
 
     if bufnr == cur_bufnr then
       sel = "%#TabLineSel#"
@@ -101,9 +104,15 @@ end
 
 M.refresh = function()
   local start = vim.fn.reltime()
-  local tl = tabline()
-  -- vim.print("cost:", vim.fn.reltimestr(vim.fn.reltime(start)))
-  statusline = tl .. rfileAndNum
+
+  statusline = tabline() .. rfileAndNum
+
+  M.refresh_count = M.refresh_count + 1
+  local cost = vim.fn.reltimestr(vim.fn.reltime(start))
+
+  if tonumber(cost) > M.max_cost then
+    M.max_cost = tonumber(cost)
+  end
 end
 
 M.setup = function()
@@ -113,7 +122,7 @@ M.setup = function()
   vim.cmd [[
       hi! StatusLine1 ctermfg=145 ctermbg=239 cterm=bold
       hi! StatusLine2 ctermfg=39 ctermbg=238
-      hi! StatusLine3 ctermfg=145 ctermbg=236 
+      hi! StatusLine3 ctermfg=145 ctermbg=236
       hi! NumberBuffers ctermfg=235 ctermbg=173 cterm=bold
       hi! WinSeparator ctermbg=237
       augroup nobuflisted
@@ -128,6 +137,10 @@ M.setup = function()
       M.refresh()
     end,
   })
+
+  api.nvim_create_user_command("ShowStatuslineStat", function()
+    vim.print("[StatusLine] refresh cnt:" .. M.refresh_count .. " max cost:" .. M.max_cost)
+  end, {})
 
   function _G.yc_statusline()
     return statusline
