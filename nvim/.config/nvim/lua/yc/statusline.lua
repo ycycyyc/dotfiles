@@ -10,18 +10,6 @@ local M = {
 
 local originFileAndNum = "%{expand('%:~:.')}%m%h %#StatusLine2# %l of %L "
 
-local current_mode = {
-  n = "%#StatusNormalMode# NORMAL %#StatusLine1#",
-  v = "%#StatusVisMode# VISUAL %#StatusLine1#",
-  V = "%#StatusVlMode# VI LINE %#StatusLine1#",
-  i = "%#StatusInsertMode# INSERT %#StatusLine1#",
-  c = "%#StatusCmdMode# COMMAND %#StatusLine1#",
-  t = "%#StatusTermMode# TERMINAL %#StatusLine1#",
-  s = "%#StatusSelMode# SELECT %#StatusLine1#",
-  S = "%#StatusSelMode# SELECT %#StatusLine1#",
-}
-
-
 -- stylua: ignore
 local modemap = {
   ['n']      = 'NORMAL',
@@ -62,13 +50,53 @@ local modemap = {
   ['t']      = 'TERMINAL',
 }
 
-current_mode["CTRL-V"] = "%#StatusVisMode# VIRTUAL %#StatusLine1#"
+-- stylua: ignore
+local stylemap = {
+  ['n']      = 'StatusNormalMode',
+  ['no']     = 'StatusNormalMode',
+  ['nov']    = 'StatusNormalMode',
+  ['noV']    = 'StatusNormalMode',
+  ['no\22'] =  'StatusNormalMode',
+  ['niI']    = 'StatusNormalMode',
+  ['niR']    = 'StatusNormalMode',
+  ['niV']    = 'StatusNormalMode',
+  ['nt']     = 'StatusNormalMode',
+  ['ntT']    = 'StatusNormalMode',
+  ['v']      = 'StatusVisMode',
+  ['vs']     = 'StatusVisMode',
+  ['V']      = 'StatusVisMode',
+  ['Vs']     = 'StatusVisMode',
+  ['\22']   =  'StatusVisMode',
+  ['\22s']  =  'StatusVisMode',
+  ['s']      = 'StatusSelMode',
+  ['S']      = 'StatusSelMode',
+  ['\19']   =  'StatusSelMode',
+  ['i']      = 'StatusInsertMode',
+  ['ic']     = 'StatusInsertMode',
+  ['ix']     = 'StatusInsertMode',
+  ['R']      = 'StatusInsertMode',
+  ['Rc']     = 'StatusInsertMode',
+  ['Rx']     = 'StatusInsertMode',
+  ['Rv']     = 'StatusInsertMode',
+  ['Rvc']    = 'StatusInsertMode',
+  ['Rvx']    = 'StatusInsertMode',
+  ['c']      = 'StatusCmdMode',
+  ['cv']     = 'StatusCmdMode',
+  ['ce']     = 'StatusCmdMode',
+  ['r']      = 'StatusInsertMode',
+  ['rm']     = 'StatusNormalMode',
+  ['r?']     = 'StatusTermMode',
+  ['!']      = 'StatusTermMode',
+  ['t']      = 'StatusTermMode',
+}
+
+local stylecache = {}
 
 ---@return number
 local widthModef = function()
   local res = 0
-  for _, mo in pairs(current_mode) do
-    local w = api.nvim_eval_statusline(mo, { use_tabline = true }).width ---@type number
+  for _, mo in pairs(modemap) do
+    local w = #mo
     if w > res then
       res = w
     end
@@ -82,12 +110,13 @@ local widthMode = widthModef()
 M.refresh_mode = function()
   M.refresh_mode_count = M.refresh_mode_count + 1
   local m = vim.fn.mode()
-  if current_mode[m] ~= nil then
-    M.mode = current_mode[m]
-  else
+  if stylecache[m] == nil then
     local msg = modemap[m]
-    M.mode = "%#StatusNormalMode# " .. msg .. " %#StatusLine1#"
+    local style = stylemap[m]
+    stylecache[m] = string.format(" %%#%s# %s %%#StatusLine1#", style, msg)
   end
+
+  M.mode = stylecache[m]
 end
 
 function M.update_line()
