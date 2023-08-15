@@ -69,7 +69,6 @@ M.setup = function()
   user_cmd("DiffOpen", helper.diff_open, {})
   user_cmd("BufOnly", function()
     helper.buf_only()
-    require("yc.statusline").refresh()
   end, {})
 
   local gotags = require "utils.gotags"

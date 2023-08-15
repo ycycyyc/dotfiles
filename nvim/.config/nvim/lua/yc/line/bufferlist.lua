@@ -3,7 +3,7 @@ local buflisted = fn.buflisted ---@type fun(number:number):number
 local bufname_of = fn.bufname
 local utils = require "yc.line.utils"
 
-local originFileAndNum = "%{expand('%:~:.')}%m%h %l of %L "
+local originFileAndNum = "%{expand('%:~:.')}%m%h"
 
 local M = {
   refresh_cnt = 0, ---@type number
