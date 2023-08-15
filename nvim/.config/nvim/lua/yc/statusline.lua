@@ -151,13 +151,16 @@ function M.update_line()
   -- local widthRighFile = api.nvim_eval_statusline(fileAndNum, { use_tabline = true }).width ---@type number
   local widthBuf = api.nvim_eval_statusline(nbuffers_str, { use_tabline = true }).width ---@type number
   ---@type number
-  local max_len = vim.o.columns - widthBuf - widthMode -- -widthRighFile
+  local max_len = vim.o.columns - widthBuf - widthMode - 10 -- -widthRighFile
+  -- 预留十个长度
 
   ---@type number[]
   local buf_lens = {}
 
+  ---@type function
   local bufname_of = fn.bufname
 
+  ---@type number
   local needMore = 5 -- 多遍历一些buf， 保证当前使用的buf能够居中
   for _, bufnr in ipairs(bufnr_list) do
     local sel = "%#StatusLine3#"
