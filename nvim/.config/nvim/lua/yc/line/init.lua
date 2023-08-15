@@ -46,33 +46,46 @@ M.setup = function()
   local mode = require "yc.line.mode"
   mode.start()
 
+  local git = require "yc.line.git"
+  git.theme = "StatusLineBufListNormal"
+  git.end_theme = "StatusLineNormal"
+  git.start()
+
   local nbuffers = require "yc.line.nbuffers"
-  nbuffers.start()
   nbuffers.theme = "NumberBuffers"
   nbuffers.end_theme = "StatusLineNormal"
+  nbuffers.start()
 
   local bufferlist = require "yc.line.bufferlist"
-  bufferlist.start()
   bufferlist.sel_theme = "StatusLineCurFile"
   bufferlist.theme = "StatusLineBufListNormal"
   bufferlist.end_theme = "StatusLineNormal"
+  bufferlist.start()
 
   ---@return number
   local max_width = function()
-    return vim.o.columns - mode.width() - nbuffers.width() - L.width() - 10
+    return vim.o.columns - mode.width() - nbuffers.width() - L.width() - git.width() - 10
   end
 
   bufferlist.max_width_cb = max_width
   bufferlist.nbuffers_cb = nbuffers.update
 
   function _G.yc_statusline()
-    return mode.to_string() .. "%=" .. bufferlist.to_string() .. "%=" .. L.to_string() .. nbuffers.to_string()
+    return mode.to_string()
+      .. git.to_string()
+      .. "%="
+      .. bufferlist.to_string()
+      .. "%="
+      .. L.to_string()
+      .. nbuffers.to_string()
   end
 
   vim.opt.statusline = "%!v:lua.yc_statusline()"
 
   vim.api.nvim_create_user_command("ShowStatuslineStat", function()
-    vim.print(string.format("[StatusLine] %s %s %s", mode.metrics(), nbuffers.metrics(), bufferlist.metrics()))
+    vim.print(
+      string.format("[StatusLine] %s %s %s %s", mode.metrics(), git.metrics(), nbuffers.metrics(), bufferlist.metrics())
+    )
   end, {})
 end
 
