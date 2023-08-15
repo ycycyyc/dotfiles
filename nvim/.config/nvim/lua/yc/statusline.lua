@@ -158,6 +158,7 @@ function M.update_line()
 
   local bufname_of = fn.bufname
 
+  local needMore = 5 -- 多遍历一些buf， 保证当前使用的buf能够居中
   for _, bufnr in ipairs(bufnr_list) do
     local sel = "%#StatusLine3#"
 
@@ -183,8 +184,12 @@ function M.update_line()
     table.insert(buf_lens, l)
     total_len = total_len + l
 
-    if find_cur_buf ~= nil and total_len > max_len then
+    if find_cur_buf ~= nil and total_len > max_len and needMore <= 0 then
       break
+    end
+
+    if find_cur_buf ~= nil then
+      needMore = needMore - 1
     end
   end
 
