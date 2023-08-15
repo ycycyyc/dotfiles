@@ -6,6 +6,6 @@ return {
     require("yc.lazy_plug").setup()
     require("yc.theme").setup()
     require("yc.settings").setup()
-    require("yc.statusline").setup()
+    require("yc.line").setup()
   end,
 }
