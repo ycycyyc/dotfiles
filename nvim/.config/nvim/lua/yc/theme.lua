@@ -135,15 +135,13 @@ local function default_theme()
   colors["@storageclass.cpp"] = { fg = purple }
   colors["@variable.builtin.lua"] = { fg = red }
 
-  if env.semantic_token == true then
-    colors["@lsp.type.variable"] = { fg = white }
-    colors["@lsp.type.parameter"] = { fg = white, bold = true }
-    colors["@lsp.type.namespace"] = { fg = red }
-    colors["@lsp.type.namespace.cpp"] = { fg = red, bold = true }
-    colors["@lsp.type.macro.cpp"] = { fg = blue }
-    colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
-    colors["@lsp.mod.readonly.go"] = { fg = cyan }
-  end
+  colors["@lsp.type.variable"] = { fg = white }
+  colors["@lsp.type.parameter"] = { fg = white, bold = true }
+  colors["@lsp.type.namespace"] = { fg = red }
+  colors["@lsp.type.namespace.cpp"] = { fg = red, bold = true }
+  colors["@lsp.type.macro.cpp"] = { fg = blue }
+  colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
+  colors["@lsp.mod.readonly.go"] = { fg = cyan }
 
   -- cpp
   hl(0, "cppStructure", { link = "Keyword" })

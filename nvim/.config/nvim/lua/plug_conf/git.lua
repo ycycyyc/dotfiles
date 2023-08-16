@@ -91,7 +91,7 @@ M.fugitive_config = function()
       local items = vim.fn.split(current_line)
 
       local cmd = "DiffviewOpen -- " .. items[2]
-      vim.print("Run cmd:" .. cmd)
+      vim.print("Run cmd: " .. cmd)
       vim.cmd(cmd)
     end)
   end)

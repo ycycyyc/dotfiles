@@ -32,6 +32,7 @@ M.load_lsp_config = function()
   table.insert(runtime_path, "lua/?/init.lua")
 
   lspconfig.lua_ls.setup {
+    on_init = on_init,
     capabilities = capabilities,
     on_attach = key_on_attach {
       client_cb = function(_, _, kms)
@@ -71,23 +72,8 @@ M.load_lsp_config = function()
   lspconfig.gopls.setup {
     on_init = on_init,
     on_attach = key_on_attach {
-      client_cb = function(client, _, _, lsp_config)
+      client_cb = function(_, _, _, lsp_config)
         lsp_config.auto_format = true
-        if
-          env.semantic_token == true
-          and client.name == "gopls"
-          and not client.server_capabilities.semanticTokensProvider
-        then
-          local semantic = client.config.capabilities.textDocument.semanticTokens
-          client.server_capabilities.semanticTokensProvider = {
-            full = true,
-            legend = {
-              tokenModifiers = semantic.tokenModifiers,
-              tokenTypes = semantic.tokenTypes,
-            },
-            range = true,
-          }
-        end
       end,
     },
     capabilities = capabilities,
