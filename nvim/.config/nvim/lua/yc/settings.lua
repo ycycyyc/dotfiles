@@ -83,6 +83,13 @@ M.setup = function()
   user_cmd("JsonFormat", "%!python -m json.tool", {})
 
   user_cmd("TestCmd", function() end, { range = true })
+
+  user_cmd("CpFilePath", function()
+    local path = vim.fn.expand "%:~:."
+    vim.print("copy path: " .. path)
+    vim.fn.setreg(0, path)
+    vim.fn.setreg('"', path)
+  end, {})
 end
 
 return M
