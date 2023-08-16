@@ -85,6 +85,15 @@ M.fugitive_config = function()
     local helper = require "utils.helper"
     local bmap = helper.build_keymap { noremap = true, buffer = true }
     bmap("n", "q", ":q<cr>")
+
+    bmap("n", "<leader>d", function()
+      local current_line = vim.api.nvim_get_current_line()
+      local items = vim.fn.split(current_line)
+
+      local cmd = "DiffviewOpen -- " .. items[2]
+      vim.print("Run cmd:" .. cmd)
+      vim.cmd(cmd)
+    end)
   end)
 end
 

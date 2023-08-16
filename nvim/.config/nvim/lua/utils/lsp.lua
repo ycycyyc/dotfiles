@@ -66,6 +66,12 @@ M.v_range_format = function()
   require("utils.lsp").range_format(pos)
 end
 
+M.on_init = function(client, _)
+  if client.server_capabilities and not env.semantic_token then
+    client.server_capabilities.semanticTokensProvider = false
+  end
+end
+
 M.key_on_attach = function(conf)
   return function(client, bufnr)
     local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -97,10 +103,6 @@ M.key_on_attach = function(conf)
       [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
       [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
     }
-
-    if not env.semantic_token and vim.fn.has "nvim-0.9" == 1 then -- disable semantic
-      client.server_capabilities.semanticTokensProvider = nil
-    end
 
     if conf and conf.client_cb and type(conf.client_cb) == "function" then
       conf.client_cb(client, bufnr, kms, lsp_config)

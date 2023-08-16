@@ -1,6 +1,7 @@
 -- install lsp-server from
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 local key_on_attach = require("utils.lsp").key_on_attach
+local on_init = require("utils.lsp").on_init
 local env = require("basic.env").env
 local keys = require "basic.keys"
 
@@ -68,6 +69,7 @@ M.load_lsp_config = function()
 
   -- 2. gopls
   lspconfig.gopls.setup {
+    on_init = on_init,
     on_attach = key_on_attach {
       client_cb = function(client, _, _, lsp_config)
         lsp_config.auto_format = true
@@ -150,6 +152,7 @@ M.load_lsp_config = function()
   local clangd_bin = env.clangd_bin
 
   lspconfig.clangd.setup {
+    on_init = on_init,
     capabilities = capabilities,
     on_attach = key_on_attach {
       client_cb = function(_, _, kms)
@@ -200,6 +203,7 @@ M.load_lsp_config = function()
 
   -- 4. other python json yaml cmake ts bash vimls
   lspconfig.pyright.setup {
+    on_init = on_init,
     capabilities = capabilities,
     filetypes = { "python" },
     on_attach = key_on_attach(),
@@ -217,12 +221,14 @@ M.load_lsp_config = function()
 
   -- json format :%!python -m json.tool
   lspconfig.jsonls.setup {
+    on_init = on_init,
     on_attach = key_on_attach(),
     cmd = { "vscode-json-languageserver", "--stdio" },
     filetypes = { "json" },
   }
 
   lspconfig.yamlls.setup {
+    on_init = on_init,
     on_attach = key_on_attach(),
     cmd = { "yaml-language-server", "--stdio" },
     filetypes = { "yaml" },
@@ -231,11 +237,13 @@ M.load_lsp_config = function()
   lspconfig.cmake.setup {
     -- YOUR_PATH
     cmd = { "/data/yc/.local/share/nvim/lspinstall/cmake/venv/bin/cmake-language-server" },
+    on_init = on_init,
     on_attach = key_on_attach(),
     filetypes = { "cmake" },
   }
 
   lspconfig.tsserver.setup {
+    on_init = on_init,
     on_attach = key_on_attach {
       client_cb = function(_, _, kms, lsp_config)
         lsp_config.auto_format = true
@@ -248,9 +256,15 @@ M.load_lsp_config = function()
   -- }
 
   -- https://github.com/bash-lsp/bash-language-server
-  lspconfig.bashls.setup { on_attach = key_on_attach() }
+  lspconfig.bashls.setup {
+    on_init = on_init,
+    on_attach = key_on_attach(),
+  }
 
-  lspconfig.vimls.setup { on_attach = key_on_attach() }
+  lspconfig.vimls.setup {
+    on_attach = key_on_attach(),
+    on_init = on_init,
+  }
 end
 
 M.rust_config = function()
