@@ -7,10 +7,7 @@ local originFileAndNum = "%{expand('%:~:.')}%m%h"
 
 local M = {
   refresh_cnt = 0, ---@type number
-  max_cost = 0, ---@type number
-  max_cost0 = "",
-  max_cost1 = "",
-  max_cost2 = "",
+  costs = {}, ---@type number[]
   max_titles = 0,
 
   cached_content = "", ---@type string
@@ -52,16 +49,7 @@ M.title = function(bufnr, iscur)
   return item
 end
 
-local cost0 = ""
-local cost1 = ""
-local cost2 = ""
-
 M.update = function()
-  cost0 = ""
-  cost1 = ""
-  cost2 = ""
-  local start = vim.fn.reltime()
-
   local cur_bufnr = api.nvim_get_current_buf() ---@type number
   local index_of_cur_buffer_in_bufflist ---@type number|nil
   local bufnr_list = {} ---@type number[]
@@ -75,9 +63,6 @@ M.update = function()
       end
     end
   end
-
-  cost0 = vim.fn.reltimestr(vim.fn.reltime(start))
-  start = vim.fn.reltime()
 
   local bufnr_list_len = #bufnr_list ---@type number
   M.nbuffers_cb(bufnr_list_len)
@@ -94,9 +79,6 @@ M.update = function()
   local l = index_of_cur_buffer_in_bufflist ---@type number
   local r = index_of_cur_buffer_in_bufflist ---@type number
   local max_len = M.max_width_cb() ---@type number
-
-  cost1 = vim.fn.reltimestr(vim.fn.reltime(start))
-  start = vim.fn.reltime()
 
   ---@param index number
   ---@param after boolean
@@ -139,7 +121,6 @@ M.update = function()
   end
 
   M.cached_content = table.concat(titles)
-  cost2 = vim.fn.reltimestr(vim.fn.reltime(start))
 end
 
 M.refresh = function()
@@ -149,12 +130,11 @@ M.refresh = function()
   M.update()
 
   local cost = vim.fn.reltimestr(vim.fn.reltime(start))
-  if tonumber(cost) > M.max_cost then
-    M.max_cost = tonumber(cost)
-    M.max_cost0 = cost0
-    M.max_cost1 = cost1
-    M.max_cost2 = cost2
+
+  if #M.costs > 10 then
+    table.remove(M.costs, 1)
   end
+  table.insert(M.costs, tonumber(cost))
 end
 
 M.start = function()
@@ -177,14 +157,19 @@ end
 
 ---@return string
 M.metrics = function()
+  local av = 0
+
+  for _, c in ipairs(M.costs) do
+    av = av + c
+  end
+
+  av = av / 10
+
   return string.format(
-    "[BufferListSec refresh cnt: %d max cost: %s, max items: %d cost0:%s, cost1:%s, cost2:%s]",
+    "[BufferListSec refresh cnt: %d average cost: %s, max items: %d ]",
     M.refresh_cnt,
-    tostring(M.max_cost),
-    M.max_titles,
-    M.max_cost0,
-    M.max_cost1,
-    M.max_cost2
+    tostring(av),
+    M.max_titles
   )
 end
 
