@@ -61,7 +61,7 @@ command! -nargs=0 Format :call CocAction('format')
 inoremap <silent><expr> <c-l>  CocActionAsync('showSignatureHelp')
 
 nnoremap <silent> <leader>t :CocOutline<cr>
-nnoremap <silent> <leader>S :CocFzfList outline<cr>
+nnoremap <silent> <leader>s :CocFzfList outline<cr>
 
 " coc-go coc-clangd coc plugin settings
 let g:coc_global_extensions=["coc-git", "coc-pairs", "coc-go", "coc-clangd", "coc-json", "coc-explorer", "coc-marketplace", "coc-yank", "coc-vimlsp", "coc-tsserver"]

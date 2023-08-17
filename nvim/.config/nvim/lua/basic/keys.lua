@@ -10,8 +10,8 @@ return {
   search_cur_word_cur_buf = "gW",
   search_resume = "<leader>l",
   switch_buffers = "<leader>o", -- buffers 切换
-  global_find_and_replace = "<leader>rr",
-  buffer_find_and_replace = "<leader>R",
+  global_find_and_replace = "<leader>R",
+  buffer_find_and_replace = "<leader>rr",
   cmd_history = "<leader>H",
 
   -- op
@@ -42,8 +42,8 @@ return {
   lsp_err_goto_next = "]g", -- 下个错误
   lsp_incoming_calls = "gl",
   lsp_toggle_autoformat = "<leader>T",
-  lsp_symbols = "<leader>S",
-  lsp_global_symbols = "<leader>s",
+  lsp_symbols = "<leader>s",
+  lsp_global_symbols = "<leader>S",
 
   -- debug 调试
   dbg_breakpoint = "<F1>",
