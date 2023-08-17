@@ -158,7 +158,7 @@ M.config = function()
     require("fzf-lua").git_commits()
   end, { silent = false })
 
-  vim.api.nvim_create_user_command("History", ":FzfLua command_history", {})
+  vim.keymap.set("n", keys.cmd_history, ":FzfLua command_history<cr>", { silent = true })
 
   map("n", keys.search_global, ":Rg ")
   silent_map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")

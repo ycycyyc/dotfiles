@@ -12,6 +12,7 @@ return {
   switch_buffers = "<leader>o", -- buffers 切换
   global_find_and_replace = "<leader>R",
   buffer_find_and_replace = "<leader>S",
+  cmd_history = "<leader>H",
 
   -- op
   toggle_dir = "<Leader>n", -- 打开目录树
