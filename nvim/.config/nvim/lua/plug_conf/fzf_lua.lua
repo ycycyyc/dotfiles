@@ -65,6 +65,7 @@ M.config = function()
   end)
 
   map("n", keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>")
+  map("n", keys.lsp_global_symbols, "<cmd>FzfLua lsp_live_workspace_symbols<cr>")
 
   map("n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>")
   map("n", keys.search_resume, "<cmd>FzfLua resume<cr>")
