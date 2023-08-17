@@ -1,11 +1,14 @@
 local M = {}
 
+local _ = require "utils.lspconf"
+
 local keys = require "basic.keys"
 local env = require("basic.env").env
 local helper = require "utils.helper"
 local api = vim.api
 
-AUTO_FORMATTING_ENABLED = false
+AUTO_FORMATTING_ENABLED = false ---@type boolean
+
 local toggle_auto_formatting = function()
   AUTO_FORMATTING_ENABLED = not AUTO_FORMATTING_ENABLED
   print(string.format("auto_formatting: %s", AUTO_FORMATTING_ENABLED))
@@ -13,14 +16,17 @@ end
 
 local formatting_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
+---@type Yc.ClientLspConfCb[]
 M.lsp_client_cbs = {}
 
+---@param cb Yc.ClientLspConfCb
 M.register_lsp_client_cb = function(cb)
   table.insert(M.lsp_client_cbs, cb)
 end
 
+---@param pos number[] | nil
 M.range_format = function(pos)
-  local timeoutms = 1000
+  local timeoutms = 1000 ---@type number
   -- local context = { source = { organizeImports = true } }
   -- vim.validate { context = { context, "t", true } }
   -- local para = vim.lsp.util.make_range_params()
@@ -43,7 +49,7 @@ M.range_format = function(pos)
     para.range = range
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
   end
-  local method = "textDocument/rangeFormatting"
+  local method = "textDocument/rangeFormatting" ---@type string
   local resp = vim.lsp.buf_request_sync(0, method, para, timeoutms)
 
   if resp and resp[1] then
@@ -66,21 +72,29 @@ M.v_range_format = function()
   require("utils.lsp").range_format(pos)
 end
 
+---@param client table
+---@param _ number
 M.on_init = function(client, _)
   if client.server_capabilities and not env.semantic_token then
     client.server_capabilities.semanticTokensProvider = false
   end
 end
 
+---@param conf Yc.LspOnAttachConf|nil
+---@return fun(client: table, bufnr: number)
 M.key_on_attach = function(conf)
+  ---@param client table
+  ---@param bufnr number
   return function(client, bufnr)
     local opts = { noremap = true, silent = true, buffer = bufnr }
     local bmap = helper.build_keymap(opts)
 
+    ---@type Yc.LspConf
     local lsp_config = {
       auto_format = false,
     }
 
+    ---@type Yc.KeyMapTbl
     local kms = {
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
       [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
@@ -109,7 +123,7 @@ M.key_on_attach = function(conf)
     end
 
     for _, cb in ipairs(M.lsp_client_cbs) do
-      cb(client, bufnr, kms)
+      cb(client, bufnr, kms, lsp_config)
     end
 
     if env.inlayhint then
@@ -172,7 +186,7 @@ function M.go_import()
 end
 
 function M.go_to_cpp() -- not used
-  local cur = api.nvim_buf_get_name(0)
+  local cur = api.nvim_buf_get_name(0) ---@type string
   local res = string.gsub(cur, ".h$", ".cpp")
 
   if res == cur then
@@ -180,7 +194,7 @@ function M.go_to_cpp() -- not used
     return
   end
 
-  local find_res = vim.fn.findfile(res)
+  local find_res = vim.fn.findfile(res) ---@type string
   if find_res == "" then
     print "find_res not found"
     return

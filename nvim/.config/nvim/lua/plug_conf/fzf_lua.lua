@@ -163,7 +163,8 @@ M.config = function()
   map("n", keys.search_global, ":Rg ")
   silent_map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
 
-  local cb = function(_, _, kms)
+  ---@type Yc.ClientLspConfCb
+  local cb = function(_, _, kms, _)
     kms[keys.lsp_goto_definition] = {
       function()
         require("fzf-lua").lsp_definitions { jump_to_single_result = true }
