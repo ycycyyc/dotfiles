@@ -97,4 +97,19 @@ dap.configurations.cpp = {
       { text = "source ${workspaceFolder}/.gdbinit" },
     },
   },
+
+  {
+    name = "Launch mongod40 single node,  use gdb vscode",
+    type = "cppdbg",
+    request = "launch",
+    program = "./build/debug/mongo/mongod",
+    args = { "-f", "/data/mongo/yc/mongo40/shard/shard_cluster/mongod/conf/mongo.conf" },
+    cwd = "${workspaceFolder}",
+    -- stopOnEntry = true,
+    serverLaunchTimeout = 100000,
+    setupCommands = {
+      { text = "-enable-pretty-printing", description = "enable pretty printing", ignoreFailures = true },
+      { text = "source ${workspaceFolder}/.gdbinit" },
+    },
+  },
 }

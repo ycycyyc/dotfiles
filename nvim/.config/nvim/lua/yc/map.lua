@@ -58,6 +58,20 @@ M.setup = function()
   -- map("n", "<leader>x", "viw<ESC>`.``gvp``P<c-o>")
 
   map("x", "<leader>s", ":s/.*'\\(.*\\)'.*/\\1")
+
+  local mouseEnable = false ---@type boolean
+  map("n", keys.toggle_mouse, function()
+    if mouseEnable == false then
+      vim.opt.mouse = "nv"
+      mouseEnable = true
+      vim.print("set mouse=nv")
+      return
+    end
+
+    vim.opt.mouse = ""
+    mouseEnable = false
+      vim.print("set mouse=")
+  end)
 end
 
 return M

@@ -1,5 +1,5 @@
 -- 常用 快捷键
-return {
+local M = {
   -- search
   search_global = "<Leader>f", -- search use rg and fzf
   run_find = "<Leader>F",
@@ -22,6 +22,7 @@ return {
   jump = "<Leader>e", -- 跳转
   --term
   toggle_term = "<C-t>", -- 打开/关闭内置终端
+  toggle_mouse = "<leader>A",
   -- jump
   jump_to_next_qf = "<leader>j",
   jump_to_prev_qf = "<leader>k",
@@ -64,3 +65,5 @@ return {
   git_diff_open = "<leader>ho",
   git_diff_file = "<leader>hf",
 }
+
+return M

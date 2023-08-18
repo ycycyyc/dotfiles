@@ -30,8 +30,8 @@ M.config = function()
     icons = { expanded = "▾", collapsed = "▸" },
     mappings = {
       -- Use a table to apply multiple mappings
-      expand = { "<CR>", "<2-LeftMouse>" },
-      open = "o",
+      expand = "o",
+      open = { "<CR>", "<2-LeftMouse>" },
       remove = "d",
       edit = "e",
       repl = "r",

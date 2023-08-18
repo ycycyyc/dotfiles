@@ -123,6 +123,17 @@ local function default_theme()
     LspInlayHint = { fg = comment_grey, bg = cursor_grey },
 
     MsgArea = { fg = white, bg = cmdlinebg },
+
+    --dap
+    DapUIStoppedThread = { fg = red },
+    DapUIThread = { fg = green },
+    DapUISource = { fg = blue },
+    DapUIWatchesEmpty = { fg = blue },
+    DapUILineNumber = { fg = yellow },
+    DapUIScope = { fg = yellow },
+    DapUIType = { fg = yellow },
+    DapUIValue = { fg = green },
+    DapUIBreakpointsPath = { fg = blue },
   }
 
   -- treesitter
