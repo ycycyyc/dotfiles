@@ -149,7 +149,7 @@ end
 
 ---@return string
 M.metrics = function()
-  return string.format("[ModeSec refresh cnt: %d]", M.refresh_cnt)
+  return string.format("[Mode refresh cnt: %d]", M.refresh_cnt)
 end
 
 return M

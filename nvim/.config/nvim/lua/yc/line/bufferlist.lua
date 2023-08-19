@@ -166,7 +166,7 @@ M.metrics = function()
   av = av / 10
 
   return string.format(
-    "[BufferListSec refresh cnt: %d average cost: %s, max items: %d ]",
+    "[BufferList refresh cnt: %d average cost: %s, max items: %d ]",
     M.refresh_cnt,
     tostring(av),
     M.max_titles

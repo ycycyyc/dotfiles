@@ -34,7 +34,7 @@ end
 
 ---@return string
 M.metrics = function()
-  return string.format("[nBufferSec update cnt: %d]", M.update_cnt)
+  return string.format("[nBuffer update cnt: %d]", M.update_cnt)
 end
 
 return M

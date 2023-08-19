@@ -1,5 +1,7 @@
 local utils = require "yc.line.utils"
 
+local redraw = function() end
+
 local M = {}
 
 local L = {
@@ -80,11 +82,21 @@ M.setup = function()
       .. nbuffers.to_string()
   end
 
-  vim.opt.statusline = "%!v:lua.yc_statusline()"
+  redraw = function()
+    bufferlist.refresh()
+    vim.opt.statusline = "%!v:lua.yc_statusline()"
+  end
+  redraw()
 
-  vim.api.nvim_create_user_command("ShowStatuslineStat", function()
+  vim.api.nvim_create_user_command("ShowStatuslineStats", function()
     vim.print(
-      string.format("[StatusLine] %s %s %s %s", mode.metrics(), git.metrics(), nbuffers.metrics(), bufferlist.metrics())
+      string.format(
+        "[StatusLine] %s %s %s %s %s",
+        mode.metrics(),
+        git.metrics(),
+        nbuffers.metrics(),
+        bufferlist.metrics()
+      )
     )
   end, {})
 end

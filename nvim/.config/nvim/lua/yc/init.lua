@@ -7,5 +7,6 @@ return {
     require("yc.theme").setup()
     require("yc.settings").setup()
     require("yc.line").setup()
+    require("yc.lsp").setup()
   end,
 }
