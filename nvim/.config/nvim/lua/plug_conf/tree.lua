@@ -37,8 +37,6 @@ M.config = function()
       vim.keymap.set("n", "q", api.tree.close, opts "Close the tree")
     end,
   }
-  --
-  vim.cmd [[highlight NvimTreeSymlink guifg=blue gui=bold,underline]]
 end
 
 return M

@@ -42,10 +42,6 @@ function M:prepare()
   vim.api.nvim_create_user_command("ShowLspProgressStats", function()
     vim.print(string.format("new %d buf, close %d buf, redraw_cnt: %d", M.new_buf_cnt, M.closed_cnt, M.redraw_cnt))
   end, {})
-
-  vim.cmd [[
-      hi! NumberLspProgress ctermfg=235 ctermbg=180 cterm=bold
-  ]]
 end
 
 ---@param line string
@@ -117,7 +113,7 @@ function M:__show(offset)
 
   win_set_local_options(self.winid, {
     winblend = 100,
-    winhighlight = "Normal:NumberLspProgress",
+    winhighlight = "Normal:LspProgress",
   })
 
   api.nvim_buf_set_lines(self.bufid, 0, height, false, { self.line })

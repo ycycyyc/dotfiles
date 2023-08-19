@@ -20,24 +20,7 @@ M.setup = function()
   vim.opt.laststatus = 3
   vim.opt.showmode = false
 
-  -- create statueline theme
   vim.cmd [[
-      hi! StatusLineNormal ctermfg=145 ctermbg=237
-      hi! StatusLineCurFile ctermfg=235 ctermbg=114 cterm=bold
-      hi! StatusLineBufListNormal ctermfg=145 ctermbg=239
-      hi! StatusLineTotalLine ctermfg=145 ctermbg=240
-      hi! NumberBuffers ctermfg=235 ctermbg=39 cterm=bold
-
-      hi! WinSeparator ctermbg=237
-
-      hi! StatusNormalMode ctermfg=235 ctermbg=39 cterm=bold
-      hi! StatusInsertMode ctermfg=235 ctermbg=204 cterm=bold
-      hi! StatusTermMode ctermfg=235 ctermbg=180 cterm=bold
-      hi! StatusVisMode ctermfg=235 ctermbg=173 cterm=bold
-      hi! StatusVlMode ctermfg=235 ctermbg=173 cterm=bold
-      hi! StatusSelMode ctermfg=235 ctermbg=200 cterm=bold
-      hi! StatusCmdMode ctermfg=235 ctermbg=39 cterm=bold
-
       augroup nobuflisted
         autocmd!
         autocmd FileType qf set nobuflisted
