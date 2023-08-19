@@ -74,7 +74,7 @@ M.setup = function()
   vim.api.nvim_create_user_command("ShowStatuslineStats", function()
     vim.print(
       string.format(
-        "[StatusLine] %s %s %s %s %s",
+        "[StatusLine] %s %s %s %s",
         mode.metrics(),
         git.metrics(),
         nbuffers.metrics(),
