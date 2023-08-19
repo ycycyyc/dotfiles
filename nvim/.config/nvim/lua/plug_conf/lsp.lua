@@ -21,9 +21,6 @@ M.load_lsp_config = function()
   -- 1. lua
   USER = vim.fn.expand "$USER"
 
-  ---@type string
-  local lua_ls_bin = env.lua_ls_bin
-
   ---@type string[]
   local runtime_path = vim.split(package.path, ";")
   table.insert(runtime_path, "lua/?.lua")
@@ -45,7 +42,6 @@ M.load_lsp_config = function()
         }
       end,
     },
-    cmd = { lua_ls_bin },
     settings = {
       Lua = {
         runtime = {

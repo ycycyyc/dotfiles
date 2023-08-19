@@ -4,9 +4,6 @@ local M = {
 
 local env = {
   clangd_bin = "clangd", -- {path}
-  theme = "default", -- default
-  lua_ls_bin = "lua-language-server", -- {path}
-  lua_ls_root = "", --{dir}
   cpp_debug_mode = "vscode", -- vscode or lldb
   go_debug_mode = "dlv", -- dlv or vscode
 
