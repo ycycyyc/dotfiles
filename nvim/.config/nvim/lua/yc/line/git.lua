@@ -7,16 +7,13 @@ local M = {
   cached_content = "",
 }
 
-local args = {}
-table.insert(args, "rev-parse")
-table.insert(args, "--abbrev-ref")
-table.insert(args, "HEAD")
+local current_git_dir = "" ---@type string
+local started = false ---@type boolean
+
+local sep = package.config:sub(1, 1)
+local file_changed = sep ~= "\\" and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
 
 M.start = function()
-  local timer = vim.loop.new_timer()
-  timer:start(1000, 1000, function()
-    M.refresh()
-  end)
   M.refresh()
 end
 
@@ -26,6 +23,11 @@ M.update = function(branch)
 end
 
 M.refresh = function()
+  local args = {}
+  table.insert(args, "rev-parse")
+  table.insert(args, "--abbrev-ref")
+  table.insert(args, "HEAD")
+
   local job = require "plenary.job"
   job
     :new({
@@ -34,14 +36,70 @@ M.refresh = function()
 
       on_exit = function(j, exit_code)
         if exit_code ~= 0 then
-          M.update "[git error]"
+          M.update ""
           return
         end
         local res = table.concat(j:result(), "\n")
         M.update(" " .. res .. " ")
+        M.start_watch_job()
       end,
     })
     :start()
+end
+
+M.watch_git_head_file = function(gitpath)
+  if gitpath == ".git" then
+    current_git_dir = vim.fn.expand "%:p:h" .. sep .. gitpath .. sep
+  else
+    current_git_dir = gitpath .. sep
+  end
+  M.do_update_branch_loop()
+end
+
+M.start_watch_job = function()
+  if started == true then
+    return
+  end
+  started = true
+
+  local argsDir = {} ---@type string[]
+  -- git rev-parse --git-dir
+  table.insert(argsDir, "rev-parse")
+  table.insert(argsDir, "--git-dir")
+
+  local job = require "plenary.job"
+  job
+    :new({
+      command = "git",
+      args = argsDir,
+      on_exit = function(j, exit_code)
+        if exit_code ~= 0 then
+          return
+        end
+        local res = table.concat(j:result(), "\n")
+        vim.schedule(function()
+          M.watch_git_head_file(res)
+        end)
+      end,
+    })
+    :start()
+end
+
+function M.do_update_branch_loop()
+  file_changed:stop()
+  local git_dir = current_git_dir
+  if git_dir and #git_dir > 0 then
+    local head_file = git_dir .. "HEAD"
+    file_changed:start(
+      head_file,
+      sep ~= "\\" and {} or 1000,
+      vim.schedule_wrap(function()
+        M.refresh()
+        -- reset file-watch
+        M.do_update_branch_loop()
+      end)
+    )
+  end
 end
 
 ---@return number
