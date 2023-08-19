@@ -22,9 +22,7 @@ M.load_lsp_config = function()
   USER = vim.fn.expand "$USER"
 
   ---@type string
-  local sumneko_root_path = env.lua_ls_root
-  ---@type string
-  local sumneko_binary = env.lua_ls_bin
+  local lua_ls_bin = env.lua_ls_bin
 
   ---@type string[]
   local runtime_path = vim.split(package.path, ";")
@@ -47,7 +45,7 @@ M.load_lsp_config = function()
         }
       end,
     },
-    cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
+    cmd = { lua_ls_bin },
     settings = {
       Lua = {
         runtime = {
