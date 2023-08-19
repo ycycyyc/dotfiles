@@ -63,6 +63,7 @@ M.load_lsp_config = function()
         workspace = {
           -- Make the server aware of Neovim runtime files
           library = vim.api.nvim_get_runtime_file("", true),
+          checkThirdParty = false, -- THIS IS THE IMPORTANT LINE TO ADD
         },
       },
     },
