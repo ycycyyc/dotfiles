@@ -2,6 +2,8 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 local key_on_attach = require("utils.lsp").key_on_attach
 local on_init = require("utils.lsp").on_init
+local go_import = require("utils.lsp").go_import
+local sync_format_save = require("utils.lsp").sync_format_save
 local env = require("basic.env").env
 local keys = require "basic.keys"
 
@@ -66,8 +68,15 @@ M.load_lsp_config = function()
   lspconfig.gopls.setup {
     on_init = on_init,
     on_attach = key_on_attach {
-      client_cb = function(_, _, _, lsp_config)
+      client_cb = function(_, _, kms, lsp_config)
         lsp_config.auto_format = true
+        kms[keys.lsp_format] = {
+          function()
+            go_import()
+            sync_format_save()
+          end,
+          "n",
+        }
       end,
     },
     capabilities = capabilities,
