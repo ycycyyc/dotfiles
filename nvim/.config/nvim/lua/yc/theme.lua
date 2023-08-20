@@ -137,7 +137,7 @@ local colors = {
   LspDiagnosticsVirtualTextError = { fg = red },
   LspDiagnosticsVirtualTextWarning = { fg = yellow },
   LspInlayHint = { fg = comment_grey, bg = cursor_grey },
-  LspProgress = { fg = black, bg = yellow },
+  LspProgress = { fg = yellow, cterm = { bold = true } },
 
   -- statusline
   StatusLine = { fg = cursor_grey, bg = white },
