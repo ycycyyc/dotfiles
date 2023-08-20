@@ -332,7 +332,11 @@ local lsp_plugins = {
     config = require("plug_conf.lsp").rust_config,
   },
 
-  { "wesleimp/stylua.nvim", ft = "lua" },
+  {
+    "nvimdev/guard.nvim",
+    ft = { "lua", "python" },
+    config = require("plug_conf.format").config,
+  },
 
   {
     "folke/noice.nvim",

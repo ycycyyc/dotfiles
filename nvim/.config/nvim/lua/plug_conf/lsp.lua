@@ -34,8 +34,7 @@ M.load_lsp_config = function()
         kms[keys.lsp_format] = {
           function()
             if vim.fn.executable "stylua" == 1 then
-              require("stylua").format()
-              vim.cmd "silent! write"
+              vim.cmd "GuardFmt"
             end
           end,
           "n",
@@ -187,7 +186,18 @@ M.load_lsp_config = function()
     on_init = on_init,
     capabilities = capabilities,
     filetypes = { "python" },
-    on_attach = key_on_attach(),
+    on_attach = key_on_attach {
+      client_cb = function(_, _, kms)
+        kms[keys.lsp_format] = {
+          function()
+            if vim.fn.executable "black" == 1 then
+              vim.cmd "GuardFmt"
+            end
+          end,
+          "n",
+        }
+      end,
+    },
     settings = {
       python = {
         analysis = {
