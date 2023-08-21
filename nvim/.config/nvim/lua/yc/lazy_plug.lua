@@ -334,7 +334,7 @@ local lsp_plugins = {
 
   {
     "nvimdev/guard.nvim",
-    ft = { "lua", "python" },
+    ft = require("plug_conf.format").ft,
     config = require("plug_conf.format").config,
   },
 

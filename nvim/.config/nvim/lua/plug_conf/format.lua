@@ -1,4 +1,5 @@
 return {
+  ft = { "lua", "python" },
   config = function()
     local ft = require "guard.filetype"
 
