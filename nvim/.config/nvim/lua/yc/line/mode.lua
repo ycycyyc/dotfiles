@@ -108,15 +108,13 @@ local wid = widthModef()
 M.refresh = function()
   M.refresh_cnt = M.refresh_cnt + 1
   local m = vim.fn.mode()
-  if stylecache[m] == nil then
+  if not stylecache[m] then
     local msg = modemap[m]
     local style = stylemap[m]
     stylecache[m] = utils.add_theme(style, msg, M.end_theme)
   end
 
-  local c = stylecache[m]
-
-  M.cached_content = c
+  M.cached_content = stylecache[m]
 end
 
 local started = false

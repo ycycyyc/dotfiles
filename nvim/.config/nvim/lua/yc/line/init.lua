@@ -1,6 +1,7 @@
 local utils = require "yc.line.utils"
 
 local redraw = function() end
+local redrawCnt = 0
 
 local M = {}
 
@@ -66,19 +67,30 @@ M.setup = function()
   end
 
   redraw = function()
+    redrawCnt = redrawCnt + 1
     bufferlist.refresh()
     vim.opt.statusline = "%!v:lua.yc_statusline()"
   end
   redraw()
 
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "LineRefresh",
+    callback = function()
+      vim.schedule(function()
+        redraw()
+      end)
+    end,
+  })
+
   vim.api.nvim_create_user_command("ShowStatuslineStats", function()
     vim.print(
       string.format(
-        "[StatusLine] %s %s %s %s",
+        "[StatusLine] %s %s %s %s %s",
         mode.metrics(),
         git.metrics(),
         nbuffers.metrics(),
-        bufferlist.metrics()
+        bufferlist.metrics(),
+        string.format("[redrawCnt: %d ]", redrawCnt)
       )
     )
   end, {})

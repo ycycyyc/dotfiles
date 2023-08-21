@@ -69,6 +69,9 @@ M.setup = function()
   user_cmd("DiffOpen", helper.diff_open, {})
   user_cmd("BufOnly", function()
     helper.buf_only()
+    vim.api.nvim_exec_autocmds("User", {
+      pattern = "LineRefresh",
+    })
   end, {})
 
   local gotags = require "utils.gotags"
