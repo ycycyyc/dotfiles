@@ -13,6 +13,8 @@ local started = false ---@type boolean
 local sep = package.config:sub(1, 1)
 local file_changed = sep ~= "\\" and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
 
+local cur_branch = "" ---@type string
+
 M.start = function()
   M.refresh()
 end
@@ -39,8 +41,28 @@ M.refresh = function()
           M.update ""
           return
         end
-        local res = table.concat(j:result(), "\n")
-        M.update(" " .. res .. " ")
+        local branch = table.concat(j:result(), "\n")
+
+        if branch == cur_branch then
+          return
+        end
+
+        if cur_branch ~= "" then
+          vim.schedule(function()
+            local timer = vim.loop.new_timer()
+            timer:start(
+              200,
+              0,
+              vim.schedule_wrap(function()
+                vim.cmd "checktime"
+                vim.notify "reload git file"
+              end)
+            )
+          end)
+        end
+
+        cur_branch = branch
+        M.update(" " .. branch .. " ")
         M.start_watch_job()
       end,
     })
