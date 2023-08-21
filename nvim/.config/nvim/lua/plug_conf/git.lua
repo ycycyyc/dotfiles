@@ -80,10 +80,10 @@ M.fugitive_config = function()
   end
 
   vim.keymap.set("n", keys.git_status, toggleFugitiveGit, {})
+  local helper = require "utils.helper"
+  local bmap = helper.build_keymap { noremap = true, buffer = true }
 
-  require("yc.settings").register_fts_cb({ "fugitive", "fugitiveblame" }, function()
-    local helper = require "utils.helper"
-    local bmap = helper.build_keymap { noremap = true, buffer = true }
+  require("yc.settings").register_fts_cb({ "fugitive" }, function()
     bmap("n", "q", ":q<cr>")
 
     bmap("n", "<leader>d", function()
@@ -93,6 +93,20 @@ M.fugitive_config = function()
       local cmd = "DiffviewOpen -- " .. items[2]
       vim.print("Run cmd: " .. cmd)
       vim.cmd(cmd)
+    end)
+  end)
+
+  require("yc.settings").register_fts_cb({ "fugitiveblame" }, function()
+    bmap("n", "q", ":q<cr>")
+
+    bmap("n", "<cr>", function()
+      local current_line = vim.api.nvim_get_current_line()
+      local items = vim.fn.split(current_line)
+      if string.find(items[1], "^") then
+        vim.cmd("DiffviewOpen " .. items[1])
+        return
+      end
+      vim.cmd("DiffviewOpen " .. items[1] .. "^!")
     end)
   end)
 end
