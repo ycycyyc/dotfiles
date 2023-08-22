@@ -102,7 +102,9 @@ M.fugitive_config = function()
     bmap("n", "<cr>", function()
       local current_line = vim.api.nvim_get_current_line()
       local items = vim.fn.split(current_line)
-      if string.find(items[1], "^") then
+      local res = vim.fn.stridx(items[1], "^")
+      if res >= 0 then
+        vim.notify "it's first commit"
         vim.cmd("DiffviewOpen " .. items[1])
         return
       end
