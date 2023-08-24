@@ -112,7 +112,9 @@ set statusline=%f%m%h\ \ %l\ of\ %L
 
 " my settings
 au FileType qf wincmd J
+au FileType help wincmd L
 au FileType * set fo-=o
+au FileType qf nnoremap <silent> <buffer> q :q<cr>
 
 if $VIM_LSP == "lsp"
     exe 'source' "~/.vim/conf/lsp.vim"

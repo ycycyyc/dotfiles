@@ -61,7 +61,11 @@ M.setup = function()
   local helper = require "utils.helper"
 
   M.register_fts_cb("qf", function()
-    vim.cmd [[wincmd J]]
+    vim.cmd.wincmd "J"
+  end)
+
+  M.register_fts_cb("help", function()
+    vim.cmd.wincmd "L"
   end)
 
   local user_cmd = vim.api.nvim_create_user_command

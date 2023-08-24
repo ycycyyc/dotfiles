@@ -27,7 +27,10 @@ M.setup = function()
   vim.opt.tabstop = 4
   vim.opt.softtabstop = 4
   vim.opt.sw = 4
-  vim.opt.expandtab = true -- 在插入模式下，会把按 Tab 键所插入的 tab 字符替换为合适数目的空格。如果确实要插入 tab 字符，需要按 CTRL-V 键，再按 Tab 键
+
+  -- 在插入模式下，会把按 Tab 键所插入的 tab 字符替换为合适数目的空格。
+  -- 如果确实要插入 tab 字符，需要按 CTRL-V 键，再按 Tab 键
+  vim.opt.expandtab = true
 
   vim.opt.backup = false
   vim.opt.writebackup = false
@@ -38,6 +41,9 @@ M.setup = function()
   vim.opt.cursorlineopt = "number"
 
   vim.opt.guicursor = "n-v-c-i:block"
+
+  -- 分割线出掉白线
+  vim.opt.fillchars = "vert: ,horiz: ,horizdown: ,verthoriz: ,vertleft: ,vertright: "
 end
 
 return M
