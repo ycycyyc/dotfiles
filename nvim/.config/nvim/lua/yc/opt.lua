@@ -41,6 +41,7 @@ M.setup = function()
   vim.opt.cursorlineopt = "number"
 
   vim.opt.guicursor = "n-v-c-i:block"
+  vim.opt.splitright = true
 
   -- 分割线出掉白线
   vim.opt.fillchars = "vert: ,horiz: ,horizdown: ,verthoriz: ,vertleft: ,vertright: "

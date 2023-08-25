@@ -86,6 +86,7 @@ set hlsearch
 set signcolumn=yes
 " set confirm
 set incsearch
+set splitright
 
 " theme
 function! s:default_theme() 
