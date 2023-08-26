@@ -1,5 +1,3 @@
-local env = require("basic.env").env
-
 local M = {}
 
 M.setup = function()
