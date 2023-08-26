@@ -88,6 +88,7 @@
     "explorer.keyMappings.global": {
         "f": "searchRecursive",
         "th": "toggleHidden",
+        "<c-v>": "open:vsplit",
         "<cr>": [
             "wait",
             "expandable?",
