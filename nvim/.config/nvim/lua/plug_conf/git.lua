@@ -1,6 +1,27 @@
 -- git
 local M = {}
 
+local show_diff = function()
+  local current_line = vim.api.nvim_get_current_line()
+  local items = vim.fn.split(current_line) ---@type string[]
+
+  -- TODO(yc) find git commit from line
+  local content = items[1]
+
+  local idx = vim.fn.stridx(content, "^") ---@type number
+  local cmd = "" ---@type string
+
+  if idx >= 0 then
+    vim.notify "it's first commit"
+    cmd = "DiffviewOpen " .. content
+  else
+    cmd = "DiffviewOpen " .. content .. "^!"
+  end
+
+  vim.notify("Run cmd: " .. cmd)
+  vim.cmd(cmd)
+end
+
 M.config = function()
   local keys = require "basic.keys"
 
@@ -90,9 +111,33 @@ M.fugitive_config = function()
       local current_line = vim.api.nvim_get_current_line()
       local items = vim.fn.split(current_line)
 
-      local cmd = "DiffviewOpen -- " .. items[2]
-      vim.print("Run cmd: " .. cmd)
-      vim.cmd(cmd)
+      local unstaged_found = vim.fn.stridx(current_line, "Unstaged")
+      if unstaged_found >= 0 then
+        vim.notify "don't show Unstaged msg"
+        return
+      end
+
+      local pos = vim.inspect_pos()
+      if not pos.syntax then
+        vim.notify "missing syntax field"
+        return
+      end
+
+      -- {
+      --   hl_group = "xxx",
+      --   hl_group_link = "xxx",
+      -- }
+      for _, syn in ipairs(pos.syntax) do
+        if syn.hl_group == "fugitiveUnstagedSection" then
+          local cmd = "DiffviewOpen -- " .. items[2]
+          vim.notify("Run cmd: " .. cmd)
+          vim.cmd(cmd)
+          return
+        elseif syn.hl_group == "fugitiveHash" then
+          show_diff()
+          return
+        end
+      end
     end)
   end)
 
@@ -100,15 +145,7 @@ M.fugitive_config = function()
     bmap("n", "q", ":q<cr>")
 
     bmap("n", "<cr>", function()
-      local current_line = vim.api.nvim_get_current_line()
-      local items = vim.fn.split(current_line)
-      local res = vim.fn.stridx(items[1], "^")
-      if res >= 0 then
-        vim.notify "it's first commit"
-        vim.cmd("DiffviewOpen " .. items[1])
-        return
-      end
-      vim.cmd("DiffviewOpen " .. items[1] .. "^!")
+      show_diff()
     end)
   end)
 end
