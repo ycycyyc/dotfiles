@@ -13,6 +13,12 @@ install module:   stow {module_name}
 uninstall module: stow -D {module_name}
 ```
 
+4. 环境配置
+在 .zshrc 中添加下一行
+```
+source ~/dotfiles/persional/.persionalrc
+```
+
 ## nvim配置
 1. neovim(needed)   version >= 0.8
 ```
