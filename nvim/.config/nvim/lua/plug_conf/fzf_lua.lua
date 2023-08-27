@@ -107,6 +107,8 @@ M.config = function()
           table.insert(rg, "-t cpp -t c")
         elseif fargs[i + 1] == "lua" then
           table.insert(rg, "-t lua")
+        elseif fargs[i + 1] == "vim" then
+          table.insert(rg, "-t vim")
         end
       elseif value == "-g" then
         ignore = 1
