@@ -15,6 +15,22 @@ local basic_plugins = {
   "nvim-lua/plenary.nvim",
 
   {
+    "utilyre/sentiment.nvim",
+    event = "VeryLazy", -- keep for lazy loading
+    opts = {
+      limit = 200,
+      included_modes = {
+        n = true,
+        i = false,
+      },
+    },
+    init = function()
+      -- `matchparen.vim` needs to be disabled manually in case of lazy loading
+      vim.g.loaded_matchparen = 1
+    end,
+  },
+
+  {
     "ycycyyc/flash.nvim",
     branch = "main",
     event = "VeryLazy",
