@@ -24,11 +24,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'voldikss/vim-floaterm'
-" Plug 'gcmt/wildfire.vim'
-Plug 'schickling/vim-bufonly'
-Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'easymotion/vim-easymotion'
+Plug 'voldikss/vim-floaterm', {'on': 'FloatermToggle'}
+Plug 'schickling/vim-bufonly', {'on': 'BufOnly'}
+Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['cpp', 'c'] }
+Plug 'easymotion/vim-easymotion', {'on': '<Plug>(easymotion-overwin-f2)'}
+
 call plug#end()
 
 inoremap jk <ESC>
