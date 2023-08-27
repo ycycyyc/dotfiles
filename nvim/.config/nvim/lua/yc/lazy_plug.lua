@@ -18,7 +18,7 @@ local basic_plugins = {
     "utilyre/sentiment.nvim",
     event = "VeryLazy", -- keep for lazy loading
     opts = {
-      limit = 200,
+      limit = 55,
       included_modes = {
         n = true,
         i = false,
