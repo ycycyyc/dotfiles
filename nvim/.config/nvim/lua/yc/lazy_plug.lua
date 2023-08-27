@@ -255,10 +255,12 @@ local lsp_plugins = {
 
   {
     "utilyre/barbecue.nvim",
+    event = "VeryLazy",
     name = "barbecue",
     version = "*",
     dependencies = {
       "SmiteshP/nvim-navic",
+      event = "VeryLazy",
       opts = {
         lazy_update_context = true,
       },
@@ -384,8 +386,8 @@ M.setup = function()
         ---@type string[] list any plugins you want to disable here
         disabled_plugins = {
           "gzip",
-          -- "matchit",
-          -- "matchparen",
+          "matchit",
+          "matchparen",
           "netrwPlugin",
           "tarPlugin",
           "tohtml",
