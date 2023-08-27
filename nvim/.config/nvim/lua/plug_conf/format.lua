@@ -1,5 +1,5 @@
 return {
-  ft = { "lua", "python" },
+  ft = { "lua", "python", "json" },
   config = function()
     local ft = require "guard.filetype"
 
@@ -8,6 +8,11 @@ return {
     ft("python"):fmt {
       cmd = "black",
       args = { "-q", "-" },
+      stdin = true,
+    }
+
+    ft("json"):fmt {
+      cmd = "jq",
       stdin = true,
     }
 
