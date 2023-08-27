@@ -1,5 +1,10 @@
 set nocompatible
 
+" disable internal plug
+let g:loaded_matchparen=1
+let g:loaded_matchit=1
+let g:loaded_netrwPlugin=1
+
 let g:coc_data_home = "~/.config/coc_vim/"
 
 if $VIM_LSP == "lsp"
