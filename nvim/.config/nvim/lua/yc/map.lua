@@ -64,13 +64,33 @@ M.setup = function()
     if mouseEnable == false then
       vim.opt.mouse = "nv"
       mouseEnable = true
-      vim.print("set mouse=nv")
+      vim.print "set mouse=nv"
       return
     end
 
     vim.opt.mouse = ""
     mouseEnable = false
-      vim.print("set mouse=")
+    vim.print "set mouse="
+  end)
+
+  local get_winnums_byft = require("utils.helper").get_winnums_byft
+
+  ---@return boolean
+  local has_qf_win = function()
+    local wins = get_winnums_byft "qf"
+    return #wins > 0
+  end
+
+  map("n", keys.jump_to_next_qf, function()
+    if has_qf_win() then
+      vim.cmd.cnext()
+    end
+  end)
+
+  map("n", keys.jump_to_prev_qf, function()
+    if has_qf_win() then
+      vim.cmd.cprev()
+    end
   end)
 end
 
