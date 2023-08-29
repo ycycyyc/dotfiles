@@ -83,13 +83,20 @@ M.setup = function()
 
   map("n", keys.jump_to_next_qf, function()
     if has_qf_win() then
-      vim.cmd.cnext()
+      local ok, _ = pcall(vim.cmd.cnext)
+      if not ok then
+        vim.cmd.cfirst()
+      end
     end
   end)
 
   map("n", keys.jump_to_prev_qf, function()
     if has_qf_win() then
-      vim.cmd.cprev()
+
+      local ok, _ = pcall(vim.cmd.cprev)
+      if not ok then
+        vim.cmd.clast()
+      end
     end
   end)
 end
