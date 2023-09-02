@@ -46,7 +46,7 @@ function! s:onedark_theme()
     hi Conditional ctermfg=170
     hi Repeat ctermfg=170
     hi Label ctermfg=170
-    hi Operator  ctermfg=170
+    hi Operator  ctermfg=39
     hi Keyword  ctermfg=170
     hi Exception ctermfg=170
     hi Define ctermfg=170
@@ -75,6 +75,7 @@ function! s:onedark_theme()
     hi CocSemVariable ctermfg=145
     hi CocSemParameter ctermfg=145
     hi CocSemClass ctermfg=180
+    hi cppType ctermfg=180
 
     " athom/more-colorful.vim enhance go highlight
     " hi Comment ctermfg=59 

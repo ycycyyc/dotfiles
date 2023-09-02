@@ -141,3 +141,4 @@ function! SynStack ()
     endfor
 endfunction
 " map gm :call SynStack()<CR>
+command! Inspect :call SynStack()
