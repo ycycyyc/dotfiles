@@ -94,6 +94,7 @@ M.coc_config = function()
     hi link CocWarningHighlight  clear
     hi link CocInfoHighlight  clear
     hi link CocHintHighlight   clear
+    autocmd FileType coctree nnoremap <buffer> q :q<cr>
   ]]
 
   vim.fn["coc_fzf#common#add_list_source"]("fzf-grep", "search global", "Rg")
