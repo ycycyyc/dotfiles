@@ -96,5 +96,6 @@
             "open"
         ]
     },
+    "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "snippets.ultisnips.pythonPrompt": false
 }

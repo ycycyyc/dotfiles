@@ -143,6 +143,7 @@ local colors = {
   StatusLine = { fg = cursor_grey, bg = white },
   StatusLineNC = { fg = cursor_grey, bg = cursor_grey },
   StatusLineNormal = { fg = white, bg = cursor_grey2 },
+  StatusLineFunction = { fg = blue, bg = cursor_grey2, cterm = { bold = true } },
   StatusLineCurFile = { fg = cmdlinebg, bg = green, cterm = { bold = true } },
   StatusLineBufListNormal = { fg = white, bg = cursor_grey4, cterm = { bold = true } },
   StatusLineTotalLine = { fg = white, bg = cursor_grey5, cterm = { bold = true } },

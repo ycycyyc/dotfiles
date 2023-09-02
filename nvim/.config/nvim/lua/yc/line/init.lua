@@ -1,5 +1,7 @@
 local utils = require "yc.line.utils"
 
+local env = require("basic.env").env
+
 local redraw = function() end
 local redrawCnt = 0
 
@@ -16,6 +18,8 @@ end
 L.width = function()
   return utils.evaluates_width(L.cached_content)
 end
+
+M.coc_setup = function() end
 
 M.setup = function()
   vim.opt.laststatus = 3
@@ -94,6 +98,10 @@ M.setup = function()
       )
     )
   end, {})
+
+  if env.coc then
+    require("yc.line.coc_winbar").init()
+  end
 end
 
 return M
