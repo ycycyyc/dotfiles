@@ -88,6 +88,9 @@ M.coc_config = function()
   -- coc-explorer
   keyset("n", keys.toggle_dir, ":CocCommand explorer<cr>")
 
+  -- coc outline 
+  keyset("n", keys.lsp_symbols, ":CocFzfList outline<cr>")
+
   -- coc color
   vim.cmd [[
     hi link CocErrorHighlight   clear
