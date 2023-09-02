@@ -61,6 +61,7 @@ M.init = function()
 
   ignore_ft["qf"] = 1
   ignore_ft["fzf"] = 1
+  ignore_ft["fugitive"] = 1
   ignore_ft[""] = 1
 end
 
