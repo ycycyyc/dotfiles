@@ -88,7 +88,7 @@ M.coc_config = function()
   -- coc-explorer
   keyset("n", keys.toggle_dir, ":CocCommand explorer<cr>")
 
-  -- coc outline 
+  -- coc outline
   keyset("n", keys.lsp_symbols, ":CocFzfList outline<cr>")
 
   -- coc color
@@ -105,6 +105,10 @@ M.coc_config = function()
   keyset("n", keys.search_resume, ":CocFzfListResume<cr>")
   keyset("n", keys.search_cur_word, ":CocFzfList fzf-grep <c-r><c-w><cr>")
   keyset("n", keys.search_global, ":CocFzfList fzf-grep ")
+
+  -- snippet
+  vim.g.coc_snippet_next = "<TAB>"
+  vim.g.coc_snippet_prev = "<S-TAB>"
 
   -- coc semantic token
   vim.g.coc_default_semantic_highlight_groups = 0
