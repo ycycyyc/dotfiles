@@ -16,7 +16,8 @@ M.update = function(winnr)
   winnr = winnr or vim.api.nvim_get_current_win()
   local bufnr = vim.api.nvim_win_get_buf(winnr)
 
-  vim.schedule(function()
+  -- 延迟更新，避免coc_current_function还没来得及更新
+  vim.defer_fn(function()
     if
       not vim.api.nvim_buf_is_valid(bufnr)
       or not vim.api.nvim_win_is_valid(winnr)
@@ -44,7 +45,7 @@ M.update = function(winnr)
     else
       vim.wo[winnr].winbar = filename
     end
-  end)
+  end, 100)
 end
 
 M.init = function()
