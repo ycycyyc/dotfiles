@@ -11,6 +11,37 @@ end
 local ignore_filename = {}
 local ignore_ft = {}
 
+---@return string
+M.func = function()
+  local func = vim.b.coc_current_function
+  if func then
+    func = utils.add_theme("StatusLineFunction", func, "StatusLineNormal")
+  else
+    return ""
+  end
+  return func
+end
+
+---@return string
+M.diagnostic_info = function()
+  local diag = vim.b.coc_diagnostic_info
+  if not diag then
+    return ""
+  end
+
+  local msgs = ""
+
+  if diag.error and diag.error > 0 then
+    msgs = msgs .. utils.add_theme("StatusLineError", " E: " .. diag.error, "StatusLineNormal")
+  end
+
+  if diag.warning and diag.warning > 0 then
+    msgs = msgs .. utils.add_theme("StatusLineWarnning", " W: " .. diag.warning, "StatusLineNormal")
+  end
+
+  return msgs
+end
+
 ---@param winnr? number
 M.update = function(winnr)
   winnr = winnr or vim.api.nvim_get_current_win()
@@ -31,20 +62,17 @@ M.update = function(winnr)
       return
     end
 
+    local content = ""
+
     local filename = vim.fn.expand "%:t"
     if ignore_filename[filename] then
       return
     end
-
     filename = utils.add_theme("StatusLineCurFile", filename, "StatusLineNormal")
 
-    local func = vim.b.coc_current_function
-    if func then
-      func = utils.add_theme("StatusLineFunction", func, "StatusLineNormal")
-      vim.wo[winnr].winbar = filename .. " " .. func
-    else
-      vim.wo[winnr].winbar = filename
-    end
+    content = filename .. M.func() .. M.diagnostic_info()
+
+    vim.wo[winnr].winbar = content
   end, 100)
 end
 
