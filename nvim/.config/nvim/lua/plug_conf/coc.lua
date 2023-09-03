@@ -30,7 +30,7 @@ M.coc_config = function()
     "coc-go",
     "coc-clangd",
     "coc-marketplace",
-    "coc-yank",
+    -- "coc-yank",
     "coc-explorer",
     "coc-json",
     "coc-yaml",
