@@ -15,7 +15,7 @@ local ignore_ft = {}
 M.func = function()
   local func = vim.b.coc_current_function
   if func then
-    func = utils.add_theme("StatusLineFunction", func, "StatusLineNormal")
+    func = utils.add_theme("StatusLineFunction", "  " .. func, "StatusLineNormal")
   else
     return ""
   end
