@@ -92,13 +92,15 @@ M.setup = function()
 
   map("n", keys.jump_to_prev_qf, function()
     if has_qf_win() then
-
       local ok, _ = pcall(vim.cmd.cprev)
       if not ok then
         vim.cmd.clast()
       end
     end
   end)
+
+  map("s", "<Del>", [[<c-g>c]])
+  map("s", "<BS>", [[<c-g>c]])
 end
 
 return M
