@@ -2,6 +2,7 @@
     "go.checkForUpdates": "disabled",
     "go.goplsUseDaemon": false,
     "go.goplsOptions": {
+        "usePlaceholders": true,
         "semanticTokens": true,
         "hints": {
             "compositeLiteralFields": true,
@@ -16,7 +17,7 @@
     "inlayHint.enable": false,
     "semanticTokens.enable": true,
     "clangd.arguments": [
-        "--function-arg-placeholders=0",
+        "--function-arg-placeholders=1",
         "--background-index",
         "-j=15",
         "--clang-tidy",
