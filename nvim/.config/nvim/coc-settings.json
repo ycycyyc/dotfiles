@@ -30,6 +30,8 @@
     "suggest.virtualText": false,
     "suggest.enablePreselect": true,
     "suggest.noselect": false,
+    "signature.enable": false,
+    "signature.hideOnTextChange": true,
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextCurrentLineOnly": false,
     "diagnostic.enableMessage": "never",
