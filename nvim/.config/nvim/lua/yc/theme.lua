@@ -68,7 +68,7 @@ local colors = {
   Conditional = { fg = purple },
   Repeat = { fg = purple },
   Label = { fg = purple },
-  Operator = { fg = blue },
+  Operator = { fg = purple },
   Keyword = { fg = purple },
   Exception = { fg = purple },
   Define = { fg = purple },
