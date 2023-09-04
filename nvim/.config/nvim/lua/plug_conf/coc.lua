@@ -67,6 +67,15 @@ M.telescope_config = function()
 
   require("telescope").setup {
     defaults = {
+      layout_strategy = "vertical",
+      layout_config = {
+        height = 0.99,
+        preview_height = 0.4,
+        vertical = {
+          prompt_position = "top",
+        },
+      },
+      sorting_strategy = "ascending",
       mappings = {
         i = {
           ["<c-j>"] = actions.move_selection_next, -- TODO(nop)
@@ -78,11 +87,8 @@ M.telescope_config = function()
       },
     },
     pickers = {
-      find_files = {
-        theme = "ivy",
-      },
+      find_files = {},
       grep_string = {
-        theme = "ivy",
         mappings = {
           i = {
             ["<c-g>"] = function(prompt_bufnr)
@@ -111,7 +117,6 @@ M.telescope_config = function()
         },
       },
       live_grep = {
-        theme = "ivy",
         mappings = {
           i = {
             ["<c-g>"] = function(prompt_bufnr)
@@ -132,11 +137,8 @@ M.telescope_config = function()
           },
         },
       },
-      current_buffer_fuzzy_find = {
-        theme = "ivy",
-      },
+      current_buffer_fuzzy_find = {},
       git_commits = {
-        theme = "ivy",
         mappings = {
           i = {
             ["<cr>"] = function(bufnr)
@@ -152,9 +154,7 @@ M.telescope_config = function()
           },
         },
       },
-      command_history = {
-        theme = "ivy",
-      },
+      command_history = {},
     },
     extensions = {
       fzf = {
@@ -164,7 +164,6 @@ M.telescope_config = function()
         case_mode = "smart_case", -- or "ignore_case" or "respect_case"
       },
       coc = {
-        theme = "ivy",
         prefer_locations = false,
       },
     },

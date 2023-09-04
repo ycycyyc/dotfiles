@@ -167,6 +167,7 @@ local colors = {
   TelescopeResultsTitle = { fg = red, cterm = { bold = true } },
   TelescopePreviewTitle = { fg = yellow, cterm = { bold = true } },
   TelescopePromptTitle = { fg = blue, cterm = { bold = true } },
+  TelescopeMultiSelection = { fg = cyan },
 }
 
 local function convert(opt)
