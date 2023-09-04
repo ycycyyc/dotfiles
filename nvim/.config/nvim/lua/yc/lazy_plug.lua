@@ -203,8 +203,8 @@ local coc_telescopy_plugins = {
         config = require("plug_conf.coc").coc_config,
       },
     },
-    lazy = false,
     config = require("plug_conf.coc").telescope_config,
+    event = "VeryLazy",
   },
 
   {
@@ -212,11 +212,13 @@ local coc_telescopy_plugins = {
     dependencies = {
       "nvim-telescope/telescope.nvim",
     },
+    event = "VeryLazy",
   },
 
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+    event = "VeryLazy",
     dependencies = {
       "nvim-telescope/telescope.nvim",
     },
