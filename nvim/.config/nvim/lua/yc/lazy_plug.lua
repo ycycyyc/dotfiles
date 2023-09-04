@@ -4,8 +4,10 @@ local env = require("basic.env").env
 local M = {}
 
 local lazypath = function()
-  if env.coc then
+  if env.coc and not env.telescope then
     return vim.fn.stdpath "data" .. "/lazy_coc/lazy.nvim"
+  elseif env.coc and env.telescope then
+    return vim.fn.stdpath "data" .. "/lazy_coc_telescope/lazy.nvim"
   else
     return vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
   end
@@ -66,7 +68,12 @@ local basic_plugins = {
   {
     "kylechui/nvim-surround",
     event = { "InsertEnter", "CursorHold", "CursorHoldI" },
-    opts = {},
+    opts = {
+      keymaps = {
+        insert = "<C-+>s", -- TODO: disable this keymap
+        insert_line = "<C-+>S", -- TODO: disable this keymap
+      },
+    },
   },
 
   {
@@ -181,6 +188,37 @@ local coc_plugins = {
           "junegunn/fzf",
         },
       },
+    },
+  },
+}
+
+local coc_telescopy_plugins = {
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      {
+        "neoclide/coc.nvim",
+        branch = "release",
+        config = require("plug_conf.coc").coc_config,
+      },
+    },
+    lazy = false,
+    config = require("plug_conf.coc").telescope_config,
+  },
+
+  {
+    "fannheyward/telescope-coc.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+  },
+
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
     },
   },
 }
@@ -357,8 +395,10 @@ M.setup = function()
   local plugins = basic_plugins
   local bplugins = {}
 
-  if env.coc then
+  if env.coc and not env.telescope then
     bplugins = coc_plugins
+  elseif env.coc and env.telescope then
+    bplugins = coc_telescopy_plugins
   else
     bplugins = lsp_plugins
   end

@@ -162,6 +162,11 @@ local colors = {
 
   --nvimtree
   NvimTreeSymlink = { fg = blue, cterm = { bold = true, underline = true } },
+
+  -- Telescope
+  TelescopeResultsTitle = { fg = red, cterm = { bold = true } },
+  TelescopePreviewTitle = { fg = yellow, cterm = { bold = true } },
+  TelescopePromptTitle = { fg = blue, cterm = { bold = true } },
 }
 
 local function convert(opt)

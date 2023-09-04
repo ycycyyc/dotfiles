@@ -14,6 +14,7 @@ local env = {
   semantic_token = true,
   luasnip = false,
   coc = false,
+  telescope = true,
   python3 = "",
   winbar = true,
   inlayhint = false, -- wait for nvim0.10 stable version
