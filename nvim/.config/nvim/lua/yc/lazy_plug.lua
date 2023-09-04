@@ -201,6 +201,7 @@ local coc_telescopy_plugins = {
         "neoclide/coc.nvim",
         branch = "release",
         config = require("plug_conf.coc").coc_config,
+        lazy = false,
       },
     },
     config = require("plug_conf.coc").telescope_config,
