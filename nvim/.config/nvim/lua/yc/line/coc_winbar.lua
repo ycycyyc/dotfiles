@@ -15,7 +15,7 @@ local ignore_ft = {}
 M.func = function()
   local func = vim.b.coc_current_function
   if func then
-    func = utils.add_theme("StatusLineFunction", "  " .. func, "StatusLineNormal")
+    func = utils.add_theme("StatusLineFunction", " " .. func, "StatusLineNormal")
   else
     return ""
   end
@@ -70,7 +70,7 @@ M.update = function(winnr)
     end
     filename = utils.add_theme("StatusLineCurFile", filename, "StatusLineNormal")
 
-    content = filename .. M.func() .. M.diagnostic_info()
+    content = filename .. M.diagnostic_info() .. M.func()
 
     vim.wo[winnr].winbar = content
   end, 100)
