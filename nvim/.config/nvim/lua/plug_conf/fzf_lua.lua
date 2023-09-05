@@ -27,9 +27,9 @@ M.config = function()
 
   require("fzf-lua").setup {
     winopts = {
-      row = 0.25,
-      col = 0.6,
-      width = 0.92, -- window width
+      row = 0.3,
+      col = 0.5,
+      width = 0.8, -- window width
       height = 0.95, -- window height
       fullscreen = false,
       preview = preview,
