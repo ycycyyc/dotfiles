@@ -19,6 +19,7 @@ M.config = function()
   map("n", keys.switch_buffers, ":Buffers<cr>")
   map("n", keys.search_cur_word_cur_buf, ":BLines <c-r><c-w><cr>")
   map("n", keys.git_commits, ":Commits<cr>")
+  map("n", keys.cmd_history, ":History:<cr>")
 
   vim.api.nvim_create_user_command("Rg", function(args)
     local rg = {
