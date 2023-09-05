@@ -9,8 +9,8 @@ local map = helper.build_keymap { noremap = true }
 M.config = function()
   vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
 
-  vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
-  vim.g.fzf_layout = { window = { width = 0.95, height = 0.85 } }
+  vim.g.fzf_preview_window = { "up:45%", "ctrl-/" }
+  vim.g.fzf_layout = { window = { width = 0.8, height = 0.9 } }
   vim.g.fzf_commits_log_options =
     "--color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'"
 
@@ -99,7 +99,7 @@ M.config = function()
       table.insert(rg, suffix)
     end
 
-    local preview = preview_func "up:60%"
+    local preview = preview_func "up:45%"
     local rgcmd = table.concat(rg, " ")
 
     grep_func(rgcmd, 1, preview, args["bang"])

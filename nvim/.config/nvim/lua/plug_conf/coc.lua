@@ -19,7 +19,7 @@ end
 
 M.fzf_config = function()
   vim.g.coc_fzf_opts = { "--layout=reverse" }
-  vim.g.coc_fzf_preview = "up:40%"
+  vim.g.coc_fzf_preview = "up:45%"
   vim.g.coc_fzf_preview_fullscreen = 0
   vim.g.coc_fzf_preview_toggle_key = "ctrl-/"
 

@@ -8,7 +8,7 @@ M.config = function()
 
   -- " 让输入上方，搜索列表在下方
   vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
-  vim.g.fzf_preview_window = { "up:40%", "ctrl-/" }
+  vim.g.fzf_preview_window = { "up:45%", "ctrl-/" }
 
   local preview = {
     layout = "up:+{2}-/2",
