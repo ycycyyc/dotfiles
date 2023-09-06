@@ -21,7 +21,7 @@ local M = {
     return vim.o.columns
   end,
 
-  nbuffers_cb = function(nBuffers) end,
+  nbuffers_cb = function(_) end,
 }
 
 ---@param bufnr number
@@ -138,9 +138,25 @@ M.refresh = function()
 end
 
 M.start = function()
-  api.nvim_create_autocmd({ "BufEnter", "BufDelete" }, {
+  api.nvim_create_autocmd({ "BufEnter" }, {
     callback = function()
       M.refresh()
+    end,
+  })
+
+  local hasRefreshJob = false
+  api.nvim_create_autocmd({ "BufDelete" }, {
+    callback = function()
+      if hasRefreshJob then
+        return
+      end
+
+      vim.defer_fn(function()
+        M.refresh()
+        hasRefreshJob = false
+      end, 50)
+
+      hasRefreshJob = true
     end,
   })
 end
