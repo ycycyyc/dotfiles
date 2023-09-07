@@ -14,6 +14,11 @@ M.config = function()
   vim.g.fzf_commits_log_options =
     "--color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'"
 
+  vim.g.fzf_action = {
+    ["ctrl-v"] = "vsplit",
+    ["ctrl-s"] = "split",
+  }
+
   map("n", keys.search_find_files, ":Files<cr>")
   map("n", keys.search_buffer, ":BLines<cr>")
   map("n", keys.switch_buffers, ":Buffers<cr>")
