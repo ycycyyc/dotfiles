@@ -20,11 +20,59 @@ M.config = function()
   }
 
   map("n", keys.search_find_files, ":Files<cr>")
-  map("n", keys.search_buffer, ":BLines<cr>")
   map("n", keys.switch_buffers, ":Buffers<cr>")
   map("n", keys.search_cur_word_cur_buf, ":BLines <c-r><c-w><cr>")
   map("n", keys.git_commits, ":Commits<cr>")
   map("n", keys.cmd_history, ":History:<cr>")
+
+  map("n", keys.search_buffer, function()
+    local filename = vim.fn.fnameescape(vim.fn.expand "%:p")
+    local line_count = vim.api.nvim_buf_line_count(0)
+
+    if line_count > 2048 then
+      vim.cmd.BLines()
+      return
+    end
+
+    local lines = vim.api.nvim_buf_get_lines(0, 0, line_count, true)
+    local items = {}
+    for i, l in ipairs(lines) do
+      table.insert(items, filename .. ":" .. tostring(i) .. ":1: " .. l)
+    end
+
+    local opt_preview = vim.fn["fzf#vim#with_preview"] "up:+{2}-/2"
+    local options = {
+      "--ansi",
+      "--delimiter",
+      ":",
+      "--with-nth",
+      "2..",
+      "--prompt",
+      tostring(line_count) .. " (lines) > ",
+      "--expect",
+      "ctrl-v", -- ignore
+      "--bind",
+      "alt-a:select-all,alt-d:deselect-all", -- ignore
+      "--multi",
+    }
+
+    for _, o in ipairs(opt_preview["options"]) do
+      table.insert(options, o)
+    end
+
+    local wrap = vim.fn["fzf#wrap"] { source = items, options = options }
+
+    wrap["sink*"] = function(lists)
+      local file = lists[2]
+
+      local subs = vim.fn.split(file, ":")
+      local row = tonumber(subs[2])
+
+      vim.fn.setcursorcharpos(row, 1)
+    end
+
+    vim.fn["fzf#run"](wrap)
+  end)
 
   vim.api.nvim_create_user_command("Rg", function(args)
     local rg = {
