@@ -25,6 +25,11 @@ M.config = function()
   map("n", keys.cmd_history, ":History:<cr>")
 
   map("n", keys.git_commits, function()
+    if require("yc.line.git").branch == "" then
+      vim.notify "not in a git repo"
+      return
+    end
+
     local cmd =
       "git log --color --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'"
 
