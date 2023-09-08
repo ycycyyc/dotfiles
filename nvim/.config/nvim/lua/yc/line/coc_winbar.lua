@@ -92,6 +92,7 @@ M.init = function()
   ignore_ft["fugitive"] = 1
   ignore_ft["lazy"] = 1
   ignore_ft["TelescopePrompt"] = 1
+  ignore_ft["DiffviewFilePanel"] = 1
   ignore_ft[""] = 1
 end
 

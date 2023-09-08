@@ -22,8 +22,37 @@ M.config = function()
   map("n", keys.search_find_files, ":Files<cr>")
   map("n", keys.switch_buffers, ":Buffers<cr>")
   map("n", keys.search_cur_word_cur_buf, ":BLines <c-r><c-w><cr>")
-  map("n", keys.git_commits, ":Commits<cr>")
   map("n", keys.cmd_history, ":History:<cr>")
+
+  map("n", keys.git_commits, function()
+    local cmd =
+      "git log --color --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'"
+
+    local run = function()
+      local options = {
+        "--ansi",
+        "--delimiter",
+        ":",
+        "--prompt",
+        "Commits > ",
+        "--multi",
+      }
+
+      local wrap = vim.fn["fzf#wrap"] { source = cmd, options = options }
+
+      wrap["sink*"] = function(lists)
+        local items = vim.fn.split(lists[2], " ")
+        require("plug_conf.gitdiff").show_diff(items[1])
+      end
+
+      vim.fn["fzf#run"](wrap)
+    end
+
+    local ok, _ = pcall(run)
+    if not ok then
+      vim.cmd "run git cmd failed"
+    end
+  end)
 
   map("n", keys.search_buffer, function()
     local filename = vim.fn.fnameescape(vim.fn.expand "%:p")

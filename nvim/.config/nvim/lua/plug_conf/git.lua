@@ -6,20 +6,7 @@ local show_diff = function()
   local items = vim.fn.split(current_line) ---@type string[]
 
   -- TODO(yc) find git commit from line
-  local content = items[1]
-
-  local idx = vim.fn.stridx(content, "^") ---@type number
-  local cmd = "" ---@type string
-
-  if idx >= 0 then
-    vim.notify "it's first commit"
-    cmd = "DiffviewOpen " .. content
-  else
-    cmd = "DiffviewOpen " .. content .. "^!"
-  end
-
-  vim.notify("Run cmd: " .. cmd)
-  vim.cmd(cmd)
+  require("plug_conf.gitdiff").show_diff(items[1])
 end
 
 M.config = function()
