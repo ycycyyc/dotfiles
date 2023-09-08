@@ -44,6 +44,7 @@ M.config = function()
     },
     git = {
       commits = {
+        cmd = "git log -C --color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'",
         actions = {
           ["ctrl-y"] = diff,
           ["default"] = diff,

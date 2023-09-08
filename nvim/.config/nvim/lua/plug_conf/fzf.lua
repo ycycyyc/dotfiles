@@ -30,8 +30,7 @@ M.config = function()
       return
     end
 
-    local cmd =
-      "git log --color --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'"
+    local cmd = "git log -C " .. vim.g.fzf_commits_log_options
 
     local run = function()
       local options = {
