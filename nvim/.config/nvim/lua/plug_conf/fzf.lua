@@ -154,28 +154,15 @@ M.config = function()
 
     -- query content
     local contents = "'" .. table.concat(content, " ") .. "'"
-    -- contents
     table.insert(rg, "-F")
+
     if #content == 0 or interactive then
-      local query = ""
-      local show_query = ""
-      if #content >= 1 then
-        query = table.concat(content, " ")
-        show_query = query
-      end
-
-      if #content > 1 then
-        query = "'" .. query .. "'"
-      end
-
       table.insert(rg, "-- ")
-
       local prefix = table.concat(rg, " ")
 
-      local init_cmd = prefix .. query .. " || true"
-      local reload_cmd = prefix .. " {q} || true"
-      local spec = { options = { "--phony", "--query", show_query, "--bind", "change:reload:" .. reload_cmd } }
-      grep_func(init_cmd, 1, preview_func(spec), args["bang"])
+      local query = table.concat(content, " ")
+
+      vim.fn["fzf#vim#grep2"](prefix, query, preview_func(), args["bang"])
       return
     end
 
