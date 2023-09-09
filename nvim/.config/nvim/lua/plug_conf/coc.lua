@@ -306,6 +306,9 @@ M.coc_config = function()
   keyset("i", "<c-k>", [[coc#pum#stop()]], { silent = true, expr = true })
   keyset("i", "<c-l>", [[CocActionAsync('showSignatureHelp')]], { silent = true, expr = true })
 
+  keyset("i", "<c-n>", [[coc#pum#visible() ? coc#pum#next(0) : "\<C-n>"]], { silent = true, expr = true })
+  keyset("i", "<c-p>", [[coc#pum#visible() ? coc#pum#prev(0) : "\<C-p>"]], { silent = true, expr = true })
+
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
 
   -- lsp format
