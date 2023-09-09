@@ -28,7 +28,7 @@
         "--pch-storage=memory"
     ],
     "rust-analyzer.server.path": "~/.cargo/bin/rust-analyzer",
-    "suggest.virtualText": false,
+    "suggest.virtualText": true,
     "suggest.enablePreselect": true,
     "suggest.noselect": false,
     "signature.enable": false,
