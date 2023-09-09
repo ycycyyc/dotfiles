@@ -168,6 +168,9 @@ local colors = {
   TelescopePreviewTitle = { fg = yellow, cterm = { bold = true } },
   TelescopePromptTitle = { fg = blue, cterm = { bold = true } },
   TelescopeMultiSelection = { fg = cyan },
+
+  -- coc
+  CocPumSearch = { fg = yellow },
 }
 
 local function convert(opt)
@@ -224,6 +227,7 @@ local function default_theme()
 
   hl(0, "CocMenuSel", { link = "PmenuSel" })
   hl(0, "CocPum", { link = "Pmenu" })
+  hl(0, "CocVirtualText", { link = "Comment" })
 
   for name, opt in pairs(colors) do
     local o = convert(opt)
