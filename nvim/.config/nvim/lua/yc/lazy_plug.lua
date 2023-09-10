@@ -19,9 +19,12 @@ local basic_plugins = {
   {
     "ycycyyc/flash.nvim",
     branch = "main",
-    event = "VeryLazy",
     opts = require("plug_conf.move").flash_opts,
     keys = {
+      {
+        "/",
+        mode = { "n" },
+      },
       {
         "<c-g>",
         mode = { "c" },
