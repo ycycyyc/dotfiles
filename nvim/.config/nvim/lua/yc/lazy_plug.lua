@@ -67,7 +67,12 @@ local basic_plugins = {
 
   {
     "kylechui/nvim-surround",
-    event = { "InsertEnter", "CursorHold", "CursorHoldI" },
+    keys = {
+      { "ds", mode = "n" },
+      { "cs", mode = "n" },
+      { "ys", mode = "n" },
+      { "S", mode = "x" },
+    },
     opts = {
       keymaps = {
         insert = "<C-+>s", -- TODO: disable this keymap
