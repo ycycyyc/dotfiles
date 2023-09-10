@@ -182,7 +182,6 @@ local coc_plugins = {
     "antoinemadec/coc-fzf",
     branch = "master",
     config = require("plug_conf.coc").fzf_config,
-    event = "VeryLazy",
     dependencies = {
       {
         "neoclide/coc.nvim",
