@@ -395,6 +395,15 @@ M.coc_config = function()
 
   -- coc settings
   vim.opt.pumheight = 10
+
+  -- coc-pairs
+  vim.b.coc_pairs = {
+    { "(", ")" },
+    { "{", "}" },
+    { "[", "]" },
+    { "'", "'" },
+    { "`", "`" },
+  }
 end
 
 return M
