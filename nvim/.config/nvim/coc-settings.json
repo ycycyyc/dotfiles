@@ -55,6 +55,9 @@
         "`"
     ],
     "outline.sortBy": "position",
+    "outline.expandLevel": 3,
+    "outline.splitCommand": "botright 60vs",
+    "tree.key.toggle": "o",
     "list.height": 22,
     "list.source.files.defaultOptions": [
         "--auto-preview"
