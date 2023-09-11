@@ -94,6 +94,7 @@ M.init = function()
   ignore_ft["TelescopePrompt"] = 1
   ignore_ft["DiffviewFilePanel"] = 1
   ignore_ft["DiffviewFiles"] = 1
+  ignore_ft["checkhealth"] = 1
   ignore_ft[""] = 1
 end
 
