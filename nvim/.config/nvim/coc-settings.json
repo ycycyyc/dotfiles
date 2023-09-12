@@ -38,7 +38,7 @@
     "signature.hideOnTextChange": true,
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextCurrentLineOnly": false,
-    "diagnostic.enableMessage": "never",
+    "diagnostic.enableMessage": "jump",
     "git.enableGlobalStatus": false,
     "git.realtimeGutters": true,
     "git.semanticCommit.scope": false,
