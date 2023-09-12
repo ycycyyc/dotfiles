@@ -95,6 +95,7 @@ M.init = function()
   ignore_ft["DiffviewFilePanel"] = 1
   ignore_ft["DiffviewFiles"] = 1
   ignore_ft["checkhealth"] = 1
+  ignore_ft["coc-explorer"] = 1
   ignore_ft[""] = 1
 end
 
