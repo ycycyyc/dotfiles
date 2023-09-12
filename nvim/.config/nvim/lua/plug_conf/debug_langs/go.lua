@@ -4,15 +4,16 @@ if not has_dap then
 end
 
 local mode = require("basic.env").env.go_debug_mode
+local uv = vim.loop or vim.uv
 
 if mode == "dlv" then
   dap.adapters.go = function(callback, _)
-    local stdout = vim.loop.new_pipe(false)
+    local stdout = uv.new_pipe(false)
     local handle
     local pid_or_err
     local port = 38697
     local opts = { stdio = { nil, stdout }, args = { "dap", "-l", "127.0.0.1:" .. port }, detached = true }
-    handle, pid_or_err = vim.loop.spawn("dlv", opts, function(code)
+    handle, pid_or_err = uv.spawn("dlv", opts, function(code)
       stdout:close()
       handle:close()
       if code ~= 0 then

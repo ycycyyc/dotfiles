@@ -12,7 +12,9 @@ local current_git_dir = "" ---@type string
 local started = false ---@type boolean
 
 local sep = package.config:sub(1, 1)
-local file_changed = sep ~= "\\" and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
+local uv = vim.loop or vim.uv
+
+local file_changed = sep ~= "\\" and uv.new_fs_event() or uv.new_fs_poll()
 
 M.start = function()
   M.refresh()

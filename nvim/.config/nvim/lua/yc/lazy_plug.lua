@@ -418,7 +418,9 @@ M.setup = function()
     table.insert(plugins, plug)
   end
 
-  if not vim.loop.fs_stat(lazypath()) then
+  local uv = vim.loop or vim.uv
+
+  if not uv.fs_stat(lazypath()) then
     vim.fn.system {
       "git",
       "clone",

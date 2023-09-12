@@ -12,13 +12,8 @@ function M:lsp_progress()
     local title = lsp.title or ""
     local done = lsp.done or false
 
-    if done == true then
-      local timer = vim.loop.new_timer()
-      timer:start(200, 0, function()
-        vim.schedule(function()
-          M.update()
-        end)
-      end)
+    if done then
+      vim.defer_fn(M.update, 1000)
     end
 
     return string.format(" %s: %s %s (%s%%) ", name, title, msg, percentage)
