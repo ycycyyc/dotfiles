@@ -72,7 +72,9 @@ M.update = function(winnr)
 
     content = filename .. M.diagnostic_info() .. M.func()
 
-    vim.wo[winnr].winbar = content
+    local winnr_str = utils.add_theme("StatusLineWinnr", "%{winnr()} ", "StatusLineNormal")
+
+    vim.wo[winnr].winbar = winnr_str .. content
   end, 100)
 end
 

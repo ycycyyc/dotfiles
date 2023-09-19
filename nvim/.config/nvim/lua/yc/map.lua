@@ -101,6 +101,14 @@ M.setup = function()
 
   map("s", "<Del>", [[<c-g>c]])
   map("s", "<BS>", [[<c-g>c]])
+
+  map("n", "<leader>1", "1<c-w>w")
+  map("n", "<leader>2", "2<c-w>w")
+  map("n", "<leader>3", "3<c-w>w")
+  map("n", "<leader>4", "4<c-w>w")
+  map("n", "<leader>5", "5<c-w>w")
+  map("n", "<leader>6", "6<c-w>w")
+  map("n", "<leader>7", "7<c-w>w")
 end
 
 return M

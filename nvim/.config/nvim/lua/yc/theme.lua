@@ -149,6 +149,7 @@ local colors = {
   StatusLineCurFile = { fg = cmdlinebg, bg = green, cterm = { bold = true } },
   StatusLineBufListNormal = { fg = white, bg = cursor_grey4, cterm = { bold = true } },
   StatusLineTotalLine = { fg = white, bg = cursor_grey5, cterm = { bold = true } },
+  StatusLineWinnr = { fg = black, bg = yellow, cterm = { bold = true } },
   NumberBuffers = { fg = black, bg = blue, cterm = { bold = true } },
   WinSeparator = { bg = cursor_grey2 },
 
