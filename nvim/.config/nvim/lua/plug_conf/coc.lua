@@ -314,11 +314,13 @@ M.coc_config = function()
   -- lsp format
   register_fts_cb({ "go", "typescript" }, function()
     bmap("n", keys.lsp_format, ":Format<cr>:w<cr>")
+    bmap("x", keys.lsp_range_format, function() end)
   end)
 
   -- lsp range format
   register_fts_cb({ "h", "cpp", "hpp", "c", "typescript" }, function()
     bmap("x", keys.lsp_range_format, "<Plug>(coc-format-selected)")
+    bmap("n", keys.lsp_format, function() end)
   end)
 
   -- lsp switch source header
