@@ -28,10 +28,43 @@ M.update = function()
 end
 
 M.setup = function()
-  vim.api.nvim_create_autocmd({ "User" }, {
-    pattern = "LspProgressUpdate",
-    callback = M.update,
-  })
+  if vim.fn.has "nvim-0.10" == 1 then
+    vim.api.nvim_create_autocmd({ "LspProgress" }, {
+      callback = function(status)
+        if status and status.data and status.data.result and status.data.result.value then
+          local client_id = status.data.client_id
+          local name = ""
+          if client_id then
+            name = vim.lsp.get_client_by_id(client_id).name or ""
+          end
+
+          local res = status.data.result
+          local kind = res.value.kind or "end"
+          local msg = res.value.message or ""
+          local title = res.value.title or ""
+          local percentage = res.value.percentage or 0
+
+          if kind == "end" then
+            vim.defer_fn(function()
+              show:show ""
+            end, 1000)
+          else
+            local info = string.format("%s: %s %s (%s%%) ", name, title, msg, percentage)
+            show:show(info)
+          end
+        else
+          vim.defer_fn(function()
+            show:show ""
+          end, 1000)
+        end
+      end,
+    })
+  else
+    vim.api.nvim_create_autocmd({ "User" }, {
+      pattern = "LspProgressUpdate",
+      callback = M.update,
+    })
+  end
 end
 
 return M

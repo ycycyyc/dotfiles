@@ -14,7 +14,7 @@
             "rangeVariableTypes": true
         }
     },
-    "inlayHint.enable": true,
+    "inlayHint.enable": false,
     "semanticTokens.enable": true,
     "clangd.arguments": [
         "--function-arg-placeholders=1",
