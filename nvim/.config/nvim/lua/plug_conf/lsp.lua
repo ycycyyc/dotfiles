@@ -60,6 +60,9 @@ M.load_lsp_config = function()
           library = vim.api.nvim_get_runtime_file("", true),
           checkThirdParty = false, -- THIS IS THE IMPORTANT LINE TO ADD
         },
+        hint = {
+          enable = env.inlayhint,
+        },
       },
     },
   }

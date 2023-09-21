@@ -136,7 +136,6 @@ local colors = {
   -- lsp
   LspDiagnosticsVirtualTextError = { fg = red },
   LspDiagnosticsVirtualTextWarning = { fg = yellow },
-  LspInlayHint = { fg = comment_grey, bg = cursor_grey },
   LspProgress = { fg = yellow, cterm = { bold = true } },
 
   -- statusline
@@ -238,6 +237,10 @@ local function default_theme()
 
   vim.cmd [[
       hi! FlashLabel cterm=nocombine ctermfg=0 ctermbg=9 gui=nocombine guifg=Black guibg=#ccff88
+      hi! LspInlayHint ctermfg=61 ctermbg=234
+      hi! link CocInlayHint  LspInlayHint
+      hi! link CocInlayHintType  LspInlayHint
+      hi! link CocInlayHintParameter  LspInlayHint
   ]]
 end
 
