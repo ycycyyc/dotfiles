@@ -17,7 +17,7 @@ local env = {
   telescope = false,
   python3 = "",
   winbar = true,
-  inlayhint = false, -- wait for nvim0.10 stable version
+  inlayhint = true,
   noice = false,
   usePlaceholders = true,
   cmp_ghost_text = true,
@@ -33,7 +33,6 @@ M.setup = function()
 
   if vim.fn.has "nvim-0.10" == 0 and M.env.inlayhint then
     M.env.inlayhint = false
-    print "inlay hint only used in nvim-0.10"
   end
 
   if not M.env.ts then

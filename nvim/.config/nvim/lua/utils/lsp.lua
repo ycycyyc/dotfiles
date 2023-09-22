@@ -116,6 +116,14 @@ M.key_on_attach = function(conf)
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
       [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
       [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
+      [keys.lsp_toggle_inlay_hint] = {
+        function()
+          if vim.fn.has "nvim-0.10" == 1 then
+            vim.lsp.inlay_hint(0, nil)
+          end
+        end,
+        "n",
+      },
     }
 
     if conf and conf.client_cb and type(conf.client_cb) == "function" then
@@ -124,10 +132,6 @@ M.key_on_attach = function(conf)
 
     for _, cb in ipairs(M.lsp_client_cbs) do
       cb(client, bufnr, kms, lsp_config)
-    end
-
-    if env.inlayhint then
-      vim.lsp.inlay_hint(bufnr)
     end
 
     if client.supports_method "textDocument/formatting" and lsp_config.auto_format then

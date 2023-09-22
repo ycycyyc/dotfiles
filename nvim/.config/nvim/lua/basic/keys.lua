@@ -43,6 +43,7 @@ local M = {
   lsp_err_goto_next = "]g", -- 下个错误
   lsp_incoming_calls = "gl",
   lsp_toggle_autoformat = "<leader>T",
+  lsp_toggle_inlay_hint = "<leader>ht",
   lsp_symbols = "<leader>s",
   lsp_global_symbols = "<leader>S",
 
