@@ -119,7 +119,11 @@ M.key_on_attach = function(conf)
       [keys.lsp_toggle_inlay_hint] = {
         function()
           if vim.fn.has "nvim-0.10" == 1 then
-            vim.lsp.inlay_hint(0, nil)
+            for nr = 1, vim.fn.bufnr "$" do
+              if vim.fn.buflisted(nr) == 1 then
+                vim.lsp.inlay_hint(nr, nil)
+              end
+            end
           end
         end,
         "n",
