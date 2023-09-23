@@ -385,6 +385,7 @@ local lsp_plugins = {
 
   {
     "mhartington/formatter.nvim",
+    ft = require("plug_conf.format").ft,
     config = require("plug_conf.format").config,
   },
 

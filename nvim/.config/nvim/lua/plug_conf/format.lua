@@ -1,4 +1,5 @@
 return {
+  ft = { "lua" },
   config = function()
     require("formatter").setup {
       logging = false,
