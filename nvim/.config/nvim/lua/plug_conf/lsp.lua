@@ -36,7 +36,7 @@ M.load_lsp_config = function()
         kms[keys.lsp_format] = {
           function()
             if vim.fn.executable "stylua" == 1 then
-              vim.cmd "Format"
+              vim.cmd "FormatWrite"
             end
           end,
           "n",
@@ -203,7 +203,7 @@ M.load_lsp_config = function()
         kms[keys.lsp_format] = {
           function()
             if vim.fn.executable "black" == 1 then
-              vim.cmd "Format"
+              vim.cmd "FormatWrite"
             end
           end,
           "n",

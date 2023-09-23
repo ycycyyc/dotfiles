@@ -13,5 +13,9 @@ return {
         },
       },
     }
+
+    vim.api.nvim_del_user_command "Format"
+    vim.api.nvim_del_user_command "FormatLock"
+    vim.api.nvim_del_user_command "FormatWriteLock"
   end,
 }
