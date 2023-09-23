@@ -79,6 +79,9 @@ M.opts = {
     separator = "▸",
   },
   context_follow_icon_color = true,
+  lead_custom_section = function()
+    return { { " %{winnr()} ", "StatusLineWinnr" }, { " ", "StatusLineNormal" } }
+  end,
 
   show_modified = true,
   show_dirname = true,
