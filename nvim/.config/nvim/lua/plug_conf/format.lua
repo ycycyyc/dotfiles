@@ -1,5 +1,5 @@
 return {
-  ft = { "lua" },
+  ft = { "lua", "python" },
   config = function()
     require("formatter").setup {
       logging = false,
@@ -7,6 +7,9 @@ return {
       filetype = {
         lua = {
           require("formatter.filetypes.lua").stylua,
+        },
+        python = {
+          require("formatter.filetypes.python").black,
         },
       },
     }
