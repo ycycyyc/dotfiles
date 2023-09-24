@@ -308,6 +308,7 @@ M.coc_config = function()
 
   keyset("i", "<c-n>", [[coc#pum#visible() ? coc#pum#next(1) : "\<C-n>"]], { silent = true, expr = true })
   keyset("i", "<c-p>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"]], { silent = true, expr = true })
+  keyset("n", keys.lsp_toggle_inlay_hint, ":CocCommand document.toggleInlayHint<cr>")
 
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
 
