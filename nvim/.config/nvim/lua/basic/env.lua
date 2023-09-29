@@ -24,12 +24,8 @@ local env = {
 }
 
 M.setup = function()
-  if vim.fn.has "nvim-0.9" == 1 then
-    local json_conf = vim.env.NVIM_JSON_CONF or "{}"
-    M.env = vim.tbl_extend("force", env, vim.json.decode(json_conf))
-  else
-    M.env = env
-  end
+  local json_conf = vim.env.NVIM_JSON_CONF or "{}"
+  M.env = vim.tbl_extend("force", env, vim.json.decode(json_conf))
 
   if vim.fn.has "nvim-0.10" == 0 and M.env.inlayhint then
     M.env.inlayhint = false
