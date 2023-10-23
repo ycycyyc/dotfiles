@@ -46,7 +46,7 @@ function! s:onedark_theme()
     hi Conditional ctermfg=170
     hi Repeat ctermfg=170
     hi Label ctermfg=170
-    hi Operator  ctermfg=39
+    hi Operator  ctermfg=170
     hi Keyword  ctermfg=170
     hi Exception ctermfg=170
     hi Define ctermfg=170
