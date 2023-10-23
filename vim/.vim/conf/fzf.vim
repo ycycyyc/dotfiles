@@ -3,7 +3,7 @@ vim9script
 $FZF_DEFAULT_OPTS = "--layout=reverse"
 g:fzf_preview_window = [ "up:45%", "ctrl-/" ]   
 g:fzf_commits_log_options = "--color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'"
-g:fzf_layout = { 'window': { 'width': 0.95, 'height': 0.85  }  }
+g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.95  }  }
 
 def RipgrepFzf(query: string, fullscreen: number)
     var command_fmt = 'rg --hidden --column --line-number --no-heading --color=always --smart-case -- %s || true'
