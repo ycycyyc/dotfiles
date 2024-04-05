@@ -274,7 +274,7 @@ local lsp_plugins = {
           return npairs.autopairs_cr()
         end
       end
-      vim.keymap.set("i", "<c-j>", cj, { expr = true, noremap = true })
+      vim.keymap.set("i", "<c-j>", cj, { expr = true, noremap = true, replace_keycodes = false })
     end,
   },
 
