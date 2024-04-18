@@ -7,7 +7,7 @@ local env = require("basic.env").env
 local map = helper.build_keymap { noremap = true }
 
 M.config = function()
-  vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
+  vim.env.FZF_DEFAULT_OPTS = "--layout=reverse" .. ' --bind "alt-a:select-all,alt-d:deselect-all"'
 
   vim.g.fzf_preview_window = { "up:45%", "ctrl-/" }
   vim.g.fzf_layout = { window = { width = 0.8, height = 0.9 } }
