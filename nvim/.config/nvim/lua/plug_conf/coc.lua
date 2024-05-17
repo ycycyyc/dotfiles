@@ -357,6 +357,9 @@ M.coc_config = function()
   -- coc semantic token
   vim.g.coc_default_semantic_highlight_groups = 0
   local hlMap = {
+    TypeNamespace = { "@namespace", "Include" },
+    TypeType = { "@type", "Type" },
+    TypeVariable = { "@variable", "Identifier" },
     Namespace = { "@namespace", "Include" },
     Type = { "@type", "Type" },
     Enum = { "@type", "Type" },
