@@ -97,6 +97,7 @@ local basic_plugins = {
       { "gcc", mode = { "n" } },
     },
     opts = {},
+    cond = vim.fn.has "nvim-0.10" == 0,
   },
 
   {
