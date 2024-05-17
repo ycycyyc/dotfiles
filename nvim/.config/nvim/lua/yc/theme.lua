@@ -16,6 +16,7 @@ local cursor_grey = { n = 236, gui = "#303030" }
 local cursor_grey2 = { n = 237, gui = "#303030" }
 local cursor_grey4 = { n = 239, gui = "#303030" }
 local cursor_grey5 = { n = 240, gui = "#303030" }
+local virtual_grey = { n = 242, gui = "#303030" }
 local cmdlinebg = { n = 235, gui = "#303030" }
 local current_line = { n = 11, gui = "#ffff00" }
 
@@ -101,6 +102,8 @@ local colors = {
   DiffText = { fg = black, bg = yellow },
 
   ColorColumn = { bg = cursor_grey },
+
+  Visual = { bg = virtual_grey }, -- 0.10 version
 
   DiagnosticInfo = { fg = blue },
   DiagnosticHint = { fg = blue },
@@ -200,6 +203,7 @@ local function default_theme()
   colors["@punctuation.delimiter"] = { fg = white }
   colors["@constant.builtin"] = { fg = dark_yellow }
   colors["@type.qualifier"] = { fg = purple }
+  colors["@type.builtin.go"] = { fg = yellow }
   colors["@storageclass.cpp"] = { fg = purple }
   colors["@variable.builtin.lua"] = { fg = red }
 
@@ -236,6 +240,10 @@ local function default_theme()
   end
 
   vim.cmd [[
+      " 0.10 
+      hi! link NormalFloat Pmenu
+      hi! IncSearch cterm=reverse
+
       hi! FlashLabel cterm=nocombine ctermfg=0 ctermbg=9 gui=nocombine guifg=Black guibg=#ccff88
       hi! LspInlayHint ctermfg=61 ctermbg=234
       hi! link CocInlayHint  LspInlayHint

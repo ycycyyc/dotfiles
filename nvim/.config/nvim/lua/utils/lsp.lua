@@ -120,12 +120,13 @@ M.key_on_attach = function(conf)
       [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
       [keys.lsp_toggle_inlay_hint] = {
         function()
-          if vim.fn.has "nvim-0.10" == 1 then
-            show_inlay_hint = not show_inlay_hint
-            for nr = 1, vim.fn.bufnr "$" do
-              if vim.fn.buflisted(nr) == 1 then
-                vim.lsp.inlay_hint(nr, show_inlay_hint)
-              end
+          if vim.fn.has "nvim-0.10" == 0 then
+            return
+          end
+          show_inlay_hint = not show_inlay_hint
+          for nr = 1, vim.fn.bufnr "$" do
+            if vim.fn.buflisted(nr) == 1 then
+              vim.lsp.inlay_hint.enable(show_inlay_hint)
             end
           end
         end,
