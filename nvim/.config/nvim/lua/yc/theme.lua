@@ -175,6 +175,9 @@ local colors = {
   -- coc
   CocPumSearch = { fg = yellow },
   CocTreeSelected = { bg = menu_grey },
+
+  -- fzf-lua
+  FzfLuaCursorLine = { bg = menu_grey },
 }
 
 local function convert(opt)
