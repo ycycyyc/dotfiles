@@ -2,74 +2,160 @@
 local M = {}
 
 M.config = function()
-  local helper = require "utils.helper"
-
-  local symbols = {
-    File = { icon = "file:", hl = "@text.uri" },
-    Module = { icon = "module:", hl = "@namespace" },
-    Namespace = { icon = "ns:", hl = "@namespace" },
-    Package = { icon = "package:", hl = "@namespace" },
-    Class = { icon = "Class:", hl = "@type" },
-    Method = { icon = "ƒ", hl = "@method" },
-    Property = { icon = "Property:", hl = "@method" },
-    Field = { icon = "  field:", hl = "@field" },
-    Constructor = { icon = "Constructor:", hl = "@constructor" },
-    Enum = { icon = "ℰ", hl = "@type" },
-    Interface = { icon = "Interface:", hl = "@type" },
-    Function = { icon = "func:", hl = "@function" },
-    Variable = { icon = "var:", hl = "@constant" },
-    Constant = { icon = "const:", hl = "@constant" },
-    String = { icon = "𝓐", hl = "@string" },
-    Number = { icon = "#", hl = "@number" },
-    Boolean = { icon = "⊨", hl = "TSBoolean" },
-    Array = { icon = "Array:", hl = "@constant" },
-    Object = { icon = "⦿", hl = "@type" },
-    Key = { icon = "🔐", hl = "@type" },
-    Null = { icon = "NULL", hl = "@type" },
-    EnumMember = { icon = "EnumMember:", hl = "@field" },
-    Struct = { icon = "𝓢", hl = "@type" },
-    Event = { icon = "🗲", hl = "@type" },
-    Operator = { icon = "+", hl = "@operator" },
-    TypeParameter = { icon = "𝙏", hl = "@parameter" },
-  }
-
   local opt = {
-    highlight_hovered_item = false,
-    auto_unfold_hover = false,
-    show_guides = true,
-    auto_preview = false,
-    position = "right",
-    width = 35,
-    show_numbers = true,
-    show_relative_numbers = true,
-    show_symbol_details = true,
-    fold_markers = { "▸", "▾" },
+    guides = {
+      enabled = false,
+    },
     keymaps = {
       close = { "<Esc>", "q" },
-      goto_location = "<Cr>",
-      focus_location = "o",
-      hover_symbol = "<C-space>",
-      toggle_preview = "K",
-      rename_symbol = "r",
       code_actions = "a",
       fold = "h",
-      unfold = "l",
       fold_all = "W",
-      unfold_all = "E",
       fold_reset = "R",
+      goto_location = "<Cr>",
+      hover_symbol = "<C-space>",
+      peek_location = "o",
+      rename_symbol = "r",
+      toggle_preview = "K",
+      unfold = "l",
+      unfold_all = "E",
     },
-    lsp_blacklist = {},
-    symbol_blacklist = {},
-    symbols = symbols,
+    outline_items = {
+      highlight_hovered_item = false,
+      show_symbol_details = true,
+    },
+    outline_window = {
+      position = "right",
+      show_numbers = true,
+      show_relative_numbers = true,
+      width = 35,
+    },
+    preview_window = {
+      auto_preview = false,
+    },
+    provider = {
+      lsp = {
+        blacklist_clients = {},
+      },
+    },
+    symbol_folding = {
+      auto_unfold_hover = false,
+      markers = { "▸", "▾" },
+    },
+    symbols = {
+      filter = {
+        -- exclude = true,
+      },
+      icons = {
+        Array = {
+          hl = "@constant",
+          icon = "Array:",
+        },
+        Boolean = {
+          hl = "TSBoolean",
+          icon = "⊨",
+        },
+        Class = {
+          hl = "@type",
+          icon = "Class:",
+        },
+        Constant = {
+          hl = "@constant",
+          icon = "const:",
+        },
+        Constructor = {
+          hl = "@constructor",
+          icon = "Constructor:",
+        },
+        Enum = {
+          hl = "@type",
+          icon = "ℰ",
+        },
+        EnumMember = {
+          hl = "@field",
+          icon = "EnumMember:",
+        },
+        Event = {
+          hl = "@type",
+          icon = "🗲",
+        },
+        Field = {
+          hl = "@field",
+          icon = "  field:",
+        },
+        File = {
+          hl = "@text.uri",
+          icon = "file:",
+        },
+        Function = {
+          hl = "@function",
+          icon = "func:",
+        },
+        Interface = {
+          hl = "@type",
+          icon = "Interface:",
+        },
+        Key = {
+          hl = "@type",
+          icon = "🔐",
+        },
+        Method = {
+          hl = "@method",
+          icon = "ƒ",
+        },
+        Module = {
+          hl = "@namespace",
+          icon = "module:",
+        },
+        Namespace = {
+          hl = "@namespace",
+          icon = "ns:",
+        },
+        Null = {
+          hl = "@type",
+          icon = "NULL",
+        },
+        Number = {
+          hl = "@number",
+          icon = "#",
+        },
+        Object = {
+          hl = "@type",
+          icon = "⦿",
+        },
+        Operator = {
+          hl = "@operator",
+          icon = "+",
+        },
+        Package = {
+          hl = "@namespace",
+          icon = "package:",
+        },
+        Property = {
+          hl = "@method",
+          icon = "Property:",
+        },
+        String = {
+          hl = "@string",
+          icon = "𝓐",
+        },
+        Struct = {
+          hl = "@type",
+          icon = "𝓢",
+        },
+        TypeParameter = {
+          hl = "@parameter",
+          icon = "𝙏",
+        },
+        Variable = {
+          hl = "@constant",
+          icon = "var:",
+        },
+      },
+    },
   }
 
-  require("symbols-outline").setup(opt)
-
-  local map = helper.build_keymap { noremap = true }
-  local keys = require "basic.keys"
-  map({ "n" }, keys.toggle_symbol, function()
-    require("symbols-outline").toggle_outline()
-  end)
+  require("outline").setup(opt)
 end
 
 return M

@@ -320,8 +320,11 @@ local lsp_plugins = {
   },
 
   {
-    "simrat39/symbols-outline.nvim",
-    keys = { { keys.toggle_symbol } },
+    "hedyhli/outline.nvim",
+    cmd = { "Outline", "OutlineOpen" },
+    keys = {
+      { keys.toggle_symbol, "<cmd>Outline<CR>", desc = "Toggle outline" },
+    },
     config = require("plug_conf.symbol").config,
   },
 
