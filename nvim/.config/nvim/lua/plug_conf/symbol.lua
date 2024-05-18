@@ -16,7 +16,7 @@ M.config = function()
       hover_symbol = "<C-space>",
       peek_location = "o",
       rename_symbol = "r",
-      toggle_preview = "K",
+      toggle_preview = "p",
       unfold = "l",
       unfold_all = "E",
     },
