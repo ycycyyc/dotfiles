@@ -178,6 +178,7 @@ local colors = {
 
   -- fzf-lua
   FzfLuaCursorLine = { bg = menu_grey },
+  QuickFixLine = { bg = menu_grey },
 }
 
 local function convert(opt)
