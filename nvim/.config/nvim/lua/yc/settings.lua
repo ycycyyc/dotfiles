@@ -62,6 +62,9 @@ M.setup = function()
 
   M.register_fts_cb("qf", function()
     vim.cmd.wincmd "J"
+
+    local bmap = helper.build_keymap { noremap = true, buffer = true, silent = true }
+    bmap("n", "q", ":q<cr>")
   end)
 
   M.register_fts_cb("help", function()
