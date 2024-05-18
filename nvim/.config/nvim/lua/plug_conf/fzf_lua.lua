@@ -169,23 +169,36 @@ M.config = function()
 
   ---@type Yc.ClientLspConfCb
   local cb = function(_, _, kms, _)
+    local opt = {
+      jump_to_single_result = true,
+      -- lua/fzf-lua/providers/lsp.lua#location_handler#opts.filter
+      filter = function(items)
+        for _, item in ipairs(items) do
+          if item.filename then
+            item.filename = require("fzf-lua.utils").ansi_codes.magenta(item.filename)
+          end
+        end
+        return items
+      end,
+    }
+
     kms[keys.lsp_goto_definition] = {
       function()
-        require("fzf-lua").lsp_definitions { jump_to_single_result = true }
+        require("fzf-lua").lsp_definitions(opt)
       end,
       "n",
     }
 
     kms[keys.lsp_goto_references] = {
       function()
-        require("fzf-lua").lsp_references { jump_to_single_result = true }
+        require("fzf-lua").lsp_references(opt)
       end,
       "n",
     }
 
     kms[keys.lsp_impl] = {
       function()
-        require("fzf-lua").lsp_implementations { jump_to_single_result = true }
+        require("fzf-lua").lsp_implementations(opt)
       end,
       "n",
     }
