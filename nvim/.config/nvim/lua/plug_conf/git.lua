@@ -134,6 +134,10 @@ M.fugitive_config = function()
     bmap("n", "<cr>", function()
       show_diff()
     end)
+
+    bmap("n", "<leader>d", function()
+      show_diff()
+    end)
   end)
 end
 
