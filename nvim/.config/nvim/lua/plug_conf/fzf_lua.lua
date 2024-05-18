@@ -42,6 +42,12 @@ M.config = function()
       -- ["--delimiter"] = ":",
       -- ["--nth"] = "4..",
     },
+    lsp = {
+      _cached_hls = {}, -- fzf-lua更新到新版本？
+      symbols = {
+        symbol_style = 3, -- remove icon
+      },
+    },
     git = {
       commits = {
         cmd = "git log -C --color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'",
