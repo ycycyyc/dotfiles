@@ -179,6 +179,10 @@ local colors = {
   -- fzf-lua
   FzfLuaCursorLine = { bg = menu_grey },
   QuickFixLine = { bg = menu_grey },
+
+  -- mini
+  MiniFilesTitleFocused = { fg = yellow, cterm = { bold = true } },
+  MiniFilesCursorLine = { bg = virtual_grey, cterm = { bold = true } },
 }
 
 local function convert(opt)

@@ -9,6 +9,7 @@ local env = {
 
   lualine = false,
   fzf_lua = true,
+  minifiles = false,
   ts = true,
   treesitter_textobj = true,
   semantic_token = true,

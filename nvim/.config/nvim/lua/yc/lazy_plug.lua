@@ -251,6 +251,19 @@ local lsp_plugins = {
       },
     },
     config = require("plug_conf.tree").config,
+    cond = not env.minifiles,
+  },
+
+  {
+    "echasnovski/mini.files",
+    version = "*",
+    keys = { {
+      keys.toggle_dir,
+    }, {
+      keys.toggle_dir_open_file,
+    } },
+    config = require("plug_conf.mini").config,
+    cond = env.minifiles,
   },
 
   {
