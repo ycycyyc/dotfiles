@@ -1,6 +1,6 @@
 -- install lsp-server from
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
-local key_on_attach = require("utils.lsp").key_on_attach
+local build_on_attach_func = require("utils.lsp").build_on_attach_func
 local on_init = require("utils.lsp").on_init
 local go_import = require("utils.lsp").go_import
 local sync_format_save = require("utils.lsp").sync_format_save
@@ -31,9 +31,9 @@ M.load_lsp_config = function()
   lspconfig.lua_ls.setup {
     on_init = on_init,
     capabilities = capabilities,
-    on_attach = key_on_attach {
-      client_cb = function(_, _, kms)
-        kms[keys.lsp_format] = {
+    on_attach = build_on_attach_func {
+      config = function(keymaps)
+        keymaps[keys.lsp_format] = {
           function()
             if vim.fn.executable "stylua" == 1 then
               vim.cmd "FormatWrite"
@@ -70,10 +70,10 @@ M.load_lsp_config = function()
   -- 2. gopls
   lspconfig.gopls.setup {
     on_init = on_init,
-    on_attach = key_on_attach {
-      client_cb = function(_, _, kms, lsp_config)
+    on_attach = build_on_attach_func {
+      config = function(keymaps, lsp_config)
         lsp_config.auto_format = true
-        kms[keys.lsp_format] = {
+        keymaps[keys.lsp_format] = {
           function()
             go_import()
             sync_format_save()
@@ -146,11 +146,11 @@ M.load_lsp_config = function()
   lspconfig.clangd.setup {
     on_init = on_init,
     capabilities = capabilities,
-    on_attach = key_on_attach {
-      client_cb = function(_, _, kms)
-        kms[keys.lsp_format] = { function() end, "n" }
-        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
-        kms[keys.switch_source_header] = {
+    on_attach = build_on_attach_func {
+      config = function(keymaps)
+        keymaps[keys.lsp_format] = { function() end, "n" }
+        keymaps[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
+        keymaps[keys.switch_source_header] = {
           function()
             switch_source_header_splitcmd(0, "edit")
           end,
@@ -198,9 +198,9 @@ M.load_lsp_config = function()
     on_init = on_init,
     capabilities = capabilities,
     filetypes = { "python" },
-    on_attach = key_on_attach {
-      client_cb = function(_, _, kms)
-        kms[keys.lsp_format] = {
+    on_attach = build_on_attach_func {
+      config = function(keymaps)
+        keymaps[keys.lsp_format] = {
           function()
             if vim.fn.executable "black" == 1 then
               vim.cmd "FormatWrite"
@@ -225,14 +225,14 @@ M.load_lsp_config = function()
   -- json format :%!python -m json.tool
   lspconfig.jsonls.setup {
     on_init = on_init,
-    on_attach = key_on_attach(),
+    on_attach = build_on_attach_func(),
     cmd = { "vscode-json-languageserver", "--stdio" },
     filetypes = { "json" },
   }
 
   lspconfig.yamlls.setup {
     on_init = on_init,
-    on_attach = key_on_attach(),
+    on_attach = build_on_attach_func(),
     cmd = { "yaml-language-server", "--stdio" },
     filetypes = { "yaml" },
   }
@@ -241,53 +241,40 @@ M.load_lsp_config = function()
     -- YOUR_PATH
     cmd = { "/data/yc/.local/share/nvim/lspinstall/cmake/venv/bin/cmake-language-server" },
     on_init = on_init,
-    on_attach = key_on_attach(),
+    on_attach = build_on_attach_func(),
     filetypes = { "cmake" },
   }
 
   lspconfig.tsserver.setup {
     on_init = on_init,
-    on_attach = key_on_attach {
-      client_cb = function(_, _, kms, lsp_config)
+    on_attach = build_on_attach_func {
+      config = function(keymaps, lsp_config)
         lsp_config.auto_format = true
-        kms[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
+        keymaps[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
       end,
     },
   }
-  -- lspconfig.denols.setup {
-  --   on_attach = key_on_attach(),
-  -- }
 
   -- https://github.com/bash-lsp/bash-language-server
   lspconfig.bashls.setup {
     on_init = on_init,
-    on_attach = key_on_attach(),
+    on_attach = build_on_attach_func(),
   }
 
   lspconfig.vimls.setup {
-    on_attach = key_on_attach(),
+    on_attach = build_on_attach_func(),
     on_init = on_init,
   }
 end
 
 M.rust_config = function()
-  -- lspconfig.rust_analyzer.setup({
-  --     on_attach = key_on_attach(),
-  --     settings = {
-  --         ["rust-analyzer"] = {
-  --             assist = {importGranularity = "module", importPrefix = "by_self"},
-  --             cargo = {loadOutDirsFromCheck = true},
-  --             procMacro = {enable = true}
-  --         }
-  --     }
-  -- })
   local rt = require "rust-tools"
   rt.setup {
     server = {
-      on_attach = key_on_attach {
-        client_cb = function(_, _, kms)
-          kms[keys.lsp_hover] = { rt.hover_actions.hover_actions, "n" }
-          kms[keys.lsp_code_action] = { rt.code_action_group.code_action_group, "n" }
+      on_attach = build_on_attach_func {
+        config = function(keymaps)
+          keymaps[keys.lsp_hover] = { rt.hover_actions.hover_actions, "n" }
+          keymaps[keys.lsp_code_action] = { rt.code_action_group.code_action_group, "n" }
         end,
       },
     },

@@ -16,12 +16,12 @@ end
 
 local formatting_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
----@type Yc.ClientLspConfCb[]
-M.lsp_client_cbs = {}
+---@type Yc.ClientLspConfFunc[]
+M.config_funcs = {}
 
----@param cb Yc.ClientLspConfCb
-M.register_lsp_client_cb = function(cb)
-  table.insert(M.lsp_client_cbs, cb)
+---@param f Yc.ClientLspConfFunc
+M.add_lsp_config_func = function(f)
+  table.insert(M.config_funcs, f)
 end
 
 ---@param pos number[] | nil
@@ -80,14 +80,13 @@ M.on_init = function(client, _)
   end
 end
 
----@param conf Yc.LspOnAttachConf|nil
+---@param opts Yc.LspOnAttachOpts|nil
 ---@return fun(client: table, bufnr: number)
-M.key_on_attach = function(conf)
+M.build_on_attach_func = function(opts)
   ---@param client table
   ---@param bufnr number
   return function(client, bufnr)
-    local opts = { noremap = true, silent = true, buffer = bufnr }
-    local bmap = helper.build_keymap(opts)
+    local buf_map = helper.build_keymap { noremap = true, silent = true, buffer = bufnr }
 
     ---@type Yc.LspConf
     local lsp_config = {
@@ -95,7 +94,7 @@ M.key_on_attach = function(conf)
     }
 
     ---@type Yc.KeyMapTbl
-    local kms = {
+    local keymaps = {
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
       [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
       [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
@@ -118,25 +117,24 @@ M.key_on_attach = function(conf)
       [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
       [keys.lsp_toggle_inlay_hint] = {
         function()
-          if vim.fn.has "nvim-0.10" == 0 then
-            return
+          if vim.lsp.inlay_hint then
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
           end
-          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
         end,
         "n",
       },
     }
 
-    if conf and conf.client_cb and type(conf.client_cb) == "function" then
-      conf.client_cb(client, bufnr, kms, lsp_config)
+    if opts and opts.config and type(opts.config) == "function" then
+      opts.config(keymaps, lsp_config)
     end
 
-    for _, cb in ipairs(M.lsp_client_cbs) do
-      cb(client, bufnr, kms, lsp_config)
+    for _, f in ipairs(M.config_funcs) do
+      f(keymaps, lsp_config)
     end
 
     if client.supports_method "textDocument/formatting" and lsp_config.auto_format then
-      kms[keys.lsp_toggle_autoformat] = { toggle_auto_formatting, "n" }
+      keymaps[keys.lsp_toggle_autoformat] = { toggle_auto_formatting, "n" }
 
       vim.api.nvim_clear_autocmds { group = formatting_augroup, buffer = bufnr }
       vim.api.nvim_create_autocmd("BufWritePre", {
@@ -152,13 +150,13 @@ M.key_on_attach = function(conf)
       })
     end
 
-    for key, action in pairs(kms) do
+    for key, action in pairs(keymaps) do
       if action ~= nil then
-        bmap(action[2], key, action[1])
+        buf_map(action[2], key, action[1])
       end
     end
 
-    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc") -- TODO
   end
 end
 

@@ -173,8 +173,8 @@ M.config = function()
   map("n", keys.search_global, ":Rg ")
   silent_map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
 
-  ---@type Yc.ClientLspConfCb
-  local cb = function(_, _, kms, _)
+  ---@type Yc.ClientLspConfFunc
+  local config_func = function(keymaps)
     local opt = {
       jump_to_single_result = true,
       -- lua/fzf-lua/providers/lsp.lua#location_handler#opts.filter
@@ -188,28 +188,28 @@ M.config = function()
       end,
     }
 
-    kms[keys.lsp_goto_definition] = {
+    keymaps[keys.lsp_goto_definition] = {
       function()
         require("fzf-lua").lsp_definitions(opt)
       end,
       "n",
     }
 
-    kms[keys.lsp_goto_references] = {
+    keymaps[keys.lsp_goto_references] = {
       function()
         require("fzf-lua").lsp_references(opt)
       end,
       "n",
     }
 
-    kms[keys.lsp_impl] = {
+    keymaps[keys.lsp_impl] = {
       function()
         require("fzf-lua").lsp_implementations(opt)
       end,
       "n",
     }
 
-    kms[keys.lsp_code_action] = {
+    keymaps[keys.lsp_code_action] = {
       function()
         require("fzf-lua").lsp_code_actions {}
       end,
@@ -217,7 +217,7 @@ M.config = function()
     }
   end
 
-  require("utils.lsp").register_lsp_client_cb(cb)
+  require("utils.lsp").add_lsp_config_func(config_func)
 end
 
 return M
