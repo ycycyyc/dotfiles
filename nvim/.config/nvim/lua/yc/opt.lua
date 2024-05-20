@@ -35,8 +35,8 @@ M.setup = function()
   vim.opt.swapfile = false
   vim.opt.signcolumn = "yes:2"
 
-  vim.opt_local.cursorline = true
-  vim.opt_local.cursorlineopt = "number"
+  vim.opt.cursorline = true
+  vim.opt.cursorlineopt = "number"
 
   vim.opt.guicursor = "n-v-c-i:block"
   vim.opt.splitright = true

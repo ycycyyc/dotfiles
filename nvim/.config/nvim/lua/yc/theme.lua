@@ -211,7 +211,7 @@ local function default_theme()
   colors["@punctuation.delimiter"] = { fg = white }
   colors["@constant.builtin"] = { fg = dark_yellow }
   colors["@type.qualifier"] = { fg = purple }
-  colors["@type.builtin.go"] = { fg = yellow }
+  colors["@type.builtin"] = { fg = yellow }
   colors["@storageclass.cpp"] = { fg = purple }
   colors["@variable.builtin.lua"] = { fg = red }
 
