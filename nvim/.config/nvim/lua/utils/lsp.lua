@@ -80,9 +80,9 @@ M.on_init = function(client, _)
   end
 end
 
----@param opts Yc.LspOnAttachOpts|nil
+---@param config_func Yc.ClientLspConfFunc|nil
 ---@return fun(client: table, bufnr: number)
-M.build_on_attach_func = function(opts)
+M.build_on_attach_func = function(config_func)
   ---@param client table
   ---@param bufnr number
   return function(client, bufnr)
@@ -91,50 +91,48 @@ M.build_on_attach_func = function(opts)
     ---@type Yc.LspConf
     local lsp_config = {
       auto_format = false,
-    }
-
-    ---@type Yc.KeyMapTbl
-    local keymaps = {
-      [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
-      [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
-      [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
-      [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition, "n" },
-      [keys.lsp_hover] = { vim.lsp.buf.hover, "n" },
-      [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
-      [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
-      [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
-      [keys.lsp_format] = { M.sync_format_save, "n" },
-      [keys.lsp_range_format] = {
-        function()
-          vim.cmd "normal w!"
-          M.sync_format_save()
-        end,
-        "x",
-      },
-      [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
-      [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
-      [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
-      [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
-      [keys.lsp_toggle_inlay_hint] = {
-        function()
-          if vim.lsp.inlay_hint then
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
-          end
-        end,
-        "n",
+      keymaps = {
+        [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
+        [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
+        [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
+        [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition, "n" },
+        [keys.lsp_hover] = { vim.lsp.buf.hover, "n" },
+        [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
+        [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
+        [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
+        [keys.lsp_format] = { M.sync_format_save, "n" },
+        [keys.lsp_range_format] = {
+          function()
+            vim.cmd "normal w!"
+            M.sync_format_save()
+          end,
+          "x",
+        },
+        [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
+        [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
+        [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
+        [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
+        [keys.lsp_toggle_inlay_hint] = {
+          function()
+            if vim.lsp.inlay_hint then
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
+            end
+          end,
+          "n",
+        },
       },
     }
 
-    if opts and opts.config and type(opts.config) == "function" then
-      opts.config(keymaps, lsp_config)
+    if config_func and type(config_func) == "function" then
+      config_func(lsp_config)
     end
 
-    for _, f in ipairs(M.config_funcs) do
-      f(keymaps, lsp_config)
+    for _, fun in ipairs(M.config_funcs) do
+      fun(lsp_config)
     end
 
     if client.supports_method "textDocument/formatting" and lsp_config.auto_format then
-      keymaps[keys.lsp_toggle_autoformat] = { toggle_auto_formatting, "n" }
+      lsp_config.keymaps[keys.lsp_toggle_autoformat] = { toggle_auto_formatting, "n" }
 
       vim.api.nvim_clear_autocmds { group = formatting_augroup, buffer = bufnr }
       vim.api.nvim_create_autocmd("BufWritePre", {
@@ -150,7 +148,7 @@ M.build_on_attach_func = function(opts)
       })
     end
 
-    for key, action in pairs(keymaps) do
+    for key, action in pairs(lsp_config.keymaps) do
       if action ~= nil then
         buf_map(action[2], key, action[1])
       end

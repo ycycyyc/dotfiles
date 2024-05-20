@@ -174,7 +174,7 @@ M.config = function()
   silent_map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
 
   ---@type Yc.ClientLspConfFunc
-  local config_func = function(keymaps)
+  local config_func = function(lsp_config)
     local opt = {
       jump_to_single_result = true,
       -- lua/fzf-lua/providers/lsp.lua#location_handler#opts.filter
@@ -187,6 +187,8 @@ M.config = function()
         return items
       end,
     }
+
+    local keymaps = lsp_config.keymaps
 
     keymaps[keys.lsp_goto_definition] = {
       function()

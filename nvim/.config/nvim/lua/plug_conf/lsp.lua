@@ -31,18 +31,16 @@ M.load_lsp_config = function()
   lspconfig.lua_ls.setup {
     on_init = on_init,
     capabilities = capabilities,
-    on_attach = build_on_attach_func {
-      config = function(keymaps)
-        keymaps[keys.lsp_format] = {
-          function()
-            if vim.fn.executable "stylua" == 1 then
-              vim.cmd "FormatWrite"
-            end
-          end,
-          "n",
-        }
-      end,
-    },
+    on_attach = build_on_attach_func(function(lsp_config)
+      lsp_config.keymaps[keys.lsp_format] = {
+        function()
+          if vim.fn.executable "stylua" == 1 then
+            vim.cmd "FormatWrite"
+          end
+        end,
+        "n",
+      }
+    end),
     settings = {
       Lua = {
         runtime = {
@@ -70,18 +68,16 @@ M.load_lsp_config = function()
   -- 2. gopls
   lspconfig.gopls.setup {
     on_init = on_init,
-    on_attach = build_on_attach_func {
-      config = function(keymaps, lsp_config)
-        lsp_config.auto_format = true
-        keymaps[keys.lsp_format] = {
-          function()
-            go_import()
-            sync_format_save()
-          end,
-          "n",
-        }
-      end,
-    },
+    on_attach = build_on_attach_func(function(lsp_config)
+      lsp_config.auto_format = true
+      lsp_config.keymaps[keys.lsp_format] = {
+        function()
+          go_import()
+          sync_format_save()
+        end,
+        "n",
+      }
+    end),
     capabilities = capabilities,
     cmd = { "gopls", "serve" },
     settings = {
@@ -146,18 +142,16 @@ M.load_lsp_config = function()
   lspconfig.clangd.setup {
     on_init = on_init,
     capabilities = capabilities,
-    on_attach = build_on_attach_func {
-      config = function(keymaps)
-        keymaps[keys.lsp_format] = { function() end, "n" }
-        keymaps[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
-        keymaps[keys.switch_source_header] = {
-          function()
-            switch_source_header_splitcmd(0, "edit")
-          end,
-          "n",
-        }
-      end,
-    },
+    on_attach = build_on_attach_func(function(lsp_config)
+      lsp_config.keymaps[keys.lsp_format] = { function() end, "n" }
+      lsp_config.keymaps[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
+      lsp_config.keymaps[keys.switch_source_header] = {
+        function()
+          switch_source_header_splitcmd(0, "edit")
+        end,
+        "n",
+      }
+    end),
     cmd = {
       clangd_bin,
       "--background-index",
@@ -198,18 +192,16 @@ M.load_lsp_config = function()
     on_init = on_init,
     capabilities = capabilities,
     filetypes = { "python" },
-    on_attach = build_on_attach_func {
-      config = function(keymaps)
-        keymaps[keys.lsp_format] = {
-          function()
-            if vim.fn.executable "black" == 1 then
-              vim.cmd "FormatWrite"
-            end
-          end,
-          "n",
-        }
-      end,
-    },
+    on_attach = build_on_attach_func(function(lsp_config)
+      lsp_config.keymaps[keys.lsp_format] = {
+        function()
+          if vim.fn.executable "black" == 1 then
+            vim.cmd "FormatWrite"
+          end
+        end,
+        "n",
+      }
+    end),
     settings = {
       python = {
         analysis = {
@@ -247,12 +239,10 @@ M.load_lsp_config = function()
 
   lspconfig.tsserver.setup {
     on_init = on_init,
-    on_attach = build_on_attach_func {
-      config = function(keymaps, lsp_config)
-        lsp_config.auto_format = true
-        keymaps[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
-      end,
-    },
+    on_attach = build_on_attach_func(function(lsp_config)
+      lsp_config.auto_format = true
+      lsp_config.keymaps[keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" }
+    end),
   }
 
   -- https://github.com/bash-lsp/bash-language-server
@@ -272,9 +262,9 @@ M.rust_config = function()
   rt.setup {
     server = {
       on_attach = build_on_attach_func {
-        config = function(keymaps)
-          keymaps[keys.lsp_hover] = { rt.hover_actions.hover_actions, "n" }
-          keymaps[keys.lsp_code_action] = { rt.code_action_group.code_action_group, "n" }
+        config = function(lsp_config)
+          lsp_config.keymaps[keys.lsp_hover] = { rt.hover_actions.hover_actions, "n" }
+          lsp_config.keymaps[keys.lsp_code_action] = { rt.code_action_group.code_action_group, "n" }
         end,
       },
     },
