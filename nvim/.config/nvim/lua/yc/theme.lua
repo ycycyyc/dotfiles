@@ -213,7 +213,7 @@ local function default_theme()
   colors["@type.qualifier"] = { fg = purple }
   colors["@type.builtin"] = { fg = yellow }
   colors["@storageclass.cpp"] = { fg = purple }
-  colors["@variable.builtin.lua"] = { fg = red }
+  colors["@variable.builtin"] = { fg = red }
 
   colors["@lsp.type.variable"] = { fg = white }
   colors["@lsp.type.parameter"] = { fg = white, bold = true }
