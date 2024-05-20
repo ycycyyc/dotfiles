@@ -9,8 +9,6 @@ local api = vim.api
 
 AUTO_FORMATTING_ENABLED = false ---@type boolean
 
-local show_inlay_hint = false
-
 local toggle_auto_formatting = function()
   AUTO_FORMATTING_ENABLED = not AUTO_FORMATTING_ENABLED
   print(string.format("auto_formatting: %s", AUTO_FORMATTING_ENABLED))
@@ -123,12 +121,7 @@ M.key_on_attach = function(conf)
           if vim.fn.has "nvim-0.10" == 0 then
             return
           end
-          show_inlay_hint = not show_inlay_hint
-          for nr = 1, vim.fn.bufnr "$" do
-            if vim.fn.buflisted(nr) == 1 then
-              vim.lsp.inlay_hint.enable(show_inlay_hint)
-            end
-          end
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
         end,
         "n",
       },
