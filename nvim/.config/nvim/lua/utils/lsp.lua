@@ -159,10 +159,6 @@ M.key_on_attach = function(conf)
     end
 
     vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
-    if show_inlay_hint then
-      vim.lsp.inlay_hint(bufnr)
-    end
   end
 end
 
