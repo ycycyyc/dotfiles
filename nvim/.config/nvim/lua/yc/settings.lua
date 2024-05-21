@@ -1,105 +1,118 @@
-local au_group = vim.api.nvim_create_augroup
-local au_cmd = vim.api.nvim_create_autocmd
+local helper = require "utils.helper"
+local buf_map = function(mode, key, action)
+  vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
+end
 
 local M = {
   ---@type table<string, function[]>
-  ft_cbs = {},
+  filetype_initfuncs = {},
+  ---@type table[]
+  user_cmds = {
+    { "DiffOpen", helper.diff_open, {} },
+
+    {
+      "BufOnly",
+      function()
+        helper.buf_only()
+        vim.api.nvim_exec_autocmds("User", {
+          pattern = "LineRefresh",
+        })
+      end,
+      {},
+    },
+
+    {
+      "GoAddTags",
+      function(args)
+        local gotags = require "utils.gotags"
+        gotags.add(args["args"])
+      end,
+      { nargs = "+" },
+    },
+
+    {
+      "GoRemoveTags",
+      function(args)
+        local gotags = require "utils.gotags"
+        gotags.remove(args["args"])
+      end,
+      { nargs = "+" },
+    },
+  },
 }
 
----@param fts string | string[]
----@param callback fun()
-M.register_fts_cb = function(fts, callback)
-  if type(fts) == "string" then
-    fts = { fts }
-  end
-
-  ---@param ft string
-  local register_ft_cb = function(ft)
-    if M.ft_cbs[ft] == nil then
-      M.ft_cbs[ft] = {}
-    end
-    table.insert(M.ft_cbs[ft], callback)
-
-    local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-    if filetype == ft then
-      callback()
-    end
-  end
-
-  for _, ft in ipairs(fts) do
-    register_ft_cb(ft)
-  end
-
-  -- refresh
-  local file_grp = au_group("setting_ft", { clear = true })
-
-  for ft, _ in pairs(M.ft_cbs) do
-    au_cmd("FileType", {
-      pattern = { ft },
+M.refresh_initfunc = function()
+  local group = vim.api.nvim_create_augroup("filetype_initfunc", { clear = true })
+  for filetype, initfuncs in pairs(M.filetype_initfuncs) do
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = { filetype },
       callback = function()
-        for _, cb in ipairs(M.ft_cbs[ft]) do
-          cb()
+        for _, initfunc in ipairs(initfuncs) do
+          initfunc()
         end
       end,
-      group = file_grp,
+      group = group,
     })
   end
 end
 
-M.setup = function()
-  local yank_grp = au_group("YankHighlight", { clear = true })
-  au_cmd("TextYankPost", {
+---@param filetypes string | string[]
+---@param initfunc fun()
+M.add_filetypes_initfunc = function(filetypes, initfunc)
+  if type(filetypes) == "string" then
+    filetypes = { filetypes }
+  end
+
+  ---@param ft string
+  local add_initfunc = function(ft)
+    if M.filetype_initfuncs[ft] == nil then
+      M.filetype_initfuncs[ft] = {}
+    end
+    table.insert(M.filetype_initfuncs[ft], initfunc)
+
+    -- 这里比较重要，直接打开文件的话， 可能第一个文件没有设置参数
+    local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
+    if current_filetype == ft then
+      initfunc()
+    end
+  end
+
+  for _, ft in ipairs(filetypes) do
+    add_initfunc(ft)
+  end
+
+  M.refresh_initfunc()
+end
+
+M.highliht_yank = function()
+  local group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+  vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
       vim.highlight.on_yank { timeout = 300 }
     end,
-    group = yank_grp,
+    group = group,
   })
+end
 
-  -- 关闭换行时， 自动注释
-  vim.cmd [[ autocmd FileType * set fo-=o ]]
+-- 关闭换行时， 自动注释
+-- vim.cmd [[ autocmd FileType * set fo-=o ]]
+M.setup = function()
+  -- autocmd
+  M.highliht_yank()
 
-  local helper = require "utils.helper"
-
-  M.register_fts_cb("qf", function()
+  M.add_filetypes_initfunc("qf", function()
     vim.cmd.wincmd "J"
-
-    local bmap = helper.build_keymap { noremap = true, buffer = true, silent = true }
-    bmap("n", "q", ":q<cr>")
+    buf_map("n", "q", ":q<cr>")
   end)
 
-  M.register_fts_cb("help", function()
+  M.add_filetypes_initfunc("help", function()
     vim.cmd.wincmd "L"
   end)
 
-  local user_cmd = vim.api.nvim_create_user_command
-
-  user_cmd("DiffOpen", helper.diff_open, {})
-  user_cmd("BufOnly", function()
-    helper.buf_only()
-    vim.api.nvim_exec_autocmds("User", {
-      pattern = "LineRefresh",
-    })
-  end, {})
-
-  local gotags = require "utils.gotags"
-  user_cmd("GoAddTags", function(args)
-    gotags.add(args["args"])
-  end, { nargs = "+" })
-
-  user_cmd("GoRemoveTags", function(args)
-    gotags.remove(args["args"])
-  end, { nargs = "+" })
-
-  user_cmd("JsonFormat", "%!python -m json.tool", {})
-
-  user_cmd("TestCmd", function() end, { range = true })
-
-  user_cmd("CpFilePath", function()
-    local path = vim.fn.expand "%:~:."
-    vim.print("copy path: " .. path)
-    vim.fn.setreg(0, path)
-    vim.fn.setreg('"', path)
-  end, {})
+  -- user_cmd
+  for _, user_cmd in ipairs(M.user_cmds) do
+    vim.api.nvim_create_user_command(user_cmd[1], user_cmd[2], user_cmd[3])
+  end
 end
 
 return M

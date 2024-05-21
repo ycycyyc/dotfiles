@@ -296,8 +296,11 @@ M.coc_config = function()
 
   vim.g.coc_global_extensions = global_extensions
 
-  local bmap = helper.build_keymap { noremap = true, buffer = true }
-  local register_fts_cb = require("yc.settings").register_fts_cb
+  local buf_map = function(mode, key, action)
+    vim.keymap.set(mode, key, action, { noremap = true, buffer = true })
+  end
+
+  local add_filetypes_initfunc = require("yc.settings").add_filetypes_initfunc
 
   -- cmp
   local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
@@ -313,20 +316,20 @@ M.coc_config = function()
   vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
 
   -- lsp format
-  register_fts_cb({ "go", "typescript" }, function()
-    bmap("n", keys.lsp_format, ":Format<cr>:w<cr>")
-    bmap("x", keys.lsp_range_format, function() end)
+  add_filetypes_initfunc({ "go", "typescript" }, function()
+    buf_map("n", keys.lsp_format, ":Format<cr>:w<cr>")
+    buf_map("x", keys.lsp_range_format, function() end)
   end)
 
   -- lsp range format
-  register_fts_cb({ "h", "cpp", "hpp", "c", "typescript" }, function()
-    bmap("x", keys.lsp_range_format, "<Plug>(coc-format-selected)")
-    bmap("n", keys.lsp_format, function() end)
+  add_filetypes_initfunc({ "h", "cpp", "hpp", "c", "typescript" }, function()
+    buf_map("x", keys.lsp_range_format, "<Plug>(coc-format-selected)")
+    buf_map("n", keys.lsp_format, function() end)
   end)
 
   -- lsp switch source header
-  register_fts_cb({ "h", "cpp", "hpp", "c" }, function()
-    bmap("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
+  add_filetypes_initfunc({ "h", "cpp", "hpp", "c" }, function()
+    buf_map("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
   end)
 
   -- coc-git

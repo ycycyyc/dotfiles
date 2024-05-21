@@ -88,13 +88,15 @@ M.fugitive_config = function()
   end
 
   vim.keymap.set("n", keys.git_status, toggleFugitiveGit, {})
-  local helper = require "utils.helper"
-  local bmap = helper.build_keymap { noremap = true, buffer = true }
 
-  require("yc.settings").register_fts_cb({ "fugitive" }, function()
-    bmap("n", "q", ":q<cr>")
+  local buf_map = function(mode, key, action)
+    vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
+  end
 
-    bmap("n", "<leader>d", function()
+  require("yc.settings").add_filetypes_initfunc({ "fugitive" }, function()
+    buf_map("n", "q", ":q<cr>")
+
+    buf_map("n", "<leader>d", function()
       local current_line = vim.api.nvim_get_current_line()
       local items = vim.fn.split(current_line)
 
@@ -128,14 +130,14 @@ M.fugitive_config = function()
     end)
   end)
 
-  require("yc.settings").register_fts_cb({ "fugitiveblame" }, function()
-    bmap("n", "q", ":q<cr>")
+  require("yc.settings").add_filetypes_initfunc({ "fugitiveblame" }, function()
+    buf_map("n", "q", ":q<cr>")
 
-    bmap("n", "<cr>", function()
+    buf_map("n", "<cr>", function()
       show_diff()
     end)
 
-    bmap("n", "<leader>d", function()
+    buf_map("n", "<leader>d", function()
       show_diff()
     end)
   end)

@@ -145,7 +145,9 @@ M.build_on_attach_func = function(user_lsp_config)
     end
 
     -- keymap
-    local buf_map = helper.build_keymap { noremap = true, silent = true, buffer = bufnr }
+    local buf_map = function(mode, key, action)
+      vim.keymap.set(mode, key, action, { noremap = true, buffer = bufnr, silent = true })
+    end
     for key, action in pairs(lsp_config.keymaps) do
       if action ~= nil then
         buf_map(action[2], key, action[1])

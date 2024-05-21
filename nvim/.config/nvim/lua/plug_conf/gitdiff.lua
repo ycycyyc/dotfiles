@@ -3,9 +3,10 @@ local M = {}
 
 M.config = function()
   local keys = require "basic.keys"
-  local helper = require "utils.helper"
-  local register_fts_cb = require("yc.settings").register_fts_cb
-  local bmap = helper.build_keymap { noremap = true, buffer = true, silent = true }
+  local add_filetypes_initfunc = require("yc.settings").add_filetypes_initfunc
+  local buf_map = function(mode, key, action)
+    vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
+  end
 
   -- Lua
   local actions = require "diffview.actions"
@@ -468,15 +469,15 @@ M.config = function()
     },
   }
 
-  register_fts_cb({ "DiffviewFiles", "DiffviewFileHistory" }, function()
+  add_filetypes_initfunc({ "DiffviewFiles", "DiffviewFileHistory" }, function()
     local close = function()
       vim.cmd "DiffviewClose"
       vim.cmd "silent! checktime"
     end
 
-    bmap("n", "<leader>q", close)
-    bmap("n", "q", close)
-    bmap("n", "<esc>", close)
+    buf_map("n", "<leader>q", close)
+    buf_map("n", "q", close)
+    buf_map("n", "<esc>", close)
   end)
 
   vim.keymap.set("n", keys.git_diff_file, function()

@@ -31,7 +31,7 @@ M.config = function()
   }
   local keys = require "basic.keys"
   local minifiles = require "mini.files"
-  local register_fts_cb = require("yc.settings").register_fts_cb
+  local add_filetypes_initfunc = require("yc.settings").add_filetypes_initfunc
 
   local minifiles_toggle = function(...)
     if not minifiles.close() then
@@ -47,7 +47,7 @@ M.config = function()
   vim.keymap.set("n", keys.toggle_dir, minifiles_toggle)
   vim.keymap.set("n", keys.toggle_dir_open_file, open_current)
 
-  register_fts_cb("minifiles", function()
+  add_filetypes_initfunc("minifiles", function()
     local opt = { noremap = true, buffer = true, silent = true, nowait = true }
 
     vim.keymap.set("n", "<cr>", function()
