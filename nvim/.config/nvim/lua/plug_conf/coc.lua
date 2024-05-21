@@ -146,7 +146,7 @@ M.telescope_config = function()
               if selection and selection.value then
                 actions.close(bufnr)
                 vim.schedule(function()
-                  vim.fn.setreg(0, selection.value)
+                  vim.fn.setreg("0", selection.value)
                   helper.diff_open()
                 end)
               end

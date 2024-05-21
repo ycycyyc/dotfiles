@@ -139,7 +139,7 @@ M.config = function()
 
   local diff = function(selected)
     local res = vim.fn.split(selected[1], " ")
-    vim.fn.setreg(0, res[1])
+    vim.fn.setreg("0", res[1])
     require("utils.helper").diff_open()
   end
 

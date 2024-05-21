@@ -19,7 +19,7 @@ function M.buf_only()
 end
 
 function M.diff_open()
-  vim.cmd("DiffviewOpen " .. vim.fn.getreg(0) .. "^!")
+  vim.cmd("DiffviewOpen " .. vim.fn.getreg "0" .. "^!")
 end
 
 function M.build_keymap(opts)
