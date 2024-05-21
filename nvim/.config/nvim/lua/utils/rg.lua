@@ -30,12 +30,12 @@ local types_mapping = {
   ["rust"] = "-t rust",
 }
 
----@param str string
+---@param wanted_word string
 ---@return boolean
 ---@return integer
-function Finder:have(str)
-  for index, item in ipairs(self.words) do
-    if item == str then
+function Finder:have(wanted_word)
+  for index, word in ipairs(self.words) do
+    if word == wanted_word then
       return true, index
     end
   end
@@ -83,9 +83,9 @@ function Finder:parse()
     end,
   }
 
-  for key, handler in pairs(handlers) do
-    local has, index = self:have(key)
-    if has then
+  for word, handler in pairs(handlers) do
+    local exist, index = self:have(word)
+    if exist then
       handler(index)
     end
   end
