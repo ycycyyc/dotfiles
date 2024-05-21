@@ -4,7 +4,7 @@ local M = {}
 ---@field rg string[]
 ---@field islive boolean|nil
 ---@field query string
----@field items string[]
+---@field words string[]
 ---@field filepath string|nil
 local Finder = {}
 
@@ -15,7 +15,7 @@ function Finder:new(args)
   setmetatable(o, self)
   self.__index = self
   self.query = args["args"]
-  self.items = args["fargs"]
+  self.words = args["fargs"]
   -- stylua: ignore
   self.rg = { "rg", "-H", "--hidden", "--column", "--line-number", "--no-heading", "--glob=!.git/", "--color=always", "--smart-case" }
   self.filepath = nil
@@ -23,18 +23,18 @@ function Finder:new(args)
 end
 
 local types_mapping = {
-  ["-t cpp"] = "-t cpp -t c",
-  ["-t c"] = "-t cpp -t c",
-  ["-t go"] = "-t go",
-  ["-t lua"] = "-t lua",
-  ["-t rust"] = "-t rust",
+  ["cpp"] = "-t cpp -t c",
+  ["c"] = "-t cpp -t c",
+  ["go"] = "-t go",
+  ["lua"] = "-t lua",
+  ["rust"] = "-t rust",
 }
 
 ---@param str string
 ---@return boolean
 ---@return integer
 function Finder:have(str)
-  for index, item in ipairs(self.items) do
+  for index, item in ipairs(self.words) do
     if item == str then
       return true, index
     end
@@ -47,27 +47,33 @@ function Finder:parse()
   local handlers = {
     ["-t"] = function(index)
       -- 最后一个提前退出
-      if index == #self.items then
+      if index == #self.words then
         return
       end
-      -- TODO:后面再适配-t go 中间出现很多个空格的情况
-      for k, v in pairs(types_mapping) do
-        local start, _ = string.find(self.query, k)
-        if start ~= nil then
-          table.insert(self.rg, v)
-          self.query = string.gsub(self.query, k, "")
+
+      -- -t 后面的那个元素
+      local val_after_t = self.words[index + 1] -- go cpp c lua or else
+
+      for _type, _t_type in pairs(types_mapping) do
+        if _type == val_after_t then
+          table.insert(self.rg, _t_type)
+
+          -- 后面再适配-t go 中间出现很多个空格的情况
+          local match = string.match(self.query, "-t%s+" .. _type)
+          self.query = string.gsub(self.query, match, "")
           self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
         end
       end
     end,
     ["--"] = function(index)
       -- 最后一个提前退出
-      if index == #self.items then
+      if index == #self.words then
         return
       end
-      self.filepath = self.items[index + 1]
+
+      self.filepath = self.words[index + 1]
       self.query = string.gsub(self.query, "%-%-", "") -- TODO 如何避免删错了
-      self.query = string.gsub(self.query, self.items[index + 1], "")
+      self.query = string.gsub(self.query, self.words[index + 1], "")
       self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
     end,
     ["-i"] = function(_)

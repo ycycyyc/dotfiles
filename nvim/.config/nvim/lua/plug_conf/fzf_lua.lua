@@ -1,4 +1,5 @@
 local keys = require "basic.keys"
+local helper = require "utils.helper"
 
 local live_grep = function(cmd, query, filepath)
   require("fzf-lua").live_grep {
@@ -68,18 +69,6 @@ local M = {
     },
   },
 }
-
-M.setup_usercmd = function()
-  for _, user_cmd in ipairs(M.user_cmds) do
-    vim.api.nvim_create_user_command(user_cmd[1], user_cmd[2], user_cmd[3])
-  end
-end
-
-M.setup_keymaps = function()
-  for _, keymap in ipairs(M.keymaps) do
-    vim.keymap.set(keymap[1], keymap[2], keymap[3], keymap[4])
-  end
-end
 
 M.setup_lspkeymap = function()
   ---@type Yc.ClientLspConfFunc
@@ -180,8 +169,8 @@ M.config = function()
     },
   }
 
-  M.setup_usercmd()
-  M.setup_keymaps()
+  helper.setup_usercmd(M.user_cmds)
+  helper.setup_keymaps(M.keymaps)
   M.setup_lspkeymap()
 end
 

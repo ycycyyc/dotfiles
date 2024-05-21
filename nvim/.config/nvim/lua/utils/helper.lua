@@ -138,4 +138,18 @@ function M.since_nvim(major, minor, patch)
   return false
 end
 
+---@param user_cmds table
+function M.setup_usercmd(user_cmds)
+  for _, user_cmd in ipairs(user_cmds) do
+    vim.api.nvim_create_user_command(user_cmd[1], user_cmd[2], user_cmd[3])
+  end
+end
+
+---@param keymaps table
+function M.setup_keymaps(keymaps)
+  for _, keymap in ipairs(keymaps) do
+    vim.keymap.set(keymap[1], keymap[2], keymap[3], keymap[4])
+  end
+end
+
 return M
