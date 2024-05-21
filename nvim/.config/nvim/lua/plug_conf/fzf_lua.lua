@@ -1,179 +1,87 @@
-local M = {}
+local keys = require "basic.keys"
 
-M.config = function()
-  local helper = require "utils.helper"
-  local map = helper.build_keymap { noremap = true }
-  local silent_map = helper.build_keymap { noremap = true, silent = true }
-  local keys = require "basic.keys"
-
-  -- " 让输入上方，搜索列表在下方
-  vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
-  vim.g.fzf_preview_window = { "up:45%", "ctrl-/" }
-
-  local preview = {
-    layout = "up:+{2}-/2",
-    vertical = "up:45%",
+local live_grep = function(cmd, query, filepath)
+  require("fzf-lua").live_grep {
+    cmd = cmd,
+    search = query,
+    filespec = filepath,
   }
+end
 
-  if vim.fn.executable "bat" == 1 then
-    preview["default"] = "bat"
-  end
-
-  local diff = function(selected)
-    local res = vim.fn.split(selected[1], " ")
-    vim.fn.setreg(0, res[1])
-    helper.diff_open()
-  end
-
-  require("fzf-lua").setup {
-    winopts = {
-      row = 0.3,
-      col = 0.5,
-      width = 0.8, -- window width
-      height = 0.95, -- window height
-      fullscreen = false,
-      preview = preview,
-    },
-    grep = {
-      no_header_i = true,
-    },
-    fzf_opts = {
-      ["--info"] = "default",
-      -- ["--delimiter"] = ":",
-      -- ["--nth"] = "4..",
-    },
-    lsp = {
-      _cached_hls = {}, -- fzf-lua更新到新版本？
-      symbols = {
-        symbol_style = 3, -- remove icon
-      },
-    },
-    git = {
-      commits = {
-        cmd = "git log -C --color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'",
-        actions = {
-          ["ctrl-y"] = diff,
-          ["default"] = diff,
-        },
-      },
-    },
+local grep = function(cmd, query, filepath)
+  require("fzf-lua").grep {
+    cmd = cmd,
+    search = query,
+    filespec = filepath,
   }
+end
 
-  map("n", keys.search_find_files, "<cmd>FzfLua files<cr>")
-  map("n", keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>")
-  map("n", keys.search_cur_word_cur_buf, function()
-    require("fzf-lua").grep_curbuf {
-      search = vim.fn.expand "<cword>",
-      fzf_opts = {
-        ["--delimiter"] = ":",
-        ["--nth"] = "3..",
-      },
-    }
-  end)
+local M = {
+  user_cmds = {
+    {
+      "Buffers",
+      function()
+        require("fzf-lua").buffers()
+      end,
+      { nargs = "*", bang = true },
+    },
 
-  map("n", keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>")
-  map("n", keys.lsp_global_symbols, "<cmd>FzfLua lsp_live_workspace_symbols<cr>")
+    {
+      "Commits",
+      function()
+        require("fzf-lua").git_commits()
+      end,
+      {},
+    },
 
-  map("n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>")
-  map("n", keys.search_resume, "<cmd>FzfLua resume<cr>")
+    {
+      "Rg",
+      require("utils.rg").build_rg_func(live_grep, grep),
+      { nargs = "*", bang = true },
+    },
+  },
 
-  vim.api.nvim_create_user_command("Rg", function(args)
-    ---@type string[]
-    local rg = {
-      "rg",
-      "-H",
-      "--hidden",
-      "--column",
-      "--line-number",
-      "--no-heading",
-      "--glob=!.git/",
-      "--color=always",
-      "--smart-case",
-    }
+  keymaps = {
+    { "n", keys.search_resume, "<cmd>FzfLua resume<cr>", { noremap = true } },
+    { "n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>", { noremap = true } },
+    { "n", keys.search_find_files, "<cmd>FzfLua files<cr>", { noremap = true } },
+    { "n", keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>", { noremap = true } },
+    { "n", keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>", { noremap = true } },
+    { "n", keys.lsp_global_symbols, "<cmd>FzfLua lsp_live_workspace_symbols<cr>", { noremap = true } },
+    { "n", keys.git_commits, ":Commits<cr>", { silent = false } },
+    { "n", keys.search_global, ":Rg ", { noremap = true } },
+    { "n", keys.search_cur_word, ":Rg <c-r><c-w><cr>", { noremap = true, silent = true } },
+    { "n", keys.cmd_history, ":FzfLua command_history<cr>", { silent = true } },
+    {
+      "n",
+      keys.search_cur_word_cur_buf,
+      function()
+        require("fzf-lua").grep_curbuf {
+          search = vim.fn.expand "<cword>",
+          fzf_opts = {
+            ["--delimiter"] = ":",
+            ["--nth"] = "3..",
+          },
+        }
+      end,
+      { noremap = true },
+    },
+  },
+}
 
-    ---@type string[]
-    local fargs = args["fargs"]
-    ---@type string[]
-    local content = {}
-    ---@type 0 | 1
-    local ignore = 0
-    ---@type boolean
-    local islive = false
-    ---@type string
-    local filepath = ""
+M.setup_usercmd = function()
+  for _, user_cmd in ipairs(M.user_cmds) do
+    vim.api.nvim_create_user_command(user_cmd[1], user_cmd[2], user_cmd[3])
+  end
+end
 
-    -- TODO(yc) grep 'main -t' 怎么处理?
-    for i, value in ipairs(fargs) do
-      if ignore > 0 then
-        ignore = 0
-      elseif value == "-t" then
-        ignore = 1
-        if fargs[i + 1] == "go" then
-          table.insert(rg, "-t go")
-        elseif fargs[i + 1] == "cpp" then
-          table.insert(rg, "-t cpp -t c")
-        elseif fargs[i + 1] == "lua" then
-          table.insert(rg, "-t lua")
-        elseif fargs[i + 1] == "vim" then
-          table.insert(rg, "-t vim")
-        end
-      elseif value == "-g" then
-        ignore = 1
-        table.insert(rg, "--glob='" .. fargs[i + 1] .. "'")
-      elseif value == "-i" then
-        islive = true
-      elseif value == "--" then
-        ignore = 1
-        filepath = fargs[i + 1]
-      else
-        table.insert(content, value)
-      end
-    end
+M.setup_keymaps = function()
+  for _, keymap in ipairs(M.keymaps) do
+    vim.keymap.set(keymap[1], keymap[2], keymap[3], keymap[4])
+  end
+end
 
-    table.insert(rg, "-- ")
-    ---@type string
-    local cmd = table.concat(rg, " ")
-
-    ---@type string
-    local query = table.concat(content, " ")
-
-    if query == "" then
-      islive = true
-    end
-
-    if islive then
-      require("fzf-lua").live_grep {
-        cmd = cmd,
-        search = query,
-        filespec = filepath,
-      }
-      return
-    end
-
-    require("fzf-lua").grep {
-      cmd = cmd,
-      search = query,
-      filespec = filepath,
-    }
-  end, { nargs = "*", bang = true })
-
-  vim.api.nvim_create_user_command("Buffers", function()
-    require("fzf-lua").buffers()
-  end, { nargs = "*", bang = true })
-
-  vim.api.nvim_create_user_command("Commits", function()
-    require("fzf-lua").git_commits()
-  end, {})
-
-  vim.keymap.set("n", keys.git_commits, function()
-    require("fzf-lua").git_commits()
-  end, { silent = false })
-
-  vim.keymap.set("n", keys.cmd_history, ":FzfLua command_history<cr>", { silent = true })
-
-  map("n", keys.search_global, ":Rg ")
-  silent_map("n", keys.search_cur_word, ":Rg <c-r><c-w><cr>")
-
+M.setup_lspkeymap = function()
   ---@type Yc.ClientLspConfFunc
   local config_func = function(lsp_config)
     local opt = {
@@ -222,6 +130,59 @@ M.config = function()
   end
 
   require("utils.lsp").add_lsp_config_func(config_func)
+end
+
+M.config = function()
+  -- " 让输入上方，搜索列表在下方
+  vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
+  vim.g.fzf_preview_window = { "up:45%", "ctrl-/" }
+
+  local diff = function(selected)
+    local res = vim.fn.split(selected[1], " ")
+    vim.fn.setreg(0, res[1])
+    require("utils.helper").diff_open()
+  end
+
+  require("fzf-lua").setup {
+    winopts = {
+      row = 0.3,
+      col = 0.5,
+      width = 0.8, -- window width
+      height = 0.95, -- window height
+      fullscreen = false,
+      preview = {
+        layout = "up:+{2}-/2",
+        vertical = "up:45%",
+      },
+    },
+    grep = {
+      no_header_i = true,
+    },
+    fzf_opts = {
+      ["--info"] = "default",
+      -- ["--delimiter"] = ":",
+      -- ["--nth"] = "4..",
+    },
+    lsp = {
+      _cached_hls = {}, -- fzf-lua更新到新版本？
+      symbols = {
+        symbol_style = 3, -- remove icon
+      },
+    },
+    git = {
+      commits = {
+        cmd = "git log -C --color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'",
+        actions = {
+          ["ctrl-y"] = diff,
+          ["default"] = diff,
+        },
+      },
+    },
+  }
+
+  M.setup_usercmd()
+  M.setup_keymaps()
+  M.setup_lspkeymap()
 end
 
 return M
