@@ -7,14 +7,13 @@ local env = require("basic.env").env
 local helper = require "utils.helper"
 local api = vim.api
 
-AUTO_FORMATTING_ENABLED = false ---@type boolean
+local auto_formatting_enable = false ---@type boolean
+local formatting_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 local toggle_auto_formatting = function()
-  AUTO_FORMATTING_ENABLED = not AUTO_FORMATTING_ENABLED
-  print(string.format("auto_formatting: %s", AUTO_FORMATTING_ENABLED))
+  auto_formatting_enable = not auto_formatting_enable
+  print(string.format("auto_formatting: %s", auto_formatting_enable))
 end
-
-local formatting_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 ---@type Yc.ClientLspConfFunc[]
 M.config_funcs = {}
@@ -80,57 +79,56 @@ M.on_init = function(client, _)
   end
 end
 
----@param config_func Yc.ClientLspConfFunc|nil
+---@type Yc.LspConf
+local default_lsp_config = {
+  auto_format = false,
+  keymaps = {
+    [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
+    [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
+    [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
+    [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition, "n" },
+    [keys.lsp_hover] = { vim.lsp.buf.hover, "n" },
+    [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
+    [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
+    [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
+    [keys.lsp_format] = { M.sync_format_save, "n" },
+    [keys.lsp_range_format] = {
+      function()
+        vim.cmd "normal w!"
+        M.sync_format_save()
+      end,
+      "x",
+    },
+    [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
+    [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
+    [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
+    [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
+    [keys.lsp_toggle_inlay_hint] = {
+      function()
+        if vim.lsp.inlay_hint then
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
+        end
+      end,
+      "n",
+    },
+  },
+}
+
+---@param user_lsp_config Yc.LspConf|nil
 ---@return fun(client: table, bufnr: number)
-M.build_on_attach_func = function(config_func)
+M.build_on_attach_func = function(user_lsp_config)
   ---@param client table
   ---@param bufnr number
   return function(client, bufnr)
-    local buf_map = helper.build_keymap { noremap = true, silent = true, buffer = bufnr }
+    -- 合并各个语言的不同配置
+    local lsp_config = vim.tbl_deep_extend("force", default_lsp_config, user_lsp_config or {}) ---@type Yc.LspConf
 
-    ---@type Yc.LspConf
-    local lsp_config = {
-      auto_format = false,
-      keymaps = {
-        [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
-        [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
-        [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
-        [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition, "n" },
-        [keys.lsp_hover] = { vim.lsp.buf.hover, "n" },
-        [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
-        [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
-        [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
-        [keys.lsp_format] = { M.sync_format_save, "n" },
-        [keys.lsp_range_format] = {
-          function()
-            vim.cmd "normal w!"
-            M.sync_format_save()
-          end,
-          "x",
-        },
-        [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
-        [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
-        [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
-        [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
-        [keys.lsp_toggle_inlay_hint] = {
-          function()
-            if vim.lsp.inlay_hint then
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
-            end
-          end,
-          "n",
-        },
-      },
-    }
-
-    if config_func and type(config_func) == "function" then
-      config_func(lsp_config)
-    end
-
+    -- 其他模块修改的配置比如fzf-lua
     for _, fun in ipairs(M.config_funcs) do
       fun(lsp_config)
     end
 
+    -- 格式化
     if client.supports_method "textDocument/formatting" and lsp_config.auto_format then
       lsp_config.keymaps[keys.lsp_toggle_autoformat] = { toggle_auto_formatting, "n" }
 
@@ -139,15 +137,15 @@ M.build_on_attach_func = function(config_func)
         group = formatting_augroup,
         buffer = bufnr,
         callback = function()
-          if not AUTO_FORMATTING_ENABLED then
-            return
+          if auto_formatting_enable then
+            vim.lsp.buf.format()
           end
-
-          vim.lsp.buf.format()
         end,
       })
     end
 
+    -- keymap
+    local buf_map = helper.build_keymap { noremap = true, silent = true, buffer = bufnr }
     for key, action in pairs(lsp_config.keymaps) do
       if action ~= nil then
         buf_map(action[2], key, action[1])
