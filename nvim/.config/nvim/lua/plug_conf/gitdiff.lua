@@ -18,17 +18,19 @@ local M = {
     },
   },
   initfuncs = {
-    { "DiffviewFiles", "DiffviewFileHistory" },
-    function()
-      local close = function()
-        vim.cmd "DiffviewClose"
-        vim.cmd "silent! checktime"
-      end
+    {
+      { "DiffviewFiles", "DiffviewFileHistory" },
+      function()
+        local close = function()
+          vim.cmd "DiffviewClose"
+          vim.cmd "silent! checktime"
+        end
 
-      buf_map("n", "<leader>q", close)
-      buf_map("n", "q", close)
-      buf_map("n", "<esc>", close)
-    end,
+        buf_map("n", "<leader>q", close)
+        buf_map("n", "q", close)
+        buf_map("n", "<esc>", close)
+      end,
+    },
   },
 }
 
