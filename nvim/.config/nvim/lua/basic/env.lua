@@ -15,7 +15,6 @@ local env = {
   semantic_token = true,
   luasnip = false,
   coc = false,
-  telescope = false,
   python3 = "",
   winbar = true,
   inlayhint = true,
@@ -26,7 +25,7 @@ local env = {
 
 M.setup = function()
   local json_conf = vim.env.NVIM_JSON_CONF or "{}"
-  M.env = vim.tbl_extend("force", env, vim.json.decode(json_conf))
+  M.env = vim.tbl_deep_extend("force", env, vim.json.decode(json_conf))
 
   if vim.fn.has "nvim-0.10" == 0 and M.env.inlayhint then
     M.env.inlayhint = false

@@ -4,10 +4,8 @@ local env = require("basic.env").env
 local M = {}
 
 local lazypath = function()
-  if env.coc and not env.telescope then
+  if env.coc then
     return vim.fn.stdpath "data" .. "/lazy_coc/lazy.nvim"
-  elseif env.coc and env.telescope then
-    return vim.fn.stdpath "data" .. "/lazy_coc_telescope/lazy.nvim"
   else
     return vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
   end
@@ -202,40 +200,6 @@ local coc_plugins = {
   },
 }
 
-local coc_telescopy_plugins = {
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-      {
-        "neoclide/coc.nvim",
-        branch = "release",
-        config = require("plug_conf.coc").config,
-        lazy = false,
-      },
-    },
-    config = require("plug_conf.coc").telescope_config,
-    event = "VeryLazy",
-  },
-
-  {
-    "fannheyward/telescope-coc.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-    event = "VeryLazy",
-  },
-
-  {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
-    event = "VeryLazy",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-  },
-}
-
 local lsp_plugins = {
   {
     "kyazdani42/nvim-tree.lua",
@@ -422,17 +386,8 @@ M.setup = function()
   vim.g.coc_data_home = "~/.config/coc_fzf/"
 
   local plugins = basic_plugins
-  local bplugins = {}
 
-  if env.coc and not env.telescope then
-    bplugins = coc_plugins
-  elseif env.coc and env.telescope then
-    bplugins = coc_telescopy_plugins
-  else
-    bplugins = lsp_plugins
-  end
-
-  for _, plug in ipairs(bplugins) do
+  for _, plug in ipairs(env.coc and coc_plugins or lsp_plugins) do
     table.insert(plugins, plug)
   end
 
