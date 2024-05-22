@@ -169,8 +169,7 @@ M.config = function()
     },
   }
 
-  helper.setup_usercmd(M.user_cmds)
-  helper.setup_keymaps(M.keymaps)
+  helper.setup_m(M)
   M.setup_lspkeymap()
 end
 

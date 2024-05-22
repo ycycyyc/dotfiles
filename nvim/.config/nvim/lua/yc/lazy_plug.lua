@@ -54,7 +54,7 @@ local basic_plugins = {
     "tpope/vim-fugitive",
     keys = { keys.git_blame, keys.git_status },
     cmd = { "Gw" },
-    config = require("plug_conf.git").fugitive_config,
+    config = require("plug_conf.fugitive").config,
   },
 
   {
