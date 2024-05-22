@@ -13,7 +13,6 @@ local env = {
   ts = true,
   treesitter_textobj = true,
   semantic_token = true,
-  luasnip = false,
   coc = false,
   python3 = "",
   winbar = true,

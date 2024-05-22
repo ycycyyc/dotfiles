@@ -15,12 +15,9 @@ M.config = function()
   cmp.setup {
     snippet = {
       expand = function(args)
-        if env.luasnip then
-          local luasnip = require "luasnip"
-          luasnip.lsp_expand(args.body)
-        else
-          require("snippy").expand_snippet(args.body) -- For `snippy` users.
-        end
+        --   local luasnip = require "luasnip"
+        --   luasnip.lsp_expand(args.body)
+        require("snippy").expand_snippet(args.body) -- For `snippy` users.
       end,
     },
 
@@ -75,7 +72,7 @@ M.config = function()
     sources = cmp.config.sources({
       { name = "nvim_lua", max_item_count = 10 },
       { name = "nvim_lsp", max_item_count = 10 },
-      env.luasnip and { name = "luasnip", max_item_count = 10 } or { name = "snippy", max_item_count = 10 },
+      { name = "snippy", max_item_count = 10 },
     }, { { name = "buffer", max_item_count = 10 } }),
   }
 end

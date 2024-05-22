@@ -316,22 +316,6 @@ local lsp_plugins = {
       "hrsh7th/cmp-buffer",
 
       {
-        "L3MON4D3/LuaSnip",
-        config = function()
-          vim.cmd [[
-              imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
-              inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
-              snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
-              snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
-          ]]
-        end,
-        dependencies = {
-          "saadparwaiz1/cmp_luasnip",
-        },
-        cond = env.luasnip,
-      },
-
-      {
         "dcampos/nvim-snippy",
         opts = {
           mappings = {
@@ -344,7 +328,6 @@ local lsp_plugins = {
         dependencies = {
           "dcampos/cmp-snippy",
         },
-        cond = not env.luasnip,
       },
     },
   },
