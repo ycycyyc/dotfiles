@@ -98,7 +98,8 @@ function Finder:run(live_grep, grep)
   self:parse()
 
   -- 生成最后的rg cmd
-  table.insert(self.rg, "-- ") -- rg的命令格式，可以减少转义
+  -- rg的命令格式，可以减少转义 看上去不需要? (note)
+  -- table.insert(self.rg, "-- ") 
   local cmd = table.concat(self.rg, " ")
 
   -- live_grep or grep
