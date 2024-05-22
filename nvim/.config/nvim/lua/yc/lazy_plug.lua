@@ -183,12 +183,12 @@ local coc_plugins = {
   {
     "antoinemadec/coc-fzf",
     branch = "master",
-    config = require("plug_conf.coc").fzf_config,
+    config = require("plug_conf.coc_fzf").config,
     dependencies = {
       {
         "neoclide/coc.nvim",
         branch = "release",
-        config = require("plug_conf.coc").coc_config,
+        config = require("plug_conf.coc").config,
       },
       {
         "junegunn/fzf.vim",
@@ -210,7 +210,7 @@ local coc_telescopy_plugins = {
       {
         "neoclide/coc.nvim",
         branch = "release",
-        config = require("plug_conf.coc").coc_config,
+        config = require("plug_conf.coc").config,
         lazy = false,
       },
     },
