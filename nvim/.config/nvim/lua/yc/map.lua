@@ -5,10 +5,12 @@ M.setup = function()
   vim.g.mapleader = " "
 
   local helper = require "utils.helper"
-  local map = helper.build_keymap { noremap = true }
-  local slient_map = helper.build_keymap { noremap = true, silent = true }
 
-  slient_map("n", "<Leader>w", "<cmd>silent w<cr>")
+  local map = function(mode, action, cb)
+    vim.keymap.set(mode, action, cb, { noremap = true })
+  end
+
+  map("n", "<Leader>w", "<cmd>silent w<cr>")
   map("n", "<Leader>q", "<cmd>q<cr>")
   map("n", "<Leader>m", "`")
   map({ "i", "s" }, "jk", "<ESC>")
@@ -41,11 +43,6 @@ M.setup = function()
   map("x", "<bs>", "<esc>")
 
   map("i", "<c-e>", helper.i_move_to_end)
-
-  -- map("n", keys.jump_to_next_qf, helper.try_jumpto_next_item)
-  -- map("n", keys.jump_to_prev_qf, helper.try_jumpto_prev_item)
-  map("n", keys.jump_to_next_qf, "<cmd>cnext<cr>")
-  map("n", keys.jump_to_prev_qf, "<cmd>cprev<cr>")
 
   map("c", "<A-b>", "<S-Left>")
   map({ "c", "i" }, "<A-f>", "<S-Right>")

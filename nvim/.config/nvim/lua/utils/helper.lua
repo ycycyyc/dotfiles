@@ -22,12 +22,6 @@ function M.diff_open()
   vim.cmd("DiffviewOpen " .. vim.fn.getreg "0" .. "^!")
 end
 
-function M.build_keymap(opts)
-  return function(mode, action, cb)
-    vim.keymap.set(mode, action, cb, opts)
-  end
-end
-
 function M.nnoremap()
   return function(action, cb)
     vim.keymap.set("n", action, cb, { noremap = true })
