@@ -1,4 +1,49 @@
-local M = {}
+local helper = require "utils.helper"
+
+local M = {
+  keymaps = {
+    {
+      "i",
+      "<TAB>",
+      function()
+        if vim.snippet.active { direction = 1 } then
+          vim.schedule(function()
+            vim.snippet.jump(1)
+          end)
+        else
+          return "<Tab>"
+        end
+      end,
+      { expr = true },
+    },
+
+    {
+      "s",
+      "<TAB>",
+      function()
+        vim.schedule(function()
+          vim.snippet.jump(1)
+        end)
+      end,
+      { expr = true },
+    },
+
+    {
+      { "i", "s" },
+      "<S-Tab>",
+      function()
+        if vim.snippet.active { direction = -1 } then
+          vim.schedule(function()
+            vim.snippet.jump(-1)
+          end)
+        else
+          return "<S-Tab>"
+        end
+      end,
+      { expr = true },
+    },
+  },
+}
 
 M.config = function()
   local cmp = require "cmp"
@@ -15,9 +60,7 @@ M.config = function()
   cmp.setup {
     snippet = {
       expand = function(args)
-        --   local luasnip = require "luasnip"
-        --   luasnip.lsp_expand(args.body)
-        require("snippy").expand_snippet(args.body) -- For `snippy` users.
+        vim.snippet.expand(args.body)
       end,
     },
 
@@ -69,12 +112,14 @@ M.config = function()
       ghost_text = env.cmp_ghost_text,
     },
 
-    sources = cmp.config.sources({
+    sources = cmp.config.sources {
       { name = "nvim_lua", max_item_count = 10 },
       { name = "nvim_lsp", max_item_count = 10 },
-      { name = "snippy", max_item_count = 10 },
-    }, { { name = "buffer", max_item_count = 10 } }),
+      { name = "buffer", max_item_count = 10 },
+    },
   }
+
+  helper.setup_m(M)
 end
 
 return M
