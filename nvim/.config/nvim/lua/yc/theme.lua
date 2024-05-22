@@ -242,22 +242,20 @@ local function default_theme()
   hl(0, "CocPum", { link = "Pmenu" })
   hl(0, "CocVirtualText", { link = "Comment" })
 
+  hl(0, "LspInlayHint", { ctermfg = 61, ctermbg = 234 })
+  hl(0, "CocInlayHint", { link = "LspInlayHint" })
+  hl(0, "CocInlayHintType", { link = "LspInlayHint" })
+  hl(0, "CocInlayHintParameter", { link = "LspInlayHint" })
+
+  -- " 0.10
+  hl(0, "NormalFloat", { link = "Pmenu" })
+  hl(0, "IncSearch", { cterm = { reverse = true } })
+  hl(0, "FlashLabel", { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 })
+
   for name, opt in pairs(colors) do
     local o = convert(opt)
     hl(0, name, o)
   end
-
-  vim.cmd [[
-      " 0.10 
-      hi! link NormalFloat Pmenu
-      hi! IncSearch cterm=reverse
-
-      hi! FlashLabel cterm=nocombine ctermfg=0 ctermbg=9 gui=nocombine guifg=Black guibg=#ccff88
-      hi! LspInlayHint ctermfg=61 ctermbg=234
-      hi! link CocInlayHint  LspInlayHint
-      hi! link CocInlayHintType  LspInlayHint
-      hi! link CocInlayHintParameter  LspInlayHint
-  ]]
 end
 
 function M.add(color)

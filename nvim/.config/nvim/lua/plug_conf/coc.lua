@@ -129,12 +129,10 @@ M.config = function()
   vim.g.coc_global_extensions = global_extensions
 
   -- coc color
-  vim.cmd [[
-    hi link CocErrorHighlight   clear
-    hi link CocWarningHighlight  clear
-    hi link CocInfoHighlight  clear
-    hi link CocHintHighlight   clear
-  ]]
+  vim.api.nvim_set_hl(0, "CocErrorHighlight", { link = "clear" })
+  vim.api.nvim_set_hl(0, "CocWarningHighlight", { link = "clear" })
+  vim.api.nvim_set_hl(0, "CocInfoHighlight", { link = "clear" })
+  vim.api.nvim_set_hl(0, "CocHintHighlight", { link = "clear" })
 
   -- snippet
   vim.g.coc_snippet_next = "<TAB>"
