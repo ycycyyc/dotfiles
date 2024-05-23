@@ -57,13 +57,14 @@ local M = {
 }
 
 M.autocmds = function()
-  local group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
-  vim.api.nvim_create_autocmd("TextYankPost", {
-    callback = function()
-      vim.highlight.on_yank { timeout = 300 }
-    end,
-    group = group,
-  })
+  -- "gbprod/yanky.nvim" 使用这个插件代替先
+  -- local group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+  -- vim.api.nvim_create_autocmd("TextYankPost", {
+  --   callback = function()
+  --     vim.highlight.on_yank { timeout = 300 }
+  --   end,
+  --   group = group,
+  -- })
 end
 
 -- 关闭换行时， 自动注释
