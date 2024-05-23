@@ -75,7 +75,7 @@ M.load_lsp_config = function()
       keymaps = {
         [keys.lsp_format] = {
           function()
-            go_import()
+            -- go_import()
             sync_format_save()
           end,
           "n",

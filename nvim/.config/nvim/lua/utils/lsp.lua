@@ -167,6 +167,8 @@ function M.format()
   vim.lsp.buf.format()
 end
 
+-- TODO
+-- 这个函数在0.10不兼容了
 function M.go_import()
   local timeoutms = 1000
   local context = { source = { organizeImports = true } }
