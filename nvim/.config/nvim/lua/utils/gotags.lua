@@ -5,7 +5,7 @@ local Job = require "plenary.job"
 
 ---@return string
 ---@return string
-local function get_ty_and_range()
+local function get_type_and_range()
   ---@type string
   local cur_line_content = api.nvim_get_current_line()
   local struct_word_pos = string.find(cur_line_content, "struct")
@@ -23,14 +23,13 @@ local function get_ty_and_range()
     local line_num = cursor_pos[1]
     return "-line", tostring(line_num)
   end
-  error "get tag range failed"
 end
 
 ---@param tags_op string
 ---@param tags_type string
-local function op_go_tags(tags_op, tags_type)
+local function operate(tags_op, tags_type)
   local file_name = api.nvim_buf_get_name(0)
-  local type, range = get_ty_and_range()
+  local type, range = get_type_and_range()
 
   local args = {}
   table.insert(args, "-file")
@@ -61,12 +60,12 @@ end
 
 ---@param tags string
 function M.add(tags)
-  op_go_tags("-add-tags", tags)
+  operate("-add-tags", tags)
 end
 
 ---@param tags string
 function M.remove(tags)
-  op_go_tags("-remove-tags", tags)
+  operate("-remove-tags", tags)
 end
 
 function M.bin_exist(cmd, args)
