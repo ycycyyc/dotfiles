@@ -252,9 +252,6 @@ local function default_theme()
   hl(0, "IncSearch", { cterm = { reverse = true } })
   hl(0, "FlashLabel", { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 })
 
-  hl(0, "YankyPut", { cterm = { reverse = true } })
-  hl(0, "YankyYanked", { cterm = { reverse = true } })
-
   for name, opt in pairs(colors) do
     local o = convert(opt)
     hl(0, name, o)

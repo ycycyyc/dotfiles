@@ -183,21 +183,6 @@ local basic_plugins = {
       vim.keymap.set("n", "<leader>xc", require("substitute.exchange").cancel, { noremap = true })
     end,
   },
-
-  {
-    "gbprod/yanky.nvim",
-    opts = {
-      ring = { history_length = 20 },
-      highlight = { timer = 250 },
-    },
-    keys = {
-      { "y" },
-      { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
-      { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before cursor" },
-      { "[w", "<Plug>(YankyCycleForward)", desc = "Cycle forward through yank history" },
-      { "]w", "<Plug>(YankyCycleBackward)", desc = "Cycle backward through yank history" },
-    },
-  },
 }
 
 local coc_plugins = {
