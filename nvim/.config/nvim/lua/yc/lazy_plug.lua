@@ -76,8 +76,16 @@ local basic_plugins = {
     },
     opts = {
       keymaps = {
-        insert = "<C-+>s", -- TODO: disable this keymap
-        insert_line = "<C-+>S", -- TODO: disable this keymap
+        -- disable this keymap
+        normal_cur = false,
+        normal_line = false,
+        normal_cur_line = false,
+
+        insert = false,
+        insert_line = false,
+
+        visual_line = false,
+        change_line = false,
       },
     },
   },
