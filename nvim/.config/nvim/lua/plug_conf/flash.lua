@@ -15,6 +15,9 @@ local opts = {
     -- before = { 0, 0 }, ---@type boolean|number[]
     before = true,
   },
+  treesitter = {
+    labels = "asdfghjklqwertyuiopzxcvbnm",
+  },
   highlight = {
     backdrop = false,
   },
