@@ -320,7 +320,6 @@ local lsp_plugins = {
     config = require("plug_conf.cmp").config,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-buffer",
 
       {
