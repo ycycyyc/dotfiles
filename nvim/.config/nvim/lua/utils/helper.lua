@@ -53,7 +53,7 @@ function M.get_winnums_byft(wanted)
   local wins = vim.api.nvim_list_wins()
   for _, win_num in ipairs(wins) do
     local buf_num = vim.fn.winbufnr(win_num)
-    local ft = vim.api.nvim_buf_get_option(buf_num, "filetype")
+    local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_num })
     if ft == wanted then
       table.insert(win_nums, win_num)
     end

@@ -61,7 +61,7 @@ function M:show(line)
 
   self.line = line
 
-  local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+  local filetype = vim.api.nvim_get_option_value("filetype", {})
   if line == "" and filetype ~= "lua" then
     M:__close()
   else

@@ -33,8 +33,7 @@ M.add_filetypes_initfunc = function(filetypes, initfunc)
     table.insert(filetype_initfuncs[ft], initfunc)
 
     -- 这里比较重要，直接打开文件的话， 可能第一个文件没有设置参数
-    local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
-    if current_filetype == ft then
+    if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == ft then
       initfunc()
     end
   end
