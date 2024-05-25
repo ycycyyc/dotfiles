@@ -53,6 +53,17 @@ local M = {
       end,
       { nargs = "+" },
     },
+
+    {
+      "CpFilePath",
+      function()
+        local path = vim.fn.expand "%:~:."
+        vim.notify("copy path: " .. path, vim.log.levels.INFO)
+        vim.fn.setreg("0", path)
+        vim.fn.setreg('"', path)
+      end,
+      {},
+    },
   },
 }
 
