@@ -15,37 +15,14 @@ local basic_plugins = {
   "nvim-lua/plenary.nvim",
 
   {
-    "ycycyyc/flash.nvim",
-    branch = "main",
-    opts = require("plug_conf.move").flash_opts,
+    "folke/flash.nvim",
     keys = {
-      {
-        "/",
-        mode = { "n" },
-      },
-      {
-        "<c-g>",
-        mode = { "c" },
-        function()
-          require("flash").toggle()
-        end,
-        desc = "Toggle Flash Search",
-      },
-      {
-        keys.jump,
-        mode = { "n", "x", "o" },
-        function()
-          require("flash").jump {
-            label = {
-              after = false, ---@type boolean|number[]
-              -- before = { 0, 0 },
-              before = true,
-            },
-          }
-        end,
-        desc = "Flash",
-      },
+      { "/" },
+      { keys.jump },
+      { keys.select_ts },
     },
+    branch = "main",
+    config = require("plug_conf.flash").config,
   },
 
   {

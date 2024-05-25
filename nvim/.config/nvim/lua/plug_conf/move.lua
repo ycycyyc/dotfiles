@@ -2,9 +2,9 @@ local M = {}
 
 -- remove leap plugin
 M.config = function()
-  local tool = require "utils.helper"
+  local helper = require "utils.helper"
   local keys = require "basic.keys"
-  local nnoremap = tool.nnoremap()
+  local nnoremap = helper.nnoremap()
   -- nnoremap(keys.jump , tool.cmd_func "HopChar2MW")
 
   -- require('leap').leap { target_windows = vim.tbl_filter(
@@ -31,21 +31,5 @@ M.config = function()
   end
   nnoremap(keys.jump, jump)
 end
-
-M.flash_opts = {
-  modes = {
-    char = {
-      enabled = false,
-    },
-  },
-  label = {
-    after = false, ---@type boolean|number[]
-    -- before = { 0, 0 }, ---@type boolean|number[]
-    before = true,
-  },
-  highlight = {
-    backdrop = false,
-  },
-}
 
 return M
