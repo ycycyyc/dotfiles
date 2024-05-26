@@ -168,16 +168,6 @@ local lsp_plugins = {
   },
 
   {
-    "junegunn/fzf.vim",
-    event = "VeryLazy",
-    config = require("plug_conf.fzf").config,
-    dependencies = {
-      "junegunn/fzf",
-    },
-    cond = not env.fzf_lua,
-  },
-
-  {
     "ibhagwan/fzf-lua",
     keys = lazy_keys "plug_conf.fzf_lua",
     cmd = lazy_cmds("plug_conf.fzf_lua", { "FzfLua" }),

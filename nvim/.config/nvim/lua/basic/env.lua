@@ -6,9 +6,6 @@ local env = {
   clangd_bin = "clangd", -- {path}
   cpp_debug_mode = "vscode", -- vscode or lldb
   go_debug_mode = "dlv", -- dlv or vscode
-
-  lualine = false,
-  fzf_lua = true,
   minifiles = false,
   ts = true,
   treesitter_textobj = true,
