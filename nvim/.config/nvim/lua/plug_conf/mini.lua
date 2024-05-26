@@ -24,15 +24,17 @@ local M = {
     { "n", keys.toggle_dir_open_file, open_current, {} },
   },
   initfuncs = {
-    "minifiles",
-    function()
-      buf_map("n", "<c-j>", "<down>")
-      buf_map("n", "<c-k>", "<up>")
-      buf_map("n", "<cr>", function()
-        local minifiles = require "mini.files"
-        minifiles.go_in { close_on_file = true }
-      end)
-    end,
+    {
+      "minifiles",
+      function()
+        buf_map("n", "<c-j>", "<down>")
+        buf_map("n", "<c-k>", "<up>")
+        buf_map("n", "<cr>", function()
+          local minifiles = require "mini.files"
+          minifiles.go_in { close_on_file = true }
+        end)
+      end,
+    },
   },
 }
 
