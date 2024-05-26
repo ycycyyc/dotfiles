@@ -242,16 +242,6 @@ local lsp_plugins = {
   },
 
   {
-    "ycycyyc/nvim-lspfuzzy",
-    event = { "CursorHold", "CursorHoldI", "BufReadPost", "BufAdd", "BufNewFile" },
-    config = require("plug_conf.lspfuzzy").config,
-    dependencies = {
-      "junegunn/fzf",
-    },
-    cond = not env.fzf_lua,
-  },
-
-  {
     "simrat39/rust-tools.nvim",
     ft = "rust",
     config = require("plug_conf.lsp").rust_config,
