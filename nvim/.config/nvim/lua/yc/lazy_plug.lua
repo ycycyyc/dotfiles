@@ -127,24 +127,8 @@ local basic_plugins = {
 
   {
     "gbprod/substitute.nvim",
-    keys = {
-      { "<leader>x", mode = { "n" } },
-      { "<leader>xc", mode = { "n" } },
-      { "X", mode = { "x" } },
-    },
-
-    config = function()
-      require("substitute").setup {
-        exchange = {
-          motion = false,
-          use_esc_to_cancel = false,
-        },
-      }
-
-      vim.keymap.set("n", "<leader>x", require("substitute.exchange").operator, { noremap = true })
-      vim.keymap.set("x", "X", require("substitute.exchange").visual, { noremap = true })
-      vim.keymap.set("n", "<leader>xc", require("substitute.exchange").cancel, { noremap = true })
-    end,
+    keys = lazy_keys "plug_conf/substitute",
+    config = require("plug_conf/substitute").config,
   },
 }
 
