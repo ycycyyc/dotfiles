@@ -149,6 +149,57 @@ local function setup_initfuncs(initfuncs)
   end
 end
 
+---@param mm string
+---@param extra string[] | nil
+---@return string[]
+function M.lazy_keys(mm, extra)
+  local m = require(mm)
+  local keys = extra or {}
+
+  if not m.keymaps then
+    return keys
+  end
+
+  local add = function(keymap)
+    if not keymap then
+      return
+    end
+
+    if keymap[#keymap].lazy_load_ignore then
+      return
+    end
+
+    table.insert(keys, {
+      keymap[2],
+      mode = keymap[1],
+    })
+  end
+
+  for _, keymap in ipairs(m.keymaps) do
+    add(keymap)
+  end
+
+  return keys
+end
+
+---@param mm string
+---@param extra string[] | nil
+---@return string[]
+function M.lazy_cmds(mm, extra)
+  local m = require(mm)
+  local cmds = extra or {}
+
+  if not m.user_cmds then
+    return cmds
+  end
+
+  for _, user_cmd in ipairs(m.user_cmds) do
+    table.insert(cmds, user_cmd[1])
+  end
+
+  return cmds
+end
+
 function M.setup_m(m)
   if m.user_cmds then
     setup_usercmd(m.user_cmds)
@@ -161,39 +212,6 @@ function M.setup_m(m)
   if m.initfuncs then
     setup_initfuncs(m.initfuncs)
   end
-end
-
-function M.lazy_keys(mm)
-  local m = require(mm)
-  local keys = {}
-  if not m.keymaps then
-    return keys
-  end
-
-  for _, keymap in ipairs(m.keymaps) do
-    table.insert(keys, {
-      keymap[2],
-      mode = keymap[1],
-    })
-  end
-
-  return keys
-end
-
-function M.lazy_cmds(mm, other)
-  other = other or {}
-
-  local m = require(mm)
-  local cmds = other
-  if not m.user_cmds then
-    return
-  end
-
-  for _, user_cmd in ipairs(m.user_cmds) do
-    table.insert(cmds, user_cmd[1])
-  end
-
-  return cmds
 end
 
 return M

@@ -32,6 +32,7 @@ local M = {
         require("flash").toggle()
       end,
       {},
+      { lazy_load_ignore = true },
     },
     {
       "n",

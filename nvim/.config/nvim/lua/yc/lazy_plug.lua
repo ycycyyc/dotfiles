@@ -18,12 +18,7 @@ local basic_plugins = {
 
   {
     "folke/flash.nvim",
-    keys = {
-      { "/" },
-      { keys.jump },
-      { keys.select_ts },
-    },
-    branch = "main",
+    keys = lazy_keys "plug_conf.flash",
     config = require("plug_conf.flash").config,
   },
 
