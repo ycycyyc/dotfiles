@@ -29,18 +29,14 @@ local basic_plugins = {
 
   {
     "tpope/vim-fugitive",
-    keys = { keys.git_blame, keys.git_status },
+    keys = lazy_keys "plug_conf.fugitive",
     cmd = { "Gw" },
     config = require("plug_conf.fugitive").config,
   },
 
   {
     "sindrets/diffview.nvim",
-    keys = {
-      { keys.git_diff, ":DiffOpen<cr>" },
-      { keys.git_diff_open, ":DiffviewOpen<cr>" },
-      { keys.git_diff_file },
-    },
+    keys = lazy_keys "plug_conf.gitdiff",
     cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewFocusFiles" },
     config = require("plug_conf.gitdiff").config,
   },

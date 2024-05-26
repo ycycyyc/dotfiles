@@ -18,10 +18,6 @@ function M.buf_only()
   end
 end
 
-function M.diff_open()
-  vim.cmd("DiffviewOpen " .. vim.fn.getreg "0" .. "^!")
-end
-
 function M.nnoremap()
   return function(action, cb)
     vim.keymap.set("n", action, cb, { noremap = true })

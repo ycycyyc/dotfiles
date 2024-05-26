@@ -23,8 +23,6 @@ local M = {
 
   ---@type table[]
   user_cmds = {
-    { "DiffOpen", helper.diff_open, {} },
-
     {
       "BufOnly",
       function()

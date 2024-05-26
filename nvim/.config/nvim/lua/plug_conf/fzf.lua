@@ -61,7 +61,7 @@ local git_commit = function()
 
     wrap["sink*"] = function(lists)
       local items = vim.fn.split(lists[2], " ")
-      require("plug_conf.gitdiff").show_diff(items[1])
+      require("utils.git").commit_diff(items[1])
     end
 
     vim.fn["fzf#run"](wrap)

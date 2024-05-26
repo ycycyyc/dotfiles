@@ -110,8 +110,7 @@ M.telescope_config = function()
               if selection and selection.value then
                 actions.close(bufnr)
                 vim.schedule(function()
-                  vim.fn.setreg("0", selection.value)
-                  helper.diff_open()
+                  require("utils.git").commit_diff(selection.value)
                 end)
               end
             end,

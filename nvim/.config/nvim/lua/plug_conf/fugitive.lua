@@ -5,12 +5,12 @@ local buf_map = function(mode, key, action)
   vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
 end
 
-local show_diff = function()
+local cur_line_diff = function()
   local current_line = vim.api.nvim_get_current_line()
   local items = vim.fn.split(current_line) ---@type string[]
 
   -- TODO(yc) find git commit from line
-  require("plug_conf.gitdiff").show_diff(items[1])
+  require("utils.git").commit_diff(items[1])
 end
 
 local function showFugitiveGit()
@@ -61,12 +61,10 @@ local fugitive_initfunc = function()
 
     for _, syn in ipairs(pos.syntax) do
       if syn.hl_group == "fugitiveUnstagedSection" then
-        local cmd = "DiffviewOpen -- " .. items[2]
-        vim.notify("Run cmd: " .. cmd)
-        vim.cmd(cmd)
+        require("utils.git").file_diff(items[2])
         return
       elseif syn.hl_group == "fugitiveHash" then
-        show_diff()
+        cur_line_diff()
         return
       end
     end
@@ -77,11 +75,11 @@ local fugitiveblame_initfunc = function()
   buf_map("n", "q", ":q<cr>")
 
   buf_map("n", "<cr>", function()
-    show_diff()
+    cur_line_diff()
   end)
 
   buf_map("n", "<leader>d", function()
-    show_diff()
+    cur_line_diff()
   end)
 end
 
