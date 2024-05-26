@@ -1,4 +1,24 @@
-local M = {}
+local keys = require "basic.keys"
+local helper = require "utils.helper"
+
+local M = {
+  keymaps = {
+    {
+      "n",
+      keys.toggle_dir,
+      "<cmd>NvimTreeToggle<cr>",
+      {},
+    },
+    {
+      "n",
+      keys.toggle_dir_open_file,
+      function()
+        require("nvim-tree.api").tree.open { find_file = true }
+      end,
+      {},
+    },
+  },
+}
 
 M.config = function()
   require("nvim-tree").setup {
@@ -37,6 +57,8 @@ M.config = function()
       vim.keymap.set("n", "q", api.tree.close, opts "Close the tree")
     end,
   }
+
+  helper.setup_m(M)
 end
 
 return M

@@ -124,18 +124,7 @@ local coc_plugins = {
 local lsp_plugins = {
   {
     "kyazdani42/nvim-tree.lua",
-    keys = {
-      {
-        keys.toggle_dir,
-        "<cmd>NvimTreeToggle<cr>",
-      },
-      {
-        keys.toggle_dir_open_file,
-        function()
-          require("nvim-tree.api").tree.open { find_file = true }
-        end,
-      },
-    },
+    keys = lazy_keys "plug_conf.tree",
     config = require("plug_conf.tree").config,
     cond = not env.minifiles,
   },
