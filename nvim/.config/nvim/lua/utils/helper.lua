@@ -167,4 +167,21 @@ function M.setup_m(m)
   end
 end
 
+function M.lazy_keys(mm)
+  local m = require(mm)
+  local keys = {}
+  if not m.keymaps then
+    return keys
+  end
+
+  for _, keymap in ipairs(m.keymaps) do
+    table.insert(keys, {
+      keymap[2],
+      mode = keymap[1],
+    })
+  end
+
+  return keys
+end
+
 return M

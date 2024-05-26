@@ -1,5 +1,6 @@
 local keys = require "basic.keys"
 local env = require("basic.env").env
+local lazy_keys = require("utils.helper").lazy_keys
 
 local M = {}
 
@@ -86,24 +87,8 @@ local basic_plugins = {
 
   {
     "nvim-pack/nvim-spectre",
-    keys = {
-      {
-        keys.global_find_and_replace,
-        function()
-          require("spectre").open()
-        end,
-        desc = "replace global",
-      },
-      {
-        keys.buffer_find_and_replace,
-        function()
-          require("spectre").open_file_search()
-        end,
-        desc = "replace only file",
-      },
-    },
-
-    opts = require("plug_conf.find_and_replace").opts,
+    keys = lazy_keys "plug_conf.find_and_replace",
+    config = require("plug_conf.find_and_replace").config,
   },
 
   {
@@ -243,8 +228,9 @@ local lsp_plugins = {
 
   {
     "ibhagwan/fzf-lua",
-    event = "VeryLazy",
+    keys = lazy_keys "plug_conf.fzf_lua",
     config = require("plug_conf.fzf_lua").config,
+    init = require("plug_conf.fzf_lua").setup_lspkeymap,
     cond = env.fzf_lua,
   },
 

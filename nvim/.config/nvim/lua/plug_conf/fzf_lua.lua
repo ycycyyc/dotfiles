@@ -170,7 +170,6 @@ M.config = function()
   }
 
   helper.setup_m(M)
-  M.setup_lspkeymap()
 end
 
 return M
