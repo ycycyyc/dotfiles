@@ -66,13 +66,6 @@ local basic_plugins = {
   },
 
   {
-    "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
-    config = require("plug_conf.line").config,
-    cond = env.lualine,
-  },
-
-  {
     "rcarriga/nvim-dap-ui",
     keys = { { keys.dbg_breakpoint } },
     config = require("plug_conf.debug").config,
