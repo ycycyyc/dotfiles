@@ -143,11 +143,7 @@ local lsp_plugins = {
   {
     "echasnovski/mini.files",
     version = "*",
-    keys = { {
-      keys.toggle_dir,
-    }, {
-      keys.toggle_dir_open_file,
-    } },
+    keys = lazy_keys "plug_conf.mini",
     config = require("plug_conf.mini").config,
     cond = env.minifiles,
   },
