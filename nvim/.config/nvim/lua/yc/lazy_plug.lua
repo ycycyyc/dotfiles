@@ -212,9 +212,7 @@ local lsp_plugins = {
   {
     "hedyhli/outline.nvim",
     cmd = { "Outline", "OutlineOpen" },
-    keys = {
-      { keys.toggle_symbol, "<cmd>Outline<CR>", desc = "Toggle outline" },
-    },
+    keys = lazy_keys "plug_conf.symbol",
     config = require("plug_conf.symbol").config,
   },
 
