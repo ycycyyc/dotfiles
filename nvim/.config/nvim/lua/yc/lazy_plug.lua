@@ -229,6 +229,7 @@ local lsp_plugins = {
   {
     "ibhagwan/fzf-lua",
     keys = lazy_keys "plug_conf.fzf_lua",
+    cmd = { "FzfLua" },
     config = require("plug_conf.fzf_lua").config,
     init = require("plug_conf.fzf_lua").setup_lspkeymap,
     cond = env.fzf_lua,
