@@ -184,4 +184,20 @@ function M.lazy_keys(mm)
   return keys
 end
 
+function M.lazy_cmds(mm, other)
+  other = other or {}
+
+  local m = require(mm)
+  local cmds = other
+  if not m.user_cmds then
+    return
+  end
+
+  for _, user_cmd in ipairs(m.user_cmds) do
+    table.insert(cmds, user_cmd[1])
+  end
+
+  return cmds
+end
+
 return M

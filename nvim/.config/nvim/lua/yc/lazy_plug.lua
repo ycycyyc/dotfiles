@@ -1,6 +1,7 @@
 local keys = require "basic.keys"
 local env = require("basic.env").env
 local lazy_keys = require("utils.helper").lazy_keys
+local lazy_cmds = require("utils.helper").lazy_cmds
 
 local M = {}
 
@@ -229,7 +230,7 @@ local lsp_plugins = {
   {
     "ibhagwan/fzf-lua",
     keys = lazy_keys "plug_conf.fzf_lua",
-    cmd = { "FzfLua" },
+    cmd = lazy_cmds("plug_conf.fzf_lua", { "FzfLua" }),
     config = require("plug_conf.fzf_lua").config,
     init = require("plug_conf.fzf_lua").setup_lspkeymap,
     cond = env.fzf_lua,
