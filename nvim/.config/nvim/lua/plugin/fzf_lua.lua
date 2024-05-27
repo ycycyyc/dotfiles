@@ -126,7 +126,7 @@ M.override_lsp_func = function()
   end
 
   ---@diagnostic disable-next-line: duplicate-set-field
-  vim.lsp.buf.code_action = function()
+  require("utils.lsp").lsp_method.code_action = function() -- fzflua 调用了vim.lsp.buf.code_action， 需要转一层
     require("fzf-lua").lsp_code_actions {}
   end
 end
