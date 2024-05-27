@@ -13,14 +13,6 @@ M.config = function()
   end
 
   cmp.setup {
-    snippet = {
-      expand = function(args)
-        --   local luasnip = require "luasnip"
-        --   luasnip.lsp_expand(args.body)
-        require("snippy").expand_snippet(args.body) -- For `snippy` users.
-      end,
-    },
-
     mapping = {
       ["<C-e>"] = cmp.mapping {
         i = tool.i_move_to_end,
@@ -60,6 +52,20 @@ M.config = function()
         end
       end, { "i", "s" }),
 
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if vim.snippet.active { direction = 1 } then
+          vim.snippet.jump(1)
+        else
+          fallback()
+        end
+      end, { "i", "s" }),
+
+      ["<S-Tab>"] = cmp.mapping(function()
+        if vim.snippet.active { direction = -1 } then
+          vim.snippet.jump(-1)
+        end
+      end, { "i", "s" }),
+
       ["<C-y>"] = cmp.config.disable,
       ["<CR>"] = cmp.mapping.confirm { select = true },
     },
@@ -72,7 +78,6 @@ M.config = function()
     sources = cmp.config.sources {
       { name = "buffer", max_item_count = 10 },
       { name = "nvim_lsp", max_item_count = 10 },
-      -- { name = "snippy", max_item_count = 10 },
     },
   }
 end

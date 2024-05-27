@@ -198,21 +198,6 @@ local lsp_plugins = {
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
-
-      {
-        "dcampos/nvim-snippy",
-        opts = {
-          mappings = {
-            is = {
-              ["<Tab>"] = "expand_or_advance",
-              ["<S-Tab>"] = "previous",
-            },
-          },
-        },
-        dependencies = {
-          "dcampos/cmp-snippy",
-        },
-      },
     },
   },
 
@@ -244,8 +229,19 @@ M.setup = function()
 
   local plugins = basic_plugins
 
-  for _, plug in ipairs(env.coc and coc_plugins or lsp_plugins) do
-    table.insert(plugins, plug)
+  if env.coc then
+    for _, plug in ipairs(coc_plugins) do
+      table.insert(plugins, plug)
+    end
+  else
+    for _, plug in ipairs(lsp_plugins) do
+      table.insert(plugins, plug)
+    end
+
+    local snippet_plugins = require("plug_conf.snippet").plugins
+    for _, plug in ipairs(snippet_plugins) do
+      table.insert(plugins, plug)
+    end
   end
 
   local uv = vim.loop or vim.uv
