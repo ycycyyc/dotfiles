@@ -99,7 +99,6 @@ local default_lsp_config = function()
       [keys.lsp_code_action] = { M.lsp_method.code_action, "n" },
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
       [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
-      [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
       [keys.lsp_toggle_inlay_hint] = {
         function()
           if vim.lsp.inlay_hint then

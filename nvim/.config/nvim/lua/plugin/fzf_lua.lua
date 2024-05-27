@@ -48,6 +48,7 @@ local M = {
     { "n", keys.search_find_files, "<cmd>FzfLua files<cr>", { noremap = true } },
     { "n", keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>", { noremap = true } },
     { "n", keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>", { noremap = true } },
+    { "n", keys.lsp_finder, "<cmd>FzfLua lsp_finder<cr>", { noremap = true } },
     { "n", keys.lsp_global_symbols, "<cmd>FzfLua lsp_live_workspace_symbols<cr>", { noremap = true } },
     { "n", keys.git_commits, ":Commits<cr>", { silent = false } },
     { "n", keys.search_global, ":Rg ", { noremap = true } },
