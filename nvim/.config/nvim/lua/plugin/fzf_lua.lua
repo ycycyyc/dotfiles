@@ -70,35 +70,59 @@ local M = {
   },
 }
 
-M.override_lsp_func = function()
-  local opt = {
+local build_opt = function()
+  local word = vim.fn.expand "<cword>"
+  local color_word = require("fzf-lua.utils").ansi_codes.red(word)
+
+  local color_item = function(item)
+    -- lua/fzf-lua/providers/lsp.lua#location_handler#opts.filter 文件名紫色字体
+    item.filename = require("fzf-lua.utils").ansi_codes.magenta(item.filename)
+
+    local new_text, cnt = string.gsub(item.text, word, color_word)
+    if cnt == 0 then --应该不会走到这
+      vim.print "should never be here"
+      return
+    end
+
+    if cnt == 1 then
+      item.text = new_text
+      return
+    end
+
+    local startIndex = item.col -- 匹配到的word开始的index
+    local nextIndex = item.col + #word -- word的下一个index
+
+    item.text = string.sub(item.text, 1, startIndex - 1) -- 开头或者空字符串
+      .. color_word -- 带颜色的word
+      .. string.sub(item.text, nextIndex) -- 结束或者空字符串
+  end
+
+  return {
     jump_to_single_result = true,
-    -- lua/fzf-lua/providers/lsp.lua#location_handler#opts.filter
-    -- 文件名紫色字体
     filter = function(items)
       for _, item in ipairs(items) do
-        if item.filename then
-          item.filename = require("fzf-lua.utils").ansi_codes.magenta(item.filename)
-        end
+        color_item(item)
       end
       return items
     end,
   }
+end
 
+M.override_lsp_func = function()
   --- 覆盖掉原生的lsp函数
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.lsp.buf.definition = function()
-    require("fzf-lua").lsp_definitions(opt)
+    require("fzf-lua").lsp_definitions(build_opt())
   end
 
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.lsp.buf.references = function()
-    require("fzf-lua").lsp_references(opt)
+    require("fzf-lua").lsp_references(build_opt())
   end
 
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.lsp.buf.implementation = function()
-    require("fzf-lua").lsp_implementations(opt)
+    require("fzf-lua").lsp_implementations(build_opt())
   end
 
   ---@diagnostic disable-next-line: duplicate-set-field
