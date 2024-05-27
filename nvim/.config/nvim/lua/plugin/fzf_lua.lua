@@ -70,55 +70,41 @@ local M = {
   },
 }
 
-M.setup_lspkeymap = function()
-  ---@type Yc.ClientLspConfFunc
-  local config_func = function(lsp_config)
-    local opt = {
-      jump_to_single_result = true,
-      -- lua/fzf-lua/providers/lsp.lua#location_handler#opts.filter
-      -- 文件名紫色字体
-      filter = function(items)
-        for _, item in ipairs(items) do
-          if item.filename then
-            item.filename = require("fzf-lua.utils").ansi_codes.magenta(item.filename)
-          end
+M.override_lsp_func = function()
+  local opt = {
+    jump_to_single_result = true,
+    -- lua/fzf-lua/providers/lsp.lua#location_handler#opts.filter
+    -- 文件名紫色字体
+    filter = function(items)
+      for _, item in ipairs(items) do
+        if item.filename then
+          item.filename = require("fzf-lua.utils").ansi_codes.magenta(item.filename)
         end
-        return items
-      end,
-    }
+      end
+      return items
+    end,
+  }
 
-    local keymaps = lsp_config.keymaps
-
-    keymaps[keys.lsp_goto_definition] = {
-      function()
-        require("fzf-lua").lsp_definitions(opt)
-      end,
-      "n",
-    }
-
-    keymaps[keys.lsp_goto_references] = {
-      function()
-        require("fzf-lua").lsp_references(opt)
-      end,
-      "n",
-    }
-
-    keymaps[keys.lsp_impl] = {
-      function()
-        require("fzf-lua").lsp_implementations(opt)
-      end,
-      "n",
-    }
-
-    keymaps[keys.lsp_code_action] = {
-      function()
-        require("fzf-lua").lsp_code_actions {}
-      end,
-      "n",
-    }
+  --- 覆盖掉原生的lsp函数
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.buf.definition = function()
+    require("fzf-lua").lsp_definitions(opt)
   end
 
-  require("utils.lsp").add_lsp_config_func(config_func)
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.buf.references = function()
+    require("fzf-lua").lsp_references(opt)
+  end
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.buf.implementation = function()
+    require("fzf-lua").lsp_implementations(opt)
+  end
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.buf.code_action = function()
+    require("fzf-lua").lsp_code_actions {}
+  end
 end
 
 M.config = function()

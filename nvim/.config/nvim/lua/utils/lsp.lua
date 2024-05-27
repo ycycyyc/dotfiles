@@ -15,14 +15,6 @@ local toggle_auto_formatting = function()
   print(string.format("auto_formatting: %s", auto_formatting_enable))
 end
 
----@type Yc.ClientLspConfFunc[]
-M.config_funcs = {}
-
----@param f Yc.ClientLspConfFunc
-M.add_lsp_config_func = function(f)
-  table.insert(M.config_funcs, f)
-end
-
 ---@param pos number[] | nil
 M.range_format = function(pos)
   local timeoutms = 1000 ---@type number
@@ -79,40 +71,42 @@ M.on_init = function(client, _)
   end
 end
 
----@type Yc.LspConf
-local default_lsp_config = {
-  auto_format = false,
-  keymaps = {
-    [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
-    [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
-    [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
-    [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition, "n" },
-    [keys.lsp_hover] = { vim.lsp.buf.hover, "n" },
-    [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
-    [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
-    [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
-    [keys.lsp_format] = { M.sync_format_save, "n" },
-    [keys.lsp_range_format] = {
-      function()
-        vim.cmd "normal w!"
-        M.sync_format_save()
-      end,
-      "x",
+---@return Yc.LspConf
+local default_lsp_config = function()
+  return {
+    auto_format = false,
+    keymaps = {
+      [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration, "n" },
+      [keys.lsp_goto_definition] = { vim.lsp.buf.definition, "n" },
+      [keys.lsp_goto_references] = { vim.lsp.buf.references, "n" },
+      [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition, "n" },
+      [keys.lsp_hover] = { vim.lsp.buf.hover, "n" },
+      [keys.lsp_impl] = { vim.lsp.buf.implementation, "n" },
+      [keys.lsp_rename] = { vim.lsp.buf.rename, "n" },
+      [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
+      [keys.lsp_format] = { M.sync_format_save, "n" },
+      [keys.lsp_range_format] = {
+        function()
+          vim.cmd "normal w!"
+          M.sync_format_save()
+        end,
+        "x",
+      },
+      [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
+      [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
+      [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
+      [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
+      [keys.lsp_toggle_inlay_hint] = {
+        function()
+          if vim.lsp.inlay_hint then
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
+          end
+        end,
+        "n",
+      },
     },
-    [keys.lsp_code_action] = { vim.lsp.buf.code_action, "n" },
-    [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev, "n" },
-    [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next, "n" },
-    [keys.lsp_incoming_calls] = { vim.lsp.buf.incoming_calls, "n" },
-    [keys.lsp_toggle_inlay_hint] = {
-      function()
-        if vim.lsp.inlay_hint then
-          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
-        end
-      end,
-      "n",
-    },
-  },
-}
+  }
+end
 
 ---@param user_lsp_config Yc.LspConf|nil
 ---@return fun(client: table, bufnr: number)
@@ -121,12 +115,7 @@ M.build_on_attach_func = function(user_lsp_config)
   ---@param bufnr number
   return function(client, bufnr)
     -- 合并各个语言的不同配置
-    local lsp_config = vim.tbl_deep_extend("force", default_lsp_config, user_lsp_config or {}) ---@type Yc.LspConf
-
-    -- 其他模块修改的配置比如fzf-lua
-    for _, fun in ipairs(M.config_funcs) do
-      fun(lsp_config)
-    end
+    local lsp_config = vim.tbl_deep_extend("force", default_lsp_config(), user_lsp_config or {}) ---@type Yc.LspConf
 
     -- 格式化
     if client.supports_method "textDocument/formatting" and lsp_config.auto_format then
@@ -154,7 +143,7 @@ M.build_on_attach_func = function(user_lsp_config)
       end
     end
 
-    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc") -- TODO
+    vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
   end
 end
 

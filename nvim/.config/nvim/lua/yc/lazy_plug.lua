@@ -157,7 +157,7 @@ local lsp_plugins = {
     keys = lazy_keys "plugin.fzf_lua",
     cmd = lazy_cmds("plugin.fzf_lua", { "FzfLua" }),
     config = require("plugin.fzf_lua").config,
-    init = require("plugin.fzf_lua").setup_lspkeymap,
+    init = require("plugin.fzf_lua").override_lsp_func,
     cond = env.fzf_lua,
   },
 
