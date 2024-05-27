@@ -153,7 +153,7 @@ local lsp_plugins = {
   },
 
   {
-    "ibhagwan/fzf-lua",
+    "ycycyyc/fzf-lua",
     keys = lazy_keys "plugin.fzf_lua",
     cmd = lazy_cmds("plugin.fzf_lua", { "FzfLua" }),
     config = require("plugin.fzf_lua").config,
