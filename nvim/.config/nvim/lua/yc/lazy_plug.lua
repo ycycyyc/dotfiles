@@ -18,34 +18,34 @@ local basic_plugins = {
 
   {
     "folke/flash.nvim",
-    keys = lazy_keys "plug_conf.flash",
-    config = require("plug_conf.flash").config,
+    keys = lazy_keys "plugin.flash",
+    config = require("plugin.flash").config,
   },
 
   {
     "tpope/vim-fugitive",
-    keys = lazy_keys "plug_conf.fugitive",
+    keys = lazy_keys "plugin.fugitive",
     cmd = { "Gw" },
-    config = require("plug_conf.fugitive").config,
+    config = require("plugin.fugitive").config,
   },
 
   {
     "sindrets/diffview.nvim",
-    keys = lazy_keys "plug_conf.gitdiff",
+    keys = lazy_keys "plugin.gitdiff",
     cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewFocusFiles" },
-    config = require("plug_conf.gitdiff").config,
+    config = require("plugin.gitdiff").config,
   },
 
   {
     "kylechui/nvim-surround",
-    keys = require("plug_conf.nvim-surround").keys,
-    opts = require("plug_conf.nvim-surround").opts,
+    keys = require("plugin.nvim-surround").keys,
+    opts = require("plugin.nvim-surround").opts,
   },
 
   {
     "akinsho/toggleterm.nvim",
     keys = { { keys.toggle_term } },
-    config = require("plug_conf.term").config,
+    config = require("plugin.term").config,
   },
 
   {
@@ -61,30 +61,30 @@ local basic_plugins = {
 
   {
     "nvim-pack/nvim-spectre",
-    keys = lazy_keys "plug_conf.find_and_replace",
-    config = require("plug_conf.find_and_replace").config,
+    keys = lazy_keys "plugin.find_and_replace",
+    config = require("plugin.find_and_replace").config,
   },
 
   {
     "rcarriga/nvim-dap-ui",
     keys = { { keys.dbg_breakpoint } },
-    config = require("plug_conf.debug").config,
+    config = require("plugin.debug").config,
     dependencies = { "mfussenegger/nvim-dap", "theHamsta/nvim-dap-virtual-text" },
   },
 
   {
     "nvim-treesitter/nvim-treesitter",
     event = { "VeryLazy" },
-    config = require("plug_conf.tree_sitter").config,
+    config = require("plugin.tree_sitter").config,
     dependencies = {
       {
         "nvim-treesitter/nvim-treesitter-context",
-        config = require("plug_conf.tree_sitter").context_config,
+        config = require("plugin.tree_sitter").context_config,
         cond = false, -- disable now
       },
       {
         "nvim-treesitter/nvim-treesitter-textobjects",
-        config = require("plug_conf.tree_sitter").textobj_config,
+        config = require("plugin.tree_sitter").textobj_config,
         cond = env.treesitter_textobj,
       },
     },
@@ -93,8 +93,8 @@ local basic_plugins = {
 
   {
     "gbprod/substitute.nvim",
-    keys = lazy_keys "plug_conf/substitute",
-    config = require("plug_conf/substitute").config,
+    keys = lazy_keys "plugin/substitute",
+    config = require("plugin/substitute").config,
   },
 }
 
@@ -102,17 +102,17 @@ local coc_plugins = {
   {
     "antoinemadec/coc-fzf",
     branch = "master",
-    config = require("plug_conf.coc_fzf").config,
+    config = require("plugin.coc_fzf").config,
     dependencies = {
       {
         "neoclide/coc.nvim",
         branch = "release",
-        config = require("plug_conf.coc").config,
+        config = require("plugin.coc").config,
       },
       {
         "junegunn/fzf.vim",
         event = "VeryLazy",
-        config = require("plug_conf.fzf").config,
+        config = require("plugin.fzf").config,
         dependencies = {
           "junegunn/fzf",
         },
@@ -124,29 +124,29 @@ local coc_plugins = {
 local lsp_plugins = {
   {
     "kyazdani42/nvim-tree.lua",
-    keys = lazy_keys "plug_conf.tree",
-    config = require("plug_conf.tree").config,
+    keys = lazy_keys "plugin.tree",
+    config = require("plugin.tree").config,
     cond = not env.minifiles,
   },
 
   {
     "echasnovski/mini.files",
     version = "*",
-    keys = lazy_keys "plug_conf.mini",
-    config = require("plug_conf.mini").config,
+    keys = lazy_keys "plugin.mini",
+    config = require("plugin.mini").config,
     cond = env.minifiles,
   },
 
   {
     "lewis6991/gitsigns.nvim",
     event = { "CursorHold", "CursorHoldI" },
-    config = require("plug_conf.git").config,
+    config = require("plugin.git").config,
   },
 
   {
     "windwp/nvim-autopairs",
     event = { "InsertEnter" },
-    config = require("plug_conf.autopairs").config,
+    config = require("plugin.autopairs").config,
     dependencies = {
       "hrsh7th/nvim-cmp",
     },
@@ -154,17 +154,17 @@ local lsp_plugins = {
 
   {
     "ibhagwan/fzf-lua",
-    keys = lazy_keys "plug_conf.fzf_lua",
-    cmd = lazy_cmds("plug_conf.fzf_lua", { "FzfLua" }),
-    config = require("plug_conf.fzf_lua").config,
-    init = require("plug_conf.fzf_lua").setup_lspkeymap,
+    keys = lazy_keys "plugin.fzf_lua",
+    cmd = lazy_cmds("plugin.fzf_lua", { "FzfLua" }),
+    config = require("plugin.fzf_lua").config,
+    init = require("plugin.fzf_lua").setup_lspkeymap,
     cond = env.fzf_lua,
   },
 
   {
     "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufAdd", "BufNewFile" },
-    config = require("plug_conf.lsp").load_lsp_config,
+    config = require("plugin.lsp").load_lsp_config,
     dependencies = "hrsh7th/cmp-nvim-lsp",
   },
 
@@ -180,21 +180,21 @@ local lsp_plugins = {
         lazy_update_context = true,
       },
     },
-    config = require("plug_conf.winbar").config,
+    config = require("plugin.winbar").config,
     cond = env.winbar,
   },
 
   {
     "hedyhli/outline.nvim",
     cmd = { "Outline", "OutlineOpen" },
-    keys = lazy_keys "plug_conf.symbol",
-    config = require("plug_conf.symbol").config,
+    keys = lazy_keys "plugin.symbol",
+    config = require("plugin.symbol").config,
   },
 
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
-    config = require("plug_conf.cmp").config,
+    config = require("plugin.cmp").config,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
@@ -204,13 +204,13 @@ local lsp_plugins = {
   {
     "simrat39/rust-tools.nvim",
     ft = "rust",
-    config = require("plug_conf.lsp").rust_config,
+    config = require("plugin.lsp").rust_config,
   },
 
   {
     "mhartington/formatter.nvim",
-    ft = require("plug_conf.format").ft,
-    config = require("plug_conf.format").config,
+    ft = require("plugin.format").ft,
+    config = require("plugin.format").config,
   },
 
   {
@@ -219,7 +219,7 @@ local lsp_plugins = {
     dependencies = {
       "MunifTanjim/nui.nvim",
     },
-    config = require("plug_conf.noice").config,
+    config = require("plugin.noice").config,
     cond = env.noice,
   },
 }
@@ -238,7 +238,7 @@ M.setup = function()
       table.insert(plugins, plug)
     end
 
-    local snippet_plugins = require("plug_conf.snippet").plugins
+    local snippet_plugins = require("plugin.snippet").plugins
     for _, plug in ipairs(snippet_plugins) do
       table.insert(plugins, plug)
     end

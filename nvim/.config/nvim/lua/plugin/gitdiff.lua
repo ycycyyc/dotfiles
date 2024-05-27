@@ -41,7 +41,7 @@ local M = {
 }
 
 M.config = function()
-  local opt = require "plug_conf.gitdiff_opt"
+  local opt = require "plugin.gitdiff_opt"
   require("diffview").setup(opt)
 
   helper.setup_m(M)

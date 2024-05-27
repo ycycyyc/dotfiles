@@ -17,8 +17,8 @@ M.config = function()
 
   vim.fn.sign_define("DapBreakpoint", { text = "B", texthl = "", linehl = "", numhl = "" })
 
-  require "plug_conf.debug_langs.go"
-  require "plug_conf.debug_langs.cpp"
+  require "plugin.debug_langs.go"
+  require "plugin.debug_langs.cpp"
 
   -- If you want to use this for rust and c, add something like this:
   dap.configurations.c = dap.configurations.cpp
