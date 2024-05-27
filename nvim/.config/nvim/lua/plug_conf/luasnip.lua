@@ -1,17 +1,4 @@
--- {
---   "L3MON4D3/LuaSnip",
---   config = function()
---     vim.cmd [[
---         imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
---         inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
---         snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
---         snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
---     ]]
---   end,
---   dependencies = {
---     "saadparwaiz1/cmp_luasnip",
---   },
--- },
+local M = {}
 
 local ls = require "luasnip"
 local s = ls.snippet
@@ -36,15 +23,6 @@ local l = extras.l
 local postfix = require("luasnip.extras.postfix").postfix
 local conds = require "luasnip.extras.conditions"
 local conds_expand = require "luasnip.extras.conditions.expand"
-
-vim.cmd [[
-  imap <silent><expr> <c-d> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-d>' 
-  inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
-  snoremap <silent> <c-d> <cmd>lua require('luasnip').jump(1)<Cr>
-  snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
-  " imap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
-  " smap <silent><expr> <C-D> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-D>'
-]]
 
 local contains_n_word = function(n)
   return function(line_to_cursor)
@@ -266,17 +244,19 @@ local go_snippets = {
   ),
 }
 
-ls.add_snippets("go", go_snippets)
-
 local lua_snippets = {
   s("require", fmt([[ require("<>") ]], { i(1, "name") }, { delimiters = "<>" })),
   s("keymap", fmt([[ vim.keymap.set(<>, <>, <>)]], { i(1, '"n"'), i(2, "action"), i(3, "{}") }, { delimiters = "<>" })),
 }
 
-ls.add_snippets("lua", lua_snippets)
-
 local all_snippets = {
   s("todo", fmt("TODO(yc): {}", { i(0, "text") })),
 }
 
-ls.add_snippets("all", all_snippets)
+M.init_snippets = function()
+  ls.add_snippets("go", go_snippets)
+  ls.add_snippets("lua", lua_snippets)
+  ls.add_snippets("all", all_snippets)
+end
+
+return M
