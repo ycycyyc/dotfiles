@@ -14,29 +14,54 @@ local cur_line_diff = function()
 end
 
 local function showFugitiveGit()
-  if vim.fn.FugitiveHead() ~= "" then
-    vim.cmd "G"
-    vim.cmd "wincmd L"
+  if vim.fn.FugitiveHead() == "" then
+    return
   end
+  vim.cmd "G"
+  vim.cmd "wincmd H"
+
+  local line_count = vim.api.nvim_buf_line_count(0)
+  local lines = vim.api.nvim_buf_get_lines(0, 0, line_count, true)
+
+  local unstageline = line_count - 1
+  local max_col = 40 -- 初始长度
+
+  for l, text in ipairs(lines) do
+    local n = string.len(text) + 12 -- TODO: 需要拿到signcolumn的长读
+    if n > max_col then
+      max_col = n
+    end
+
+    local match = string.match(text, "Unstaged")
+    if match then
+      unstageline = l
+    end
+  end
+
+  if max_col > 80 then -- max
+    max_col = 80
+  end
+  vim.cmd("vertical res " .. tostring(max_col))
+
+  vim.fn.setcursorcharpos(unstageline + 1, 1)
 end
 
 local function toggleFugitiveGit()
-  if vim.fn.buflisted(vim.fn.bufname "fugitive:///*/.git//$") ~= 0 then
-    -- local helper = require "utils.helper"
+  local winns = helper.get_winnums_byft "fugitive"
+  local cur_win = vim.api.nvim_get_current_win()
 
-    --  如果当前window为fugitiv就关闭
-    local winnums = helper.get_winnums_byft "fugitive"
-    local cur_win = vim.api.nvim_get_current_win()
-    for _, winn in ipairs(winnums) do
-      if cur_win == winn then
-        vim.cmd [[ execute ":bdelete" bufname('fugitive:///*/.git//$') ]]
-        return
-      end
+  for _, winn in ipairs(winns) do
+    --  当前所在的win刚好是futitive， 那么就close fugitive
+    if cur_win == winn then
+      vim.api.nvim_buf_delete(vim.fn.winbufnr(cur_win), { force = false })
+      return
     end
+  end
 
-    require("utils.helper").try_jumpto_ft_win "fugitive"
-  else
+  if #winns == 0 then -- 没有打开futitive
     showFugitiveGit()
+  else -- 直接跳转过去， 避免从头开始
+    require("utils.helper").try_jumpto_ft_win "fugitive"
   end
 end
 
