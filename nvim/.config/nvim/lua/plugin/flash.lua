@@ -52,6 +52,11 @@ local M = {
       "n",
       keys.select_ts,
       function()
+        -- TODO: 同时使用coc 和treesitter neovim会直接退出？
+        if require("basic.env").env.coc then
+          vim.notify("neovim will panic")
+          return
+        end
         require("flash").treesitter()
       end,
       {},
