@@ -14,11 +14,6 @@ export PATH="/usr/local/vim/bin/":${PATH}
 
 ## config
 cd ~
-mv .vimrc .vimrc.bak 
 ln -s ~/dotfile/vim/.vimrc .vimrc
-cd .vim
-ln -s  ~/dotfile/vim/coc-settings.json coc-settings.json
-mkdir -p ~/.vim/after/syntax/
-ln -s ~/dotfile/vim/go.vim ~/.vim/after/syntax/go.vim
 
 run :PlugInstall to install plugin

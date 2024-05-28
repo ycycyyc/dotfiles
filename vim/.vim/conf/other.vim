@@ -56,7 +56,8 @@ function! ToggleGStatus()
         endif
     else
         G
-        wincmd L
+        wincmd H
+        vertical res 80
     endif
 endfunction
 command ToggleGStatus :call ToggleGStatus()

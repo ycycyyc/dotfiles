@@ -24,7 +24,7 @@ local function showFugitiveGit()
   local lines = vim.api.nvim_buf_get_lines(0, 0, line_count, true)
 
   local unstageline = line_count - 1
-  local max_col = 40 -- 初始长度
+  local max_col = 80 -- 初始长度
 
   for l, text in ipairs(lines) do
     local n = string.len(text) + 12 -- TODO: 需要拿到signcolumn的长读
@@ -38,8 +38,8 @@ local function showFugitiveGit()
     end
   end
 
-  if max_col > 80 then -- max
-    max_col = 80
+  if max_col > 100 then -- max
+    max_col = 100
   end
   vim.cmd("vertical res " .. tostring(max_col))
 

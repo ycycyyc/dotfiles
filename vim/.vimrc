@@ -126,14 +126,14 @@ au FileType * set fo-=o
 au FileType qf nnoremap <silent> <buffer> q :q<cr>
 
 if $VIM_LSP == "lsp"
-    exe 'source' "~/.vim/conf/lsp.vim"
+    exe 'source' "~/dotfiles/vim/.vim/conf/lsp.vim"
 else
-    exe 'source' "~/.vim/conf/coc.vim"
+    exe 'source' "~/dotfiles/vim/.vim/conf/coc.vim"
 endif
 
-exe 'source' "~/.vim/conf/fzf.vim"
-exe 'source' "~/.vim/conf/other.vim"
-exe 'source' "~/.vim/conf/theme.vim"
+exe 'source' "~/dotfiles/vim/.vim/conf/fzf.vim"
+exe 'source' "~/dotfiles/vim/.vim/conf/other.vim"
+exe 'source' "~/dotfiles/vim/.vim/conf/theme.vim"
 
 function! SynStack ()
     for i1 in synstack(line("."), col("."))
