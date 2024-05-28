@@ -14,6 +14,6 @@ export PATH="/usr/local/vim/bin/":${PATH}
 
 ## config
 cd ~
-ln -s ~/dotfile/vim/.vimrc .vimrc
+ln -s ~/dotfiles/vim/.vimrc .vimrc
 
 run :PlugInstall to install plugin

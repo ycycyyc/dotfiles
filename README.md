@@ -20,11 +20,11 @@ source ~/dotfiles/persional/.persionalrc
 ```
 
 ## nvim配置
-1. neovim(needed)   version >= 0.8
+1. neovim(needed)   
 ```
 install neovim from source
 mkdir nvim
-git clone https://github.com/neovim/neovim -b v0.8.3
+git clone https://github.com/neovim/neovim -b {最新的release分支}
 make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=/usr/local/nvim
 make install
 
@@ -46,7 +46,7 @@ build type: Release
 1. clangd (needed)
 
 ## neovim env
-1. export NVIM_CONF="clangd_bin=clangd,theme=default,lua_ls_bin={path},lua_ls_root={path}"
+1. export NVIM_JSON_CONF='{}'
 
 ## clang/clangd/lldb build
 1. git clone https://github.com/llvm/llvm-project
