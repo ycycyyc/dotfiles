@@ -10,19 +10,27 @@ local luasnip = {
     dependencies = {
       "saadparwaiz1/cmp_luasnip",
     },
-    event = "InsertEnter",
+    -- 真正用到snippet plugin的时候才加载比如tab s-tab expand
+    -- 如果不太合适, 可以在插入时加载
+    -- event = "InsertEnter",
+    lazy = true,
     cond = false,
+    -- config = function()
+    -- require("plugin.luasnip").init_snippets()
+    -- end,
   },
-  config = function()
+  init = function()
     -- copy from: https://github.com/tjdevries/config.nvim/blob/master/lua/custom/snippets.lua
-    local ls = require "luasnip"
 
-    -- TODO: Think about `locally_jumpable`, etc.
-    -- Might be nice to send PR to luasnip to use filters instead for these functions ;)
-    vim.snippet.expand = ls.lsp_expand
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.snippet.expand = function(input)
+      local ls = require "luasnip"
+      ls.lsp_expand(input)
+    end
 
     ---@diagnostic disable-next-line: duplicate-set-field
     vim.snippet.active = function(filter)
+      local ls = require "luasnip"
       filter = filter or {}
       filter.direction = filter.direction or 1
 
@@ -35,6 +43,7 @@ local luasnip = {
 
     ---@diagnostic disable-next-line: duplicate-set-field
     vim.snippet.jump = function(direction)
+      local ls = require "luasnip"
       if direction == 1 then
         if ls.expandable() then
           return ls.expand_or_jump()
@@ -46,7 +55,11 @@ local luasnip = {
       end
     end
 
-    vim.snippet.stop = ls.unlink_current
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.snippet.stop = function()
+      local ls = require "luasnip"
+      ls.unlink_current()
+    end
   end,
 }
 
@@ -56,19 +69,22 @@ local snippy = {
     dependencies = {
       "dcampos/cmp-snippy",
     },
-    event = "InsertEnter",
+    lazy = true,
     cond = false,
   },
-  config = function()
-    local sn = require "snippy"
-
-    vim.snippet.expand = sn.expand_snippet
+  init = function()
+    vim.snippet.expand = function(input)
+      local sn = require "snippy"
+      sn.expand_snippet(input)
+    end
 
     vim.snippet.active = function(filter)
+      local sn = require "snippy"
       return sn.can_jump(filter.direction)
     end
 
     vim.snippet.jump = function(direction)
+      local sn = require "snippy"
       if direction > 0 then
         sn.next()
       else
@@ -79,13 +95,13 @@ local snippy = {
 }
 
 local native = {
-  config = function()
-    local native_expand = vim.snippet.expand
+  init = function()
+    local expand = vim.snippet.expand
 
     vim.snippet.expand = function(input)
       local is_snippet = string.match(input, "%$")
       if is_snippet then
-        native_expand(input)
+        expand(input)
       else
         vim.api.nvim_put({ input }, "c", false, true)
       end
@@ -99,12 +115,14 @@ local vsnip = {
     dependencies = {
       "hrsh7th/cmp-vsnip",
     },
-    event = "InsertEnter",
+    event = "InsertEnter", -- TODO vim插件，没法做到用的时候再加载
     cond = false,
   },
 
-  config = function()
-    vim.snippet.expand = vim.fn["vsnip#anonymous"]
+  init = function()
+    vim.snippet.expand = function(input)
+      vim.fn["vsnip#anonymous"](input)
+    end
 
     vim.snippet.active = function(filter)
       return vim.fn["vsnip#jumpable"](filter.direction) == 1
@@ -139,11 +157,12 @@ M.init = function()
   end
 
   engine = all[snippet]
+
   if not engine.plugin then -- 比如native不需要依赖plugin直接调用配置参数
-    engine.config()
+    engine.init()
   else
     engine.plugin.cond = true
-    engine.plugin.config = engine.config
+    engine.plugin.init = engine.init
   end
 
   M.plugins = {}
