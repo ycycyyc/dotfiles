@@ -183,6 +183,22 @@ local colors = {
   -- mini
   MiniFilesTitleFocused = { fg = yellow, cterm = { bold = true } },
   MiniFilesCursorLine = { bg = virtual_grey, cterm = { bold = true } },
+
+  -- Neogit
+  NeogitStatusHEAD = { fg = cyan },
+  NeogitMerging = { fg = yellow },
+  NeogitBranch = { fg = blue, cterm = { bold = true } },
+  NeogitUntrackedfiles = { fg = yellow, cterm = { bold = true } },
+  NeogitUnstagedchanges = { fg = purple },
+  NeogitChangeUUunstaged = { fg = red },
+  NeogitChangeModified = { fg = red },
+  NeogitRecentcommits = { fg = green, cterm = { bold = true } },
+  NeogitChangeNstaged = { fg = purple },
+  NeogitStagedchanges = { fg = blue, cterm = { bold = true } },
+  NeogitBranchHead = { fg = blue },
+  NeogitUnmergedchanges = { fg = yellow },
+  NeogitPopupActionKey = { fg = red, cterm = { bold = true } },
+  NeogitTagName = { fg = yellow, cterm = { bold = true } },
 }
 
 local function convert(opt)

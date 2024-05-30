@@ -23,10 +23,15 @@ local basic_plugins = {
   },
 
   {
-    "tpope/vim-fugitive",
-    keys = lazy_keys "plugin.fugitive",
-    cmd = { "Gw" },
-    config = require("plugin.fugitive").config,
+    "NeogitOrg/neogit",
+    keys = lazy_keys "plugin.neogit",
+    config = require("plugin.neogit").config,
+  },
+
+  {
+    "FabijanZulj/blame.nvim",
+    keys = lazy_keys "plugin.gitblame",
+    config = require("plugin.gitblame").config,
   },
 
   {
