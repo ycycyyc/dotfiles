@@ -11,6 +11,7 @@ local green = 114
 local black = 235
 
 M.opts = {
+  include_buftypes = { "", "nowrite", "nofile" },
   create_autocmd = false,
   modifiers = {
     ---Filename modifiers applied to dirname.
