@@ -29,6 +29,7 @@ local M = {
 
 M.config = function()
   require("blame").setup {
+    ate_format = "%Y.%m.%d",
     mappings = {
       commit_info = "i",
       stack_push = "<TAB>",

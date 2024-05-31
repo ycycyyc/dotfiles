@@ -1,32 +1,6 @@
 local keys = require "basic.keys"
 local helper = require "utils.helper"
 
-local openNeogit = function()
-  local neogit = require "neogit"
-  neogit.open { kind = "vsplit_left" }
-
-  vim.cmd("vertical res " .. tostring(80))
-end
-
-local function toggleGit()
-  local winns = helper.get_winnums_byft "NeogitStatus"
-  local cur_win = vim.api.nvim_get_current_win()
-
-  for _, winn in ipairs(winns) do
-    --  当前所在的win刚好是futitive， 那么就close fugitive
-    if cur_win == winn then
-      vim.api.nvim_buf_delete(vim.fn.winbufnr(cur_win), { force = false })
-      return
-    end
-  end
-
-  if #winns == 0 then
-    openNeogit()
-  else -- 直接跳转过去， 避免从头开始
-    require("utils.helper").try_jumpto_ft_win "NeogitStatus"
-  end
-end
-
 local M = {
   keymaps = {
     {
@@ -34,7 +8,7 @@ local M = {
       keys.git_status,
       function()
         local neogit = require "neogit"
-        neogit.open { kind = "replace" }
+        neogit.open {}
       end,
       {},
     },
@@ -48,16 +22,17 @@ M.config = function()
     status = {
       mode_text = {
         M = "M",
-        N = "n",
+        N = "N",
+        D = "D",
+        R = "R",
+        A = "A",
       },
     },
     integrations = {
       fzf_lua = true,
     },
     mappings = {
-      status = {
-        -- ["<enter>"] = "VSplitOpen",
-      },
+      status = {},
     },
   }
   helper.setup_m(M)
