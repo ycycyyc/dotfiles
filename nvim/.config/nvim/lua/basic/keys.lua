@@ -6,6 +6,7 @@ local M = {
   search_toggle_rg_mode = "<leader>T", -- 使用fixString 匹配还是 正则
   search_buffer = "<Leader>b", -- search only in buffer use fzf
   search_find_files = "<C-p>", -- 查文件
+  search_git_files = "<C-f>",
   search_cur_word = "gw",
   search_cur_word_cur_buf = "gW",
   search_resume = "<leader>l",
