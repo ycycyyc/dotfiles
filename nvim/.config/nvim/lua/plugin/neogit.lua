@@ -15,11 +15,48 @@ local M = {
   },
 }
 
+M.init = function()
+  vim.api.nvim_create_user_command("Gwrite", function()
+    local Job = require "plenary.job"
+
+    local args = {}
+
+    local file = vim.fn.expand "%:p"
+
+    table.insert(args, "add")
+    table.insert(args, "--")
+    table.insert(args, file)
+
+    local errors = {}
+
+    local job = Job:new {
+      command = "git",
+      args = args,
+      on_stderr = function(_, data)
+        table.insert(errors, data)
+      end,
+    }
+
+    local output = job:sync()
+
+    if job.code ~= 0 then
+      vim.schedule(function()
+        error(string.format("Gwrite run failed:%s", errors[1] or "Failed to format due to errors"))
+      end)
+    else
+      vim.print("add file " .. vim.fn.expand "%:~:." .. " success")
+    end
+  end, {})
+end
+
 M.config = function()
   require("neogit").setup {
     auto_refresh = false,
     auto_close_console = false,
+    remember_settings = false,
+    disable_line_numbers = false,
     status = {
+      recent_commit_count = 0, -- 去掉recent_commit
       mode_text = {
         M = "M",
         N = "N",

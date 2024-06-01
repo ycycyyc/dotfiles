@@ -25,6 +25,7 @@ local basic_plugins = {
   {
     "NeogitOrg/neogit",
     keys = lazy_keys "plugin.neogit",
+    init = require("plugin.neogit").init,
     config = require("plugin.neogit").config,
   },
 
