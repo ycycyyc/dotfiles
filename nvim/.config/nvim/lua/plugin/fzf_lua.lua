@@ -171,7 +171,7 @@ M.config = function()
     },
     git = {
       files = {
-        cmd = [[ git status --porcelain | awk '{if ($1 == "M" || $1 == "A" || $1 == "??") print $2}' ]],
+        cmd = [[ git status --porcelain | awk '{if ($1 == "M" || $1 == "MM" || $1 == "A" || $1 == "??") print $2}' ]],
       },
       commits = {
         cmd = "git log -C --color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'",
