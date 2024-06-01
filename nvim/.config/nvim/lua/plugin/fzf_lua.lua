@@ -46,7 +46,7 @@ local M = {
     { "n", keys.search_resume, "<cmd>FzfLua resume<cr>", { noremap = true } },
     { "n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>", { noremap = true } },
     { "n", keys.search_find_files, "<cmd>FzfLua files<cr>", { noremap = true } },
-    { "n", keys.search_git_files, "<cmd>FzfLua git_files<cr>", { noremap = true } },
+    { "n", keys.search_git_status, "<cmd>FzfLua git_status<cr>", { noremap = true } },
     { "n", keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>", { noremap = true } },
     { "n", keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>", { noremap = true } },
     { "n", keys.lsp_finder, "<cmd>FzfLua lsp_finder<cr>", { noremap = true } },
@@ -143,6 +143,7 @@ M.config = function()
     require("utils.git").commit_diff(res[1])
   end
 
+  local actions = require "fzf-lua.actions"
   require("fzf-lua").setup {
     winopts = {
       row = 0.3,
@@ -170,8 +171,11 @@ M.config = function()
       },
     },
     git = {
-      files = {
-        cmd = [[ git status --porcelain | awk '{if ($1 == "M" || $1 == "MM" || $1 == "A" || $1 == "??") print $2}' ]],
+      status = {
+        actions = {
+          ["ctrl-l"] = { fn = actions.git_unstage, reload = true },
+          ["ctrl-h"] = { fn = actions.git_stage, reload = true },
+        },
       },
       commits = {
         cmd = "git log -C --color --pretty=format:'%C(yellow)%h%Creset  %C(blue)<%an>%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s  %C(auto)%d'",
