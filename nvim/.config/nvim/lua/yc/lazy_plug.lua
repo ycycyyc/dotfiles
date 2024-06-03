@@ -214,8 +214,8 @@ local lsp_plugins = {
   },
 
   {
-    "mhartington/formatter.nvim",
-    ft = require("plugin.format").ft,
+    "stevearc/conform.nvim",
+    lazy = true,
     config = require("plugin.format").config,
   },
 

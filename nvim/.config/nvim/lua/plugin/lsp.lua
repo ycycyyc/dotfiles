@@ -6,18 +6,6 @@ local ulsp = require "utils.lsp"
 
 local M = {}
 
-local format_lua_file = function()
-  if vim.fn.executable "stylua" == 1 then
-    vim.cmd "FormatWrite"
-  end
-end
-
-local format_python_file = function()
-  if vim.fn.executable "black" == 1 then
-    vim.cmd "FormatWrite"
-  end
-end
-
 local lua_ls_runtime_path = function()
   ---@type string[]
   local runtime_path = vim.split(package.path, ";")
@@ -44,10 +32,14 @@ local function switch_source_header_cmd()
   end)
 end
 
+local conform_format = function()
+  require("conform").format { bufnr = 0 }
+end
+
 local attach_confs = {
   lua_ls = {
     keymaps = {
-      [keys.lsp_format] = { format_lua_file },
+      [keys.lsp_format] = { conform_format },
     },
   },
   gopls = {
@@ -62,7 +54,7 @@ local attach_confs = {
   },
   pyright = {
     keymaps = {
-      [keys.lsp_format] = { format_python_file },
+      [keys.lsp_format] = { conform_format },
     },
   },
 }

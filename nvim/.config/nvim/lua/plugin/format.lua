@@ -1,21 +1,12 @@
-return {
-  ft = { "lua", "python" },
-  config = function()
-    require("formatter").setup {
-      logging = false,
-      log_level = vim.log.levels.WARN,
-      filetype = {
-        lua = {
-          require("formatter.filetypes.lua").stylua,
-        },
-        python = {
-          require("formatter.filetypes.python").black,
-        },
-      },
-    }
+local M = {}
 
-    vim.api.nvim_del_user_command "Format"
-    vim.api.nvim_del_user_command "FormatLock"
-    vim.api.nvim_del_user_command "FormatWriteLock"
-  end,
-}
+M.config = function()
+  require("conform").setup {
+    formatters_by_ft = {
+      lua = { "stylua" },
+      python = { "black" },
+    },
+  }
+end
+
+return M
