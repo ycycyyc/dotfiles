@@ -146,7 +146,7 @@ local lsp_plugins = {
   {
     "lewis6991/gitsigns.nvim",
     event = { "CursorHold", "CursorHoldI" },
-    config = require("plugin.git").config,
+    config = require("plugin.gitsigns").config,
   },
 
   {

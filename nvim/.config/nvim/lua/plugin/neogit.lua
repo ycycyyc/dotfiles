@@ -6,18 +6,38 @@ local function open(type, path, cursor)
   vim.cmd(("silent! %s %s | %s | norm! zz"):format(type, vim.fn.fnameescape(path), cursor and cursor[1] or "1"))
 end
 
-local jumpto_window = function()
+local jumpto_window = function(path)
   local ignore_types = { "NeogitStatus", "lsp_progresss", "qf", "NvimTree" }
   local wins = vim.api.nvim_list_wins()
+
+  local s_wins = {}
+
   for _, win_num in ipairs(wins) do
     local buf_num = vim.fn.winbufnr(win_num)
-    local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_num })
-    if not vim.tbl_contains(ignore_types, ft) then
+
+    -- 1. win中文件已经打开
+    if vim.api.nvim_buf_get_name(buf_num) == path then
       vim.api.nvim_set_current_win(win_num)
       vim.cmd "redraw"
       return
     end
+
+    local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_num })
+
+    if not vim.tbl_contains(ignore_types, ft) then
+      table.insert(s_wins, win_num)
+    end
   end
+
+  -- 2. 当前没有可用的window
+  if #s_wins == 0 then
+    open("edit", path)
+    return
+  end
+
+  -- 3. 选择第一个window
+  vim.api.nvim_set_current_win(s_wins[1])
+  vim.cmd("edit " .. path)
 end
 
 -- copy from neogit/buffers/status/actions.lua
@@ -133,9 +153,7 @@ M.config = function()
 
       if item and item.absolute_path then
         local cursor = translate_cursor_location(self, item)
-        -- self:close()
-        jumpto_window()
-        open("edit", item.absolute_path, cursor)
+        jumpto_window(item.absolute_path)
         return
       end
     end

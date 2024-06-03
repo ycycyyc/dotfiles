@@ -202,6 +202,7 @@ local colors = {
   NeogitUnmergedchanges = { fg = yellow },
   NeogitPopupActionKey = { fg = red, cterm = { bold = true } },
   NeogitTagName = { fg = yellow, cterm = { bold = true } },
+  NeogitChangeRstaged = { fg = red },
 }
 
 local function convert(opt)
