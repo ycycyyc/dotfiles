@@ -170,7 +170,7 @@ local lsp_plugins = {
   {
     "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufAdd", "BufNewFile" },
-    config = require("plugin.lsp").load_lsp_config,
+    config = require("plugin.lsp").config,
     dependencies = "hrsh7th/cmp-nvim-lsp",
   },
 

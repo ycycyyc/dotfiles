@@ -1,88 +1,88 @@
 -- install lsp-server from
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
-local build_on_attach_func = require("utils.lsp").build_on_attach_func
-local on_init = require("utils.lsp").on_init
-local go_import = require("utils.lsp").go_import
-local sync_format_save = require("utils.lsp").sync_format_save
 local env = require("basic.env").env
 local keys = require "basic.keys"
+local ulsp = require "utils.lsp"
 
 local M = {}
 
--- conf key binding
---
-M.load_lsp_config = function()
-  -- 0. base cofig
-  local lspconfig = require "lspconfig"
-  local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local format_lua_file = function()
+  if vim.fn.executable "stylua" == 1 then
+    vim.cmd "FormatWrite"
+  end
+end
 
-  vim.lsp.set_log_level "OFF"
-  vim.lsp.handlers["textDocument/publishDiagnostics"] =
-    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { underline = false })
+local format_python_file = function()
+  if vim.fn.executable "black" == 1 then
+    vim.cmd "FormatWrite"
+  end
+end
 
-  -- 1. lua
-  USER = vim.fn.expand "$USER"
-
+local lua_ls_runtime_path = function()
   ---@type string[]
   local runtime_path = vim.split(package.path, ";")
   table.insert(runtime_path, "lua/?.lua")
   table.insert(runtime_path, "lua/?/init.lua")
+  return runtime_path
+end
 
-  lspconfig.lua_ls.setup {
-    on_init = on_init,
-    capabilities = capabilities,
-    on_attach = build_on_attach_func {
-      keymaps = {
-        [keys.lsp_format] = {
-          function()
-            if vim.fn.executable "stylua" == 1 then
-              vim.cmd "FormatWrite"
-            end
-          end,
-          "n",
-        },
-      },
+local function switch_source_header_cmd()
+  local bufnr = 0
+  local cmd = "edit"
+  local lspconfig = require "lspconfig"
+  bufnr = lspconfig.util.validate_bufnr(bufnr)
+  local params = { uri = vim.uri_from_bufnr(bufnr) }
+  vim.lsp.buf_request(bufnr, "textDocument/switchSourceHeader", params, function(err, dst_file, result)
+    if err then
+      error(tostring(err))
+    end
+    if not result then
+      print "Corresponding file can’t be determined"
+      return
+    end
+    vim.api.nvim_command(cmd .. " " .. vim.uri_to_fname(dst_file))
+  end)
+end
+
+local attach_confs = {
+  lua_ls = {
+    keymaps = {
+      [keys.lsp_format] = { format_lua_file },
     },
+  },
+  gopls = {
+    auto_format = true,
+  },
+  clangd = {
+    keymaps = {
+      [keys.lsp_format] = { function() end },
+      [keys.lsp_range_format] = { ulsp.v_range_format, "x" },
+      [keys.switch_source_header] = { switch_source_header_cmd },
+    },
+  },
+  pyright = {
+    keymaps = {
+      [keys.lsp_format] = { format_python_file },
+    },
+  },
+}
+
+local servers = {
+  lua_ls = {
     settings = {
       Lua = {
-        runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-          version = "LuaJIT",
-          -- Setup your lua path
-          path = runtime_path,
-        },
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = { "vim" },
-        },
+        runtime = { version = "LuaJIT", path = lua_ls_runtime_path() },
+        diagnostics = { globals = { "vim" } },
         workspace = {
-          -- Make the server aware of Neovim runtime files
           library = vim.api.nvim_get_runtime_file("", true),
           checkThirdParty = false, -- THIS IS THE IMPORTANT LINE TO ADD
         },
-        hint = {
-          enable = env.inlayhint,
-        },
+        hint = { enable = env.inlayhint },
       },
     },
-  }
+  },
 
-  -- 2. gopls
-  lspconfig.gopls.setup {
-    on_init = on_init,
-    on_attach = build_on_attach_func {
-      auto_format = true,
-      keymaps = {
-        [keys.lsp_format] = {
-          function()
-            -- go_import()
-            sync_format_save()
-          end,
-          "n",
-        },
-      },
-    },
-    capabilities = capabilities,
+  gopls = {
     cmd = { "gopls", "serve" },
     settings = {
       gopls = {
@@ -109,167 +109,78 @@ M.load_lsp_config = function()
         staticcheck = true,
       },
     },
-    commands = {
-      GoImportAndFormat = {
-        function()
-          require("utils.lsp").go_import()
-          require("utils.lsp").sync_format_save()
-        end,
-      },
-    },
     root_dir = function()
       return vim.fn.getcwd()
     end,
-  }
+  },
 
-  -- 3. clangd
-  ---@param bufnr number
-  ---@param splitcmd string
-  local function switch_source_header_splitcmd(bufnr, splitcmd)
-    bufnr = lspconfig.util.validate_bufnr(bufnr)
-    local params = { uri = vim.uri_from_bufnr(bufnr) }
-    vim.lsp.buf_request(bufnr, "textDocument/switchSourceHeader", params, function(err, dst_file, result)
-      if err then
-        error(tostring(err))
-      end
-      if not result then
-        print "Corresponding file can’t be determined"
-        return
-      end
-      vim.api.nvim_command(splitcmd .. " " .. vim.uri_to_fname(dst_file))
-    end)
-  end
-
-  ---@type string
-  local clangd_bin = env.clangd_bin
-
-  lspconfig.clangd.setup {
-    on_init = on_init,
-    capabilities = capabilities,
-    on_attach = build_on_attach_func {
-      keymaps = {
-        [keys.lsp_format] = { function() end, "n" },
-        [keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" },
-        [keys.switch_source_header] = {
-          function()
-            switch_source_header_splitcmd(0, "edit")
-          end,
-          "n",
-        },
-      },
-    },
+  clangd = {
     cmd = {
-      clangd_bin,
+      env.clangd_bin,
       "--background-index",
-      "--suggest-missing-includes", -- 在后台自动分析文件（基于complie_commands)
-      -- "--background-index",
-      -- 标记compelie_commands.json文件的目录位置
-      -- 关于complie_commands.json如何生成可见我上一篇文章的末尾
-      -- https://zhuanlan.zhihu.com/p/84876003
-      -- "--compile-commands-dir=build",
-      -- 同时开启的任务数量
-      "-j=15", -- 告诉clangd用那个clang进行编译，路径参考which clang++的路径
-      -- "--query-driver=/usr/bin/clang++",
-      -- clang-tidy功能
-      "--clang-tidy", -- "--clang-tidy-checks=performance-*,bugprone-*",
-      -- "--clang-tidy-checks=*",
-      -- 全局补全（会自动补充头文件）
-      "--all-scopes-completion", -- 更详细的补全内容
-      "--completion-style=detailed", -- 补充头文件的形式
-      "--header-insertion=iwyu", -- pch优化的位置
-      "--pch-storage=memory", -- "--query-driver=/data/opt/gcc-5.4.0/bin/g++",
+      "--suggest-missing-includes",
+      "-j=15",
+      "--clang-tidy",
+      "--all-scopes-completion",
+      "--completion-style=detailed",
+      "--header-insertion=iwyu",
+      "--pch-storage=memory",
       env.usePlaceholders and "--function-arg-placeholders" or "--function-arg-placeholders=0",
-      -- "-Wuninitialized",
-      -- '--query-driver="/usr/local/opt/gcc-arm-none-eabi-8-2019-q3-update/bin/arm-none-eabi-gcc"'
     },
     filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
-    commands = {
-      Format = {
-        function()
-          require("utils.lsp").format()
-        end,
-        description = "format",
-      },
-    },
-  }
+    commands = { Format = { ulsp.lsp_method.format, description = "format" } },
+  },
 
-  -- 4. other python json yaml cmake ts bash vimls
-  lspconfig.pyright.setup {
-    on_init = on_init,
-    capabilities = capabilities,
+  pyright = {
     filetypes = { "python" },
-    on_attach = build_on_attach_func {
-      keymaps = {
-        [keys.lsp_format] = {
-          function()
-            if vim.fn.executable "black" == 1 then
-              vim.cmd "FormatWrite"
-            end
-          end,
-          "n",
-        },
-      },
-    },
     settings = {
       python = {
-        analysis = {
-          autoSearchPaths = true,
-          diagnosticMode = "workspace",
-          useLibraryCodeForTypes = true,
-        },
+        analysis = { autoSearchPaths = true, diagnosticMode = "workspace", useLibraryCodeForTypes = true },
       },
     },
     single_file_support = true,
-  }
+  },
+}
 
-  -- json format :%!python -m json.tool
-  lspconfig.jsonls.setup {
-    on_init = on_init,
-    on_attach = build_on_attach_func {},
-    cmd = { "vscode-json-languageserver", "--stdio" },
-    filetypes = { "json" },
-  }
+M.config = function()
+  local lspconfig = require "lspconfig"
 
-  lspconfig.yamlls.setup {
-    on_init = on_init,
-    on_attach = build_on_attach_func {},
-    cmd = { "yaml-language-server", "--stdio" },
-    filetypes = { "yaml" },
-  }
-  -- lspinstall cmake
-  lspconfig.cmake.setup {
-    -- YOUR_PATH
-    cmd = { "/data/yc/.local/share/nvim/lspinstall/cmake/venv/bin/cmake-language-server" },
-    on_init = on_init,
-    on_attach = build_on_attach_func {},
-    filetypes = { "cmake" },
-  }
+  vim.lsp.set_log_level "OFF"
+  vim.lsp.handlers["textDocument/publishDiagnostics"] =
+    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { underline = false })
 
-  lspconfig.tsserver.setup {
-    on_init = on_init,
-    on_attach = build_on_attach_func {
-      auto_format = true,
-      keymaps = { [keys.lsp_range_format] = { require("utils.lsp").v_range_format, "x" } },
-    },
-  }
+  for name, opt in pairs(servers) do
+    -- 1. 默认的配置
+    local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-  -- https://github.com/bash-lsp/bash-language-server
-  lspconfig.bashls.setup {
-    on_init = on_init,
-    on_attach = build_on_attach_func {},
-  }
+    local on_init = function(client, _)
+      if client.server_capabilities and not env.semantic_token then
+        client.server_capabilities.semanticTokensProvider = false
+      end
+    end
 
-  lspconfig.vimls.setup {
-    on_attach = build_on_attach_func {},
-    on_init = on_init,
-  }
+    local d_opt = {
+      on_init = on_init,
+      capabilities = capabilities,
+    }
+
+    -- 2. on_attach使用的配置
+    local conf = attach_confs[name] or {}
+
+    local a_opt = {
+      on_attach = ulsp.build_on_attach_func(conf),
+    }
+
+    -- 3. 再加上每个lsp-server特有的配置
+    lspconfig[name].setup(vim.tbl_deep_extend("error", opt, d_opt, a_opt))
+  end
 end
 
 M.rust_config = function()
   local rt = require "rust-tools"
   rt.setup {
     server = {
-      on_attach = build_on_attach_func {
+      on_attach = ulsp.build_on_attach_func {
         keymaps = {
           [keys.lsp_hover] = { rt.hover_actions.hover_actions, "n" },
           [keys.lsp_code_action] = { rt.code_action_group.code_action_group, "n" },
