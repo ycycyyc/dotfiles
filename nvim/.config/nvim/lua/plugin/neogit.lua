@@ -7,7 +7,7 @@ local function open(type, path, cursor)
 end
 
 local jumpto_window = function()
-  local ignore_types = { "NeogitStatus", "lsp_progresss" }
+  local ignore_types = { "NeogitStatus", "lsp_progresss", "qf", "NvimTree" }
   local wins = vim.api.nvim_list_wins()
   for _, win_num in ipairs(wins) do
     local buf_num = vim.fn.winbufnr(win_num)
@@ -15,6 +15,7 @@ local jumpto_window = function()
     if not vim.tbl_contains(ignore_types, ft) then
       vim.api.nvim_set_current_win(win_num)
       vim.cmd "redraw"
+      return
     end
   end
 end
