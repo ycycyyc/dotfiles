@@ -6,6 +6,12 @@ local function open(type, path, cursor)
   vim.cmd(("silent! %s %s | %s | norm! zz"):format(type, vim.fn.fnameescape(path), cursor and cursor[1] or "1"))
 end
 
+local hide_window = function(win, hide)
+  local config = vim.api.nvim_win_get_config(win)
+  local new_config = vim.tbl_deep_extend("force", config, { hide = hide })
+  vim.api.nvim_win_set_config(win, new_config)
+end
+
 local jumpto_window = function(path)
   local ignore_types = { "NeogitStatus", "lsp_progresss", "qf", "NvimTree" }
   local wins = vim.api.nvim_list_wins()
@@ -69,15 +75,30 @@ local M = {
       "n",
       keys.git_status,
       function()
-        local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-        if ft == "NeogitStatus" then
-          vim.api.nvim_input "q"
+        local cur_win = vim.api.nvim_get_current_win()
+        local wins = helper.get_winnums_byft "NeogitStatus"
+
+        for _, winn in ipairs(wins) do
+          -- 1. 当前正处于Neogit中, 退出
+          if cur_win == winn then
+            vim.api.nvim_input "q"
+            return
+          end
+        end
+
+        -- 2. 没有打开Neogit
+        if #wins == 0 then
+          local neogit = require "neogit"
+          neogit.open { kind = "floating" }
+          return
+        elseif #wins > 1 then -- 非预期行为不能同时存在多个NeogitStatus window
+          vim.notify("got " .. tostring(#wins) .. " not expected")
           return
         end
 
-        local neogit = require "neogit"
-        neogit.open { kind = "vsplit_left" }
-        vim.cmd "vertical res 80"
+        -- 3. 打开了neogit, 但是处于其他buf中
+        vim.api.nvim_set_current_win(wins[1])
+        hide_window(wins[1], false)
       end,
       {},
     },
@@ -113,13 +134,52 @@ M.init = function()
         error(string.format("Gwrite run failed:%s", errors[1] or "Failed to format due to errors"))
       end)
     else
-      vim.print("add file " .. vim.fn.expand "%:~:." .. " success")
+      vim.notify("add file " .. vim.fn.expand "%:~:." .. " success")
     end
   end, {})
 end
 
 M.config = function()
   require("neogit").setup {
+    kind = "floating",
+    commit_editor = {
+      kind = "tab",
+    },
+    commit_select_view = {
+      kind = "tab",
+    },
+    commit_view = {
+      kind = "tab",
+      verify_commit = vim.fn.executable "gpg" == 1,
+    },
+    log_view = {
+      kind = "tab",
+    },
+    rebase_editor = {
+      kind = "tab",
+    },
+    reflog_view = {
+      kind = "tab",
+    },
+    merge_editor = {
+      kind = "tab",
+    },
+    description_editor = {
+      kind = "tab",
+    },
+    tag_editor = {
+      kind = "tab",
+    },
+    preview_buffer = {
+      kind = "tab",
+    },
+    popup = {
+      kind = "floating",
+    },
+    refs_view = {
+      kind = "tab",
+    },
+
     filewatcher = {
       enabled = false,
     },
@@ -128,7 +188,7 @@ M.config = function()
     remember_settings = false,
     disable_line_numbers = false,
     status = {
-      recent_commit_count = 0, -- 去掉recent_commit
+      -- recent_commit_count = 30, -- 去掉recent_commit
       mode_text = {
         M = "M",
         N = "N",
@@ -152,7 +212,8 @@ M.config = function()
       local item = self.buffer.ui:get_item_under_cursor()
 
       if item and item.absolute_path then
-        local cursor = translate_cursor_location(self, item)
+        hide_window(vim.api.nvim_get_current_win(), true)
+
         jumpto_window(item.absolute_path)
         return
       end
