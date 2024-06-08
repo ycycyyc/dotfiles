@@ -1,7 +1,6 @@
 local M = {}
 
 local api = vim.api
-local Job = require "plenary.job"
 
 ---@return string
 ---@return string
@@ -27,7 +26,7 @@ end
 
 ---@param tags_op string
 ---@param tags_type string
-local function operate(tags_op, tags_type)
+local function run(tags_op, tags_type)
   local file_name = api.nvim_buf_get_name(0)
   local type, range = get_type_and_range()
 
@@ -40,6 +39,7 @@ local function operate(tags_op, tags_type)
   table.insert(args, tags_type)
 
   local errors = {}
+  local Job = require "plenary.job"
   local job = Job:new {
     command = "gomodifytags",
     args = args,
@@ -60,21 +60,12 @@ end
 
 ---@param tags string
 function M.add(tags)
-  operate("-add-tags", tags)
+  run("-add-tags", tags)
 end
 
 ---@param tags string
 function M.remove(tags)
-  operate("-remove-tags", tags)
-end
-
-function M.bin_exist(cmd, args)
-  local job = Job:new {
-    command = cmd,
-    args = args,
-  }
-  job:sync()
-  return job.code == 0
+  run("-remove-tags", tags)
 end
 
 return M
