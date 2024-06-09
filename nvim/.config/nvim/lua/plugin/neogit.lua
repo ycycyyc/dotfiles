@@ -207,6 +207,7 @@ M.config = function()
     mappings = {
       status = {},
     },
+    disable_insert_on_commit = true,
   }
 
   local action = require "neogit.buffers.status.actions"
