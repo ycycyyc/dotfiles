@@ -80,7 +80,8 @@ local basic_plugins = {
 
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "VeryLazy" },
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     config = require("plugin.tree_sitter").config,
     dependencies = {
       {
@@ -145,7 +146,7 @@ local lsp_plugins = {
 
   {
     "lewis6991/gitsigns.nvim",
-    event = { "CursorHold", "CursorHoldI" },
+    event = "User FilePost",
     config = require("plugin.gitsigns").config,
   },
 
@@ -169,19 +170,18 @@ local lsp_plugins = {
 
   {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPost", "BufAdd", "BufNewFile" },
+    event = "User FilePost",
     config = require("plugin.lsp").config,
     dependencies = "hrsh7th/cmp-nvim-lsp",
   },
 
   {
     "utilyre/barbecue.nvim",
-    event = "VeryLazy",
+    event = "User FilePost",
     name = "barbecue",
     version = "*",
     dependencies = {
       "SmiteshP/nvim-navic",
-      event = "VeryLazy",
       opts = {
         lazy_update_context = true,
       },
