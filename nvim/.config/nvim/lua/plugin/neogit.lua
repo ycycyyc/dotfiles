@@ -46,29 +46,6 @@ local jumpto_window = function(path)
   vim.cmd("edit " .. path)
 end
 
--- copy from neogit/buffers/status/actions.lua
-local function translate_cursor_location(self, item)
-  if rawget(item, "diff") then
-    local line = self.buffer:cursor_line()
-
-    for _, hunk in ipairs(item.diff.hunks) do
-      if line >= hunk.first and line <= hunk.last then
-        local offset = line - hunk.first
-        local row = hunk.disk_from + offset - 1
-
-        for i = 1, offset do
-          -- If the line is a deletion, we need to adjust the row
-          if string.sub(hunk.lines[i], 1, 1) == "-" then
-            row = row - 1
-          end
-        end
-
-        return { row, 0 }
-      end
-    end
-  end
-end
-
 local M = {
   keymaps = {
     {
@@ -139,6 +116,7 @@ M.init = function()
       end)
     else
       vim.notify("add file " .. vim.fn.expand "%:~:." .. " success")
+      vim.cmd "silent write" -- 写文件触发neogit状态的更新
     end
   end, {})
 end
@@ -212,6 +190,7 @@ M.config = function()
 
   local action = require "neogit.buffers.status.actions"
 
+  -- See: neogit/buffers/status/actions.lua
   action.n_goto_file = function(self)
     return function()
       local item = self.buffer.ui:get_item_under_cursor()
