@@ -95,6 +95,7 @@ local basic_plugins = {
         cond = env.treesitter_textobj,
       },
     },
+    lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
     cond = env.ts,
   },
 
