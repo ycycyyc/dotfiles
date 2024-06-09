@@ -114,12 +114,14 @@ local native = {
     local expand = vim.snippet.expand
 
     vim.snippet.expand = function(input)
-      local is_snippet = string.match(input, "%$")
-      if is_snippet then
-        expand(input)
-      else
-        vim.api.nvim_put({ input }, "c", false, true)
-      end
+      -- lazyvim
+      require("utils.native_snippet").expand(input, expand)
+      -- local is_snippet = string.match(input, "%$")
+      -- if is_snippet then
+      --   expand(input)
+      -- else
+      --   vim.api.nvim_put({ input }, "c", false, true)
+      -- end
     end
   end,
 }
