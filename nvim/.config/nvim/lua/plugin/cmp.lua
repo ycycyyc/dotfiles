@@ -75,10 +75,11 @@ M.config = function()
       ghost_text = env.cmp_ghost_text,
     },
 
-    sources = cmp.config.sources {
-      { name = "buffer", max_item_count = 10 },
+    sources = cmp.config.sources({
       { name = "nvim_lsp", max_item_count = 10 },
-    },
+    }, {
+      { name = "buffer", max_item_count = 10 },
+    }),
   }
 end
 
