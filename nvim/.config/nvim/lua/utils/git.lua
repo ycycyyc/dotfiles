@@ -2,8 +2,13 @@ local M = {}
 
 ---使用diffview来对比commit
 
----@param commit string
+---@param commit string | nil
 M.commit_diff = function(commit)
+  if not commit then
+    vim.cmd "DiffviewOpen"
+    return
+  end
+
   local idx = vim.fn.stridx(commit, "^") ---@type number
   local cmd = "" ---@type string
 
