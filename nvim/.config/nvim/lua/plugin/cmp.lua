@@ -66,8 +66,16 @@ M.config = function()
         end
       end, { "i", "s" }),
 
-      ["<C-y>"] = cmp.config.disable,
-      ["<CR>"] = cmp.mapping.confirm { select = true },
+      -- ["<cr>"] = cmp.mapping.confirm { select = true },
+      -- See: https://github.com/LazyVim/LazyVim/commit/2961162ebaef96e4ffbc1e6c97dba0dc32efbbb0
+      ["<CR>"] = cmp.mapping(function(fallback)
+        if cmp.core.view:visible() or vim.fn.pumvisible() == 1 then
+          if cmp.confirm { select = true, behavior = cmp.ConfirmBehavior.Insert } then
+            return
+          end
+        end
+        return fallback()
+      end),
     },
 
     experimental = {
