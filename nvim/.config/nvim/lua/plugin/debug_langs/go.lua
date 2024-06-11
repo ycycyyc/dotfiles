@@ -1,7 +1,4 @@
-local has_dap, dap = pcall(require, "dap")
-if not has_dap then
-  return
-end
+local dap = require "dap"
 
 local mode = require("basic.env").env.go_debug_mode
 local uv = vim.loop or vim.uv

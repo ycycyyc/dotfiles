@@ -67,9 +67,9 @@ local basic_plugins = {
 
   {
     "rcarriga/nvim-dap-ui",
-    keys = { { keys.dbg_breakpoint } },
+    keys = lazy_keys "plugin.debug",
     config = require("plugin.debug").config,
-    dependencies = { "mfussenegger/nvim-dap", "theHamsta/nvim-dap-virtual-text" },
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
   },
 
   {
