@@ -1,4 +1,4 @@
-local show = require "yc.lsp.show"
+local show = require "yc.custom.lsp.show"
 
 local M = {}
 

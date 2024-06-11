@@ -1,6 +1,5 @@
 local keys = require "basic.keys"
-
-local M = {}
+local helper = require "utils.helper"
 
 local terminals = {}
 
@@ -8,7 +7,7 @@ local terminals = {}
 ---@param cmd string?
 ---@param opts table?
 ---@return function
-function M.open_term(cmd, opts)
+local function open_term(cmd, opts)
   opts = vim.tbl_deep_extend("force", {
     ft = "terminal",
     size = { width = 0.9, height = 0.8 },
@@ -37,6 +36,23 @@ function M.open_term(cmd, opts)
   end
 
   return terminals[termkey]
+end
+
+local M = {
+  keymaps = {
+    {
+      "n",
+      keys.toggle_term,
+      function()
+        open_term(nil, nil)
+      end,
+      {},
+    },
+  },
+}
+
+function M.setup()
+  helper.setup_m(M)
 end
 
 return M

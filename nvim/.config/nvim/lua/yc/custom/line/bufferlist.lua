@@ -1,7 +1,7 @@
 local api, fn = vim.api, vim.fn
 local buflisted = fn.buflisted ---@type fun(number:number):number
 local bufname_of = fn.bufname
-local utils = require "yc.line.utils"
+local utils = require "utils.theme"
 
 local originFileAndNum = "%{expand('%:~:.')}%m%h"
 

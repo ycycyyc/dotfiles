@@ -1,5 +1,5 @@
 local api, fn = vim.api, vim.fn
-local utils = require "yc.line.utils"
+local utils = require "utils.theme"
 
 local M = {
   refresh_cnt = 0, ---@type integer

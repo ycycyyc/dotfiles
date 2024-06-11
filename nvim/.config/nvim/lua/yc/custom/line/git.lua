@@ -1,4 +1,4 @@
-local utils = require "yc.line.utils"
+local utils = require "utils.theme"
 
 local M = {
   update_cnt = 0,

@@ -36,41 +36,12 @@ local M = {
     },
 
     {
-      "GoAddTags",
-      function(args)
-        local gotags = require "utils.gotags"
-        gotags.add(args["args"])
-      end,
-      { nargs = "+" },
-    },
-
-    {
-      "GoRemoveTags",
-      function(args)
-        local gotags = require "utils.gotags"
-        gotags.remove(args["args"])
-      end,
-      { nargs = "+" },
-    },
-
-    {
       "CpFilePath",
       function()
         local path = vim.fn.expand "%:~:."
         vim.notify("copy path: " .. path, vim.log.levels.INFO)
         vim.fn.setreg("0", path)
         vim.fn.setreg('"', path)
-      end,
-      {},
-    },
-  },
-
-  keymaps = {
-    {
-      "n",
-      keys.toggle_term,
-      function()
-        require("utils.terminal").open_term(nil, nil)
       end,
       {},
     },

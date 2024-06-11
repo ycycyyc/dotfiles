@@ -1,4 +1,4 @@
-local utils = require "yc.line.utils"
+local utils = require "utils.theme"
 
 local env = require("basic.env").env
 
@@ -33,20 +33,20 @@ M.setup = function()
       augroup END
   ]]
 
-  local mode = require "yc.line.mode"
+  local mode = require "yc.custom.line.mode"
   mode.start()
 
-  local git = require "yc.line.git"
+  local git = require "yc.custom.line.git"
   git.theme = "StatusLineBufListNormal"
   git.end_theme = "StatusLineNormal"
   git.start()
 
-  local nbuffers = require "yc.line.nbuffers"
+  local nbuffers = require "yc.custom.line.nbuffers"
   nbuffers.theme = "NumberBuffers"
   nbuffers.end_theme = "StatusLineNormal"
   nbuffers.start()
 
-  local bufferlist = require "yc.line.bufferlist"
+  local bufferlist = require "yc.custom.line.bufferlist"
   bufferlist.sel_theme = "StatusLineCurFile"
   bufferlist.theme = "StatusLineBufListNormal"
   bufferlist.end_theme = "StatusLineNormal"
