@@ -49,12 +49,6 @@ local basic_plugins = {
   },
 
   {
-    "akinsho/toggleterm.nvim",
-    keys = { { keys.toggle_term } },
-    config = require("plugin.term").config,
-  },
-
-  {
     "numToStr/Comment.nvim",
     keys = {
       { "gc", mode = { "x", "n" } },

@@ -1,4 +1,5 @@
 local helper = require "utils.helper"
+local keys = require "basic.keys"
 
 local buf_map = function(mode, key, action)
   vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
@@ -59,6 +60,17 @@ local M = {
         vim.notify("copy path: " .. path, vim.log.levels.INFO)
         vim.fn.setreg("0", path)
         vim.fn.setreg('"', path)
+      end,
+      {},
+    },
+  },
+
+  keymaps = {
+    {
+      "n",
+      keys.toggle_term,
+      function()
+        require("utils.terminal").open_term(nil, nil)
       end,
       {},
     },

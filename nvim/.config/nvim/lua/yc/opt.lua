@@ -43,6 +43,9 @@ M.setup = function()
 
   -- 分割线出掉白线
   vim.opt.fillchars = "vert: ,horiz: ,horizdown: ,verthoriz: ,vertleft: ,vertright: "
+
+  -- :100 只保留100条history cmd
+  vim.opt.shada:append(":100")
 end
 
 return M
