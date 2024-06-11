@@ -5,7 +5,14 @@ local helper = require "utils.helper"
 local M = {
   keymaps = {
     { "n", keys.dbg_breakpoint, function() require("dap").toggle_breakpoint() end, { noremap = true } },
-    { "n", keys.dbg_continue, function() require("dap").continue() end, { noremap = true } },
+    { "n",
+      keys.dbg_continue,
+      function()
+        local ui_select = require("utils.ui").select
+        ui_select(require("dap").continue)
+      end,
+      { noremap = true },
+    },
     { "n", keys.dbg_step_over, function() require("dap").step_over() end, { noremap = true } },
     { "n", keys.dbg_step_into, function() require("dap").step_into() end, { noremap = true } },
     { "n", keys.dbg_eval, function() require("dapui").eval() end, { noremap = true }, } },
