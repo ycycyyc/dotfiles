@@ -277,6 +277,7 @@ M.setup = function()
       },
     },
     ui = {
+      border = "rounded",
       icons = {
         cmd = "⌘",
         config = "🛠",
