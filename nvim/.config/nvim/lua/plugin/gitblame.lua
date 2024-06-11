@@ -33,12 +33,7 @@ end
 
 local M = {
   keymaps = {
-    {
-      "n",
-      keys.git_blame,
-      ":BlameToggle<cr>",
-      {},
-    },
+    { "n", keys.git_blame, "<cmd>BlameToggle<cr>", {} },
   },
   initfuncs = {
     { "blame", diffCommit },
@@ -66,6 +61,11 @@ M.config = function()
       local blame_type = event.data
       if blame_type == "window" then
         require("barbecue.ui").toggle(false)
+
+        vim.defer_fn(function()
+          local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+          require("utils.helper").try_jumpto_ft_win "blame"
+        end, 0)
       end
     end,
   })

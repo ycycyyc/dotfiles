@@ -63,7 +63,6 @@ function M.try_jumpto_ft_win(wanted)
   local win_nums = M.get_winnums_byft(wanted)
 
   if #win_nums == 0 then
-    vim.print("no " .. wanted .. " window found")
     return false
   end
 
