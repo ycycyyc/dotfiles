@@ -3,8 +3,6 @@ local buflisted = fn.buflisted ---@type fun(number:number):number
 local bufname_of = fn.bufname
 local utils = require "utils.theme"
 
-local originFileAndNum = "%{expand('%:~:.')}%m%h"
-
 local M = {
   refresh_cnt = 0, ---@type number
   costs = {}, ---@type number[]
@@ -20,13 +18,13 @@ local M = {
 }
 
 ---@param bufnr number
----@param iscur boolean
+---@param cur_buf_format string|nil
 ---@return string
-local colorfy_item = function(bufnr, iscur)
+local colorfy_item = function(bufnr, cur_buf_format)
   local filename ---@type string
   local theme
-  if iscur then
-    filename = originFileAndNum
+  if cur_buf_format then
+    filename = cur_buf_format
     theme = M.sel_theme
   else
     local bufname = bufname_of(bufnr)
@@ -64,17 +62,39 @@ local get_listedbufs = function()
   return bufnr_list, cur_index
 end
 
+local list_insert = function(list, new)
+  for i, l in ipairs(list) do
+    if l > new then
+      table.insert(list, i, new)
+      return i
+    end
+  end
+
+  table.insert(list, new)
+  return #list
+end
+
 ---@return string[]|nil
 local cal_fileitems = function()
   local bufnr_list, cur_index = get_listedbufs()
+  local cur_buf_format = "%{expand('%:~:.')}%m%h"
+
+  if not cur_index then
+    local n = vim.api.nvim_get_current_buf()
+    local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+
+    if ft == "terminal" then
+      cur_index = list_insert(bufnr_list, n)
+      cur_buf_format = "Terminal"
+    else
+      return nil
+    end
+  end
+
   local bufnr_list_len = #bufnr_list ---@type number
   require("yc.custom.line.nbuffers").update(bufnr_list_len) -- 如何让俩个模块不关联?
 
-  if not cur_index then
-    return nil
-  end
-
-  local colored_file_items = { colorfy_item(bufnr_list[cur_index], true) } ---@type string[]
+  local colored_file_items = { colorfy_item(bufnr_list[cur_index], cur_buf_format) }
   local total_sz = utils.evaluates_width(colored_file_items[1])
   local available_sz = _G.yc_statusline_avail_width()
 
@@ -82,7 +102,7 @@ local cal_fileitems = function()
   ---@param forward boolean
   ---@return boolean
   local try_add = function(index, forward)
-    local item = colorfy_item(bufnr_list[index], false)
+    local item = colorfy_item(bufnr_list[index])
     local sz = utils.evaluates_width(item)
     if total_sz + sz > available_sz then
       return false

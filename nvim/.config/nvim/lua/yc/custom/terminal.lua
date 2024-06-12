@@ -16,6 +16,10 @@ local function open_term(cmd, opts)
 
   local termkey = vim.inspect { cmd = cmd or "shell", cwd = opts.cwd, env = opts.env }
 
+  vim.defer_fn(function()
+    vim.api.nvim_exec_autocmds("User", { pattern = "LineRefresh" })
+  end, 0)
+
   if terminals[termkey] and terminals[termkey]:buf_valid() then
     terminals[termkey]:toggle()
   else
