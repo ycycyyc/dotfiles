@@ -8,18 +8,13 @@ local originFileAndNum = "%{expand('%:~:.')}%m%h"
 local M = {
   refresh_cnt = 0, ---@type number
   costs = {}, ---@type number[]
-  max_titles = 0,
+  max_items = 0,
 
-  cached_content = "", ---@type string
+  cached_str = "", ---@type string
 
-  sel_theme = "StatusLine",
-  theme = "StatusLine",
-  end_theme = "StatusLine",
-
-  ---@type function
-  max_width_cb = function()
-    return vim.o.columns
-  end,
+  sel_theme = "StatusLineCurFile",
+  theme = "StatusLineBufListNormal",
+  end_theme = "StatusLineNormal",
 
   nbuffers_cb = function(_) end,
 }
@@ -27,7 +22,7 @@ local M = {
 ---@param bufnr number
 ---@param iscur boolean
 ---@return string
-M.title = function(bufnr, iscur)
+local colorfy_item = function(bufnr, iscur)
   local filename ---@type string
   local theme
   if iscur then
@@ -42,92 +37,106 @@ M.title = function(bufnr, iscur)
     theme = M.theme
   end
 
-  -- local item = string.format(" %%%dT%s %d %s %%#StatusLine1#", bufnr, sel, bufnr, filename)
+  -- local item = string.format(" %%%dT%s %d %s %%#StatusLine1#", bufnr, sel, bufnr, filename) why ??
   local item = utils.add_theme(theme, string.format("%d %s", bufnr, filename), M.end_theme)
   item = string.format(" %%%dT%s", bufnr, item)
 
   return item
 end
 
-M.update = function()
-  local cur_bufnr = api.nvim_get_current_buf() ---@type number
-  local index_of_cur_buffer_in_bufflist ---@type number|nil
+---@return number[]
+---@return number|nil
+local get_listedbufs = function()
+  local cur_index ---@type number|nil
   local bufnr_list = {} ---@type number[]
 
+  local cur_bufnr = api.nvim_get_current_buf() ---@type number
   for bufnr = 1, vim.fn.bufnr "$" do
     if buflisted(bufnr) == 1 then
       table.insert(bufnr_list, bufnr)
 
       if cur_bufnr == bufnr then
-        index_of_cur_buffer_in_bufflist = #bufnr_list
+        cur_index = #bufnr_list
       end
     end
   end
 
-  local bufnr_list_len = #bufnr_list ---@type number
-  M.nbuffers_cb(bufnr_list_len)
+  return bufnr_list, cur_index
+end
 
-  if not index_of_cur_buffer_in_bufflist then
-    return
+---@return string[]|nil
+local cal_fileitems = function()
+  local bufnr_list, cur_index = get_listedbufs()
+  local bufnr_list_len = #bufnr_list ---@type number
+  require("yc.custom.line.nbuffers").update(bufnr_list_len) -- 如何让俩个模块不关联?
+
+  if not cur_index then
+    return nil
   end
 
-  local titles = {} ---@type string[]
-  table.insert(titles, M.title(cur_bufnr, true))
-
-  local total_sz = utils.evaluates_width(titles[1])
-
-  local l = index_of_cur_buffer_in_bufflist ---@type number
-  local r = index_of_cur_buffer_in_bufflist ---@type number
-  local max_len = M.max_width_cb() ---@type number
+  local colored_file_items = { colorfy_item(bufnr_list[cur_index], true) } ---@type string[]
+  local total_sz = utils.evaluates_width(colored_file_items[1])
+  local available_sz = _G.yc_statusline_avail_width()
 
   ---@param index number
-  ---@param after boolean
+  ---@param forward boolean
   ---@return boolean
-  local next_ok = function(index, after)
-    local t = M.title(bufnr_list[index], false)
-    local sz = utils.evaluates_width(t)
-    if total_sz + sz > max_len then
+  local try_add = function(index, forward)
+    local item = colorfy_item(bufnr_list[index], false)
+    local sz = utils.evaluates_width(item)
+    if total_sz + sz > available_sz then
       return false
     end
     total_sz = total_sz + sz
 
-    if after == true then
-      table.insert(titles, t)
+    if forward == true then
+      table.insert(colored_file_items, item)
     else
-      table.insert(titles, 1, t)
+      table.insert(colored_file_items, 1, item)
     end
-
     return true
   end
 
-  while l ~= 1 or r ~= bufnr_list_len do
-    if r + 1 <= bufnr_list_len then
-      if next_ok(r + 1, true) == false then
+  local left = cur_index - 1
+  local right = cur_index + 1
+
+  while left >= 1 or right <= bufnr_list_len do
+    if right <= bufnr_list_len then
+      if not try_add(right, true) then
         break
       end
-      r = r + 1
+      right = right + 1
     end
 
-    if l - 1 >= 1 then
-      if next_ok(l - 1, false) == false then
+    if left >= 1 then
+      if not try_add(left, false) then
         break
       end
-      l = l - 1
+      left = left - 1
     end
   end
 
-  if #titles > M.max_titles then
-    M.max_titles = #titles
+  return colored_file_items
+end
+
+local update_cached_content = function()
+  local colored_file_items = cal_fileitems()
+  if not colored_file_items then
+    return
   end
 
-  M.cached_content = table.concat(titles)
+  if #colored_file_items > M.max_items then
+    M.max_items = #colored_file_items
+  end
+
+  M.cached_str = table.concat(colored_file_items)
 end
 
 M.refresh = function()
   M.refresh_cnt = M.refresh_cnt + 1
   local start = vim.fn.reltime()
 
-  M.update()
+  update_cached_content()
 
   local cost = vim.fn.reltimestr(vim.fn.reltime(start))
 
@@ -162,14 +171,7 @@ M.start = function()
 end
 
 ---@return number
-M.width = function()
-  return 0
-end
-
----@return string
-M.to_string = function()
-  return M.cached_content
-end
+M.width = 0
 
 ---@return string
 M.metrics = function()
@@ -185,7 +187,7 @@ M.metrics = function()
     "[BufferList refresh cnt: %d average cost: %s, max items: %d ]",
     M.refresh_cnt,
     tostring(av),
-    M.max_titles
+    M.max_items
   )
 end
 

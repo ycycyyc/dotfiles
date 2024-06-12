@@ -2,12 +2,10 @@ local utils = require "utils.theme"
 
 local M = {
   update_cnt = 0,
-  cached_content = "", ---@type string
-  theme = "StatusLine", ---@type string
-  end_theme = "StatusLine", ---@type string
+  cached_str = "No Buffer", ---@type string
+  theme = "NumberBuffers",
+  end_theme = "StatusLineNormal",
 }
-
-M.start = function() end
 
 ---@param n number
 M.update = function(n)
@@ -19,17 +17,7 @@ M.update = function(n)
     c = string.format(" %d Buffers ", n)
   end
 
-  M.cached_content = utils.add_theme(M.theme, c, M.end_theme)
-end
-
----@return number
-M.width = function()
-  return utils.evaluates_width(M.cached_content)
-end
-
----@return string
-M.to_string = function()
-  return M.cached_content
+  M.cached_str = utils.add_theme(M.theme, c, M.end_theme)
 end
 
 ---@return string

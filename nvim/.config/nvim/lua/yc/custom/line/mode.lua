@@ -3,7 +3,7 @@ local utils = require "utils.theme"
 
 local M = {
   refresh_cnt = 0, ---@type integer
-  cached_content = "", ---@type string
+  cached_str = "", ---@type string
   end_theme = "StatusLine1", ---@type string
 }
 
@@ -114,7 +114,7 @@ M.refresh = function()
     stylecache[m] = utils.add_theme(style, msg, M.end_theme)
   end
 
-  M.cached_content = stylecache[m]
+  M.cached_str = stylecache[m]
 end
 
 local started = false
@@ -124,7 +124,7 @@ M.start = function()
     return
   end
 
-  if M.cached_content == "" then
+  if M.cached_str == "" then
     M.refresh()
   end
 
@@ -133,16 +133,6 @@ M.start = function()
       M.refresh()
     end,
   })
-end
-
----@return number
-M.width = function()
-  return wid
-end
-
----@return string
-M.to_string = function()
-  return M.cached_content
 end
 
 ---@return string

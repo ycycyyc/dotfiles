@@ -1,106 +1,86 @@
 local utils = require "utils.theme"
-
+local helper = require "utils.helper"
 local env = require("basic.env").env
 
-local redraw = function() end
-local redrawCnt = 0
+local module_prefix = "yc.custom.line."
 
-local M = {}
+local componentNames = { "mode", "githead", "gitinfo", "alig", "bufferlist", "alig", "off", "nbuffers" }
+local components = {}
 
-local L = {
-  cached_content = utils.add_theme("StatusLineTotalLine", " %l of %L ", "StatusLineNormal"),
+---@return number
+function _G.yc_statusline_avail_width()
+  local w = 0
+  for _, c in ipairs(components) do
+    if c.width then
+      w = w + c.width
+    else
+      w = w + utils.evaluates_width(c.cached_str)
+    end
+  end
+  return vim.o.columns - 10 - w -- 10是padding的长度
+end
+
+---@return string
+function _G.yc_statusline()
+  local res = {}
+  for _, c in ipairs(components) do
+    table.insert(res, c.cached_str)
+  end
+  return table.concat(res)
+end
+
+local refreshCnt = 0
+local refresh = function()
+  refreshCnt = refreshCnt + 1
+  for _, c in ipairs(components) do
+    if c.refresh and type(c.refresh) == "function" then
+      c.refresh()
+    end
+  end
+  vim.opt.statusline = "%!v:lua.yc_statusline()"
+end
+
+local stats = function()
+  local msg = { "[refreshCnt:" .. tostring(refreshCnt) .. "]" }
+  for _, c in ipairs(components) do
+    if c.metrics then
+      table.insert(msg, c.metrics())
+    end
+  end
+  vim.notify(vim.inspect(msg))
+end
+
+local M = {
+  user_cmds = { { "ShowLineStats", stats, {} } },
 }
-
-L.to_string = function()
-  return L.cached_content
-end
-
-L.width = function()
-  return utils.evaluates_width(L.cached_content)
-end
-
-M.coc_setup = function() end
 
 M.setup = function()
   vim.opt.laststatus = 3
   vim.opt.showmode = false
 
-  vim.cmd [[
-      augroup nobuflisted
-        autocmd!
-        autocmd FileType qf set nobuflisted
-        autocmd FileType fugitive set nobuflisted
-      augroup END
-  ]]
-
-  local mode = require "yc.custom.line.mode"
-  mode.start()
-
-  local git = require "yc.custom.line.git"
-  git.theme = "StatusLineBufListNormal"
-  git.end_theme = "StatusLineNormal"
-  git.start()
-
-  local nbuffers = require "yc.custom.line.nbuffers"
-  nbuffers.theme = "NumberBuffers"
-  nbuffers.end_theme = "StatusLineNormal"
-  nbuffers.start()
-
-  local bufferlist = require "yc.custom.line.bufferlist"
-  bufferlist.sel_theme = "StatusLineCurFile"
-  bufferlist.theme = "StatusLineBufListNormal"
-  bufferlist.end_theme = "StatusLineNormal"
-  bufferlist.start()
-
-  ---@return number
-  local max_width = function()
-    return vim.o.columns - mode.width() - nbuffers.width() - L.width() - git.width() - 10
+  for _, name in ipairs(componentNames) do
+    local component = require(module_prefix .. name)
+    table.insert(components, component)
+    if component.start then
+      component.start()
+    end
   end
 
-  bufferlist.max_width_cb = max_width
-  bufferlist.nbuffers_cb = nbuffers.update
-
-  function _G.yc_statusline()
-    return mode.to_string()
-      .. git.to_string()
-      .. "%="
-      .. bufferlist.to_string()
-      .. "%="
-      .. L.to_string()
-      .. nbuffers.to_string()
-  end
-
-  redraw = function()
-    redrawCnt = redrawCnt + 1
-    bufferlist.refresh()
-    vim.opt.statusline = "%!v:lua.yc_statusline()"
-  end
-  redraw()
+  refresh()
 
   vim.api.nvim_create_autocmd("User", {
     pattern = "LineRefresh",
     callback = function()
       vim.schedule(function()
-        redraw()
+        refresh()
       end)
     end,
   })
 
-  vim.api.nvim_create_user_command("ShowStatuslineStats", function()
-    vim.print(
-      string.format(
-        "[StatusLine] %s %s %s %s %s",
-        mode.metrics(),
-        git.metrics(),
-        nbuffers.metrics(),
-        bufferlist.metrics(),
-        string.format("[redrawCnt: %d ]", redrawCnt)
-      )
-    )
-  end, {})
+  helper.setup_m(M)
 
   if env.coc then
-    require("yc.line.coc_winbar").init()
+    require(module_prefix .. "coc_winbar").start()
   end
 end
 

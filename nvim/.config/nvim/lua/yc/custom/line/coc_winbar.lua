@@ -62,7 +62,7 @@ M.update = function(winnr)
       return
     end
 
-    local content = ""
+    local str = ""
 
     local filename = vim.fn.expand "%:t"
     if ignore_filename[filename] then
@@ -70,15 +70,15 @@ M.update = function(winnr)
     end
     filename = utils.add_theme("StatusLineCurFile", filename, "StatusLineNormal")
 
-    content = filename .. M.diagnostic_info() .. M.func()
+    str = filename .. M.diagnostic_info() .. M.func()
 
     local winnr_str = utils.add_theme("StatusLineWinnr", "%{winnr()} ", "StatusLineNormal")
 
-    vim.wo[winnr].winbar = winnr_str .. content
+    vim.wo[winnr].winbar = winnr_str .. str
   end, 100)
 end
 
-M.init = function()
+M.start = function()
   vim.api.nvim_create_autocmd({ "CursorHold", "BufEnter" }, {
     callback = function()
       M.update()
