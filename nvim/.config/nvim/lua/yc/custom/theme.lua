@@ -241,7 +241,7 @@ local function default_theme()
   colors["@lsp.type.parameter"] = { fg = white, bold = true }
   colors["@lsp.type.namespace"] = { fg = red }
   colors["@lsp.type.namespace.cpp"] = { fg = red, bold = true }
-  colors["@lsp.type.macro.cpp"] = { fg = blue }
+  colors["@lsp.type.macro.cpp"] = { fg = blue, bold = true }
   colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
   colors["@lsp.mod.readonly.go"] = { fg = cyan }
 
