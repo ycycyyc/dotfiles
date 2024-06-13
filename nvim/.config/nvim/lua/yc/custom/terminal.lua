@@ -31,6 +31,14 @@ local function open_term(cmd, opts)
       terminals[termkey]:toggle()
     end, { buffer = buf, nowait = true })
 
+    vim.keymap.set("n", "gf", function()
+      local f = vim.fn.findfile(vim.fn.expand "<cfile>")
+      if f ~= "" then
+        vim.cmd "close"
+        vim.cmd("e " .. f)
+      end
+    end, { buffer = buf })
+
     vim.api.nvim_create_autocmd("BufEnter", {
       buffer = buf,
       callback = function()

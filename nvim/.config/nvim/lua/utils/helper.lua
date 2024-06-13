@@ -144,7 +144,7 @@ end
 ---@param initfuncs table
 local function setup_initfuncs(initfuncs)
   for _, initfunc in ipairs(initfuncs) do
-    require("utils.initfunc").add_filetypes_initfunc(initfunc[1], initfunc[2])
+    require("utils.initfunc").add(initfunc[1], initfunc[2])
   end
 end
 

@@ -1,48 +1,28 @@
----@type table<string, function[]>
-local filetype_initfuncs = {}
+local group = vim.api.nvim_create_augroup("lang_initfunc", { clear = true })
+
+---@param lang string
+---@param initfunc function
+local add = function(lang, initfunc)
+  local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+  if ft == lang then
+    initfunc()
+  end
+
+  vim.api.nvim_create_autocmd("FileType", { group = group, pattern = { lang }, callback = initfunc })
+end
 
 local M = {}
 
-local refresh_initfunc = function()
-  local group = vim.api.nvim_create_augroup("filetype_initfunc", { clear = true })
-  for filetype, initfuncs in pairs(filetype_initfuncs) do
-    vim.api.nvim_create_autocmd("FileType", {
-      pattern = { filetype },
-      callback = function()
-        for _, initfunc in ipairs(initfuncs) do
-          initfunc()
-        end
-      end,
-      group = group,
-    })
-  end
-end
-
----@param filetypes string | string[]
----@param initfunc fun()
-M.add_filetypes_initfunc = function(filetypes, initfunc)
-  if type(filetypes) == "string" then
-    filetypes = { filetypes }
+---@param langs string | string[]
+---@param initfunc function
+M.add = function(langs, initfunc)
+  if type(langs) == "string" then
+    langs = { langs }
   end
 
-  ---@param ft string
-  local add_initfunc = function(ft)
-    if filetype_initfuncs[ft] == nil then
-      filetype_initfuncs[ft] = {}
-    end
-    table.insert(filetype_initfuncs[ft], initfunc)
-
-    -- 这里比较重要，直接打开文件的话， 可能第一个文件没有设置参数
-    if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == ft then
-      initfunc()
-    end
+  for _, lang in ipairs(langs) do
+    add(lang, initfunc)
   end
-
-  for _, ft in ipairs(filetypes) do
-    add_initfunc(ft)
-  end
-
-  refresh_initfunc()
 end
 
 return M
