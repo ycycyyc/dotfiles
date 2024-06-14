@@ -128,15 +128,14 @@ local lsp_plugins = {
     "kyazdani42/nvim-tree.lua",
     keys = lazy_keys "plugin.tree",
     config = require("plugin.tree").config,
-    cond = not env.minifiles,
+    cond = not env.oil,
   },
 
   {
-    "echasnovski/mini.files",
-    version = "*",
-    keys = lazy_keys "plugin.mini",
-    config = require("plugin.mini").config,
-    cond = env.minifiles,
+    "stevearc/oil.nvim",
+    keys = lazy_keys "plugin.oil",
+    config = require("plugin.oil").config,
+    cond = env.oil,
   },
 
   {
