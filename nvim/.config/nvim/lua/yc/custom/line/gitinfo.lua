@@ -34,7 +34,7 @@ local get_info = function()
   return table.concat(res, " ")
 end
 
-local refersh = function()
+local refresh = function()
   M.update_cnt = M.update_cnt + 1
 
   local info = get_info()
@@ -44,10 +44,10 @@ end
 M.start = function()
   vim.api.nvim_create_autocmd("User", {
     pattern = "GitSignsUpdate",
-    callback = function()
-      refersh()
-    end,
+    callback = refresh,
   })
+
+  vim.api.nvim_create_autocmd({ "BufEnter" }, { callback = refresh })
 end
 
 ---@return string
