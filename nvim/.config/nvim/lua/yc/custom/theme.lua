@@ -271,6 +271,11 @@ local function default_theme()
 
   -- " 0.10
   hl(0, "NormalFloat", { link = "Pmenu" })
+
+  -- float window
+  hl(0, "FloatBorder", { link = "clear" })
+  hl(0, "FloatTitle", { cterm = { bold = true }, ctermfg = 204 })
+
   hl(0, "IncSearch", { cterm = { reverse = true } })
   hl(0, "FlashLabel", { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 })
 
