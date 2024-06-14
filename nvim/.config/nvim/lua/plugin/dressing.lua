@@ -30,7 +30,19 @@ end
 
 M.config = function()
   require("dressing").setup {
-    select = { backend = { "builtin" } },
+    select = {
+      builtin = {
+        win_options = {
+          winhighlight = "Normal:LazyNormal",
+        },
+      },
+      backend = { "builtin" },
+    },
+    input = {
+      win_options = {
+        winhighlight = "Normal:LazyNormal",
+      },
+    },
   }
 
   helper.setup_m(M)
