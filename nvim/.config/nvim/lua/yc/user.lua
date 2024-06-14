@@ -10,8 +10,8 @@ local M = {
     {
       "qf",
       function()
-        vim.cmd.wincmd "J"
         buf_map("n", "q", ":q<cr>")
+        vim.cmd.wincmd "J"
       end,
     },
     {

@@ -223,6 +223,13 @@ local lsp_plugins = {
     config = require("plugin.noice").config,
     cond = env.noice,
   },
+
+  {
+    "stevearc/dressing.nvim",
+    lazy = true,
+    init = require("plugin.dressing").init,
+    config = require("plugin.dressing").config,
+  },
 }
 
 M.setup = function()
