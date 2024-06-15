@@ -106,9 +106,9 @@ M.config = function()
 
           local set = function(title)
             if title == "" then
-              title = string.format(" %s ", cur_dir)
+              title = string.format(" %s/ ", cur_dir)
             else
-              title = string.format(" %s ▸ %s ", cur_dir, title)
+              title = string.format(" %s/ ▸ %s/ ", cur_dir, title)
             end
             local config = vim.api.nvim_win_get_config(winid)
             local new_config = vim.tbl_deep_extend("force", config, {
