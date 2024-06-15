@@ -40,7 +40,7 @@ M.config = function()
     },
     use_default_keymaps = false,
     win_options = {
-      winhighlight = "Normal:LazyNormal",
+      winhighlight = "Normal:MyFloatNormal",
     },
     float = {
       padding = 4,

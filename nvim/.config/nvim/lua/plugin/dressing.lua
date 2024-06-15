@@ -33,14 +33,14 @@ M.config = function()
     select = {
       builtin = {
         win_options = {
-          winhighlight = "Normal:LazyNormal",
+          winhighlight = "Normal:MyFloatNormal",
         },
       },
       backend = { "builtin" },
     },
     input = {
       win_options = {
-        winhighlight = "Normal:LazyNormal",
+        winhighlight = "Normal:MyFloatNormal",
       },
     },
   }

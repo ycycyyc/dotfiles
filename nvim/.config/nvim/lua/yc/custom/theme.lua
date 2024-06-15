@@ -115,6 +115,7 @@ local colors = {
   TabLine = { bg = menu_grey, fg = white },
 
   NvimTreeCursorLine = { bg = menu_grey },
+  NvimTreeRootFolder = { fg = yellow, cterm = { bold = true } },
 
   cStructure = { fg = purple },
   cBlock = { fg = white },
@@ -273,18 +274,25 @@ local function default_theme()
   hl(0, "NormalFloat", { link = "Pmenu" })
 
   -- float window
-  hl(0, "FloatBorder", { link = "clear" })
   hl(0, "FloatTitle", { cterm = { bold = true }, ctermfg = 204 })
 
   hl(0, "IncSearch", { cterm = { reverse = true } })
   hl(0, "FlashLabel", { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 })
 
-  hl(0, "LazyNormal", { link = "clear" })
-  hl(0, "SnippetTabstop", { link = "clear" })
-
   for name, opt in pairs(colors) do
     local o = convert(opt)
     hl(0, name, o)
+  end
+
+  local clear_hl = {
+    "MyFloatNormal",
+    "LazyNormal",
+    "NvimTreeNormalFloat",
+    "SnippetTabstop",
+    "FloatBorder",
+  }
+  for _, h in ipairs(clear_hl) do
+    hl(0, h, { link = "clear" })
   end
 end
 
