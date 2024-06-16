@@ -290,6 +290,8 @@ local function default_theme()
     "NvimTreeNormalFloat",
     "SnippetTabstop",
     "FloatBorder",
+    "CocExplorerNormalFloat",
+    "CocExplorerNormalFloatBorder",
   }
   for _, h in ipairs(clear_hl) do
     hl(0, h, { link = "clear" })

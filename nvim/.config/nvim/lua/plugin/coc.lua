@@ -34,7 +34,8 @@ local M = {
     { "n", keys.toggle_symbol, ":CocOutline<cr>", {} },
 
     -- coc-explorer
-    { "n", keys.toggle_dir, ":CocCommand explorer<cr>", {} },
+    { "n", keys.toggle_dir, ":CocCommand explorer --preset floating<cr>", {} },
+    { "n", keys.toggle_dir_open_file, ":CocCommand explorer --preset floating --reveal-when-open<cr>", {} },
   },
   initfuncs = {
     {
@@ -64,6 +65,41 @@ local M = {
       "coctree",
       function()
         buf_map("n", "q", ":q<cr>")
+      end,
+    },
+    {
+      "coc-explorer",
+      function()
+        local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+        local bufnr = vim.api.nvim_get_current_buf()
+
+        vim.api.nvim_create_autocmd("CursorMoved", {
+          group = vim.api.nvim_create_augroup("show_dir_coc_explorer", { clear = true }),
+          buffer = bufnr,
+          callback = function(args)
+            local info = vim.fn["CocAction"]("runCommand", "explorer.getNodeInfo", 0)
+            if info == vim.NIL then
+              return
+            end
+
+            local set = function(title)
+              local winid = vim.api.nvim_get_current_win()
+              local config = vim.api.nvim_win_get_config(winid)
+              local new_config = vim.tbl_deep_extend("force", config, {
+                title = title,
+                border = "rounded",
+              })
+              vim.api.nvim_win_set_config(winid, new_config)
+            end
+
+            if info and info.fullpath then
+              local is = vim.fn.split(info.fullpath, "/")
+              table.remove(is, #is)
+              local path = table.concat(is, "/")
+              set(path)
+            end
+          end,
+        })
       end,
     },
   },
@@ -137,6 +173,13 @@ M.config = function()
   -- snippet
   vim.g.coc_snippet_next = "<TAB>"
   vim.g.coc_snippet_prev = "<S-TAB>"
+
+  vim.g.coc_explorer_global_presets = {
+    floating = {
+      position = "floating",
+      ["open-action-strategy"] = "sourceWindow",
+    },
+  }
 
   -- coc settings
   vim.opt.pumheight = 10

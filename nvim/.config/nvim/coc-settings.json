@@ -93,12 +93,16 @@
     },
     "explorer.git.enable": false,
     "explorer.file.reveal.whenOpen": false,
+    "explorer.floating.border.enable": false,
     "explorer.filename.colored.enable": false,
     "explorer.file.child.template": "[git | 2] [selection | clip | 1] [indent][icon | 1] [filename omitCenter 1][modified][readonly] [linkIcon & 1][link growRight 1 omitCenter 5]",
+    "explorer.floating.width": -50,
     "explorer.keyMappings.global": {
         "f": "searchRecursive",
         "th": "toggleHidden",
         "<c-v>": "open:vsplit",
+        "<c-l>": ["wait", "expanded?", "collapse", "expand"]
+        "<c-h>": ["wait", "collapse"],
         "<cr>": [
             "wait",
             "expandable?",
