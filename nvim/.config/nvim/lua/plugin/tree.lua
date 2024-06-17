@@ -38,6 +38,9 @@ M.config = function()
       },
     },
     view = {
+      number = true,
+      relativenumber = true,
+      signcolumn = "auto",
       float = {
         enable = true,
         open_win_config = function()
