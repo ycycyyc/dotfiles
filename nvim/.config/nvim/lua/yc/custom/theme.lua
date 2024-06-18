@@ -105,6 +105,8 @@ local colors = {
 
   Visual = { bg = virtual_grey }, -- 0.10 version
 
+  Title = { fg = red, cterm = { bold = true } },
+
   DiagnosticInfo = { fg = blue },
   DiagnosticHint = { fg = blue },
   CmpItemAbbrMatch = { fg = yellow },
@@ -246,6 +248,7 @@ local function default_theme()
   colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
   colors["@lsp.mod.readonly.go"] = { fg = cyan }
 
+
   -- cpp
   hl(0, "cppStructure", { link = "Keyword" })
   hl(0, "cStorageClass", { link = "Keyword" })
@@ -292,6 +295,7 @@ local function default_theme()
     "FloatBorder",
     "CocExplorerNormalFloat",
     "CocExplorerNormalFloatBorder",
+    "@markup.raw.block.markdown",
   }
   for _, h in ipairs(clear_hl) do
     hl(0, h, { link = "clear" })
