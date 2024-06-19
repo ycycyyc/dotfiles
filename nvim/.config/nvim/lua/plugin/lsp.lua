@@ -57,6 +57,7 @@ local attach_confs = {
       [keys.lsp_format] = { conform_format },
     },
   },
+  rust_analyzer = {},
 }
 
 local servers = {
@@ -132,6 +133,7 @@ local servers = {
     },
     single_file_support = true,
   },
+  rust_analyzer = {},
 }
 
 M.config = function()
@@ -166,20 +168,6 @@ M.config = function()
     -- 3. 再加上每个lsp-server特有的配置
     lspconfig[name].setup(vim.tbl_deep_extend("error", opt, d_opt, a_opt))
   end
-end
-
-M.rust_config = function()
-  local rt = require "rust-tools"
-  rt.setup {
-    server = {
-      on_attach = ulsp.build_on_attach_func {
-        keymaps = {
-          [keys.lsp_hover] = { rt.hover_actions.hover_actions, "n" },
-          [keys.lsp_code_action] = { rt.code_action_group.code_action_group, "n" },
-        },
-      },
-    },
-  }
 end
 
 return M

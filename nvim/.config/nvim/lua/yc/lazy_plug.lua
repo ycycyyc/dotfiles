@@ -202,12 +202,6 @@ local lsp_plugins = {
   },
 
   {
-    "simrat39/rust-tools.nvim",
-    ft = "rust",
-    config = require("plugin.lsp").rust_config,
-  },
-
-  {
     "stevearc/conform.nvim",
     lazy = true,
     config = require("plugin.format").config,
