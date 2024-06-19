@@ -223,6 +223,12 @@ local lsp_plugins = {
     init = require("plugin.dressing").init,
     config = require("plugin.dressing").config,
   },
+
+  {
+    "mrcjkb/rustaceanvim",
+    ft = "rust",
+    config = require("plugin.rust").config,
+  },
 }
 
 M.setup = function()

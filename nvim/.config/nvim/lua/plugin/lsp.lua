@@ -57,7 +57,6 @@ local attach_confs = {
       [keys.lsp_format] = { conform_format },
     },
   },
-  rust_analyzer = {},
 }
 
 local servers = {
@@ -133,7 +132,6 @@ local servers = {
     },
     single_file_support = true,
   },
-  rust_analyzer = {},
 }
 
 M.config = function()
