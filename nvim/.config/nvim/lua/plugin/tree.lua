@@ -5,16 +5,14 @@ local M = {
   keymaps = {
     {
       "n",
-      keys.toggle_dir,
+      keys.toggle_dir_open_file,
       "<cmd>NvimTreeToggle<cr>",
       {},
     },
     {
       "n",
-      keys.toggle_dir_open_file,
-      function()
-        require("nvim-tree.api").tree.open { find_file = true }
-      end,
+      keys.toggle_dir,
+      "<cmd>NvimTreeFindFileToggle<cr>",
       {},
     },
   },

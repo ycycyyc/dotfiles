@@ -25,6 +25,14 @@ local M = {
       end,
       {},
     },
+    {
+      "n",
+      keys.toggle_dir_open_file,
+      function()
+        require("oil").toggle_float "."
+      end,
+      {},
+    },
   },
 }
 
