@@ -32,6 +32,7 @@ M.config = function()
   require("dressing").setup {
     select = {
       builtin = {
+        relative = "cursor",
         win_options = {
           winhighlight = "Normal:MyFloatNormal",
         },
