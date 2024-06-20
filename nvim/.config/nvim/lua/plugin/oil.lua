@@ -36,8 +36,28 @@ local M = {
   },
 }
 
+local type_hlgroups = setmetatable({
+  ["▸"] = "Directory",
+}, {
+  __index = function()
+    return "OilTypeFile"
+  end,
+})
+
 M.config = function()
   require("oil").setup {
+    columns = {
+      {
+        "type",
+        icons = {
+          directory = "▸",
+          file = "",
+        },
+        highlight = function(type_str)
+          return type_hlgroups[type_str]
+        end,
+      },
+    },
     default_file_explorer = false,
     keymaps = {
       ["<CR>"] = "actions.select",
