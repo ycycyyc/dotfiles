@@ -101,7 +101,7 @@
         "f": "searchRecursive",
         "th": "toggleHidden",
         "<c-v>": "open:vsplit",
-        "<c-l>": ["wait", "expanded?", "collapse", "expand"]
+        "<c-l>": ["wait", "expanded?", "collapse", "expand"],
         "<c-h>": ["wait", "collapse"],
         "<cr>": [
             "wait",
