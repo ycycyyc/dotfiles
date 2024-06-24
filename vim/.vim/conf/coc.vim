@@ -70,7 +70,8 @@ nnoremap <silent> [c <Plug>(coc-git-prevchunk)
 nnoremap <silent> <leader>hu :CocCommand git.chunkUndo<cr>
 nnoremap <silent> <leader>hp :CocCommand git.chunkInfo<cr>
 
-nnoremap <leader>n :CocCommand explorer<cr>
+nnoremap <leader>N :CocCommand explorer --preset floating<cr>
+nnoremap <leader>n :CocCommand explorer --preset floating --reveal-when-open<cr>
 nnoremap <leader>c :CocCommand clangd.switchSourceHeader<cr>
 
 " hi coc
@@ -80,21 +81,25 @@ hi link CocInfoHighlight  CocBold
 hi link CocHintHighlight   CocBold
 
 let g:coc_default_semantic_highlight_groups=0
-hi default link CocSemType Type
-hi default link CocSemClass Type
-hi default link CocSemEnum Type
-hi default CocSemNamespace ctermfg=204
-hi default CocSemProperty ctermfg=204
-" hi default CocSemNamespace ctermfg=170
-hi default link CocSemFunction Function
-hi default link CocSemMethod Function
-hi default link CocSemKeyword Keyword
-hi default link CocSemEnumMember Constant
-hi default link CocSemModifier StorageClass
-hi default link CocSemMacro PreProc
-" hi CocSemProperty ctermfg=204
-hi default link CocSemProperty Function
-hi default link CocSemOperator Operator
+
+hi default CocSemTypeEnum ctermfg=180
+hi default CocSemTypeClass ctermfg=180
+hi default CocSemTypeType ctermfg=180
+hi default CocSemTypeParameter cterm=bold ctermfg=145
+hi default CocSemTypeNamespace ctermfg=204
+hi default CocSemTypeProperty ctermfg=204
+hi default CocSemTypeFunction ctermfg=39
+hi default CocSemTypeMethod ctermfg=39
+hi default CocSemTypeProperty ctermfg=39
+
+hi default CocSemTypeVariable ctermfg=145
+
+hi default link CocSemTypeKeyword Keyword
+hi default link CocSemTypeEnumMember Constant
+hi default link CocSemTypeModifier StorageClass
+hi default link CocSemTypeMacro PreProc
+
+hi default link CocSemTypeOperator Operator
 
 hi default link cStructure Statement
 hi default link cppStructure Statement
@@ -103,3 +108,5 @@ hi default link cppStorageClass Statement
 hi default link cppModifier Statement
 hi cType ctermfg=170
 hi cppType ctermfg=170
+
+hi default link goBlock CocSemTypeVariable
