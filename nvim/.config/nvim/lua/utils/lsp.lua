@@ -91,10 +91,21 @@ local default_lsp_config = function()
       [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
       [keys.lsp_hover] = { vim.lsp.buf.hover },
       [keys.lsp_rename] = { vim.lsp.buf.rename },
-      [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
       [keys.lsp_range_format] = { function() end, "x" },
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev },
       [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next },
+
+      [keys.lsp_signature_help] = {
+        function()
+          local cmp = require "cmp"
+          if cmp.visible() then
+            cmp.close()
+          end
+          vim.lsp.buf.signature_help()
+        end,
+        "i",
+      },
+
       [keys.lsp_toggle_inlay_hint] = {
         function()
           if vim.lsp.inlay_hint then
