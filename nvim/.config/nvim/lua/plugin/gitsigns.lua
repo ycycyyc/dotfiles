@@ -12,7 +12,7 @@ M.config = function()
       topdelete = { text = "‾" },
       changedelete = { text = "_" },
     },
-
+    signs_staged_enable = false,
     on_attach = function(bufnr)
       local gs = package.loaded.gitsigns
 
