@@ -70,9 +70,9 @@ nnoremap <silent> [c <Plug>(coc-git-prevchunk)
 nnoremap <silent> <leader>hu :CocCommand git.chunkUndo<cr>
 nnoremap <silent> <leader>hp :CocCommand git.chunkInfo<cr>
 
-nnoremap <leader>N :CocCommand explorer --preset floating<cr>
-nnoremap <leader>n :CocCommand explorer --preset floating --reveal-when-open<cr>
-nnoremap <leader>c :CocCommand clangd.switchSourceHeader<cr>
+nnoremap <silent> <leader>N :CocCommand explorer <cr>
+nnoremap <silent> <leader>n :CocCommand explorer --reveal-when-open<cr>
+nnoremap <silent> <leader>c :CocCommand clangd.switchSourceHeader<cr>
 
 " hi coc
 hi link CocErrorHighlight   CocBold
