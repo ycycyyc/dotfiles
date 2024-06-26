@@ -138,8 +138,6 @@ M.config = function()
   local lspconfig = require "lspconfig"
 
   vim.lsp.set_log_level "OFF"
-  vim.lsp.handlers["textDocument/publishDiagnostics"] =
-    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { underline = false })
 
   for name, opt in pairs(servers) do
     -- 1. 默认的配置
@@ -166,6 +164,12 @@ M.config = function()
     -- 3. 再加上每个lsp-server特有的配置
     lspconfig[name].setup(vim.tbl_deep_extend("error", opt, d_opt, a_opt))
   end
+
+  -- 4. vim.diagnostics
+  vim.diagnostic.config {
+    underline = false,
+    signs = false,
+  }
 end
 
 return M
