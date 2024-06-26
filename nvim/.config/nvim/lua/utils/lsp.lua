@@ -16,6 +16,10 @@ end
 
 local M = {
   lsp_method = {
+    -- 默认方法, 后续会被插件覆盖（fzf-lua)
+    definition = vim.lsp.buf.definition,
+    references = vim.lsp.buf.references,
+    impl = vim.lsp.buf.implementation,
     code_action = vim.lsp.buf.code_action,
     format = sync_format_save,
   },
@@ -77,17 +81,18 @@ local default_lsp_config = function()
   return {
     auto_format = false,
     keymaps = {
+      [keys.lsp_goto_definition] = { M.lsp_method.definition },
+      [keys.lsp_goto_references] = { M.lsp_method.references },
+      [keys.lsp_format] = { M.lsp_method.format },
+      [keys.lsp_impl] = { M.lsp_method.impl },
+      [keys.lsp_code_action] = { M.lsp_method.code_action },
+
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
-      [keys.lsp_goto_definition] = { vim.lsp.buf.definition },
-      [keys.lsp_goto_references] = { vim.lsp.buf.references },
       [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
       [keys.lsp_hover] = { vim.lsp.buf.hover },
-      [keys.lsp_impl] = { vim.lsp.buf.implementation },
       [keys.lsp_rename] = { vim.lsp.buf.rename },
       [keys.lsp_signature_help] = { vim.lsp.buf.signature_help, "i" },
-      [keys.lsp_format] = { M.lsp_method.format },
       [keys.lsp_range_format] = { function() end, "x" },
-      [keys.lsp_code_action] = { M.lsp_method.code_action },
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev },
       [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next },
       [keys.lsp_toggle_inlay_hint] = {
