@@ -64,6 +64,7 @@ M.config = function()
       ["<c-l>"] = "actions.select",
       ["<c-h>"] = "actions.parent",
       ["<c-r>"] = "actions.open_cwd",
+      ["<C-p>"] = "actions.preview",
       ["<C-v>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
     },
     use_default_keymaps = false,
