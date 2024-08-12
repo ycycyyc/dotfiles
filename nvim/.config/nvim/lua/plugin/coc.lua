@@ -34,8 +34,8 @@ local M = {
     { "n", keys.toggle_symbol, ":CocOutline<cr>", {} },
 
     -- coc-explorer
-    { "n", keys.toggle_dir_open_file, ":CocCommand explorer --preset floating<cr>", {} },
-    { "n", keys.toggle_dir, ":CocCommand explorer --preset floating --reveal-when-open<cr>", {} },
+    -- { "n", keys.toggle_dir_open_file, ":CocCommand explorer --preset floating<cr>", {} },
+    -- { "n", keys.toggle_dir, ":CocCommand explorer --preset floating --reveal-when-open<cr>", {} },
   },
   initfuncs = {
     {
@@ -157,7 +157,7 @@ M.config = function()
     "coc-clangd",
     "coc-marketplace",
     -- "coc-yank",
-    "coc-explorer",
+    -- "coc-explorer",
     "coc-json",
     "coc-yaml",
   }
