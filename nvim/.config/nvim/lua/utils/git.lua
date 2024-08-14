@@ -51,6 +51,26 @@ local git_async = function(args, on_ok, on_err)
     :start()
 end
 
+---@param args string[]
+---@param on_ok function
+---@param on_err function | nil
+local git_sync = function(args, on_ok, on_err)
+  local job = require "plenary.job"
+  local jn = job:new {
+    command = "git",
+    args = args,
+    on_exit = function(j, exit_code)
+      if exit_code ~= 0 then
+        on_err = on_err or function() end
+        on_err()
+        return
+      end
+      on_ok(j:result())
+    end,
+  }
+  jn:sync()
+end
+
 ---@param on_ok function
 ---@param on_err function | nil
 M.head_async = function(on_ok, on_err)
@@ -76,6 +96,22 @@ M.gitpath_async = function(on_ok, on_err)
     local gitpath = table.concat(res, "\n")
     on_ok(gitpath)
   end, on_err)
+end
+
+---@return string
+M.head = function()
+  local args = {}
+  table.insert(args, "rev-parse")
+  table.insert(args, "--abbrev-ref")
+  table.insert(args, "HEAD")
+
+  local res = ""
+  git_sync(args, function(r)
+    if #r > 0 then
+      res = r[1]
+    end
+  end)
+  return res
 end
 
 return M

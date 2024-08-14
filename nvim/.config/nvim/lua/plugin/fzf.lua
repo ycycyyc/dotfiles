@@ -48,7 +48,8 @@ local search_buf = function()
 end
 
 local git_commit = function()
-  if require("yc.line.git").branch == "" then
+  local head = require("utils.git").head()
+  if head == "" then
     vim.notify "not in a git repo"
     return
   end
