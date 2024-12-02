@@ -28,7 +28,7 @@ local opts = {
   line_sep = "└-----------------------------------------",
   highlight = {
     ui = "String",
-    search = "DiffChange",
+    search = "FindMatch",
     replace = "DiffDelete",
   },
   mapping = {

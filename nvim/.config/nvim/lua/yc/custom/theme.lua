@@ -248,7 +248,6 @@ local function default_theme()
   colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
   colors["@lsp.mod.readonly.go"] = { fg = cyan }
 
-
   -- cpp
   hl(0, "cppStructure", { link = "Keyword" })
   hl(0, "cStorageClass", { link = "Keyword" })
@@ -281,6 +280,8 @@ local function default_theme()
 
   hl(0, "IncSearch", { cterm = { reverse = true } })
   hl(0, "FlashLabel", { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 })
+
+  hl(0, "FindMatch", { ctermfg = 235, ctermbg = 114, cterm = { bold = true } })
 
   for name, opt in pairs(colors) do
     local o = convert(opt)
