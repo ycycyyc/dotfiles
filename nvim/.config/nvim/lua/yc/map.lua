@@ -3,6 +3,7 @@ local M = {}
 M.setup = function()
   local keys = require "basic.keys"
   vim.g.mapleader = " "
+  vim.g.maplocalleader = "<space>"
 
   local helper = require "utils.helper"
 
