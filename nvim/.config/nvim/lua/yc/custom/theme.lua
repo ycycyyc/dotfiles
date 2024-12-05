@@ -272,6 +272,13 @@ local function default_theme()
   hl(0, "CocInlayHintType", { link = "LspInlayHint" })
   hl(0, "CocInlayHintParameter", { link = "LspInlayHint" })
 
+  hl(0, "GrugFarResultsPath", { link = "Keyword" })
+  hl(0, "GrugFarResultsMatchRemoved", { link = "FindMatch" })
+  hl(0, "GrugFarResultsMatch", { link = "FindMatch" })
+  hl(0, "GrugFarResultsLineNo", { link = "DapUIThread" })
+
+  hl(0, "GrugFarResultsMatchAdded", { ctermfg = 235, ctermbg = 204, cterm = { bold = true } })
+
   -- " 0.10
   hl(0, "NormalFloat", { link = "Pmenu" })
 

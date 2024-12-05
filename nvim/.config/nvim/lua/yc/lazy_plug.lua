@@ -80,10 +80,16 @@ local basic_plugins = {
     -- cond = vim.fn.has "nvim-0.10" == 0,
   },
 
+  -- {
+  --   "nvim-pack/nvim-spectre",
+  --   keys = lazy_keys "plugin.find_and_replace",
+  --   config = require("plugin.find_and_replace").config,
+  -- },
+
   {
-    "nvim-pack/nvim-spectre",
-    keys = lazy_keys "plugin.find_and_replace",
-    config = require("plugin.find_and_replace").config,
+    "MagicDuck/grug-far.nvim",
+    keys = lazy_keys "plugin.grug",
+    config = require("plugin.grug").config,
   },
 
   {
