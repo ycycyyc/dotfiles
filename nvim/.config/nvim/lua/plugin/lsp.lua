@@ -37,6 +37,11 @@ local conform_format = function()
 end
 
 local attach_confs = {
+  protols = {
+    keymaps = {
+      [keys.lsp_format] = { function() end },
+    },
+  },
   lua_ls = {
     keymaps = {
       [keys.lsp_format] = { conform_format },
@@ -60,6 +65,7 @@ local attach_confs = {
 }
 
 local servers = {
+  protols = {},
   lua_ls = {
     settings = {
       Lua = {
