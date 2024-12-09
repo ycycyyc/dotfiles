@@ -23,6 +23,13 @@ M.config = function()
   sn.setup {
     notifier = {
       enabled = true,
+      icons = {
+        error = "E ",
+        warn = "W ",
+        info = "I ",
+        debug = "E ",
+        trace = "T ",
+      },
       margin = { top = 1, right = 1, bottom = 1 },
     },
   }
