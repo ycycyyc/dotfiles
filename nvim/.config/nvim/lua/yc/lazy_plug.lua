@@ -194,6 +194,14 @@ local lsp_plugins = {
   },
 
   {
+    "yanskun/gotests.nvim",
+    cmd = "GoTests",
+    config = function()
+      require("gotests").setup()
+    end,
+  },
+
+  {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     config = require("plugin.cmp").config,
