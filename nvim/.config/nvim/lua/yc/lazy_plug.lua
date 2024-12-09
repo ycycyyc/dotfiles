@@ -36,19 +36,6 @@ local basic_plugins = {
     config = require("plugin.flash").config,
   },
 
-  -- {
-  --   "NeogitOrg/neogit",
-  --   keys = lazy_keys "plugin.neogit",
-  --   init = require("plugin.neogit").init,
-  --   config = require("plugin.neogit").config,
-  -- },
-  --
-  -- {
-  --   "FabijanZulj/blame.nvim",
-  --   keys = lazy_keys "plugin.gitblame",
-  --   config = require("plugin.gitblame").config,
-  -- },
-
   {
     "tpope/vim-fugitive",
     keys = lazy_keys "plugin.fugitive",
