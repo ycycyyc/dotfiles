@@ -22,7 +22,8 @@ source ~/dotfiles/persional/.persionalrc
 ## nvim配置
 1. neovim(needed)   
 ```
-install neovim from source
+版本较低的linux系统可以从: https://github.com/neovim/neovim-releases/releases 拷贝二进制
+或者从源码开始编译
 mkdir nvim
 git clone https://github.com/neovim/neovim -b {最新的release分支}
 make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=/usr/local/nvim
