@@ -97,10 +97,7 @@ local default_lsp_config = function()
 
       [keys.lsp_signature_help] = {
         function()
-          local cmp = require "cmp"
-          if cmp.visible() then
-            cmp.close()
-          end
+          require("utils.cmp").hide()
           vim.lsp.buf.signature_help()
         end,
         "i",

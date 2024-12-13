@@ -17,7 +17,8 @@ local env = {
   noice = false,
   usePlaceholders = true,
   cmp_ghost_text = true,
-  snippet = "",
+  snippet = "native",
+  cmp = "blink",
 }
 
 M.setup = function()

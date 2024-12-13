@@ -18,9 +18,6 @@ local M = {
 M.config = function()
   require("nvim-autopairs").setup { map_c_w = true }
 
-  local cmp_autopairs = require "nvim-autopairs.completion.cmp"
-  require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
-
   helper.setup_m(M)
 end
 

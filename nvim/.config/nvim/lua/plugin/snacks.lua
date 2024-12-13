@@ -34,6 +34,11 @@ M.config = function()
     },
   }
 
+  sn.util.on_key("jk", function()
+    vim.cmd "noh"
+    vim.snippet._try_stop_snippet()
+  end)
+
   vim.keymap.set("n", keys.toggle_term, function()
     sn.terminal.toggle(nil, {
       win = {

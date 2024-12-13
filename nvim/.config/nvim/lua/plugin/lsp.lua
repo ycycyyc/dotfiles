@@ -147,7 +147,7 @@ M.config = function()
 
   for name, opt in pairs(servers) do
     -- 1. 默认的配置
-    local capabilities = require("cmp_nvim_lsp").default_capabilities()
+    local capabilities = require("utils.cmp").lsp_capabilities()
 
     local on_init = function(client, _)
       if client.server_capabilities and not env.semantic_token then

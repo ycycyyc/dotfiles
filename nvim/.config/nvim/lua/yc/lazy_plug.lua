@@ -6,11 +6,14 @@ local lazy_cmds = require("utils.helper").lazy_cmds
 local M = {}
 
 local lazypath = function()
+  local path = "lazy"
+
   if env.coc then
-    return vim.fn.stdpath "data" .. "/lazy_coc/lazy.nvim"
-  else
-    return vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+    path = path .. "_coc"
   end
+
+  path = path .. "_" .. env.snippet .. "_" .. env.cmp
+  return vim.fn.stdpath "data" .. "/" .. path .. "/lazy.nvim"
 end
 
 local basic_plugins = {
@@ -139,7 +142,6 @@ local coc_plugins = {
 }
 
 local lsp_plugins = {
-
   {
     "lewis6991/gitsigns.nvim",
     event = "User FilePost",
@@ -148,11 +150,8 @@ local lsp_plugins = {
 
   {
     "windwp/nvim-autopairs",
-    event = { "InsertEnter" },
+    event = "InsertEnter",
     config = require("plugin.autopairs").config,
-    dependencies = {
-      "hrsh7th/nvim-cmp",
-    },
   },
 
   {
@@ -168,7 +167,6 @@ local lsp_plugins = {
     "neovim/nvim-lspconfig",
     event = "User FilePost",
     config = require("plugin.lsp").config,
-    dependencies = "hrsh7th/cmp-nvim-lsp",
   },
 
   {
@@ -202,16 +200,6 @@ local lsp_plugins = {
   },
 
   {
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
-    config = require("plugin.cmp").config,
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-    },
-  },
-
-  {
     "stevearc/conform.nvim",
     lazy = true,
     config = require("plugin.format").config,
@@ -240,7 +228,8 @@ local lsp_plugins = {
     config = require("plugin.rust").config,
   },
 
-  require "plugin.snippet",
+  require("plugin.edit")[env.cmp],
+  require("plugin.snippet")[env.snippet],
 }
 
 M.setup = function()
