@@ -239,6 +239,8 @@ local lsp_plugins = {
     ft = "rust",
     config = require("plugin.rust").config,
   },
+
+  require "plugin.snippet",
 }
 
 M.setup = function()
@@ -252,11 +254,6 @@ M.setup = function()
     end
   else
     for _, plug in ipairs(lsp_plugins) do
-      table.insert(plugins, plug)
-    end
-
-    local snippet_plugins = require("plugin.snippet").plugins
-    for _, plug in ipairs(snippet_plugins) do
       table.insert(plugins, plug)
     end
   end
