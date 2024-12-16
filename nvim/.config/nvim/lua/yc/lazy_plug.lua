@@ -20,17 +20,9 @@ local basic_plugins = {
   "nvim-lua/plenary.nvim",
 
   {
-    "kyazdani42/nvim-tree.lua",
-    keys = lazy_keys "plugin.tree",
-    config = require("plugin.tree").config,
-    cond = not env.oil,
-  },
-
-  {
     "stevearc/oil.nvim",
     keys = lazy_keys "plugin.oil",
     config = require("plugin.oil").config,
-    cond = env.oil,
   },
 
   {
