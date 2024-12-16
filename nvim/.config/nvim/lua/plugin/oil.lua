@@ -10,6 +10,7 @@ local M = {
     {
       "oil",
       function()
+        vim.b.completion = false
         buf_map("n", "q", function()
           require("oil").close()
         end)

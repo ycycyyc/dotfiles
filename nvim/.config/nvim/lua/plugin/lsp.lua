@@ -155,7 +155,7 @@ M.config = function()
       end
     end
 
-    local d_opt = {
+    local init_opt = {
       on_init = on_init,
       capabilities = capabilities,
     }
@@ -163,12 +163,12 @@ M.config = function()
     -- 2. on_attach使用的配置
     local conf = attach_confs[name] or {}
 
-    local a_opt = {
+    local attach_opt = {
       on_attach = ulsp.build_on_attach_func(conf),
     }
 
     -- 3. 再加上每个lsp-server特有的配置
-    lspconfig[name].setup(vim.tbl_deep_extend("error", opt, d_opt, a_opt))
+    lspconfig[name].setup(vim.tbl_deep_extend("error", opt, init_opt, attach_opt))
   end
 
   -- 4. vim.diagnostics
