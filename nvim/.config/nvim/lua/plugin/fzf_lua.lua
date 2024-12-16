@@ -126,6 +126,10 @@ M.override_lsp_func = function()
   lsp_method.impl = function()
     require("fzf-lua").lsp_implementations(build_opt())
   end
+
+  lsp_method.code_action = function()
+    require("fzf-lua").lsp_code_actions()
+  end
 end
 
 M.config = function()

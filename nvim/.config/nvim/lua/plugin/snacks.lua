@@ -21,6 +21,14 @@ vim.api.nvim_create_autocmd("LspProgress", {
 M.config = function()
   local sn = require "snacks"
   sn.setup {
+    input = {
+      win = {
+        relative = "cursor",
+        row = -3,
+        col = 0,
+      },
+      icon = ">",
+    },
     notifier = {
       enabled = true,
       icons = {

@@ -208,13 +208,6 @@ local lsp_plugins = {
   },
 
   {
-    "stevearc/dressing.nvim",
-    lazy = true,
-    init = require("plugin.dressing").init,
-    config = require("plugin.dressing").config,
-  },
-
-  {
     "mrcjkb/rustaceanvim",
     ft = "rust",
     config = require("plugin.rust").config,
