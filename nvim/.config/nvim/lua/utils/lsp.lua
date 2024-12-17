@@ -1,7 +1,6 @@
-local keys = require "basic.keys"
-local env = require("basic.env").env
 local helper = require "utils.helper"
 local api = vim.api
+local keys = YcVim.keys
 
 ---@alias Yc.KeyMaps table<string, table>
 
@@ -14,16 +13,7 @@ local function sync_format_save()
   vim.cmd "silent write"
 end
 
-local M = {
-  lsp_method = {
-    -- 默认方法, 后续会被插件覆盖（fzf-lua)
-    definition = vim.lsp.buf.definition,
-    references = vim.lsp.buf.references,
-    impl = vim.lsp.buf.implementation,
-    code_action = vim.lsp.buf.code_action,
-    format = sync_format_save,
-  },
-}
+local M = {}
 
 local apply_lsp_edit = function(resp)
   if resp and resp[1] then
@@ -81,11 +71,11 @@ local default_lsp_config = function()
   return {
     auto_format = false,
     keymaps = {
-      [keys.lsp_goto_definition] = { M.lsp_method.definition },
-      [keys.lsp_goto_references] = { M.lsp_method.references },
-      [keys.lsp_format] = { M.lsp_method.format },
-      [keys.lsp_impl] = { M.lsp_method.impl },
-      [keys.lsp_code_action] = { M.lsp_method.code_action },
+      [keys.lsp_goto_definition] = { YcVim.lsp.method.definition },
+      [keys.lsp_goto_references] = { YcVim.lsp.method.references },
+      [keys.lsp_format] = { YcVim.lsp.method.format },
+      [keys.lsp_impl] = { YcVim.lsp.method.impl },
+      [keys.lsp_code_action] = { YcVim.lsp.method.code_action },
 
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
       [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
@@ -97,7 +87,7 @@ local default_lsp_config = function()
 
       [keys.lsp_signature_help] = {
         function()
-          require("utils.cmp").hide()
+          YcVim.cmp.hide()
           vim.lsp.buf.signature_help()
         end,
         "i",

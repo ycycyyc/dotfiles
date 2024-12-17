@@ -1,4 +1,4 @@
-local M = {}
+local plugin = {}
 
 local white = 145
 local bg = 239
@@ -10,7 +10,7 @@ local cyan = 38
 local green = 114
 local black = 235
 
-M.opts = {
+plugin.opts = {
   include_buftypes = { "", "nowrite", "nofile" },
   create_autocmd = false,
   modifiers = {
@@ -117,7 +117,7 @@ M.opts = {
   },
 }
 
-M.config = function()
+plugin.config = function()
   local helper = require "utils.helper"
   vim.api.nvim_create_autocmd({
     helper.since_nvim(0, 9) and "WinResized" or "WinScrolled",
@@ -134,7 +134,20 @@ M.config = function()
     end,
   })
 
-  require("barbecue").setup(M.opts)
+  require("barbecue").setup(plugin.opts)
 end
 
-return M
+return {
+  "utilyre/barbecue.nvim",
+  event = "User FilePost",
+  name = "barbecue",
+  version = "*",
+  dependencies = {
+    "SmiteshP/nvim-navic",
+    opts = {
+      lazy_update_context = true,
+    },
+  },
+  config = plugin.config,
+  cond = YcVim.env.winbar,
+}

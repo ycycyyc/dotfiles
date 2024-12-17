@@ -1,42 +1,30 @@
-local helper = require "utils.helper"
-
-local M = {
-  keymaps = {
+return {
+  "gbprod/substitute.nvim",
+  keys = {
     {
-      "n",
       "<leader>x",
       function()
         require("substitute.exchange").operator()
       end,
-      { noremap = true },
     },
     {
-      "x",
-      "X",
-      function()
-        require("substitute.exchange").visual()
-      end,
-      { noremap = true },
-    },
-    {
-      "n",
       "<leader>xc",
       function()
         require("substitute.exchange").cancel()
       end,
-      { noremap = true },
+    },
+    {
+      "X",
+      function()
+        require("substitute.exchange").visual()
+      end,
+      mode = "x",
     },
   },
-}
-
-M.config = function()
-  require("substitute").setup {
+  opts = {
     exchange = {
       motion = false,
       use_esc_to_cancel = false,
     },
-  }
-  helper.setup_m(M)
-end
-
-return M
+  },
+}

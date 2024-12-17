@@ -1,8 +1,7 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
+local keys = YcVim.keys
 
 -- stylua: ignore
-local M = {
+local plugin = {
   keymaps = {
     { "n", keys.dbg_breakpoint, function() require("dap").toggle_breakpoint() end, { noremap = true } },
     { "n", keys.dbg_continue, function() require("dap").continue() end, { noremap = true } },
@@ -11,7 +10,7 @@ local M = {
     { "n", keys.dbg_eval, function() require("dapui").eval() end, { noremap = true }, } },
 }
 
-M.config = function()
+plugin.config = function()
   local dap = require "dap"
   vim.fn.sign_define("DapBreakpoint", { text = "B", texthl = "WarningMsg", linehl = "", numhl = "" })
 
@@ -46,7 +45,12 @@ M.config = function()
     dapui.close()
   end
 
-  helper.setup_m(M)
+  YcVim.setup_m(plugin)
 end
 
-return M
+return {
+  "rcarriga/nvim-dap-ui",
+  keys = YcVim.lazy.keys(plugin.keymaps),
+  config = plugin.config,
+  dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+}

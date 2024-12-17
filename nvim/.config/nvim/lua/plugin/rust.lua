@@ -1,9 +1,7 @@
-local M = {}
-
-M.config = function()
+local config = function()
   local ulsp = require "utils.lsp"
 
-  local keys = require "basic.keys"
+  local keys = YcVim.keys
   local attach_conf = {
     keymaps = {
       [keys.lsp_code_action] = { ":RustLsp codeAction<cr>" },
@@ -25,4 +23,8 @@ M.config = function()
   }
 end
 
-return M
+return {
+  "mrcjkb/rustaceanvim",
+  ft = "rust",
+  config = config,
+}

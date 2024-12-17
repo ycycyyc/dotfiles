@@ -67,16 +67,12 @@ local function remove(tags)
   run("-remove-tags", tags)
 end
 
-local M = {
+local plugin = {}
+
   -- stylua: ignore
-  user_cmds = {
-    { "GoAddTags", function(args) add(args["args"]) end, { nargs = "+" } },
-    { "GoRemoveTags", function(args) remove(args["args"]) end, { nargs = "+" } },
-  },
+plugin.user_cmds = {
+  { "GoAddTags", function(args) add(args["args"]) end, { nargs = "+" } },
+  { "GoRemoveTags", function(args) remove(args["args"]) end, { nargs = "+" } },
 }
 
-function M.setup()
-  helper.setup_m(M)
-end
-
-return M
+YcVim.setup_m(plugin)

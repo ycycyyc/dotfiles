@@ -1,15 +1,9 @@
-local helper = require "utils.helper"
-
-local buf_map = function(mode, key, action)
-  vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
-end
-
 local M = {
   initfuncs = {
     {
       "DressingSelect",
       function()
-        buf_map("n", "q", ":q<cr>")
+        YcVim.map.buf("n", "q", ":q<cr>")
       end,
     },
   },
@@ -46,7 +40,7 @@ M.config = function()
     },
   }
 
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 end
 
 return M

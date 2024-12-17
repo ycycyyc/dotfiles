@@ -1,5 +1,3 @@
-local helper = require "utils.helper"
-
 local cj = function()
   local npairs = require "nvim-autopairs"
   if vim.fn.pumvisible() ~= 0 then
@@ -9,16 +7,19 @@ local cj = function()
   end
 end
 
-local M = {
-  keymaps = {
-    { "i", "<c-j>", cj, { expr = true, noremap = true, replace_keycodes = false } },
-  },
+local plugin = {}
+
+plugin.keymaps = {
+  { "i", "<c-j>", cj, { expr = true, noremap = true, replace_keycodes = false } },
 }
 
-M.config = function()
+plugin.config = function()
   require("nvim-autopairs").setup { map_c_w = true }
-
-  helper.setup_m(M)
+  YcVim.setup_m(plugin)
 end
 
-return M
+return {
+  "windwp/nvim-autopairs",
+  event = "InsertEnter",
+  config = plugin.config,
+}

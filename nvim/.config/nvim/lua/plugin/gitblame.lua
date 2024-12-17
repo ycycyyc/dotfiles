@@ -1,9 +1,4 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
-
-local buf_map = function(mode, key, action)
-  vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
-end
+local keys = YcVim.keys
 
 -- blame.nvim 插件的功能
 local native = function()
@@ -12,22 +7,22 @@ local native = function()
   local c = view.blamed_lines[row]
 
   if c.author == "Not Committed Yet" then
-    require("utils.git").commit_diff()
+    YcVim.git.commit_diff()
     return
   end
-  require("utils.git").commit_diff(c.hash)
+  YcVim.git.commit_diff(c.hash)
 end
 
 local diffCommit = function()
-  buf_map("n", "<cr>", function()
+  YcVim.map.buf("n", "<cr>", function()
     local current_line = vim.api.nvim_get_current_line()
     local items = vim.fn.split(current_line) ---@type string[]
 
     if items[1] == "Not" then
-      require("utils.git").commit_diff()
+      YcVim.git.commit_diff()
       return
     end
-    require("utils.git").commit_diff(items[1])
+    YcVim.git.commit_diff(items[1])
   end)
 end
 
@@ -51,7 +46,7 @@ M.config = function()
       close = { "<esc>", "q" },
     },
   }
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 
   --  you can do something like this: there are some conflicts with some winbar plugins,
   --  in this case barbecue is toggled

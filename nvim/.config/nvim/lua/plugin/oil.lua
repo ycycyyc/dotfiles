@@ -1,39 +1,14 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
+local plugin = {}
 
-local buf_map = function(mode, key, action)
-  vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
-end
-
-local M = {
-  initfuncs = {
-    {
-      "oil",
-      function()
-        vim.b.completion = false
-        buf_map("n", "q", function()
-          require("oil").close()
-        end)
-      end,
-    },
-  },
-  keymaps = {
-    {
-      "n",
-      keys.toggle_dir,
-      function()
-        require("oil").toggle_float()
-      end,
-      {},
-    },
-    {
-      "n",
-      keys.toggle_dir_open_file,
-      function()
-        require("oil").toggle_float "."
-      end,
-      {},
-    },
+plugin.initfuncs = {
+  {
+    "oil",
+    function()
+      vim.b.completion = false
+      YcVim.map.buf("n", "q", function()
+        require("oil").close()
+      end)
+    end,
   },
 }
 
@@ -45,8 +20,26 @@ local type_hlgroups = setmetatable({
   end,
 })
 
-M.config = function()
-  require("oil").setup {
+return {
+  "stevearc/oil.nvim",
+  init = function()
+    YcVim.setup_m(plugin)
+  end,
+  keys = {
+    {
+      YcVim.keys.toggle_dir,
+      function()
+        require("oil").toggle_float()
+      end,
+    },
+    {
+      YcVim.keys.toggle_dir_open_file,
+      function()
+        require("oil").toggle_float "."
+      end,
+    },
+  },
+  opts = {
     columns = {
       {
         "type",
@@ -82,8 +75,5 @@ M.config = function()
         return name == ".." or name == ".git"
       end,
     },
-  }
-  helper.setup_m(M)
-end
-
-return M
+  },
+}

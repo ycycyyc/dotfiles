@@ -1,10 +1,7 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
+local keys = YcVim.keys
 
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
-local buf_map = function(mode, key, action)
-  vim.keymap.set(mode, key, action, { noremap = true, buffer = true })
-end
+local buf_map = YcVim.map.buf
 
 local M = {
   user_cmds = {
@@ -195,7 +192,7 @@ M.config = function()
 
   -- coc semantic token
   setup_semantic_token()
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 end
 
 return M

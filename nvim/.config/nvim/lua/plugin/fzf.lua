@@ -1,5 +1,4 @@
-local helper = require "utils.helper"
-local keys = require "basic.keys"
+local keys = YcVim.keys
 
 local search_buf = function()
   local filename = vim.fn.fnameescape(vim.fn.expand "%:p")
@@ -62,7 +61,7 @@ local git_commit = function()
 
     wrap["sink*"] = function(lists)
       local items = vim.fn.split(lists[2], " ")
-      require("utils.git").commit_diff(items[1])
+      YcVim.git.commit_diff(items[1])
     end
 
     vim.fn["fzf#run"](wrap)
@@ -128,7 +127,7 @@ M.config = function()
     ["ctrl-s"] = "split",
   }
 
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 end
 
 return M

@@ -1,6 +1,4 @@
-local keys = require "basic.keys"
-
-local M = {}
+local plugin = {}
 
 --- https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
 vim.api.nvim_create_autocmd("LspProgress", {
@@ -18,7 +16,7 @@ vim.api.nvim_create_autocmd("LspProgress", {
   end,
 })
 
-M.config = function()
+plugin.config = function()
   local sn = require "snacks"
   sn.setup {
     input = {
@@ -44,14 +42,14 @@ M.config = function()
 
   sn.util.on_key("jk", function()
     vim.cmd "noh"
-    vim.snippet._try_stop_snippet()
+    YcVim.cmp.snippet.try_stop()
   end)
 
-  vim.keymap.set("n", keys.toggle_term, function()
+  vim.keymap.set("n", YcVim.keys.toggle_term, function()
     sn.terminal.toggle(nil, {
       win = {
         on_buf = function(win)
-          vim.keymap.set("t", keys.toggle_term, function()
+          vim.keymap.set("t", YcVim.keys.toggle_term, function()
             sn.terminal.toggle()
           end, { buffer = win.buf, nowait = true })
         end,
@@ -70,4 +68,9 @@ M.config = function()
   end)
 end
 
-return M
+return {
+  "folke/snacks.nvim",
+  priority = 1000,
+  lazy = false,
+  config = plugin.config,
+}

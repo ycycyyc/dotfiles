@@ -1,4 +1,4 @@
-local M = {}
+local plugin = {}
 
 local ts_disable = function(lang, bufnr)
   if vim.tbl_contains({ "cpp", "go" }, lang) then
@@ -8,7 +8,7 @@ local ts_disable = function(lang, bufnr)
   return vim.api.nvim_buf_line_count(bufnr) > 3500
 end
 
-M.config = function()
+plugin.config = function()
   local ensure_installed = { "cpp", "go", "lua", "c" }
   if vim.fn.has "mac" == 1 then
     ensure_installed = { "cpp", "go" }
@@ -34,7 +34,7 @@ M.config = function()
   }
 end
 
-M.textobj_config = function()
+plugin.textobj_config = function()
   require("nvim-treesitter.configs").setup {
     textobjects = {
       move = {
@@ -83,7 +83,7 @@ M.textobj_config = function()
   }
 end
 
-M.context_config = function()
+plugin.context_config = function()
   require("treesitter-context").setup {
     enable = false, -- Enable this plugin (Can be enabled/disabled later via commands)
     max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
@@ -124,4 +124,24 @@ M.context_config = function()
     separator = nil, -- Separator between context and content. Should be a single character string, like '-'.
   }
 end
-return M
+
+return {
+  "nvim-treesitter/nvim-treesitter",
+  event = { "BufReadPost", "BufNewFile" },
+  cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+  config = plugin.config,
+  dependencies = {
+    {
+      "nvim-treesitter/nvim-treesitter-context",
+      config = plugin.context_config,
+      cond = false, -- disable now
+    },
+    {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      config = plugin.textobj_config,
+      cond = YcVim.env.treesitter_textobj,
+    },
+  },
+  lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+  cond = YcVim.env.ts,
+}

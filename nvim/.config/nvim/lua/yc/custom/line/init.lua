@@ -1,6 +1,6 @@
 local utils = require "utils.theme"
 local helper = require "utils.helper"
-local env = require("basic.env").env
+local env = YcVim.env
 
 local module_prefix = "yc.custom.line."
 
@@ -8,7 +8,7 @@ local componentNames = { "mode", "githead", "gitinfo", "alig", "bufferlist", "al
 local components = {}
 
 ---@return number
-function _G.yc_statusline_avail_width()
+function YcVim.extra.yc_statusline_avail_width()
   local w = 0
   for _, c in ipairs(components) do
     if c.width then
@@ -21,7 +21,7 @@ function _G.yc_statusline_avail_width()
 end
 
 ---@return string
-function _G.yc_statusline()
+function YcVim.extra.yc_statusline()
   local res = {}
   for _, c in ipairs(components) do
     table.insert(res, c.cached_str)
@@ -37,7 +37,7 @@ local refresh = function()
       c.refresh()
     end
   end
-  vim.opt.statusline = "%!v:lua.yc_statusline()"
+  vim.opt.statusline = "%!v:lua.YcVim.extra.yc_statusline()"
 end
 
 local stats = function()
@@ -54,34 +54,30 @@ local M = {
   user_cmds = { { "ShowLineStats", stats, {} } },
 }
 
-M.setup = function()
-  vim.opt.laststatus = 3
-  vim.opt.showmode = false
+vim.opt.laststatus = 3
+vim.opt.showmode = false
 
-  for _, name in ipairs(componentNames) do
-    local component = require(module_prefix .. name)
-    table.insert(components, component)
-    if component.start then
-      component.start()
-    end
-  end
-
-  refresh()
-
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "LineRefresh",
-    callback = function()
-      vim.schedule(function()
-        refresh()
-      end)
-    end,
-  })
-
-  helper.setup_m(M)
-
-  if env.coc then
-    require(module_prefix .. "coc_winbar").start()
+for _, name in ipairs(componentNames) do
+  local component = require(module_prefix .. name)
+  table.insert(components, component)
+  if component.start then
+    component.start()
   end
 end
 
-return M
+refresh()
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "LineRefresh",
+  callback = function()
+    vim.schedule(function()
+      refresh()
+    end)
+  end,
+})
+
+YcVim.setup_m(M)
+
+if env.coc then
+  require(module_prefix .. "coc_winbar").start()
+end

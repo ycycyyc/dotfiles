@@ -311,20 +311,4 @@ local function default_theme()
   end
 end
 
-function M.add(color)
-  if M.started == false then
-    table.insert(colors, color)
-  else
-    for name, opt in pairs(color) do
-      local o = convert(opt)
-      hl(0, name, o)
-    end
-  end
-end
-
-function M.setup()
-  default_theme()
-  M.started = true
-end
-
-return M
+default_theme()

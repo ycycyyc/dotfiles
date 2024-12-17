@@ -1,9 +1,5 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
+local keys = YcVim.keys
 
-local buf_map = function(mode, key, action)
-  vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true, nowait = true })
-end
 
 local minifiles_toggle = function(...)
   local minifiles = require "mini.files"
@@ -27,9 +23,9 @@ local M = {
     {
       "minifiles",
       function()
-        buf_map("n", "<c-j>", "<down>")
-        buf_map("n", "<c-k>", "<up>")
-        buf_map("n", "<cr>", function()
+        YcVim.map.buf("n", "<c-j>", "<down>")
+        YcVim.map.buf("n", "<c-k>", "<up>")
+        YcVim.map.buf("n", "<cr>", function()
           local minifiles = require "mini.files"
           minifiles.go_in { close_on_file = true }
         end)
@@ -68,7 +64,7 @@ M.config = function()
     },
   }
 
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 end
 
 return M

@@ -1,13 +1,15 @@
-local M = {}
+local plugin = {
+  "kylechui/nvim-surround",
+}
 
-M.keys = {
+plugin.keys = {
   { "ds", mode = "n" },
   { "cs", mode = "n" },
   { "ys", mode = "n" },
   { "S", mode = "x" },
 }
 
-M.opts = {
+plugin.opts = {
   keymaps = {
     -- disable this keymap
     normal_cur = false,
@@ -22,4 +24,4 @@ M.opts = {
   },
 }
 
-return M
+return plugin

@@ -1,7 +1,6 @@
 local M = {}
 
-local keys = require "basic.keys"
-local helper = require "utils.helper"
+local keys = YcVim.keys
 local keyset = vim.keymap.set
 local last_rg
 local last_grep_string_prompt = ""
@@ -110,7 +109,7 @@ M.telescope_config = function()
               if selection and selection.value then
                 actions.close(bufnr)
                 vim.schedule(function()
-                  require("utils.git").commit_diff(selection.value)
+                  YcVim.git.commit_diff(selection.value)
                 end)
               end
             end,

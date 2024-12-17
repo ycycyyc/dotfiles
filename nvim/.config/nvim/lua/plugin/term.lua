@@ -6,7 +6,7 @@ M.config = function()
   --
   -- map('n', '<C-t>', '<CMD>lua require("FTerm").toggle()<CR>', opts)
   -- map('t', '<C-t>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>', opts)
-  local keys = require "basic.keys"
+  local keys = YcVim.keys
   require("toggleterm").setup {
     -- size can be a number or function which is passed the current terminal
     -- size = 20,

@@ -12,7 +12,8 @@ local cmp = {
   },
 }
 
-return {
+local plugins = {
   blink = blink,
   cmp = cmp,
 }
+return plugins[YcVim.env.cmp]

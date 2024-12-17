@@ -1,16 +1,11 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
-
-local buf_map = function(mode, key, action)
-  vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
-end
+local keys = YcVim.keys
 
 local cur_line_diff = function()
   local current_line = vim.api.nvim_get_current_line()
   local items = vim.fn.split(current_line) ---@type string[]
 
   -- TODO(yc) find git commit from line
-  require("utils.git").commit_diff(items[1])
+  YcVim.git.commit_diff(items[1])
 end
 
 local function showFugitiveGit()
@@ -47,6 +42,7 @@ local function showFugitiveGit()
 end
 
 local function toggleFugitiveGit()
+  local helper = require "utils.helper"
   local winns = helper.get_winnums_byft "fugitive"
   local cur_win = vim.api.nvim_get_current_win()
 
@@ -66,9 +62,9 @@ local function toggleFugitiveGit()
 end
 
 local fugitive_initfunc = function()
-  buf_map("n", "q", ":q<cr>")
+  YcVim.map.buf("n", "q", ":q<cr>")
 
-  buf_map("n", "<leader>d", function()
+  YcVim.map.buf("n", "<leader>d", function()
     local current_line = vim.api.nvim_get_current_line()
     local items = vim.fn.split(current_line)
 
@@ -86,7 +82,7 @@ local fugitive_initfunc = function()
 
     for _, syn in ipairs(pos.syntax) do
       if syn.hl_group == "fugitiveUnstagedSection" then
-        require("utils.git").file_diff(items[2])
+        YcVim.git.file_diff(items[2])
         return
       elseif syn.hl_group == "fugitiveHash" then
         cur_line_diff()
@@ -97,30 +93,32 @@ local fugitive_initfunc = function()
 end
 
 local fugitiveblame_initfunc = function()
-  buf_map("n", "q", ":q<cr>")
+  YcVim.map.buf("n", "q", ":q<cr>")
 
-  buf_map("n", "<cr>", function()
+  YcVim.map.buf("n", "<cr>", function()
     cur_line_diff()
   end)
 
-  buf_map("n", "<leader>d", function()
+  YcVim.map.buf("n", "<leader>d", function()
     cur_line_diff()
   end)
 end
 
-local M = {
-  keymaps = {
-    { "n", keys.git_blame, ":Git blame<cr>", {} },
-    { "n", keys.git_status, toggleFugitiveGit, {} },
-  },
-  initfuncs = {
-    { "fugitive", fugitive_initfunc },
-    { "fugitiveblame", fugitiveblame_initfunc },
-  },
+local plugin = {}
+
+plugin.initfuncs = {
+  { "fugitive", fugitive_initfunc },
+  { "fugitiveblame", fugitiveblame_initfunc },
 }
 
-M.config = function()
-  helper.setup_m(M)
-end
-
-return M
+return {
+  "tpope/vim-fugitive",
+  keys = {
+    { keys.git_blame, ":Git blame<cr>" },
+    { keys.git_status, toggleFugitiveGit },
+  },
+  cmd = { "Gw" },
+  config = function()
+    YcVim.setup_m(plugin)
+  end,
+}

@@ -1,6 +1,6 @@
 local M = {}
 
-local tool = require "utils.helper"
+local helper = require "utils.helper"
 
 M.config = function()
   local hide = function(cmp)
@@ -9,7 +9,7 @@ M.config = function()
 
   vim.keymap.set({ "i", "s" }, "<c-e>", function()
     require("blink.cmp").hide()
-    tool.i_move_to_end "move to line end"
+    helper.i_move_to_end "move to line end"
   end, { noremap = true })
 
   local opts = {
@@ -50,6 +50,19 @@ M.config = function()
   }
 
   require("blink.cmp").setup(opts)
+
+  -- 在默认模式下按<c-n>或者<c-p>可以修改当前的word
+  local list = require "blink.cmp.completion.list"
+  local select = list.select
+  list.select = function(idx, o)
+    select(idx, o)
+    local item = list.items[idx]
+    require("blink.cmp.completion.trigger").suppress_events_for_callback(function()
+      if idx and idx > 1 and item and list.config.selection == "preselect" then
+        list.apply_preview(item)
+      end
+    end)
+  end
 end
 
 return M

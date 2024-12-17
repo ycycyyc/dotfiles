@@ -1,7 +1,3 @@
-vim.snippet._try_stop_snippet = function()
-  vim.snippet.stop()
-end
-
 local vsnip = {
   "hrsh7th/vim-vsnip",
   dependencies = {
@@ -104,7 +100,7 @@ local luasnip = {
       ls.unlink_current()
     end
 
-    vim.snippet._try_stop_snippet = function()
+    YcVim.cmp.snippet.try_stop = function()
       if
         require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
         and not require("luasnip").session.jump_active
@@ -146,16 +142,16 @@ local snippy = {
   end,
 }
 
-local env = require("basic.env").env
-
-if env.snippet == "native" then
+if YcVim.env.snippet == "native" then
   local expand = vim.snippet.expand
   vim.snippet.expand = function(input)
     require("utils.native_snippet").expand(input, expand)
   end
 end
 
-return {
+local M = {
   luasnip = luasnip,
   native = {},
 }
+
+return M[YcVim.env.snippet]

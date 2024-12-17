@@ -1,10 +1,10 @@
 -- install lsp-server from
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
-local env = require("basic.env").env
-local keys = require "basic.keys"
+local env = YcVim.env
+local keys = YcVim.keys
 local ulsp = require "utils.lsp"
 
-local M = {}
+local plugin = {}
 
 local lua_ls_runtime_path = function()
   ---@type string[]
@@ -32,10 +32,6 @@ local function switch_source_header_cmd()
   end)
 end
 
-local conform_format = function()
-  require("conform").format { bufnr = 0 }
-end
-
 local attach_confs = {
   protols = {
     keymaps = {
@@ -44,7 +40,11 @@ local attach_confs = {
   },
   lua_ls = {
     keymaps = {
-      [keys.lsp_format] = { conform_format },
+      [keys.lsp_format] = {
+        function()
+          YcVim.lsp.method.plugin_format()
+        end,
+      },
     },
   },
   gopls = {
@@ -59,7 +59,11 @@ local attach_confs = {
   },
   pyright = {
     keymaps = {
-      [keys.lsp_format] = { conform_format },
+      [keys.lsp_format] = {
+        function()
+          YcVim.lsp.method.plugin_format()
+        end,
+      },
     },
   },
 }
@@ -126,7 +130,7 @@ local servers = {
       env.usePlaceholders and "--function-arg-placeholders" or "--function-arg-placeholders=0",
     },
     filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
-    commands = { Format = { ulsp.lsp_method.format, description = "format" } },
+    commands = { Format = { YcVim.lsp.method.format, description = "format" } },
   },
 
   pyright = {
@@ -140,14 +144,14 @@ local servers = {
   },
 }
 
-M.config = function()
+plugin.config = function()
   local lspconfig = require "lspconfig"
 
   vim.lsp.set_log_level "OFF"
 
   for name, opt in pairs(servers) do
     -- 1. 默认的配置
-    local capabilities = require("utils.cmp").lsp_capabilities()
+    local capabilities = YcVim.lsp.lsp_capabilities()
 
     local on_init = function(client, _)
       if client.server_capabilities and not env.semantic_token then
@@ -178,4 +182,8 @@ M.config = function()
   }
 end
 
-return M
+return {
+  "neovim/nvim-lspconfig",
+  event = "User FilePost",
+  config = plugin.config,
+}

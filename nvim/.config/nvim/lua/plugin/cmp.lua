@@ -1,9 +1,8 @@
-local M = {}
+local plugin = {}
 
-M.config = function()
+plugin.config = function()
   local cmp = require "cmp"
-  local tool = require "utils.helper"
-  local env = require("basic.env").env
+  local helper = require "utils.helper"
 
   vim.o.completeopt = "menu,menuone,noselect"
 
@@ -15,7 +14,7 @@ M.config = function()
   cmp.setup {
     mapping = {
       ["<C-e>"] = cmp.mapping {
-        i = tool.i_move_to_end,
+        i = helper.i_move_to_end,
       },
       ["<C-k>"] = cmp.mapping {
         i = function()
@@ -80,7 +79,7 @@ M.config = function()
 
     experimental = {
       -- this feature conflict with copilot.vim's preview.
-      ghost_text = env.cmp_ghost_text,
+      ghost_text = YcVim.env.cmp_ghost_text,
     },
 
     sources = cmp.config.sources({
@@ -91,4 +90,4 @@ M.config = function()
   }
 end
 
-return M
+return plugin

@@ -1,5 +1,4 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
+local keys = YcVim.keys
 
 local M = {
   keymaps = {
@@ -135,7 +134,7 @@ M.config = function()
     end,
   }
 
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 end
 
 return M

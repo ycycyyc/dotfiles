@@ -3,7 +3,7 @@ local M = {}
 -- remove leap plugin
 M.config = function()
   local helper = require "utils.helper"
-  local keys = require "basic.keys"
+  local keys = YcVim.keys
   local nnoremap = helper.nnoremap()
   -- nnoremap(keys.jump , tool.cmd_func "HopChar2MW")
 

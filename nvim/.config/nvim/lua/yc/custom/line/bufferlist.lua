@@ -96,7 +96,7 @@ local cal_fileitems = function()
 
   local colored_file_items = { colorfy_item(bufnr_list[cur_index], cur_buf_format) }
   local total_sz = utils.evaluates_width(colored_file_items[1])
-  local available_sz = _G.yc_statusline_avail_width()
+  local available_sz = YcVim.extra.yc_statusline_avail_width()
 
   ---@param index number
   ---@param forward boolean

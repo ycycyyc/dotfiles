@@ -1,9 +1,5 @@
-return {
-  setup = function()
-    require("yc.custom.theme").setup()
-    require("yc.custom.line").setup()
-    -- require("yc.custom.lsp").setup()
-    -- require("yc.custom.terminal").setup()
-    require("yc.custom.gotags").setup()
-  end,
-}
+require "yc.custom.theme"
+require "yc.custom.line"
+require "yc.custom.gotags"
+require "yc.custom.cmds"
+require "yc.custom.autocmds"

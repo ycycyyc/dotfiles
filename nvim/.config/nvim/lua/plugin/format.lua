@@ -1,12 +1,15 @@
-local M = {}
-
-M.config = function()
-  require("conform").setup {
+return {
+  "stevearc/conform.nvim",
+  lazy = true,
+  init = function()
+    YcVim.lsp.method.plugin_format = function()
+      require("conform").format { bufnr = 0 }
+    end
+  end,
+  opts = {
     formatters_by_ft = {
       lua = { "stylua" },
       python = { "black" },
     },
-  }
-end
-
-return M
+  },
+}

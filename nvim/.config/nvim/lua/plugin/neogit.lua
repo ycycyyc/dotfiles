@@ -1,4 +1,4 @@
-local keys = require "basic.keys"
+local keys = YcVim.keys
 local helper = require "utils.helper"
 
 -- copy from neogit/buffers/status/actions.lua
@@ -204,7 +204,7 @@ M.config = function()
     end
   end
 
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 end
 
 return M

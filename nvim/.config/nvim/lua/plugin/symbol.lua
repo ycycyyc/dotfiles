@@ -1,14 +1,10 @@
-local helper = require "utils.helper"
-local keys = require "basic.keys"
-
-local M = {
-  keymaps = {
-    { "n", keys.toggle_symbol, "<cmd>Outline<CR>", {} },
+return {
+  "hedyhli/outline.nvim",
+  cmd = { "Outline", "OutlineOpen" },
+  keys = {
+    { YcVim.keys.toggle_symbol, "<cmd>Outline<CR>" },
   },
-}
-
-M.config = function()
-  local opt = {
+  opts = {
     guides = {
       enabled = false,
     },
@@ -160,10 +156,5 @@ M.config = function()
         },
       },
     },
-  }
-
-  require("outline").setup(opt)
-  helper.setup_m(M)
-end
-
-return M
+  },
+}

@@ -1,6 +1,3 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
-
 local live_grep = function(cmd, query, filepath)
   require("fzf-lua").live_grep {
     cmd = cmd,
@@ -17,58 +14,39 @@ local grep = function(cmd, query, filepath)
   }
 end
 
-local M = {
-  user_cmds = {
-    {
-      "Buffers",
-      function()
-        require("fzf-lua").buffers()
-      end,
-      { nargs = "*", bang = true },
+local grep_buf_word = function()
+  require("fzf-lua").grep_curbuf {
+    search = vim.fn.expand "<cword>",
+    fzf_opts = {
+      ["--delimiter"] = ":",
+      ["--nth"] = "3..",
     },
+  }
+end
 
-    {
-      "Commits",
-      function()
-        require("fzf-lua").git_commits()
-      end,
-      {},
-    },
+local plugin = {}
 
-    {
-      "Rg",
-      require("utils.rg").build_rg_func(live_grep, grep),
-      { nargs = "*", bang = true },
-    },
+plugin.user_cmds = {
+  {
+    "Buffers",
+    function()
+      require("fzf-lua").buffers()
+    end,
+    { nargs = "*", bang = true },
   },
 
-  keymaps = {
-    { "n", keys.search_resume, "<cmd>FzfLua resume<cr>", { noremap = true } },
-    { "n", keys.switch_buffers, "<cmd>FzfLua buffers<cr>", { noremap = true } },
-    { "n", keys.search_find_files, "<cmd>FzfLua files<cr>", { noremap = true } },
-    { "n", keys.search_git_status, "<cmd>FzfLua git_status<cr>", { noremap = true } },
-    { "n", keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>", { noremap = true } },
-    { "n", keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>", { noremap = true } },
-    { "n", keys.lsp_finder, "<cmd>FzfLua lsp_finder<cr>", { noremap = true } },
-    { "n", keys.lsp_global_symbols, "<cmd>FzfLua lsp_live_workspace_symbols<cr>", { noremap = true } },
-    { "n", keys.git_commits, ":Commits<cr>", { silent = false } },
-    { "n", keys.search_global, ":Rg ", { noremap = true } },
-    { "n", keys.search_cur_word, ":Rg <c-r><c-w><cr>", { noremap = true, silent = true } },
-    { "n", keys.cmd_history, ":FzfLua command_history<cr>", { silent = true } },
-    {
-      "n",
-      keys.search_cur_word_cur_buf,
-      function()
-        require("fzf-lua").grep_curbuf {
-          search = vim.fn.expand "<cword>",
-          fzf_opts = {
-            ["--delimiter"] = ":",
-            ["--nth"] = "3..",
-          },
-        }
-      end,
-      { noremap = true },
-    },
+  {
+    "Commits",
+    function()
+      require("fzf-lua").git_commits()
+    end,
+    {},
+  },
+
+  {
+    "Rg",
+    require("utils.rg").build_rg_func(live_grep, grep),
+    { nargs = "*", bang = true },
   },
 }
 
@@ -110,8 +88,8 @@ local build_opt = function()
   }
 end
 
-M.override_lsp_func = function()
-  local lsp_method = require("utils.lsp").lsp_method
+plugin.init = function()
+  local lsp_method = YcVim.lsp.method
 
   lsp_method.definition = function()
     require("fzf-lua").lsp_definitions {
@@ -132,14 +110,14 @@ M.override_lsp_func = function()
   end
 end
 
-M.config = function()
+plugin.config = function()
   -- " 让输入上方，搜索列表在下方
   vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
   vim.g.fzf_preview_window = { "up:45%", "ctrl-/" }
 
   local diff = function(selected)
     local res = vim.fn.split(selected[1], " ")
-    require("utils.git").commit_diff(res[1])
+    YcVim.git.commit_diff(res[1])
   end
 
   local actions = require "fzf-lua.actions"
@@ -186,7 +164,31 @@ M.config = function()
     },
   }
 
-  helper.setup_m(M)
+  YcVim.setup_m(plugin)
 end
 
-return M
+local keys = YcVim.keys
+
+return {
+  "ycycyyc/fzf-lua",
+  lazy = true,
+  keys = {
+    { keys.search_resume, "<cmd>FzfLua resume<cr>" },
+    { keys.switch_buffers, "<cmd>FzfLua buffers<cr>" },
+    { keys.search_find_files, "<cmd>FzfLua files<cr>" },
+    { keys.search_git_status, "<cmd>FzfLua git_status<cr>" },
+    { keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>" },
+    { keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>" },
+    { keys.lsp_finder, "<cmd>FzfLua lsp_finder<cr>" },
+    { keys.lsp_global_symbols, "<cmd>FzfLua lsp_live_workspace_symbols<cr>" },
+    { keys.git_commits, ":Commits<cr>" },
+    { keys.search_global, ":Rg " },
+    { keys.search_cur_word, ":Rg <c-r><c-w><cr>" },
+    { keys.cmd_history, ":FzfLua command_history<cr>" },
+    { keys.search_cur_word_cur_buf, grep_buf_word },
+  },
+  cmd = YcVim.lazy.cmds(plugin.user_cmds, { "FzfLua" }),
+  config = plugin.config,
+  init = plugin.init,
+  cond = YcVim.env.fzf_lua,
+}

@@ -1,5 +1,4 @@
-local keys = require "basic.keys"
-local helper = require "utils.helper"
+local keys = YcVim.keys
 
 local function show_docs()
   local cw = vim.fn.expand "<cword>"
@@ -41,7 +40,26 @@ M.config = function()
 
   vim.fn["coc_fzf#common#add_list_source"]("fzf-grep", "search global", "Rg")
 
-  helper.setup_m(M)
+  YcVim.setup_m(M)
 end
 
-return M
+return {
+  "antoinemadec/coc-fzf",
+  branch = "master",
+  config = M.config,
+  dependencies = {
+    {
+      "neoclide/coc.nvim",
+      branch = "release",
+      config = require("plugin.coc").config,
+    },
+    {
+      "junegunn/fzf.vim",
+      event = "VeryLazy",
+      config = require("plugin.fzf").config,
+      dependencies = {
+        "junegunn/fzf",
+      },
+    },
+  },
+}

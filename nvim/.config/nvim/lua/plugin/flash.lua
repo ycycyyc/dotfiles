@@ -1,7 +1,8 @@
-local helper = require "utils.helper"
-local keys = require "basic.keys"
+local keys = YcVim.keys
 
-local opts = {
+local plugin = {}
+
+plugin.opts = {
   modes = {
     char = {
       enabled = false, -- f t F T  ...
@@ -23,50 +24,46 @@ local opts = {
   },
 }
 
-local M = {
-  keymaps = {
+plugin.keymaps = {
+  {
+    "c",
+    "<c-g>",
+    function()
+      require("flash").toggle()
+    end,
+    {},
+  },
+}
+
+return {
+  "folke/flash.nvim",
+  keys = {
+    { "/" },
+    { "?" },
     {
-      "c",
-      "<c-g>",
-      function()
-        require("flash").toggle()
-      end,
-      {},
-      { lazy_load_ignore = true },
-    },
-    {
-      "n",
       keys.jump,
       function()
         require("flash").jump {
           label = {
             after = false, ---@type boolean|number[]
-            -- before = { 0, 0 },
-            before = true,
+            before = true, -- before = { 0, 0 },
           },
         }
       end,
-      {},
     },
     {
-      "n",
       keys.select_ts,
       function()
-        -- TODO: 同时使用coc 和treesitter neovim会直接退出？
-        if require("basic.env").env.coc then
-          vim.notify("neovim will panic")
-          return
+        if YcVim.env.coc then
+          vim.notify "neovim will panic"
+          return -- TODO: 同时使用coc 和treesitter neovim会直接退出？
         end
         require("flash").treesitter()
       end,
-      {},
     },
   },
+  config = function()
+    require("flash").setup(plugin.opts)
+    YcVim.setup_m(plugin)
+  end,
 }
-
-M.config = function()
-  require("flash").setup(opts)
-  helper.setup_m(M)
-end
-
-return M
