@@ -266,6 +266,7 @@ local function default_theme()
   hl(0, "CocMenuSel", { link = "PmenuSel" })
   hl(0, "CocPum", { link = "Pmenu" })
   hl(0, "CocVirtualText", { link = "Comment" })
+  hl(0, "BlinkCmpGhostText", { link = "Comment" })
 
   hl(0, "LspInlayHint", { ctermfg = 61, ctermbg = 234 })
   hl(0, "CocInlayHint", { link = "LspInlayHint" })

@@ -33,6 +33,9 @@ M.config = function()
       cmdline = {},
     },
     completion = {
+      ghost_text = {
+        enabled = false,
+      },
       menu = {
         draw = {
           columns = { { "label", "label_description", gap = 1 }, { "kind" } },
@@ -41,7 +44,7 @@ M.config = function()
     },
     fuzzy = {
       prebuilt_binaries = {
-        download = true,
+        download = false,
       },
     },
   }
