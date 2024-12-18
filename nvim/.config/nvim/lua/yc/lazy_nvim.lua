@@ -18,7 +18,7 @@ local plugin_names = {
 -- stylua: ignore
 local lsp_plugin_names = {
   "fzf_lua", "lsp", "winbar", "gotest", "autopairs",
-  "gitsigns", "rust", "format", "symbol", "edit", "snippet",
+  "gitsigns", "rust", "format", "symbol", "code", "snippet",
 }
 
 if YcVim.env.coc then
