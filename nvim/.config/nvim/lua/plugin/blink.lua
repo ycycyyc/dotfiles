@@ -2,6 +2,10 @@ local plugin = {
   "saghen/blink.cmp",
 }
 
+if 1 == vim.fn.executable "cargo" then
+  plugin.build = "cargo build --release"
+end
+
 local hide = function(cmp)
   cmp.hide()
 end
