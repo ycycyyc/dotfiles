@@ -1,5 +1,13 @@
 local plugin = {}
 
+plugin.user_cmds = {
+  {
+    "SnacksShowHistory",
+    ":lua Snacks.notifier.show_history()<cr>",
+    {},
+  },
+}
+
 --- https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
 vim.api.nvim_create_autocmd("LspProgress", {
   ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
@@ -17,8 +25,8 @@ vim.api.nvim_create_autocmd("LspProgress", {
 })
 
 plugin.config = function()
-  local sn = require "snacks"
-  sn.setup {
+  local snacks = require "snacks"
+  snacks.setup {
     input = {
       win = {
         relative = "cursor",
@@ -40,17 +48,19 @@ plugin.config = function()
     },
   }
 
-  sn.util.on_key("jk", function()
+  snacks.util.on_key("jk", function()
     vim.cmd "noh"
     YcVim.cmp.snippet.try_stop()
   end)
 
+  YcVim.setup_m(plugin)
+
   vim.keymap.set("n", YcVim.keys.toggle_term, function()
-    sn.terminal.toggle(nil, {
+    snacks.terminal.toggle(nil, {
       win = {
         on_buf = function(win)
           vim.keymap.set("t", YcVim.keys.toggle_term, function()
-            sn.terminal.toggle()
+            snacks.terminal.toggle()
           end, { buffer = win.buf, nowait = true })
         end,
         border = "rounded",
