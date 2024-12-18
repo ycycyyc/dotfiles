@@ -1,32 +1,32 @@
-local M = {}
+local plugin = {
+  "saghen/blink.cmp",
+}
 
-local helper = require "utils.helper"
+local hide = function(cmp)
+  cmp.hide()
+end
 
-M.config = function()
-  local hide = function(cmp)
+local toggle = function(cmp)
+  if cmp.is_visible() then
     cmp.hide()
+  else
+    cmp.show()
   end
+end
 
-  vim.keymap.set({ "i", "s" }, "<c-e>", function()
-    require("blink.cmp").hide()
-    helper.i_move_to_end "move to line end"
-  end, { noremap = true })
-
+plugin.config = function()
   local opts = {
     keymap = {
       ["<cr>"] = { "select_and_accept", "fallback" },
-      ["<C-k>"] = {
-        function(cmp)
-          if cmp.is_visible() then
-            cmp.hide()
-          else
-            cmp.show()
-          end
-        end,
-      },
+      ["<C-k>"] = { toggle },
       ["<Tab>"] = { hide, "snippet_forward", "fallback" },
       ["<S-Tab>"] = { hide, "snippet_backward", "fallback" },
-      ["<C-e>"] = {},
+      ["<C-e>"] = {
+        function()
+          require("blink.cmp").hide()
+          require("utils.helper").i_move_to_end()
+        end,
+      },
     },
     sources = {
       default = { "lsp", "path", "buffer" },
@@ -65,4 +65,4 @@ M.config = function()
   end
 end
 
-return M
+return plugin

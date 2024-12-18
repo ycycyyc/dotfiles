@@ -1,4 +1,6 @@
-local plugin = {}
+local plugin = {
+  "hrsh7th/nvim-cmp",
+}
 
 plugin.config = function()
   local cmp = require "cmp"
@@ -89,5 +91,10 @@ plugin.config = function()
     }),
   }
 end
+
+plugin.dependencies = {
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-buffer",
+}
 
 return plugin

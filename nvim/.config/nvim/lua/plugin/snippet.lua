@@ -147,11 +147,13 @@ if YcVim.env.snippet == "native" then
   vim.snippet.expand = function(input)
     require("utils.native_snippet").expand(input, expand)
   end
+  return {}
 end
 
-local M = {
+local plugins = {
   luasnip = luasnip,
-  native = {},
+  vsnip = vsnip,
+  snippy = snippy,
 }
 
-return M[YcVim.env.snippet]
+return plugins[YcVim.env.snippet]
