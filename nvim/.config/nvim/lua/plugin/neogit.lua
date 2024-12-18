@@ -204,7 +204,7 @@ M.config = function()
     end
   end
 
-  YcVim.setup_m(M)
+  YcVim.setup_plugin(M)
 end
 
 return M

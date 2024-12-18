@@ -119,6 +119,6 @@ return {
   },
   cmd = { "Gw" },
   config = function()
-    YcVim.setup_m(plugin)
+    YcVim.setup_plugin(plugin)
   end,
 }

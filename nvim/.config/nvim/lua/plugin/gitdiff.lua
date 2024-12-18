@@ -66,6 +66,6 @@ return {
   config = function()
     local opt = require "plugin.gitdiff_opt"
     require("diffview").setup(opt)
-    YcVim.setup_m(plugin)
+    YcVim.setup_plugin(plugin)
   end,
 }

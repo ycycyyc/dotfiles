@@ -45,7 +45,7 @@ plugin.config = function()
     dapui.close()
   end
 
-  YcVim.setup_m(plugin)
+  YcVim.setup_plugin(plugin)
 end
 
 return {

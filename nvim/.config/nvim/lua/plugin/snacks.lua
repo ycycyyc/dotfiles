@@ -53,7 +53,7 @@ plugin.config = function()
     YcVim.cmp.snippet.try_stop()
   end)
 
-  YcVim.setup_m(plugin)
+  YcVim.setup_plugin(plugin)
 
   vim.keymap.set("n", YcVim.keys.toggle_term, function()
     snacks.terminal.toggle(nil, {

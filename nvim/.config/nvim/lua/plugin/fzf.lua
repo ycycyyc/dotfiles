@@ -127,7 +127,7 @@ M.config = function()
     ["ctrl-s"] = "split",
   }
 
-  YcVim.setup_m(M)
+  YcVim.setup_plugin(M)
 end
 
 return M

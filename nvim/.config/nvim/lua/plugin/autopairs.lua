@@ -15,7 +15,7 @@ plugin.keymaps = {
 
 plugin.config = function()
   require("nvim-autopairs").setup { map_c_w = true }
-  YcVim.setup_m(plugin)
+  YcVim.setup_plugin(plugin)
 end
 
 return {

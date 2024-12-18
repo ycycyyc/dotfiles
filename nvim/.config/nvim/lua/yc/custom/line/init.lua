@@ -76,7 +76,7 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
-YcVim.setup_m(M)
+YcVim.setup_plugin(M)
 
 if env.coc then
   require(module_prefix .. "coc_winbar").start()

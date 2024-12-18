@@ -64,6 +64,6 @@ return {
   },
   config = function()
     require("flash").setup(plugin.opts)
-    YcVim.setup_m(plugin)
+    YcVim.setup_plugin(plugin)
   end,
 }

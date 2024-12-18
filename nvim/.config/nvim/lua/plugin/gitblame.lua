@@ -46,7 +46,7 @@ M.config = function()
       close = { "<esc>", "q" },
     },
   }
-  YcVim.setup_m(M)
+  YcVim.setup_plugin(M)
 
   --  you can do something like this: there are some conflicts with some winbar plugins,
   --  in this case barbecue is toggled

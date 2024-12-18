@@ -192,7 +192,7 @@ M.config = function()
 
   -- coc semantic token
   setup_semantic_token()
-  YcVim.setup_m(M)
+  YcVim.setup_plugin(M)
 end
 
 return M

@@ -40,4 +40,4 @@ plugin.user_cmds = {
   },
 }
 
-YcVim.setup_m(plugin)
+YcVim.setup_plugin(plugin)
