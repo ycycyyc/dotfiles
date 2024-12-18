@@ -263,6 +263,8 @@ local function default_theme()
   hl(0, "typescriptOperator", { link = "Keyword" })
   hl(0, "typescriptImport", { link = "Keyword" })
 
+  hl(0, "javaScriptFunction", { link = "Keyword" })
+
   hl(0, "CocMenuSel", { link = "PmenuSel" })
   hl(0, "CocPum", { link = "Pmenu" })
   hl(0, "CocVirtualText", { link = "Comment" })

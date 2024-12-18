@@ -69,6 +69,7 @@ local attach_confs = {
 }
 
 local servers = {
+  ts_ls = {},
   protols = {},
   lua_ls = {
     settings = {
