@@ -18,6 +18,11 @@ local toggle = function(cmp)
   end
 end
 
+local function has_words_before()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+end
+
 plugin.config = function()
   local opts = {
     keymap = {
@@ -25,6 +30,18 @@ plugin.config = function()
       ["<C-k>"] = { toggle },
       ["<Tab>"] = { hide, "snippet_forward", "fallback" },
       ["<S-Tab>"] = { hide, "snippet_backward", "fallback" },
+      ["<C-n>"] = {
+        function(cmp)
+          if cmp.is_visible() then
+            cmp.select_next()
+            return true
+          elseif has_words_before() then
+            cmp.show()
+            return true
+          end
+        end,
+        "fallback",
+      },
       ["<C-e>"] = {
         function()
           require("blink.cmp").hide()
