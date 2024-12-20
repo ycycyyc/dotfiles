@@ -145,8 +145,24 @@ local snippy = {
 if YcVim.env.snippet == "native" then
   local expand = vim.snippet.expand
   vim.snippet.expand = function(input)
-    require("utils.native_snippet").expand(input, expand)
+    -- Native sessions don't support nested snippet sessions.
+    -- Always use the top-level session.
+    -- Otherwise, when on the first placeholder and selecting a new completion,
+    -- the nested session will be used instead of the top-level session.
+    -- See: https://github.com/LazyVim/LazyVim/issues/3199
+    local session = vim.snippet.active() and vim.snippet._session or nil
+
+    local ok, err = pcall(expand, input)
+    if not ok then
+      vim.notify("Failed expand snippet:" .. input .. " got err:" .. err)
+    end
+
+    -- Restore top-level session when needed
+    if session then
+      vim.snippet._session = session
+    end
   end
+
   return {}
 end
 
