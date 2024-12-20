@@ -14,7 +14,10 @@ plugin.keymaps = {
 }
 
 plugin.config = function()
-  require("nvim-autopairs").setup { map_c_w = true }
+  require("nvim-autopairs").setup {
+    disable_filetype = { "snacks_input" },
+    map_c_w = true,
+  }
   YcVim.setup_plugin(plugin)
 end
 

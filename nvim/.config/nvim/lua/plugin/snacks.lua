@@ -8,6 +8,21 @@ plugin.user_cmds = {
   },
 }
 
+plugin.initfuncs = {
+  {
+    "snacks_input",
+    function()
+      YcVim.map.buf("i", "<C-w>", function()
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        local l = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]
+        for i = 1, #l do
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<backspace>", true, false, true), "n", true)
+        end
+      end)
+    end,
+  },
+}
+
 --- https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
 vim.api.nvim_create_autocmd("LspProgress", {
   ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
@@ -32,6 +47,9 @@ plugin.config = function()
         relative = "cursor",
         row = -3,
         col = 0,
+        keys = {
+          i_esc = { "<esc>", { "cmp_close", "cancel" }, mode = "i" },
+        },
       },
       icon = ">",
     },
