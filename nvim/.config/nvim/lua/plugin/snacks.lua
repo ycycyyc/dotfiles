@@ -66,11 +66,6 @@ plugin.config = function()
     },
   }
 
-  snacks.util.on_key("jk", function()
-    vim.cmd "noh"
-    YcVim.cmp.snippet.try_stop()
-  end)
-
   YcVim.setup_plugin(plugin)
 
   vim.keymap.set("n", YcVim.keys.toggle_term, function()

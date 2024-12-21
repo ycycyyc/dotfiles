@@ -2,14 +2,20 @@ local keys = YcVim.keys
 vim.g.mapleader = " "
 vim.g.maplocalleader = "<space>"
 
-local map = function(mode, action, cb)
-  vim.keymap.set(mode, action, cb, { noremap = true })
+local map = function(mode, action, cb, opts)
+  opts = opts or { noremap = true }
+  vim.keymap.set(mode, action, cb, opts)
 end
 
 map("n", "<Leader>w", "<cmd>silent w<cr>")
 map("n", "<Leader>q", "<cmd>q<cr>")
 map("n", "<Leader>m", "`")
-map({ "i", "s" }, "jk", "<ESC>")
+
+map({ "i", "s" }, "jk", function()
+  vim.cmd "noh"
+  YcVim.cmp.snippet.try_stop()
+  return "<ESC>"
+end, { expr = true })
 
 map("i", "<c-f>", "<right>")
 
