@@ -1,12 +1,12 @@
-YcVim.git = {}
+local git = {}
 
 ---@param commit string | nil
-YcVim.git.commit_diff = function(commit)
+git.commit_diff = function(commit)
   vim.notify "not support commit diff"
 end
 
 ---@param file string
-YcVim.git.file_diff = function(file)
+git.file_diff = function(file)
   vim.notify "not support file diff"
 end
 
@@ -53,7 +53,7 @@ end
 
 ---@param on_ok function
 ---@param on_err function | nil
-YcVim.git.head_async = function(on_ok, on_err)
+git.head_async = function(on_ok, on_err)
   local args = {}
   table.insert(args, "rev-parse")
   table.insert(args, "--abbrev-ref")
@@ -66,7 +66,7 @@ YcVim.git.head_async = function(on_ok, on_err)
 end
 
 ---@return string
-YcVim.git.head = function()
+git.head = function()
   local args = {}
   table.insert(args, "rev-parse")
   table.insert(args, "--abbrev-ref")
@@ -83,7 +83,7 @@ end
 
 ---@param on_ok function
 ---@param on_err function|nil
-YcVim.git.path_async = function(on_ok, on_err)
+git.path_async = function(on_ok, on_err)
   local args = {}
   table.insert(args, "rev-parse")
   table.insert(args, "--git-dir")
@@ -93,3 +93,5 @@ YcVim.git.path_async = function(on_ok, on_err)
     on_ok(gitpath)
   end, on_err)
 end
+
+YcVim.git = git

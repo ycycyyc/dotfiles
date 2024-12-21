@@ -1,5 +1,4 @@
 local config = function()
-  local ulsp = require "utils.lsp"
 
   local keys = YcVim.keys
   local attach_conf = {
@@ -17,7 +16,7 @@ local config = function()
     },
     server = {
       on_attach = function(client, bufnr)
-        ulsp.build_on_attach_func(attach_conf)(client, bufnr)
+        YcVim.lsp.on_attach_func(attach_conf)(client, bufnr)
       end,
     },
   }

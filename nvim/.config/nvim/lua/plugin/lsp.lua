@@ -2,7 +2,6 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 local env = YcVim.env
 local keys = YcVim.keys
-local ulsp = require "utils.lsp"
 
 local plugin = {}
 
@@ -53,7 +52,7 @@ local attach_confs = {
   clangd = {
     keymaps = {
       [keys.lsp_format] = { function() end },
-      [keys.lsp_range_format] = { ulsp.v_range_format, "x" },
+      [keys.lsp_range_format] = { YcVim.lsp.v_range_format, "x" },
       [keys.switch_source_header] = { switch_source_header_cmd },
     },
   },
@@ -169,7 +168,7 @@ plugin.config = function()
     local conf = attach_confs[name] or {}
 
     local attach_opt = {
-      on_attach = ulsp.build_on_attach_func(conf),
+      on_attach = YcVim.lsp.on_attach_func(conf),
     }
 
     -- 3. 再加上每个lsp-server特有的配置

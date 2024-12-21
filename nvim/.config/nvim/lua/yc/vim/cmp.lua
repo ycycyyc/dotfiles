@@ -1,6 +1,6 @@
-YcVim.cmp = {}
+local cmp = {}
 
-YcVim.cmp.visible = function()
+cmp.visible = function()
   ---@module 'blink.cmp'
   local blink = package.loaded["blink.cmp"]
   if blink then
@@ -8,15 +8,15 @@ YcVim.cmp.visible = function()
   end
 
   ---@module 'cmp'
-  local cmp = package.loaded["cmp"]
-  if cmp then
-    return cmp.core.view:visible()
+  local nvim_cmp = package.loaded["cmp"]
+  if nvim_cmp then
+    return nvim_cmp.core.view:visible()
   end
 
   return false
 end
 
-YcVim.cmp.hide = function()
+cmp.hide = function()
   ---@module 'blink.cmp'
   local blink = package.loaded["blink.cmp"]
   if blink then
@@ -25,17 +25,19 @@ YcVim.cmp.hide = function()
   end
 
   ---@module 'cmp'
-  local cmp = package.loaded["cmp"]
-  if cmp then
-    if cmp.visible() then
-      cmp.abort()
+  local nvim_cmp = package.loaded["cmp"]
+  if nvim_cmp then
+    if nvim_cmp.visible() then
+      nvim_cmp.abort()
     end
     return
   end
 end
 
-YcVim.cmp.snippet = {
+cmp.snippet = {
   try_stop = function()
     vim.snippet.stop()
   end,
 }
+
+YcVim.cmp = cmp
