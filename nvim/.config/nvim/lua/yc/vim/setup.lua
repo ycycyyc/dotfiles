@@ -12,10 +12,35 @@ local function setup_keymaps(keymaps)
   end
 end
 
+local group = vim.api.nvim_create_augroup("YcVim_setup_initfuncs", { clear = true })
+
+---@param lang string
+---@param initfunc function
+local add_lang = function(lang, initfunc)
+  local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+  if ft == lang then
+    initfunc()
+  end
+
+  vim.api.nvim_create_autocmd("FileType", { group = group, pattern = { lang }, callback = initfunc })
+end
+
+---@param langs string | string[]
+---@param initfunc function
+local add_langs = function(langs, initfunc)
+  if type(langs) == "string" then
+    langs = { langs }
+  end
+
+  for _, lang in ipairs(langs) do
+    add_lang(lang, initfunc)
+  end
+end
+
 ---@param initfuncs table
 local function setup_initfuncs(initfuncs)
   for _, initfunc in ipairs(initfuncs) do
-    require("utils.initfunc").add(initfunc[1], initfunc[2])
+    add_langs(initfunc[1], initfunc[2])
   end
 end
 
