@@ -47,7 +47,7 @@ local search_buf = function()
 end
 
 local git_commit = function()
-  local head = require("utils.git").head()
+  local head = YcVim.git.head()
   if head == "" then
     vim.notify "not in a git repo"
     return

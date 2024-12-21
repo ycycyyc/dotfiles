@@ -40,7 +40,7 @@ M.refresh = function()
     M.launch_once()
   end
 
-  require("utils.git").head_async(on_ok, on_err)
+  YcVim.git.head_async(on_ok, on_err)
 end
 
 ---@param gitpath string
@@ -96,7 +96,7 @@ M.launch_once = function()
     end)
   end
 
-  require("utils.git").gitpath_async(on_ok)
+  YcVim.git.path_async(on_ok)
 end
 
 ---@return string
