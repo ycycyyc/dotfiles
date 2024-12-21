@@ -118,9 +118,8 @@ plugin.opts = {
 }
 
 plugin.config = function()
-  local helper = require "utils.helper"
   vim.api.nvim_create_autocmd({
-    helper.since_nvim(0, 9) and "WinResized" or "WinScrolled",
+    YcVim.util.since_nvim(0, 9) and "WinResized" or "WinScrolled",
     "BufWinEnter",
     "CursorHold",
     "InsertLeave",

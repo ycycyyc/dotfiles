@@ -40,7 +40,7 @@ plugin.config = function()
       ["<C-e>"] = {
         function()
           require("blink.cmp").hide()
-          require("utils.helper").i_move_to_end()
+          YcVim.util.i_move_to_end()
         end,
       },
     },

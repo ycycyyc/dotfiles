@@ -1,4 +1,3 @@
-local helper = require "utils.helper"
 local api = vim.api
 local keys = YcVim.keys
 
@@ -62,7 +61,7 @@ local range_format = function(pos)
 end
 
 M.v_range_format = function()
-  local pos = helper.get_visual_selection()
+  local pos = YcVim.util.get_visual_selection()
   range_format(pos)
 end
 

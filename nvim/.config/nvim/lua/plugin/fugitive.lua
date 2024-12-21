@@ -42,8 +42,7 @@ local function showFugitiveGit()
 end
 
 local function toggleFugitiveGit()
-  local helper = require "utils.helper"
-  local winns = helper.get_winnums_byft "fugitive"
+  local winns = YcVim.util.get_winnums_byft "fugitive"
   local cur_win = vim.api.nvim_get_current_win()
 
   for _, winn in ipairs(winns) do
@@ -57,7 +56,7 @@ local function toggleFugitiveGit()
   if #winns == 0 then -- 没有打开futitive
     showFugitiveGit()
   else -- 直接跳转过去， 避免从头开始
-    require("utils.helper").try_jumpto_ft_win "fugitive"
+    YcVim.util.try_jumpto_ft_win "fugitive"
   end
 end
 

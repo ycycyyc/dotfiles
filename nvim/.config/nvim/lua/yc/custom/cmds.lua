@@ -20,7 +20,7 @@ plugin.user_cmds = {
   {
     "BufOnly",
     function()
-      require("utils.helper").buf_only()
+      YcVim.util.buf_only()
       vim.api.nvim_exec_autocmds("User", {
         pattern = "LineRefresh",
       })

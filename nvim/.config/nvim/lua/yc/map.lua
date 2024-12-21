@@ -2,8 +2,6 @@ local keys = YcVim.keys
 vim.g.mapleader = " "
 vim.g.maplocalleader = "<space>"
 
-local helper = require "utils.helper"
-
 local map = function(mode, action, cb)
   vim.keymap.set(mode, action, cb, { noremap = true })
 end
@@ -40,7 +38,7 @@ map("n", "<C-Up>", "<cmd>resize +2<cr>")
 map("n", "<C-Down>", "<cmd>resize -2<cr>")
 map("x", "<bs>", "<esc>")
 
-map("i", "<c-e>", helper.i_move_to_end)
+map("i", "<c-e>", YcVim.util.i_move_to_end)
 
 map("c", "<A-b>", "<S-Left>")
 map({ "c", "i" }, "<A-f>", "<S-Right>")
@@ -68,11 +66,9 @@ map("n", keys.toggle_mouse, function()
   vim.print "set mouse="
 end)
 
-local get_winnums_byft = require("utils.helper").get_winnums_byft
-
 ---@return boolean
 local has_qf_win = function()
-  local wins = get_winnums_byft "qf"
+  local wins = YcVim.util.get_winnums_byft "qf"
   return #wins > 0
 end
 

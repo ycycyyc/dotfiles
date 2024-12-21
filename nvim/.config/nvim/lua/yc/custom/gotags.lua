@@ -1,5 +1,3 @@
-local helper = require "utils.helper"
-
 ---@return string
 ---@return string
 local function analyze()

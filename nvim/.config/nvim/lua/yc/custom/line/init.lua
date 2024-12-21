@@ -1,5 +1,4 @@
 local utils = require "utils.theme"
-local helper = require "utils.helper"
 local env = YcVim.env
 
 local module_prefix = "yc.custom.line."

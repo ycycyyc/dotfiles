@@ -4,14 +4,13 @@ local plugin = {
 
 plugin.config = function()
   local cmp = require "cmp"
-  local helper = require "utils.helper"
 
   vim.o.completeopt = "menu,menuone,noselect"
 
   cmp.setup {
     mapping = {
       ["<C-e>"] = cmp.mapping {
-        i = helper.i_move_to_end,
+        i = YcVim.util.i_move_to_end
       },
       ["<C-k>"] = cmp.mapping {
         i = function()

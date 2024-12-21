@@ -59,7 +59,7 @@ M.config = function()
 
         vim.defer_fn(function()
           local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-          require("utils.helper").try_jumpto_ft_win "blame"
+          YcVim.util.try_jumpto_ft_win "blame"
         end, 0)
       end
     end,
