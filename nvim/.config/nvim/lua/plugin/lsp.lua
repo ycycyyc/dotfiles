@@ -68,7 +68,7 @@ local attach_confs = {
 }
 
 local servers = {
-  ts_ls = {},
+  vtsls = {}, -- npm install -g @vtsls/language-server
   protols = {},
   lua_ls = {
     settings = {
