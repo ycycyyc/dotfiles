@@ -10,23 +10,7 @@ plugin.config = function()
   cmp.setup {
     mapping = {
       ["<C-e>"] = cmp.mapping {
-        i = YcVim.util.i_move_to_end
-      },
-      ["<C-k>"] = cmp.mapping {
-        i = function()
-          if cmp.visible() then
-            cmp.abort()
-          else
-            cmp.complete()
-          end
-        end,
-        c = function()
-          if cmp.visible() then
-            cmp.close()
-          else
-            cmp.complete()
-          end
-        end,
+        i = YcVim.util.i_move_to_end,
       },
 
       ["<c-n>"] = cmp.mapping(function(fallback)

@@ -34,6 +34,30 @@ cmp.hide = function()
   end
 end
 
+cmp.show = function()
+  ---@module 'blink.cmp'
+  local blink = package.loaded["blink.cmp"]
+  if blink then
+    require("blink.cmp").show()
+    return
+  end
+
+  ---@module 'cmp'
+  local nvim_cmp = package.loaded["cmp"]
+  if nvim_cmp then
+    nvim_cmp.complete()
+    return
+  end
+end
+
+cmp.toggle = function()
+  if cmp.visible() then
+    cmp.hide()
+  else
+    cmp.show()
+  end
+end
+
 cmp.snippet = {
   try_stop = function()
     vim.snippet.stop()

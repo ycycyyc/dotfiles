@@ -107,6 +107,8 @@ map("n", "<leader>5", "5<c-w>w")
 map("n", "<leader>6", "6<c-w>w")
 map("n", "<leader>7", "7<c-w>w")
 
+map("i", "<c-k>", YcVim.cmp.toggle)
+
 -- smart deletion, dd
 -- It solves the issue, where you want to delete empty line, but dd will override you last yank.
 -- Code above will check if u are deleting empty line, if so - use black hole register.

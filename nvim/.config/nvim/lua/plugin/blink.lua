@@ -6,25 +6,10 @@ if 1 == vim.fn.executable "cargo" then
   plugin.build = "cargo build --release"
 end
 
-local hide = function(cmp)
-  cmp.hide()
-end
-
-local toggle = function(cmp)
-  if cmp.is_visible() then
-    cmp.hide()
-  else
-    cmp.show()
-  end
-end
-
 plugin.config = function()
   local opts = {
     keymap = {
       ["<cr>"] = { "select_and_accept", "fallback" },
-      ["<C-k>"] = { toggle },
-      ["<Tab>"] = { hide, "snippet_forward", "fallback" },
-      ["<S-Tab>"] = { hide, "snippet_backward", "fallback" },
       ["<C-n>"] = {
         function(cmp)
           if cmp.is_visible() then
