@@ -1,18 +1,4 @@
-local keys = YcVim.keys
-
 -- blame.nvim 插件的功能
-local native = function()
-  local view = require("blame").last_opened_view
-  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
-  local c = view.blamed_lines[row]
-
-  if c.author == "Not Committed Yet" then
-    YcVim.git.commit_diff()
-    return
-  end
-  YcVim.git.commit_diff(c.hash)
-end
-
 local diffCommit = function()
   YcVim.map.buf("n", "<cr>", function()
     local current_line = vim.api.nvim_get_current_line()
@@ -26,16 +12,13 @@ local diffCommit = function()
   end)
 end
 
-local M = {
-  keymaps = {
-    { "n", keys.git_blame, "<cmd>BlameToggle<cr>", {} },
-  },
-  initfuncs = {
-    { "blame", diffCommit },
-  },
+local plugin = {}
+
+plugin.initfuncs = {
+  { "blame", diffCommit },
 }
 
-M.config = function()
+plugin.config = function()
   require("blame").setup {
     date_format = "%Y.%m.%d",
     mappings = {
@@ -46,7 +29,8 @@ M.config = function()
       close = { "<esc>", "q" },
     },
   }
-  YcVim.setup_plugin(M)
+
+  YcVim.setup_plugin(plugin)
 
   --  you can do something like this: there are some conflicts with some winbar plugins,
   --  in this case barbecue is toggled
@@ -76,4 +60,13 @@ M.config = function()
   })
 end
 
-return M
+return {
+  "FabijanZulj/blame.nvim",
+  keys = {
+    {
+      YcVim.keys.git_blame,
+      "<cmd>BlameToggle<cr>",
+    },
+  },
+  config = plugin.config,
+}
