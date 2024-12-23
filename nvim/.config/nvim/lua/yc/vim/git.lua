@@ -94,4 +94,24 @@ git.path_async = function(on_ok, on_err)
   end, on_err)
 end
 
+git.add_file = function()
+  local Job = require "plenary.job"
+  local args = {}
+  local file = vim.fn.expand "%:p"
+  table.insert(args, "add")
+  table.insert(args, "--")
+  table.insert(args, file)
+
+  git_async(args, function()
+    vim.notify("add file" .. file .. " success")
+    vim.schedule(function()
+      vim.cmd "silent write" -- 写文件触发neogit状态的更新
+    end)
+  end, function()
+    vim.schedule(function()
+      vim.notify("add file" .. file .. " failed")
+    end)
+  end)
+end
+
 YcVim.git = git
