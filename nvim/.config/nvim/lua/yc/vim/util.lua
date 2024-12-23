@@ -67,19 +67,35 @@ function util.get_visual_selection()
   return { startp, endp }
 end
 
----@param wanted string
+---@param match function
 ---@return number[]
-function util.get_winnums_byft(wanted)
+local get_winnums = function(match)
   local win_nums = {}
   local wins = vim.api.nvim_list_wins()
   for _, win_num in ipairs(wins) do
     local buf_num = vim.fn.winbufnr(win_num)
     local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_num })
-    if ft == wanted then
+    if match(ft) then
       table.insert(win_nums, win_num)
     end
   end
   return win_nums
+end
+
+---@param wanted string
+---@return number[]
+function util.get_winnums_byft(wanted)
+  return get_winnums(function(ft)
+    return ft == wanted
+  end)
+end
+
+---@param wanted string
+---@return number[]
+function util.get_winnums_like_ft(wanted)
+  return get_winnums(function(ft)
+    return string.match(ft, wanted) ~= nil
+  end)
 end
 
 ---@param wanted string

@@ -6,17 +6,16 @@ plugin.toggle_git_status = function()
   end, 200)
 
   local cur_win = vim.api.nvim_get_current_win()
-  local wins = YcVim.util.get_winnums_byft "NeogitStatus"
 
+  local wins = YcVim.util.get_winnums_like_ft("Neogit")
   for _, winn in ipairs(wins) do
-    -- 当前正处于Neogit中, 退出
     if cur_win == winn then
       vim.api.nvim_input "q"
       return
     end
   end
 
-  require("neogit").open { kind = "floating" }
+  require("neogit").open {}
 end
 
 plugin.init = function()
@@ -33,6 +32,12 @@ return {
   },
   opts = {
     kind = "floating",
+    log_view = {
+      kind = "auto",
+    },
+    commit_editor = {
+      kind = "auto",
+    },
     filewatcher = { enabled = false },
     auto_refresh = false,
     auto_close_console = false,
