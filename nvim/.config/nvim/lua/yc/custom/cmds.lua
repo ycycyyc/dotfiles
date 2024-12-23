@@ -38,6 +38,13 @@ plugin.user_cmds = {
     end,
     {},
   },
+  {
+    "ShowEnvHash",
+    function()
+      vim.notify(vim.inspect(YcVim.env_hash))
+    end,
+    {},
+  },
 }
 
 YcVim.setup_plugin(plugin)
