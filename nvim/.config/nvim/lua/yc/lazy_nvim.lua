@@ -1,17 +1,11 @@
 local lazypath = function()
-  local path = "lazy"
-
-  if YcVim.env.coc then
-    path = path .. "_coc"
-  end
-
-  path = path .. "_" .. YcVim.env.snippet .. "_" .. YcVim.env.cmp
+  local path = "lazy_" .. YcVim.env_hash
   return vim.fn.stdpath "data" .. "/" .. path .. "/lazy.nvim"
 end
 
 -- stylua: ignore
 local plugin_names = {
-  "plenary", "oil", "flash", "fugitive", "gitdiff", "nvim-surround",
+  "plenary", "oil", "flash", "git_manager", "gitdiff", "nvim-surround",
   "snacks", "comment", "grug", "substitute", "debug", "tree_sitter",
 }
 
@@ -31,7 +25,15 @@ end
 
 local plugins = {}
 for i, name in ipairs(plugin_names) do
-  table.insert(plugins, require("plugin." .. name))
+  local pn = require("plugin." .. name)
+
+  if type(pn[1]) == "string" then
+    table.insert(plugins, pn)
+  else
+    for _, p in ipairs(pn) do
+      table.insert(plugins, p)
+    end
+  end
 end
 
 vim.g.coc_data_home = "~/.config/coc_fzf/"
