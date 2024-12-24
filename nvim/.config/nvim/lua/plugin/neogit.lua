@@ -7,7 +7,7 @@ plugin.toggle_git_status = function()
 
   local cur_win = vim.api.nvim_get_current_win()
 
-  local wins = YcVim.util.get_winnums_like_ft("Neogit")
+  local wins = YcVim.util.get_winnums_like_ft "Neogit"
   for _, winn in ipairs(wins) do
     if cur_win == winn then
       vim.api.nvim_input "q"
@@ -43,6 +43,7 @@ return {
     auto_close_console = false,
     remember_settings = false,
     disable_line_numbers = false,
+    notification_icon = "",
     status = {
       -- recent_commit_count = 30, -- 去掉recent_commit
       mode_text = {
@@ -52,12 +53,6 @@ return {
         R = "R",
         A = "A",
       },
-    },
-    integrations = {
-      fzf_lua = true,
-    },
-    mappings = {
-      status = {},
     },
     disable_insert_on_commit = true,
   },
