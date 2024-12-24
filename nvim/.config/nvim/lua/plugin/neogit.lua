@@ -19,8 +19,17 @@ plugin.toggle_git_status = function()
 end
 
 plugin.init = function()
-  vim.api.nvim_create_user_command("Gwrite", YcVim.git.add_file, {})
-  vim.api.nvim_create_user_command("Gw", YcVim.git.add_file, {})
+  local stage_file = function()
+    local file = vim.fn.expand "%:p"
+
+    local git = require "neogit.lib.git"
+    git.status.stage { file }
+
+    vim.notify("stage file:" .. file)
+  end
+
+  vim.api.nvim_create_user_command("Gwrite", stage_file, {})
+  vim.api.nvim_create_user_command("Gw", stage_file, {})
 end
 
 return {
