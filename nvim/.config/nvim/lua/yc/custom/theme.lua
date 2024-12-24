@@ -1,316 +1,244 @@
-local hl = vim.api.nvim_set_hl
+local colors = YcVim.colors
 
-local red = { n = 204, gui = "#ff5f87" }
-local blue = { n = 39, gui = "#00afff" }
-local black = { n = 235, gui = "#262626" }
-local dark_yellow = { n = 173, gui = "#d7875f" }
-local yellow = { n = 180, gui = "#d7af87" }
-local comment_grey = { n = 59, gui = "#5f5f5f" }
-local menu_grey = { n = 237, gui = "#3a3a3a" }
-local menu_grey2 = { n = 233, gui = "#121212" }
-local green = { n = 114, gui = "#87d787" }
-local white = { n = 145, gui = "#afafaf" }
-local cyan = { n = 38, gui = "#00afd7" }
-local purple = { n = 170, gui = "#d75fd7" }
-local cursor_grey = { n = 236, gui = "#303030" }
-local cursor_grey2 = { n = 237, gui = "#303030" }
-local cursor_grey4 = { n = 239, gui = "#303030" }
-local cursor_grey5 = { n = 240, gui = "#303030" }
-local virtual_grey = { n = 242, gui = "#303030" }
-local cmdlinebg = { n = 235, gui = "#303030" }
-local current_line = { n = 11, gui = "#ffff00" }
+local theme = {
+  --- 1. grammer
+  Constant = { myfg = colors.cyan },
+  Error = { myfg = colors.red },
+  Identifier = { myfg = colors.red },
+  String = { myfg = colors.green },
 
-local M = {
-  red = red,
-  blud = blue,
-  black = black,
-  dark_yellow = dark_yellow,
-  yellow = yellow,
-  comment_grey = comment_grey,
-  menu_grey = menu_grey,
-  menu_grey2 = menu_grey2,
-  green = green,
-  white = white,
-  cyan = cyan,
-  purle = purple,
-  cursor_grey = cursor_grey,
-  cmdlinebg = cmdlinebg,
-  current_line = current_line,
+  PreProc = { myfg = colors.yellow },
+  PreCondit = { myfg = colors.yellow },
+  Type = { myfg = colors.yellow },
+  Typedef = { myfg = colors.yellow },
+  Structure = { myfg = colors.yellow },
+  StorageClass = { myfg = colors.yellow },
 
-  started = false,
-}
+  Number = { myfg = colors.dark_yellow },
+  Character = { myfg = colors.dark_yellow },
+  Boolean = { myfg = colors.dark_yellow },
+  SpecialChar = { myfg = colors.dark_yellow },
 
-local colors = {
-  Constant = { fg = cyan },
-  Error = { fg = red },
-  Identifier = { fg = red },
-  String = { fg = green },
+  Comment = { myfg = colors.comment_grey },
+  SpecialComment = { myfg = colors.comment_grey },
 
-  PreProc = { fg = yellow },
-  PreCondit = { fg = yellow },
-  Type = { fg = yellow },
-  Typedef = { fg = yellow },
-  Structure = { fg = yellow },
-  StorageClass = { fg = yellow },
+  Function = { myfg = colors.blue },
+  Special = { myfg = colors.blue },
+  Include = { myfg = colors.blue },
 
-  Number = { fg = dark_yellow },
-  Character = { fg = dark_yellow },
-  Boolean = { fg = dark_yellow },
-  SpecialChar = { fg = dark_yellow },
+  Statement = { myfg = colors.purple },
+  Conditional = { myfg = colors.purple },
+  Repeat = { myfg = colors.purple },
+  Label = { myfg = colors.purple },
+  Operator = { myfg = colors.purple },
+  Keyword = { myfg = colors.purple },
+  Exception = { myfg = colors.purple },
+  Define = { myfg = colors.purple },
+  Macro = { myfg = colors.purple },
+  Todo = { myfg = colors.purple },
 
-  Comment = { fg = comment_grey },
-  SpecialComment = { fg = comment_grey },
+  --- 2. builtin
+  -- Cursor = { myfg = black, mybg = blue },
+  Search = { myfg = colors.black, mybg = colors.yellow },
+  IncSearch = { cterm = { reverse = true } },
+  Directory = { myfg = colors.blue },
+  Pmenu = { myfg = colors.white, mybg = colors.menu_grey },
+  PmenuSel = { myfg = colors.cursor_grey1, mybg = colors.blue },
+  PmenuSbar = { mybg = colors.cursor_grey1 },
+  PmenuThumb = { mybg = colors.white },
 
-  Function = { fg = blue },
-  Special = { fg = blue },
-  Include = { fg = blue },
+  SignColumn = { mybg = colors.menu_grey },
+  LineNr = { myfg = colors.comment_grey, mybg = colors.menu_grey },
+  MatchParen = { myfg = colors.white, underline = true },
+  CursorLineNr = { mybg = colors.menu_grey, myfg = colors.current_line, cterm = {} },
 
-  Statement = { fg = purple },
-  Conditional = { fg = purple },
-  Repeat = { fg = purple },
-  Label = { fg = purple },
-  Operator = { fg = purple },
-  Keyword = { fg = purple },
-  Exception = { fg = purple },
-  Define = { fg = purple },
-  Macro = { fg = purple },
-  Todo = { fg = purple },
-  --
-  -- Cursor = { fg = black, bg = blue },
-  Search = { fg = black, bg = yellow },
-  Directory = { fg = blue },
+  diffAdded = { myfg = colors.green },
+  diffRemoved = { myfg = colors.red },
 
-  Pmenu = { fg = white, bg = menu_grey },
-  PmenuSel = { fg = cursor_grey, bg = blue },
-  PmenuSbar = { bg = cursor_grey },
-  PmenuThumb = { bg = white },
+  DiffAdd = { myfg = colors.black, mybg = colors.green },
+  DiffDelete = { myfg = colors.black, mybg = colors.red },
+  DiffText = { myfg = colors.black, mybg = colors.yellow },
 
-  GitSignsAdd = { fg = green, bg = menu_grey },
-  GitSignsChange = { fg = yellow, bg = menu_grey },
-  GitSignsDelete = { fg = red, bg = menu_grey },
+  ColorColumn = { mybg = colors.cursor_grey1 },
 
-  SignColumn = { bg = menu_grey },
-  LineNr = { fg = comment_grey, bg = menu_grey },
-  MatchParen = { fg = white, underline = true },
-  CursorLineNr = { bg = menu_grey, fg = current_line, cterm = {} },
+  Visual = { mybg = colors.virtual_grey }, -- 0.10 version
 
-  diffAdded = { fg = green },
-  diffRemoved = { fg = red },
+  Title = { myfg = colors.red, cterm = { bold = true } },
+  FloatTitle = { cterm = { bold = true }, myfg = colors.red },
+  FloatBorder = { link = "clear" },
 
-  DiffAdd = { fg = black, bg = green },
-  DiffDelete = { fg = black, bg = red },
-  DiffText = { fg = black, bg = yellow },
-
-  ColorColumn = { bg = cursor_grey },
-
-  Visual = { bg = virtual_grey }, -- 0.10 version
-
-  Title = { fg = red, cterm = { bold = true } },
-
-  DiagnosticInfo = { fg = blue },
-  DiagnosticHint = { fg = blue },
-  CmpItemAbbrMatch = { fg = yellow },
+  DiagnosticInfo = { myfg = colors.blue },
+  DiagnosticHint = { myfg = colors.blue },
+  CmpItemAbbrMatch = { myfg = colors.yellow },
 
   -- tabline
-  TabLineFill = { bg = menu_grey },
-  TabLineSel = { bg = green, fg = black },
-  TabLine = { bg = menu_grey, fg = white },
+  TabLineFill = { mybg = colors.menu_grey },
+  TabLineSel = { mybg = colors.green, myfg = colors.black },
+  TabLine = { mybg = colors.menu_grey, myfg = colors.white },
 
-  NvimTreeCursorLine = { bg = menu_grey },
-  NvimTreeRootFolder = { fg = yellow, cterm = { bold = true } },
+  -- c/cpp
+  cStructure = { myfg = colors.purple },
+  cBlock = { myfg = colors.white },
+  cppStructure = { link = "Keyword" },
+  cStorageClass = { link = "Keyword" },
+  cppModifier = { link = "Keyword" },
+  cppStorageClass = { link = "Keyword" },
 
-  cStructure = { fg = purple },
-  cBlock = { fg = white },
-
-  -- self define
-  YcNameSpace = { fg = red },
-  YcCppStructure = { fg = yellow },
-
-  MsgArea = { fg = white, bg = cmdlinebg },
-
-  --dap
-  DapUIStoppedThread = { fg = red },
-  DapUIThread = { fg = green },
-  DapUISource = { fg = blue },
-  DapUIWatchesEmpty = { fg = blue },
-  DapUILineNumber = { fg = yellow },
-  DapUIScope = { fg = yellow },
-  DapUIType = { fg = yellow },
-  DapUIValue = { fg = green },
-  DapUIBreakpointsPath = { fg = blue },
-
-  -- lsp
-  LspDiagnosticsVirtualTextError = { fg = red },
-  LspDiagnosticsVirtualTextWarning = { fg = yellow },
-  LspProgress = { fg = yellow, cterm = { bold = true } },
-
-  -- statusline
-  StatusLine = { fg = cursor_grey, bg = white },
-  StatusLineNC = { fg = cursor_grey, bg = cursor_grey },
-  StatusLineNormal = { fg = white, bg = cursor_grey2 },
-  StatusLineFunction = { fg = blue, bg = cursor_grey2, cterm = { bold = true } },
-  StatusLineError = { fg = red, bg = cursor_grey2, cterm = { bold = true } },
-  StatusLineWarnning = { fg = yellow, bg = cursor_grey2, cterm = { bold = true } },
-  StatusLineCurFile = { fg = cmdlinebg, bg = green, cterm = { bold = true } },
-  StatusLineBufListNormal = { fg = white, bg = cursor_grey4, cterm = { bold = true } },
-  StatusLineGitSigns = { fg = white, bg = cursor_grey5, cterm = { bold = true } },
-  StatusLineTotalLine = { fg = white, bg = cursor_grey5, cterm = { bold = true } },
-  StatusLineWinnr = { fg = black, bg = yellow, cterm = { bold = true } },
-  NumberBuffers = { fg = black, bg = blue, cterm = { bold = true } },
-  WinSeparator = { bg = cursor_grey2 },
-
-  StatusNormalMode = { fg = black, bg = blue, cterm = { bold = true } },
-  StatusInsertMode = { fg = black, bg = purple, cterm = { bold = true } },
-  StatusTermMode = { fg = black, bg = yellow, cterm = { bold = true } },
-  StatusVisMode = { fg = black, bg = dark_yellow, cterm = { bold = true } },
-  StatusVlMode = { fg = black, bg = dark_yellow, cterm = { bold = true } },
-  StatusSelMode = { fg = black, bg = cyan, cterm = { bold = true } },
-  StatusCmdMode = { fg = black, bg = red, cterm = { bold = true } },
-
-  --nvimtree
-  NvimTreeSymlink = { fg = blue, cterm = { bold = true, underline = true } },
-
-  -- Telescope
-  TelescopeResultsTitle = { fg = red, cterm = { bold = true } },
-  TelescopePreviewTitle = { fg = yellow, cterm = { bold = true } },
-  TelescopePromptTitle = { fg = blue, cterm = { bold = true } },
-  TelescopeMultiSelection = { fg = cyan },
-
-  -- coc
-  CocPumSearch = { fg = yellow },
-  CocTreeSelected = { bg = menu_grey },
-
-  -- fzf-lua
-  FzfLuaCursorLine = { bg = menu_grey },
-  QuickFixLine = { bg = menu_grey },
-
-  -- mini
-  MiniFilesTitleFocused = { fg = yellow, cterm = { bold = true } },
-  MiniFilesCursorLine = { bg = virtual_grey, cterm = { bold = true } },
-
-  -- Neogit
-  NeogitStatusHEAD = { fg = purple },
-  NeogitMerging = { fg = yellow },
-  NeogitBranch = { fg = green, cterm = { bold = true } },
-  NeogitRemote = { fg = red },
-  NeogitUntrackedfiles = { fg = purple },
-  NeogitUnstagedchanges = { fg = purple },
-  NeogitChangeUUunstaged = { fg = red },
-  NeogitChangeModified = { fg = yellow },
-  NeogitChangeDunstaged = { fg = red },
-  NeogitRecentcommits = { fg = blue },
-  NeogitChangeDeleted = { fg = red },
-  NeogitChangeNstaged = { fg = purple },
-  NeogitStagedchanges = { fg = blue, cterm = { bold = true } },
-  NeogitBranchHead = { fg = blue },
-  NeogitUnmergedchanges = { fg = yellow },
-  NeogitPopupActionKey = { fg = red, cterm = { bold = true } },
-  NeogitTagName = { fg = yellow, cterm = { bold = true } },
-  NeogitChangeRstaged = { fg = red },
-  NeogitUnpushedchanges = { fg = purple },
-}
-
-local function convert(opt)
-  local res = {}
-
-  for field, val in pairs(opt) do
-    if field == "fg" then
-      res.fg = val.gui
-      res.ctermfg = val.n
-    elseif field == "bg" then
-      res.bg = val.gui
-      res.ctermbg = val.n
-    else
-      res[field] = val
-    end
-  end
-
-  return res
-end
-
-local function default_theme()
-  -- treesitter
-  colors["@variable"] = { fg = white }
-  colors["@parameter"] = { fg = white, bold = true }
-  colors["@punctuation.bracket"] = { fg = white }
-  colors["@punctuation.delimiter"] = { fg = white }
-  colors["@constant.builtin"] = { fg = dark_yellow }
-  colors["@type.qualifier"] = { fg = purple }
-  colors["@type.builtin"] = { fg = yellow }
-  colors["@storageclass.cpp"] = { fg = purple }
-  colors["@variable.builtin"] = { fg = red }
-
-  colors["@lsp.type.variable"] = { fg = white }
-  colors["@lsp.type.parameter"] = { fg = white, bold = true }
-  colors["@lsp.type.namespace"] = { fg = red }
-  colors["@lsp.type.namespace.cpp"] = { fg = red, bold = true }
-  colors["@lsp.type.macro.cpp"] = { fg = blue, bold = true }
-  colors["@lsp.typemod.variable.defaultLibrary"] = { fg = dark_yellow }
-  colors["@lsp.mod.readonly.go"] = { fg = cyan }
-
-  -- cpp
-  hl(0, "cppStructure", { link = "Keyword" })
-  hl(0, "cStorageClass", { link = "Keyword" })
-  hl(0, "cppModifier", { link = "Keyword" })
-  hl(0, "cppStorageClass", { link = "Keyword" })
   -- go
-  hl(0, "goBlock", { link = "@variable" })
-  -- ts
-  hl(0, "typescriptTry", { link = "Keyword" })
-  hl(0, "typescriptExceptions", { link = "Keyword" })
-  hl(0, "typescriptTypeReference", { link = "Type" })
-  hl(0, "typescriptVariable", { link = "Keyword" })
-  hl(0, "typescriptOperator", { link = "Keyword" })
-  hl(0, "typescriptImport", { link = "Keyword" })
+  goBlock = { link = "@variable" },
 
-  hl(0, "javaScriptFunction", { link = "Keyword" })
+  -- js/ts
+  typescriptTry = { link = "Keyword" },
+  typescriptExceptions = { link = "Keyword" },
+  typescriptTypeReference = { link = "Type" },
+  typescriptVariable = { link = "Keyword" },
+  typescriptOperator = { link = "Keyword" },
+  typescriptImport = { link = "Keyword" },
+  javaScriptFunction = { link = "Keyword" },
 
-  hl(0, "CocMenuSel", { link = "PmenuSel" })
-  hl(0, "CocPum", { link = "Pmenu" })
-  hl(0, "CocVirtualText", { link = "Comment" })
-  hl(0, "BlinkCmpGhostText", { link = "Comment" })
-
-  hl(0, "LspInlayHint", { ctermfg = 61, ctermbg = 234 })
-  hl(0, "CocInlayHint", { link = "LspInlayHint" })
-  hl(0, "CocInlayHintType", { link = "LspInlayHint" })
-  hl(0, "CocInlayHintParameter", { link = "LspInlayHint" })
-
-  hl(0, "GrugFarResultsPath", { link = "Keyword" })
-  hl(0, "GrugFarResultsMatchRemoved", { link = "FindMatch" })
-  hl(0, "GrugFarResultsMatch", { link = "FindMatch" })
-  hl(0, "GrugFarResultsLineNo", { link = "DapUIThread" })
-
-  hl(0, "GrugFarResultsMatchAdded", { ctermfg = 235, ctermbg = 204, cterm = { bold = true } })
+  MsgArea = { myfg = colors.white, mybg = colors.cmdline },
 
   -- " 0.10
-  hl(0, "NormalFloat", { link = "Pmenu" })
+  NormalFloat = { link = "Pmenu" },
 
-  -- float window
-  hl(0, "FloatTitle", { cterm = { bold = true }, ctermfg = 204 })
+  -- lsp
+  LspDiagnosticsVirtualTextError = { myfg = colors.red },
+  LspDiagnosticsVirtualTextWarning = { myfg = colors.yellow },
+  LspProgress = { myfg = colors.yellow, cterm = { bold = true } },
+  LspInlayHint = { ctermfg = 61, ctermbg = 234 },
 
-  hl(0, "IncSearch", { cterm = { reverse = true } })
-  hl(0, "FlashLabel", { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 })
+  -- statusline
+  StatusLine = { myfg = colors.cursor_grey1, mybg = colors.white },
+  StatusLineNC = { myfg = colors.cursor_grey1, mybg = colors.cursor_grey1 },
+  StatusLineNormal = { myfg = colors.white, mybg = colors.cursor_grey2 },
+  StatusLineFunction = { myfg = colors.blue, mybg = colors.cursor_grey2, cterm = { bold = true } },
+  StatusLineError = { myfg = colors.red, mybg = colors.cursor_grey2, cterm = { bold = true } },
+  StatusLineWarnning = { myfg = colors.yellow, mybg = colors.cursor_grey2, cterm = { bold = true } },
+  StatusLineCurFile = { myfg = colors.cmdline, mybg = colors.green, cterm = { bold = true } },
+  StatusLineBufListNormal = { myfg = colors.white, mybg = colors.cursor_grey4, cterm = { bold = true } },
+  StatusLineGitSigns = { myfg = colors.white, mybg = colors.cursor_grey5, cterm = { bold = true } },
+  StatusLineTotalLine = { myfg = colors.white, mybg = colors.cursor_grey5, cterm = { bold = true } },
+  StatusLineWinnr = { myfg = colors.black, mybg = colors.yellow, cterm = { bold = true } },
+  WinSeparator = { mybg = colors.cursor_grey2 },
 
-  hl(0, "FindMatch", { ctermfg = 235, ctermbg = 114, cterm = { bold = true } })
+  StatusNormalMode = { myfg = colors.black, mybg = colors.blue, cterm = { bold = true } },
+  StatusInsertMode = { myfg = colors.black, mybg = colors.purple, cterm = { bold = true } },
+  StatusTermMode = { myfg = colors.black, mybg = colors.yellow, cterm = { bold = true } },
+  StatusVisMode = { myfg = colors.black, mybg = colors.dark_yellow, cterm = { bold = true } },
+  StatusVlMode = { myfg = colors.black, mybg = colors.dark_yellow, cterm = { bold = true } },
+  StatusSelMode = { myfg = colors.black, mybg = colors.cyan, cterm = { bold = true } },
+  StatusCmdMode = { myfg = colors.black, mybg = colors.red, cterm = { bold = true } },
 
-  for name, opt in pairs(colors) do
-    local o = convert(opt)
-    hl(0, name, o)
-  end
+  ---- plugin
+  -- nvim-tree
+  NvimTreeCursorLine = { mybg = colors.menu_grey },
+  NvimTreeRootFolder = { myfg = colors.yellow, cterm = { bold = true } },
+  NvimTreeNormalFloat = { link = "clear" },
 
-  local clear_hl = {
-    "MyFloatNormal",
-    "LazyNormal",
-    "NvimTreeNormalFloat",
-    "SnippetTabstop",
-    "FloatBorder",
-    "CocExplorerNormalFloat",
-    "CocExplorerNormalFloatBorder",
-    "@markup.raw.block.markdown",
-  }
-  for _, h in ipairs(clear_hl) do
-    hl(0, h, { link = "clear" })
-  end
+  -- coc
+  CocPumSearch = { myfg = colors.yellow },
+  CocTreeSelected = { mybg = colors.menu_grey },
+  CocMenuSel = { link = "PmenuSel" },
+  CocPum = { link = "Pmenu" },
+  CocVirtualText = { link = "Comment" },
+  CocInlayHint = { link = "LspInlayHint" },
+  CocInlayHintType = { link = "LspInlayHint" },
+  CocInlayHintParameter = { link = "LspInlayHint" },
+  CocExplorerNormalFloat = { link = "clear" },
+  CocExplorerNormalFloatBorder = { link = "clear" },
+  CocErrorHighlight = { link = "clear" },
+  CocWarningHighlight = { link = "clear" },
+  CocInfoHighlight = { link = "clear" },
+  CocHintHighlight = { link = "clear" },
+
+  -- fzf-lua
+  FzfLuaCursorLine = { mybg = colors.menu_grey },
+  QuickFixLine = { mybg = colors.menu_grey },
+
+  -- mini
+  MiniFilesTitleFocused = { myfg = colors.yellow, cterm = { bold = true } },
+  MiniFilesCursorLine = { mybg = colors.virtual_grey, cterm = { bold = true } },
+
+  -- Neogit
+  NeogitStatusHEAD = { myfg = colors.purple },
+  NeogitMerging = { myfg = colors.yellow },
+  NeogitBranch = { myfg = colors.green, cterm = { bold = true } },
+  NeogitRemote = { myfg = colors.red },
+  NeogitUntrackedfiles = { myfg = colors.purple },
+  NeogitUnstagedchanges = { myfg = colors.purple },
+  NeogitChangeUUunstaged = { myfg = colors.red },
+  NeogitChangeModified = { myfg = colors.yellow },
+  NeogitChangeDunstaged = { myfg = colors.red },
+  NeogitRecentcommits = { myfg = colors.blue },
+  NeogitChangeDeleted = { myfg = colors.red },
+  NeogitChangeNstaged = { myfg = colors.purple },
+  NeogitStagedchanges = { myfg = colors.blue, cterm = { bold = true } },
+  NeogitBranchHead = { myfg = colors.blue },
+  NeogitUnmergedchanges = { myfg = colors.yellow },
+  NeogitPopupActionKey = { myfg = colors.red, cterm = { bold = true } },
+  NeogitTagName = { myfg = colors.yellow, cterm = { bold = true } },
+  NeogitChangeRstaged = { myfg = colors.red },
+  NeogitUnpushedchanges = { myfg = colors.purple },
+
+  -- grug
+  GrugFarResultsPath = { link = "Keyword" },
+  GrugFarResultsMatchRemoved = { link = "FindMatch" },
+  GrugFarResultsMatch = { link = "FindMatch" },
+  GrugFarResultsLineNo = { link = "DapUIThread" },
+  GrugFarResultsMatchAdded = { ctermfg = 235, ctermbg = 204, cterm = { bold = true } },
+
+  -- blink.cmp
+  BlinkCmpGhostText = { link = "Comment" },
+
+  -- dap
+  DapUIStoppedThread = { myfg = colors.red },
+  DapUIThread = { myfg = colors.green },
+  DapUISource = { myfg = colors.blue },
+  DapUIWatchesEmpty = { myfg = colors.blue },
+  DapUILineNumber = { myfg = colors.yellow },
+  DapUIScope = { myfg = colors.yellow },
+  DapUIType = { myfg = colors.yellow },
+  DapUIValue = { myfg = colors.green },
+  DapUIBreakpointsPath = { myfg = colors.blue },
+
+  -- flash.nvim
+  FlashLabel = { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 },
+
+  -- gitsigns
+  GitSignsAdd = { myfg = colors.green, mybg = colors.menu_grey },
+  GitSignsChange = { myfg = colors.yellow, mybg = colors.menu_grey },
+  GitSignsDelete = { myfg = colors.red, mybg = colors.menu_grey },
+
+  --- 4. treesitter
+  ["@variable"] = { myfg = colors.white },
+  ["@parameter"] = { myfg = colors.white, bold = true },
+  ["@punctuation.bracket"] = { myfg = colors.white },
+  ["@punctuation.delimiter"] = { myfg = colors.white },
+  ["@constant.builtin"] = { myfg = colors.dark_yellow },
+  ["@type.qualifier"] = { myfg = colors.purple },
+  ["@type.builtin"] = { myfg = colors.yellow },
+  ["@storageclass.cpp"] = { myfg = colors.purple },
+  ["@variable.builtin"] = { myfg = colors.red },
+  ["@lsp.type.variable"] = { myfg = colors.white },
+  ["@lsp.type.parameter"] = { myfg = colors.white, bold = true },
+  ["@lsp.type.namespace"] = { myfg = colors.red },
+  ["@lsp.type.namespace.cpp"] = { myfg = colors.red, bold = true },
+  ["@lsp.type.macro.cpp"] = { myfg = colors.blue, bold = true },
+  ["@lsp.typemod.variable.defaultLibrary"] = { myfg = colors.dark_yellow },
+  ["@lsp.mod.readonly.go"] = { myfg = colors.cyan },
+  ["@markup.raw.block.markdown"] = { link = "clear" },
+
+  --- 5. custom define
+  YcNameSpace = { myfg = colors.red },
+  YcCppStructure = { myfg = colors.yellow },
+  NumberBuffers = { myfg = colors.black, mybg = colors.blue, cterm = { bold = true } },
+  FindMatch = { ctermfg = 235, ctermbg = 114, cterm = { bold = true } },
+  MyFloatNormal = { link = "clear" },
+  LazyNormal = { link = "clear" },
+  SnippetTabstop = { link = "clear" },
+}
+
+for name, opt in pairs(theme) do
+  local o = YcVim.colors_convert(opt)
+  vim.api.nvim_set_hl(0, name, o)
 end
-
-default_theme()

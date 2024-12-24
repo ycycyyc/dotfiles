@@ -8,5 +8,6 @@ require "yc.vim.setup"
 require "yc.vim.cmp"
 require "yc.vim.lsp"
 require "yc.vim.git"
+require "yc.vim.colors"
 
 YcVim.extra = {}
