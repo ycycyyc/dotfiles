@@ -43,3 +43,6 @@ vim.opt.fillchars = "vert: ,horiz: ,horizdown: ,verthoriz: ,vertleft: ,vertright
 
 -- :100 只保留100条history cmd
 vim.opt.shada:append ":100"
+
+vim.opt.laststatus = 3
+vim.opt.showmode = false

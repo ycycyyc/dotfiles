@@ -3,40 +3,35 @@ local buflisted = fn.buflisted ---@type fun(number:number):number
 local bufname_of = fn.bufname
 local util = YcVim.util
 
-local M = {
-  refresh_cnt = 0, ---@type number
-  costs = {}, ---@type number[]
-  max_items = 0,
+---@type yc.line.Component
+local M = YcVim.extra.new_component "bufferlist"
 
-  cached_str = "", ---@type string
-
-  sel_theme = "StatusLineCurFile",
-  theme = "StatusLineBufListNormal",
-  end_theme = "StatusLineNormal",
-
-  nbuffers_cb = function(_) end,
-}
+local costs = {} ---@type number[]
+local max_items = 0
+local sel_sytle = "StatusLineCurFile"
+local m_style = "StatusLineBufListNormal"
+local end_style = "StatusLineNormal"
 
 ---@param bufnr number
 ---@param cur_buf_format string|nil
 ---@return string
 local colorfy_item = function(bufnr, cur_buf_format)
   local filename ---@type string
-  local theme
+  local style
   if cur_buf_format then
     filename = cur_buf_format
-    theme = M.sel_theme
+    style = sel_sytle
   else
     local bufname = bufname_of(bufnr)
     filename = fn.fnamemodify(bufname, ":t") ---@type string
     if bufname == "" then
       filename = "[no name]"
     end
-    theme = M.theme
+    style = m_style
   end
 
   -- local item = string.format(" %%%dT%s %d %s %%#StatusLine1#", bufnr, sel, bufnr, filename) why ??
-  local item = util.add_theme(theme, string.format("%d %s", bufnr, filename), M.end_theme)
+  local item = util.add_theme(style, string.format("%d %s", bufnr, filename), end_style)
   item = string.format(" %%%dT%s", bufnr, item)
 
   return item
@@ -48,7 +43,7 @@ local get_listedbufs = function()
   local cur_index ---@type number|nil
   local bufnr_list = {} ---@type number[]
 
-  local cur_bufnr = api.nvim_get_current_buf() ---@type number
+  local cur_bufnr = vim.api.nvim_get_current_buf() ---@type number
   for bufnr = 1, vim.fn.bufnr "$" do
     if buflisted(bufnr) == 1 then
       table.insert(bufnr_list, bufnr)
@@ -75,7 +70,7 @@ local list_insert = function(list, new)
 end
 
 ---@return string[]|nil
-local cal_fileitems = function()
+local get_color_items = function()
   local bufnr_list, cur_index = get_listedbufs()
   local cur_buf_format = "%{expand('%:~:.')}%m%h"
 
@@ -92,7 +87,7 @@ local cal_fileitems = function()
   end
 
   local bufnr_list_len = #bufnr_list ---@type number
-  require("yc.custom.line.nbuffers").update(bufnr_list_len) -- 如何让俩个模块不关联?
+  vim.g.ycvim_buf_number = bufnr_list_len
 
   local colored_file_items = { colorfy_item(bufnr_list[cur_index], cur_buf_format) }
   local total_sz = util.evaluates_width(colored_file_items[1])
@@ -139,42 +134,31 @@ local cal_fileitems = function()
   return colored_file_items
 end
 
-local update_cached_content = function()
-  local colored_file_items = cal_fileitems()
+local update_content = function()
+  local colored_file_items = get_color_items()
   if not colored_file_items then
     return
   end
 
-  if #colored_file_items > M.max_items then
-    M.max_items = #colored_file_items
+  if #colored_file_items > max_items then
+    max_items = #colored_file_items
   end
 
-  M.cached_str = table.concat(colored_file_items)
+  M.content = table.concat(colored_file_items)
 end
 
-M.refresh = function()
-  M.refresh_cnt = M.refresh_cnt + 1
-  local start = vim.fn.reltime()
-
-  update_cached_content()
-
-  local cost = vim.fn.reltimestr(vim.fn.reltime(start))
-
-  if #M.costs > 10 then
-    table.remove(M.costs, 1)
-  end
-  table.insert(M.costs, tonumber(cost))
-end
+---@return number
+M.width = 0
 
 M.start = function()
-  api.nvim_create_autocmd({ "BufEnter" }, {
+  vim.api.nvim_create_autocmd({ "BufEnter" }, {
     callback = function()
       M.refresh()
     end,
   })
 
   local hasRefreshJob = false
-  api.nvim_create_autocmd({ "BufDelete" }, {
+  vim.api.nvim_create_autocmd({ "BufDelete" }, {
     callback = function()
       if hasRefreshJob then
         return
@@ -190,25 +174,30 @@ M.start = function()
   })
 end
 
----@return number
-M.width = 0
+M.refresh = function()
+  M.cnt = M.cnt + 1
+  local start = vim.fn.reltime()
 
----@return string
+  update_content()
+
+  local cost = vim.fn.reltimestr(vim.fn.reltime(start))
+
+  if #costs > 10 then
+    table.remove(costs, 1)
+  end
+  table.insert(costs, tonumber(cost))
+end
+
 M.metrics = function()
   local av = 0
 
-  for _, c in ipairs(M.costs) do
+  for _, c in ipairs(costs) do
     av = av + c
   end
 
   av = av / 10
 
-  return string.format(
-    "[BufferList refresh cnt: %d average cost: %s, max items: %d ]",
-    M.refresh_cnt,
-    tostring(av),
-    M.max_items
-  )
+  return string.format("[BufferList refresh cnt: %d average cost: %s, max items: %d ]", M.cnt, tostring(av), max_items)
 end
 
 return M

@@ -1,12 +1,8 @@
-local M = {
-  update_cnt = 0,
-  theme = "StatusLineGitSigns",
-  end_theme = "StatusLineNormal",
-  cached_str = "",
-}
+---@class yc.line.Component
+local M = YcVim.extra.new_component "gitinfo"
 
 ---@return string
-local get_info = function()
+local get_msg = function()
   local git_info = vim.b.gitsigns_status_dict
   if not git_info then
     return ""
@@ -32,25 +28,29 @@ local get_info = function()
   return table.concat(res, " ")
 end
 
-local refresh = function()
-  M.update_cnt = M.update_cnt + 1
-
-  local info = get_info()
-  M.cached_str = YcVim.util.add_theme(M.theme, info, M.end_theme)
-end
-
 M.start = function()
   vim.api.nvim_create_autocmd("User", {
     pattern = "GitSignsUpdate",
-    callback = refresh,
+    callback = M.refresh,
   })
 
-  vim.api.nvim_create_autocmd({ "BufEnter" }, { callback = refresh })
+  M.refresh()
+  vim.api.nvim_create_autocmd({ "BufEnter" }, { callback = M.refresh })
+end
+
+M.refresh = function()
+  M.cnt = M.cnt + 1
+
+  local msg = get_msg()
+  local style = "StatusLineGitInfos"
+  local end_style = "StatusLineNormal"
+
+  M.content = YcVim.util.add_theme(style, msg, end_style)
 end
 
 ---@return string
 M.metrics = function()
-  return string.format("[GitInfo update cnt: %d]", M.update_cnt)
+  return string.format("[GitInfo update cnt: %d]", M.cnt)
 end
 
 return M

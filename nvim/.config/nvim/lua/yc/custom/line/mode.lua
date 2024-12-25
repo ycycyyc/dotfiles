@@ -1,11 +1,5 @@
 local api, fn = vim.api, vim.fn
 
-local M = {
-  refresh_cnt = 0, ---@type integer
-  cached_str = "", ---@type string
-  end_theme = "StatusLine1", ---@type string
-}
-
 -- stylua: ignore
 local modemap = {
   ['n']      = 'NORMAL',
@@ -89,54 +83,35 @@ local stylemap = {
 ---@type table<string, string>
 local stylecache = {}
 
----@return number
-local widthModef = function()
-  local res = 0
-  for _, mo in pairs(modemap) do
-    local w = #mo
-    if w > res then
-      res = w
-    end
-  end
-  return res
-end
+---@type string
+local end_style = "StatusLineNormal"
 
----@type number
-local wid = widthModef()
+---@class yc.line.Component
+local M = YcVim.extra.new_component "mode"
 
-M.refresh = function()
-  M.refresh_cnt = M.refresh_cnt + 1
-  local m = vim.fn.mode()
-  if not stylecache[m] then
-    local msg = modemap[m]
-    local style = stylemap[m]
-    stylecache[m] = YcVim.util.add_theme(style, msg, M.end_theme)
-  end
-
-  M.cached_str = stylecache[m]
-end
-
-local started = false
-
-M.start = function()
-  if started then
-    return
-  end
-
-  if M.cached_str == "" then
-    M.refresh()
-  end
-
-  api.nvim_create_autocmd("ModeChanged", {
+function M.start()
+  M.refresh()
+  vim.api.nvim_create_autocmd("ModeChanged", {
     callback = function()
       M.refresh()
     end,
   })
 end
 
+function M.refresh()
+  M.cnt = M.cnt + 1
+  local m = vim.fn.mode()
+  if not stylecache[m] then
+    local msg = modemap[m]
+    local style = stylemap[m]
+    stylecache[m] = YcVim.util.add_theme(style, msg, end_style)
+  end
+  M.content = stylecache[m]
+end
+
 ---@return string
-M.metrics = function()
-  return string.format("[Mode refresh cnt: %d]", M.refresh_cnt)
+function M.metrics()
+  return string.format("[Mode refresh cnt: %d]", M.cnt)
 end
 
 return M

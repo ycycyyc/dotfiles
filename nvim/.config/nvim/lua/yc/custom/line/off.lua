@@ -1,5 +1,6 @@
-local M = {
-  cached_str = YcVim.util.add_theme("StatusLineTotalLine", " %l of %L ", "StatusLineNormal"),
-}
+---@type yc.line.Component
+local M = YcVim.extra.new_component "off"
+
+M.content = YcVim.util.add_theme("StatusLineOff", " %l of %L ", "StatusLineNormal")
 
 return M

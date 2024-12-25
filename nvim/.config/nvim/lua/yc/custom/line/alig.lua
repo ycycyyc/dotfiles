@@ -1,11 +1,8 @@
-local M = {
-  cached_str = "%=",
-}
-
-M.start = function() end
-
-M.refresh = function() end
+---@type yc.line.Component
+local M = YcVim.extra.new_component "alig"
 
 M.width = 0
+
+M.content = "%="
 
 return M

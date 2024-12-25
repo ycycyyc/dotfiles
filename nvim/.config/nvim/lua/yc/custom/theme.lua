@@ -117,8 +117,13 @@ local theme = {
   StatusLineCurFile = { myfg = colors.cmdline, mybg = colors.green, cterm = { bold = true } },
   StatusLineBufListNormal = { myfg = colors.white, mybg = colors.cursor_grey4, cterm = { bold = true } },
   StatusLineGitSigns = { myfg = colors.white, mybg = colors.cursor_grey5, cterm = { bold = true } },
+  StatusLineGitInfos = { myfg = colors.white, mybg = colors.cursor_grey5, cterm = { bold = true } },
   StatusLineTotalLine = { myfg = colors.white, mybg = colors.cursor_grey5, cterm = { bold = true } },
+  StatusLineOff = { myfg = colors.white, mybg = colors.cursor_grey5, cterm = { bold = true } },
   StatusLineWinnr = { myfg = colors.black, mybg = colors.yellow, cterm = { bold = true } },
+  StatusLineGitHead = { myfg = colors.white, mybg = colors.cursor_grey4, cterm = { bold = true } },
+  StatusLineNBuffers = { myfg = colors.black, mybg = colors.blue, cterm = { bold = true } },
+
   WinSeparator = { mybg = colors.cursor_grey2 },
 
   StatusNormalMode = { myfg = colors.black, mybg = colors.blue, cterm = { bold = true } },
