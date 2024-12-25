@@ -1,4 +1,3 @@
-local utils = require "utils.theme"
 local env = YcVim.env
 
 local module_prefix = "yc.custom.line."
@@ -13,7 +12,7 @@ function YcVim.extra.yc_statusline_avail_width()
     if c.width then
       w = w + c.width
     else
-      w = w + utils.evaluates_width(c.cached_str)
+      w = w + YcVim.util.evaluates_width(c.cached_str)
     end
   end
   return vim.o.columns - 10 - w -- 10是padding的长度

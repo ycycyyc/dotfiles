@@ -1,4 +1,4 @@
-local utils = require "utils.theme"
+local util = YcVim.util
 
 local M = {}
 
@@ -15,7 +15,7 @@ local ignore_ft = {}
 M.func = function()
   local func = vim.b.coc_current_function
   if func then
-    func = utils.add_theme("StatusLineFunction", " " .. func, "StatusLineNormal")
+    func = util.add_theme("StatusLineFunction", " " .. func, "StatusLineNormal")
   else
     return ""
   end
@@ -32,11 +32,11 @@ M.diagnostic_info = function()
   local msgs = ""
 
   if diag.error and diag.error > 0 then
-    msgs = msgs .. utils.add_theme("StatusLineError", " E: " .. diag.error, "StatusLineNormal")
+    msgs = msgs .. util.add_theme("StatusLineError", " E: " .. diag.error, "StatusLineNormal")
   end
 
   if diag.warning and diag.warning > 0 then
-    msgs = msgs .. utils.add_theme("StatusLineWarnning", " W: " .. diag.warning, "StatusLineNormal")
+    msgs = msgs .. util.add_theme("StatusLineWarnning", " W: " .. diag.warning, "StatusLineNormal")
   end
 
   return msgs
@@ -68,11 +68,11 @@ M.update = function(winnr)
     if ignore_filename[filename] then
       return
     end
-    filename = utils.add_theme("StatusLineCurFile", filename, "StatusLineNormal")
+    filename = util.add_theme("StatusLineCurFile", filename, "StatusLineNormal")
 
     str = filename .. M.diagnostic_info() .. M.func()
 
-    local winnr_str = utils.add_theme("StatusLineWinnr", "%{winnr()} ", "StatusLineNormal")
+    local winnr_str = util.add_theme("StatusLineWinnr", "%{winnr()} ", "StatusLineNormal")
 
     vim.wo[winnr].winbar = winnr_str .. str
   end, 100)

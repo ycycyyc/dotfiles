@@ -1,5 +1,4 @@
 local api, fn = vim.api, vim.fn
-local utils = require "utils.theme"
 
 local M = {
   refresh_cnt = 0, ---@type integer
@@ -111,7 +110,7 @@ M.refresh = function()
   if not stylecache[m] then
     local msg = modemap[m]
     local style = stylemap[m]
-    stylecache[m] = utils.add_theme(style, msg, M.end_theme)
+    stylecache[m] = YcVim.util.add_theme(style, msg, M.end_theme)
   end
 
   M.cached_str = stylecache[m]

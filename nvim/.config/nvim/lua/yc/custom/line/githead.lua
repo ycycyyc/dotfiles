@@ -1,5 +1,3 @@
-local utils = require "utils.theme"
-
 local M = {
   update_cnt = 0,
   theme = "StatusLineBufListNormal",
@@ -19,7 +17,7 @@ end
 
 local update_cached_str = function()
   M.update_cnt = M.update_cnt + 1
-  M.cached_str = utils.add_theme(M.theme, M.head, M.end_theme)
+  M.cached_str = YcVim.util.add_theme(M.theme, M.head, M.end_theme)
 end
 
 M.refresh = function()

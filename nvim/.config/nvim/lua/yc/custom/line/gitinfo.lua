@@ -1,5 +1,3 @@
-local utils = require "utils.theme"
-
 local M = {
   update_cnt = 0,
   theme = "StatusLineGitSigns",
@@ -38,7 +36,7 @@ local refresh = function()
   M.update_cnt = M.update_cnt + 1
 
   local info = get_info()
-  M.cached_str = utils.add_theme(M.theme, info, M.end_theme)
+  M.cached_str = YcVim.util.add_theme(M.theme, info, M.end_theme)
 end
 
 M.start = function()

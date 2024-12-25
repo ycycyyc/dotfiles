@@ -1,5 +1,3 @@
-local utils = require "utils.theme"
-
 local M = {
   update_cnt = 0,
   cached_str = "No Buffer", ---@type string
@@ -17,7 +15,7 @@ M.update = function(n)
     c = string.format(" %d Buffers ", n)
   end
 
-  M.cached_str = utils.add_theme(M.theme, c, M.end_theme)
+  M.cached_str = YcVim.util.add_theme(M.theme, c, M.end_theme)
 end
 
 ---@return string

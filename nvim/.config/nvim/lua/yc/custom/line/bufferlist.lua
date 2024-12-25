@@ -1,7 +1,7 @@
 local api, fn = vim.api, vim.fn
 local buflisted = fn.buflisted ---@type fun(number:number):number
 local bufname_of = fn.bufname
-local utils = require "utils.theme"
+local util = YcVim.util
 
 local M = {
   refresh_cnt = 0, ---@type number
@@ -36,7 +36,7 @@ local colorfy_item = function(bufnr, cur_buf_format)
   end
 
   -- local item = string.format(" %%%dT%s %d %s %%#StatusLine1#", bufnr, sel, bufnr, filename) why ??
-  local item = utils.add_theme(theme, string.format("%d %s", bufnr, filename), M.end_theme)
+  local item = util.add_theme(theme, string.format("%d %s", bufnr, filename), M.end_theme)
   item = string.format(" %%%dT%s", bufnr, item)
 
   return item
@@ -95,7 +95,7 @@ local cal_fileitems = function()
   require("yc.custom.line.nbuffers").update(bufnr_list_len) -- 如何让俩个模块不关联?
 
   local colored_file_items = { colorfy_item(bufnr_list[cur_index], cur_buf_format) }
-  local total_sz = utils.evaluates_width(colored_file_items[1])
+  local total_sz = util.evaluates_width(colored_file_items[1])
   local available_sz = YcVim.extra.yc_statusline_avail_width()
 
   ---@param index number
@@ -103,7 +103,7 @@ local cal_fileitems = function()
   ---@return boolean
   local try_add = function(index, forward)
     local item = colorfy_item(bufnr_list[index])
-    local sz = utils.evaluates_width(item)
+    local sz = util.evaluates_width(item)
     if total_sz + sz > available_sz then
       return false
     end
