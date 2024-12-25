@@ -30,6 +30,26 @@ plugin.init = function()
 
   vim.api.nvim_create_user_command("Gwrite", stage_file, {})
   vim.api.nvim_create_user_command("Gw", stage_file, {})
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "NeogitReset",
+    callback = function()
+      vim.defer_fn(function()
+        vim.cmd "checktime"
+      end, 200)
+
+      local wins = YcVim.util.get_winnums_byft "NeogitLogView"
+      for _, win in ipairs(wins) do
+        vim.api.nvim_buf_delete(vim.fn.winbufnr(win), { force = false })
+        vim.notify("delete NeogitLogView win:" .. win)
+      end
+
+      local status_buffer = require "neogit.buffers.status"
+      if status_buffer.is_open() then
+        status_buffer.instance():dispatch_refresh(nil, "reset_complete")
+      end
+    end,
+  })
 end
 
 return {
