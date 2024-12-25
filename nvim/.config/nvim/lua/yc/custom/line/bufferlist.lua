@@ -78,7 +78,7 @@ local get_color_items = function()
     local n = vim.api.nvim_get_current_buf()
     local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
 
-    if ft == "terminal" then
+    if ft == "terminal" or ft == "snacks_terminal" then
       cur_index = list_insert(bufnr_list, n)
       cur_buf_format = "Terminal"
     else
