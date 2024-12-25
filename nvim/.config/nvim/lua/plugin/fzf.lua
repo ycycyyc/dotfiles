@@ -100,7 +100,7 @@ local M = {
   user_cmds = {
     {
       "Rg",
-      require("utils.rg").build_rg_func(live_grep, grep),
+      YcVim.rg.run(live_grep, grep),
       { nargs = "*", bang = true },
     },
   },

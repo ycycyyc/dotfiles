@@ -99,7 +99,7 @@ function Finder:run(live_grep, grep)
 
   -- 生成最后的rg cmd
   -- rg的命令格式，可以减少转义 看上去不需要? (note)
-  -- table.insert(self.rg, "-- ") 
+  -- table.insert(self.rg, "-- ")
   local cmd = table.concat(self.rg, " ")
 
   -- live_grep or grep
@@ -112,7 +112,7 @@ function Finder:run(live_grep, grep)
   find(cmd, self.query, self.filepath)
 end
 
-M.build_rg_func = function(live_grep, grep)
+M.run = function(live_grep, grep)
   return function(args)
     Finder:new(args):run(live_grep, grep)
   end

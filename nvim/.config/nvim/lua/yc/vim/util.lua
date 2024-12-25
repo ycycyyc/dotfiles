@@ -142,4 +142,16 @@ function util.win_only()
   end
 end
 
+---@param str string
+---@return number
+function util.calculateHash(str)
+  local hash = 0
+  local len = string.len(str)
+  for i = 1, len do
+    local byte = string.byte(str, i)
+    hash = (hash * 31 + byte) % (2 ^ 32) -- 使用简单的哈希算法
+  end
+  return hash
+end
+
 return util
