@@ -5,7 +5,7 @@ plugin.initfuncs = {
     "oil",
     function()
       vim.b.completion = false
-      YcVim.map.buf("n", "q", function()
+      YcVim.keys.buf_map("n", "q", function()
         require("oil").close()
       end)
     end,
@@ -23,7 +23,7 @@ local type_hlgroups = setmetatable({
 return {
   "stevearc/oil.nvim",
   init = function()
-    YcVim.setup_plugin(plugin)
+    YcVim.setup(plugin)
   end,
   keys = {
     {

@@ -73,4 +73,4 @@ plugin.user_cmds = {
   { "GoRemoveTags", function(args) remove(args["args"]) end, { nargs = "+" } },
 }
 
-YcVim.setup_plugin(plugin)
+YcVim.setup(plugin)

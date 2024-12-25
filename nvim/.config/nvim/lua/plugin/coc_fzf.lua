@@ -40,7 +40,7 @@ M.config = function()
 
   vim.fn["coc_fzf#common#add_list_source"]("fzf-grep", "search global", "Rg")
 
-  YcVim.setup_plugin(M)
+  YcVim.setup(M)
 end
 
 return {

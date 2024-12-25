@@ -39,9 +39,9 @@ plugin.initfuncs = {
         vim.cmd "silent! checktime"
       end
 
-      YcVim.map.buf("n", "<leader>q", close)
-      YcVim.map.buf("n", "q", close)
-      YcVim.map.buf("n", "<esc>", close)
+      YcVim.keys.buf_map("n", "<leader>q", close)
+      YcVim.keys.buf_map("n", "q", close)
+      YcVim.keys.buf_map("n", "<esc>", close)
     end,
   },
 }
@@ -66,6 +66,6 @@ return {
   config = function()
     local opt = require "plugin.gitdiff_opt"
     require("diffview").setup(opt)
-    YcVim.setup_plugin(plugin)
+    YcVim.setup(plugin)
   end,
 }

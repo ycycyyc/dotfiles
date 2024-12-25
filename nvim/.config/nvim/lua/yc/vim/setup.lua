@@ -45,7 +45,7 @@ local function setup_initfuncs(initfuncs)
 end
 
 ---@param m table
-YcVim.setup_plugin = function(m)
+local setup = function(m)
   if m.user_cmds then
     setup_usercmd(m.user_cmds)
   end
@@ -58,3 +58,5 @@ YcVim.setup_plugin = function(m)
     setup_initfuncs(m.initfuncs)
   end
 end
+
+return setup

@@ -18,7 +18,7 @@ plugin.config = function()
     disable_filetype = { "snacks_input" },
     map_c_w = true,
   }
-  YcVim.setup_plugin(plugin)
+  YcVim.setup(plugin)
 end
 
 return {

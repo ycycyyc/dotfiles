@@ -61,9 +61,9 @@ local function toggleFugitiveGit()
 end
 
 local fugitive_initfunc = function()
-  YcVim.map.buf("n", "q", ":q<cr>")
+  YcVim.keys.buf_map("n", "q", ":q<cr>")
 
-  YcVim.map.buf("n", "<leader>d", function()
+  YcVim.keys.buf_map("n", "<leader>d", function()
     local current_line = vim.api.nvim_get_current_line()
     local items = vim.fn.split(current_line)
 
@@ -92,13 +92,13 @@ local fugitive_initfunc = function()
 end
 
 local fugitiveblame_initfunc = function()
-  YcVim.map.buf("n", "q", ":q<cr>")
+  YcVim.keys.buf_map("n", "q", ":q<cr>")
 
-  YcVim.map.buf("n", "<cr>", function()
+  YcVim.keys.buf_map("n", "<cr>", function()
     cur_line_diff()
   end)
 
-  YcVim.map.buf("n", "<leader>d", function()
+  YcVim.keys.buf_map("n", "<leader>d", function()
     cur_line_diff()
   end)
 end
@@ -118,6 +118,6 @@ return {
   },
   cmd = { "Gw" },
   config = function()
-    YcVim.setup_plugin(plugin)
+    YcVim.setup(plugin)
   end,
 }

@@ -142,4 +142,4 @@ function util.win_only()
   end
 end
 
-YcVim.util = util
+return util

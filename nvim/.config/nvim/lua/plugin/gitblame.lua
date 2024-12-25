@@ -1,6 +1,6 @@
 -- blame.nvim 插件的功能
 local diffCommit = function()
-  YcVim.map.buf("n", "<cr>", function()
+  YcVim.keys.buf_map("n", "<cr>", function()
     local current_line = vim.api.nvim_get_current_line()
     local items = vim.fn.split(current_line) ---@type string[]
 
@@ -30,7 +30,7 @@ plugin.config = function()
     },
   }
 
-  YcVim.setup_plugin(plugin)
+  YcVim.setup(plugin)
 
   --  you can do something like this: there are some conflicts with some winbar plugins,
   --  in this case barbecue is toggled

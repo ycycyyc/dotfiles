@@ -1,5 +1,5 @@
 -- 常用 快捷键
-YcVim.keys = {
+local keys = {
   -- search
   search_global = "<Leader>f", -- search use rg and fzf
   run_find = "<Leader>F",
@@ -69,8 +69,8 @@ YcVim.keys = {
   git_diff_file = "<leader>hf",
 }
 
-YcVim.map = {
-  buf = function(mode, key, action)
-    vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
-  end,
-}
+keys.buf_map = function(mode, key, action)
+  vim.keymap.set(mode, key, action, { noremap = true, buffer = true, silent = true })
+end
+
+return keys

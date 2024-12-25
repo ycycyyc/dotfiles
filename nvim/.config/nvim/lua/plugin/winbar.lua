@@ -2,7 +2,8 @@ local plugin = {}
 
 local colors = YcVim.colors
 local bg = colors.cursor_grey4
-local convert = YcVim.colors_convert
+
+local convert = colors.convert
 
 plugin.opts = {
   include_buftypes = { "", "nowrite", "nofile" },

@@ -114,4 +114,4 @@ git.add_file = function()
   end)
 end
 
-YcVim.git = git
+return git

@@ -38,5 +38,6 @@ local function convert(opt)
   return res
 end
 
-YcVim.colors = colors
-YcVim.colors_convert = convert
+colors.convert = convert
+
+return colors

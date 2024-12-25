@@ -4,7 +4,7 @@ plugin.initfuncs = {
   {
     "qf",
     function()
-      YcVim.map.buf("n", "q", ":q<cr>")
+      YcVim.keys.buf_map("n", "q", ":q<cr>")
       vim.cmd.wincmd "J"
     end,
   },
@@ -41,10 +41,10 @@ plugin.user_cmds = {
   {
     "ShowEnvHash",
     function()
-      vim.notify(vim.inspect(YcVim.env_hash))
+      vim.notify(vim.inspect(YcVim.extra.env_hash))
     end,
     {},
   },
 }
 
-YcVim.setup_plugin(plugin)
+YcVim.setup(plugin)

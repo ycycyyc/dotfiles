@@ -1,7 +1,7 @@
 local keys = YcVim.keys
 
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
-local buf_map = YcVim.map.buf
+local buf_map = YcVim.keys.buf_map
 
 local M = {
   user_cmds = {
@@ -186,7 +186,7 @@ M.config = function()
 
   -- coc semantic token
   setup_semantic_token()
-  YcVim.setup_plugin(M)
+  YcVim.setup(M)
 end
 
 return M

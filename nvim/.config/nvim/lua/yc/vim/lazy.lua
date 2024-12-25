@@ -1,9 +1,9 @@
-YcVim.lazy = {}
+local lazy = {}
 
 ---@param keymaps table[]
 ---@param extra string[]|nil
 ---@return string[]
-YcVim.lazy.keys = function(keymaps, extra)
+lazy.keys = function(keymaps, extra)
   local keys = extra or {}
 
   if not keymaps then
@@ -35,7 +35,7 @@ end
 ---@param user_cmds table[]
 ---@param extra string[] | nil
 ---@return string[]
-YcVim.lazy.cmds = function(user_cmds, extra)
+lazy.cmds = function(user_cmds, extra)
   local cmds = extra or {}
 
   if not user_cmds then
@@ -48,3 +48,5 @@ YcVim.lazy.cmds = function(user_cmds, extra)
 
   return cmds
 end
+
+return lazy

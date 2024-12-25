@@ -64,4 +64,4 @@ cmp.snippet = {
   end,
 }
 
-YcVim.cmp = cmp
+return cmp

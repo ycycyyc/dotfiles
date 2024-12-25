@@ -95,11 +95,11 @@ local default_lsp_config = function()
   return {
     auto_format = false,
     keymaps = {
-      [keys.lsp_goto_definition] = { YcVim.lsp.method.definition },
-      [keys.lsp_goto_references] = { YcVim.lsp.method.references },
-      [keys.lsp_format] = { YcVim.lsp.method.format },
-      [keys.lsp_impl] = { YcVim.lsp.method.impl },
-      [keys.lsp_code_action] = { YcVim.lsp.method.code_action },
+      [keys.lsp_goto_definition] = { lsp.method.definition },
+      [keys.lsp_goto_references] = { lsp.method.references },
+      [keys.lsp_format] = { lsp.method.format },
+      [keys.lsp_impl] = { lsp.method.impl },
+      [keys.lsp_code_action] = { lsp.method.code_action },
 
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
       [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
@@ -152,4 +152,4 @@ lsp.on_attach_func = function(user_lsp_config)
   end
 end
 
-YcVim.lsp = lsp
+return lsp

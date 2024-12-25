@@ -35,7 +35,7 @@ plugin.config = function()
     dapui.close()
   end
 
-  YcVim.setup_plugin(plugin)
+  YcVim.setup(plugin)
 end
 
 local keys = YcVim.keys

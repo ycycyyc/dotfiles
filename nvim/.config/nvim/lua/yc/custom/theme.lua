@@ -239,6 +239,6 @@ local theme = {
 }
 
 for name, opt in pairs(theme) do
-  local o = YcVim.colors_convert(opt)
+  local o = colors.convert(opt)
   vim.api.nvim_set_hl(0, name, o)
 end
