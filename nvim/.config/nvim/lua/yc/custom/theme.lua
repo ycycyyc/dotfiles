@@ -214,6 +214,19 @@ local theme = {
   GitSignsChange = { myfg = colors.yellow, mybg = colors.menu_grey },
   GitSignsDelete = { myfg = colors.red, mybg = colors.menu_grey },
 
+  -- aerial
+  AerialNamespace = { myfg = colors.red, cterm = { bold = true } },
+  AerialNamespaceIcon = { link = "AerialNamespace" },
+  AerialMethod = { link = "Function" },
+  AerialFunction = { link = "Function" },
+  AerialStruct = { link = "Type" },
+  AerialClass = { link = "Type" },
+  AerialField = { myfg = colors.white },
+  AerialFieldIcon = { myfg = colors.white },
+  AerialConstructor = { link = "Type" },
+  AerialConstructorIcon = { link = "AerialConstructor" },
+  AerialEnum = { myfg = colors.cyan },
+
   --- 4. treesitter
   ["@variable"] = { myfg = colors.white },
   ["@parameter"] = { myfg = colors.white, bold = true },
