@@ -227,6 +227,10 @@ local theme = {
   AerialConstructorIcon = { link = "AerialConstructor" },
   AerialEnum = { myfg = colors.cyan },
 
+  -- snacks
+  -- dashboard
+  SnacksDashboardHeader = { myfg = colors.blue },
+
   --- 4. treesitter
   ["@variable"] = { myfg = colors.white },
   ["@parameter"] = { myfg = colors.white, bold = true },

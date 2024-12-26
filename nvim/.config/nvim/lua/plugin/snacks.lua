@@ -42,6 +42,26 @@ vim.api.nvim_create_autocmd("LspProgress", {
 plugin.config = function()
   local snacks = require "snacks"
   snacks.setup {
+    dashboard = {
+      preset = {
+        pick = nil,
+        keys = {
+          { icon = "", key = "l", desc = " Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+          { icon = "", key = "q", desc = " Quit", action = ":q" },
+        },
+      },
+      formats = {
+        icon = function(item)
+          return { "", hl = "icon", width = 2 }
+        end,
+      },
+      sections = {
+        { section = "header" },
+        { icon = "", section = "keys", indent = 2, padding = 1, gap = 1 },
+        { icon = "", section = "recent_files", indent = 2, padding = 1, gap = 0.5 },
+        { section = "startup" },
+      },
+    },
     input = {
       win = {
         relative = "cursor",
