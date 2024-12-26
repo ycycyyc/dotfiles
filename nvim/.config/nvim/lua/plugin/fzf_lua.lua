@@ -105,8 +105,11 @@ plugin.init = function()
     require("fzf-lua").lsp_implementations(build_opt())
   end
 
-  lsp_method.code_action = function()
-    require("fzf-lua").lsp_code_actions()
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.ui.select = function(...)
+    -- load fzf-lua, 并且替换 vim.ui.select
+    require("fzf-lua").register_ui_select()
+    return vim.ui.select(...)
   end
 end
 

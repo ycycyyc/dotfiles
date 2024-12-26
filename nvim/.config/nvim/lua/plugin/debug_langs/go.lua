@@ -1,6 +1,6 @@
 local dap = require "dap"
 
-local mode = require("basic.env").env.go_debug_mode
+local mode = YcVim.env.go_debug_mode
 local uv = vim.loop or vim.uv
 
 if mode == "dlv" then
