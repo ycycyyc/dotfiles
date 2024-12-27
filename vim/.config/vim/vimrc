@@ -1,5 +1,13 @@
 set nocompatible
 
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+exe 'source' "~/.vim/autoload/plug.vim"
+
 " disable internal plug
 let g:loaded_matchparen=1
 let g:loaded_matchit=1
@@ -126,14 +134,14 @@ au FileType * set fo-=o
 au FileType qf nnoremap <silent> <buffer> q :q<cr>
 
 if $VIM_LSP == "lsp"
-    exe 'source' "~/dotfiles/vim/.vim/conf/lsp.vim"
+   source ~/.config/vim/conf/lsp.vim
 else
-    exe 'source' "~/dotfiles/vim/.vim/conf/coc.vim"
+   source ~/.config/vim/conf/coc.vim
 endif
 
-exe 'source' "~/dotfiles/vim/.vim/conf/fzf.vim"
-exe 'source' "~/dotfiles/vim/.vim/conf/other.vim"
-exe 'source' "~/dotfiles/vim/.vim/conf/theme.vim"
+source ~/.config/vim/conf/theme.vim
+source ~/.config/vim/conf/other.vim
+source ~/.config/vim/conf/fzf.vim
 
 function! SynStack ()
     for i1 in synstack(line("."), col("."))
