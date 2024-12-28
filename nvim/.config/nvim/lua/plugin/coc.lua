@@ -3,102 +3,66 @@ local keys = YcVim.keys
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
 local buf_map = YcVim.keys.buf_map
 
-local M = {
-  user_cmds = {
-    {
-      "Format",
-      "call CocAction('format')",
-      {},
-    },
+local plugin = {}
+
+plugin.user_cmds = {
+  {
+    "Format",
+    "call CocAction('format')",
+    {},
   },
-  keymaps = {
-    -- cmp
-    { "i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts },
-    { "i", "<c-j>", [["\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts },
-    { "i", "<c-k>", [[coc#pum#stop()]], { silent = true, expr = true } },
-    { "i", "<c-l>", [[CocActionAsync('showSignatureHelp')]], { silent = true, expr = true } },
-    { "i", "<c-n>", [[coc#pum#visible() ? coc#pum#next(1) : "\<C-n>"]], { silent = true, expr = true } },
-    { "i", "<c-p>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"]], { silent = true, expr = true } },
-    { "n", keys.lsp_toggle_inlay_hint, ":CocCommand document.toggleInlayHint<cr>" },
+}
 
-    -- coc-git
-    { "n", keys.git_next_chunk, "<Plug>(coc-git-nextchunk)", {} },
-    { "n", keys.git_prev_chunk, "<Plug>(coc-git-prevchunk)", {} },
-    { "n", keys.git_reset_chunk, ":CocCommand git.chunkUndo<cr>", {} },
-    { "n", keys.git_preview_hunk, ":CocCommand git.chunkInfo<cr>", {} },
+plugin.keymaps = {
+  -- cmp
+  { "i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts },
+  { "i", "<c-j>", [["\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts },
+  { "i", "<c-k>", [[coc#pum#stop()]], { silent = true, expr = true } },
+  { "i", "<c-l>", [[CocActionAsync('showSignatureHelp')]], { silent = true, expr = true } },
+  { "i", "<c-n>", [[coc#pum#visible() ? coc#pum#next(1) : "\<C-n>"]], { silent = true, expr = true } },
+  { "i", "<c-p>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"]], { silent = true, expr = true } },
+  { "n", keys.lsp_toggle_inlay_hint, ":CocCommand document.toggleInlayHint<cr>" },
 
-    -- coc-outline
-    { "n", keys.toggle_symbol, ":CocOutline<cr>", {} },
+  -- coc-git
+  { "n", keys.git_next_chunk, "<Plug>(coc-git-nextchunk)", {} },
+  { "n", keys.git_prev_chunk, "<Plug>(coc-git-prevchunk)", {} },
+  { "n", keys.git_reset_chunk, ":CocCommand git.chunkUndo<cr>", {} },
+  { "n", keys.git_preview_hunk, ":CocCommand git.chunkInfo<cr>", {} },
 
-    -- coc-explorer
-    -- { "n", keys.toggle_dir_open_file, ":CocCommand explorer --preset floating<cr>", {} },
-    -- { "n", keys.toggle_dir, ":CocCommand explorer --preset floating --reveal-when-open<cr>", {} },
+  -- coc-outline
+  { "n", keys.toggle_symbol, ":CocOutline<cr>", {} },
+}
+
+plugin.initfuncs = {
+  {
+    -- lsp format
+    { "go", "typescript" },
+    function()
+      buf_map("n", keys.lsp_format, ":Format<cr>:w<cr>")
+      buf_map("x", keys.lsp_range_format, function() end)
+    end,
   },
-  initfuncs = {
-    {
-      -- lsp format
-      { "go", "typescript" },
-      function()
-        buf_map("n", keys.lsp_format, ":Format<cr>:w<cr>")
-        buf_map("x", keys.lsp_range_format, function() end)
-      end,
-    },
-    {
-      -- lsp range format
-      { "h", "cpp", "hpp", "c", "typescript" },
-      function()
-        buf_map("x", keys.lsp_range_format, "<Plug>(coc-format-selected)")
-        buf_map("n", keys.lsp_format, function() end)
-      end,
-    },
+  {
+    -- lsp range format
+    { "h", "cpp", "hpp", "c", "typescript" },
+    function()
+      buf_map("x", keys.lsp_range_format, "<Plug>(coc-format-selected)")
+      buf_map("n", keys.lsp_format, function() end)
+    end,
+  },
 
-    {
-      { "h", "cpp", "hpp", "c" },
-      function()
-        buf_map("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
-      end,
-    },
-    {
-      "coctree",
-      function()
-        buf_map("n", "q", ":q<cr>")
-      end,
-    },
-    {
-      "coc-explorer",
-      function()
-        local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-        local bufnr = vim.api.nvim_get_current_buf()
+  {
+    { "h", "cpp", "hpp", "c" },
+    function()
+      buf_map("n", keys.switch_source_header, ":CocCommand clangd.switchSourceHeader<cr>")
+    end,
+  },
 
-        vim.api.nvim_create_autocmd("CursorMoved", {
-          group = vim.api.nvim_create_augroup("show_dir_coc_explorer", { clear = true }),
-          buffer = bufnr,
-          callback = function(args)
-            local info = vim.fn["CocAction"]("runCommand", "explorer.getNodeInfo", 0)
-            if info == vim.NIL then
-              return
-            end
-
-            local set = function(title)
-              local winid = vim.api.nvim_get_current_win()
-              local config = vim.api.nvim_win_get_config(winid)
-              local new_config = vim.tbl_deep_extend("force", config, {
-                title = title,
-                border = "rounded",
-              })
-              vim.api.nvim_win_set_config(winid, new_config)
-            end
-
-            if info and info.fullpath then
-              local is = vim.fn.split(info.fullpath, "/")
-              table.remove(is, #is)
-              local path = table.concat(is, "/")
-              set(path)
-            end
-          end,
-        })
-      end,
-    },
+  {
+    "coctree",
+    function()
+      buf_map("n", "q", ":q<cr>")
+    end,
   },
 }
 
@@ -145,7 +109,7 @@ local setup_semantic_token = function()
   end
 end
 
-M.config = function()
+plugin.config = function()
   -- global plugin
   local global_extensions = {
     "coc-git",
@@ -186,7 +150,11 @@ M.config = function()
 
   -- coc semantic token
   setup_semantic_token()
-  YcVim.setup(M)
+
+  -- coc winbar
+  require("yc.custom.line.coc_winbar").start()
+
+  YcVim.setup(plugin)
 end
 
-return M
+return plugin

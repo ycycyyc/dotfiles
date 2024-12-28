@@ -98,6 +98,7 @@ M.start = function()
   ignore_ft["DiffviewFiles"] = 1
   ignore_ft["checkhealth"] = 1
   ignore_ft["coc-explorer"] = 1
+  ignore_ft["snacks_dashboard"] = 1
   ignore_ft[""] = 1
 end
 
