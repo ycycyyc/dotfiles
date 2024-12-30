@@ -26,8 +26,8 @@ local keys = {
   toggle_term = "<C-t>", -- 打开/关闭内置终端
   toggle_mouse = "<leader>A",
   -- jump
-  jump_to_next_qf = "<leader>j",
-  jump_to_prev_qf = "<leader>k",
+  jump_to_next_qf = "]e",
+  jump_to_prev_qf = "[e",
 
   -- lsp
   lsp_goto_declaration = "gD", -- 声明

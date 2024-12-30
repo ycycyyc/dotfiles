@@ -78,8 +78,8 @@ cnoremap <c-a> <Home>
 command! Cnext try | cnext | catch | cfirst | catch | endtry
 command! Cprev try | cprev | catch | clast | catch | endtry
 
-nnoremap <silent> <leader>j :Cnext<cr>
-nnoremap <silent> <leader>k :Cprev<cr>
+nnoremap <silent> ]e :Cnext<cr>
+nnoremap <silent> [e :Cprev<cr>
 
 set tabstop=4
 set softtabstop=4
@@ -140,7 +140,8 @@ else
    source ~/.config/vim/conf/coc.vim
 endif
 
-source ~/.config/vim/conf/theme.vim
+set background=dark
+# source ~/.config/vim/conf/theme.vim
 source ~/.config/vim/conf/other.vim
 source ~/.config/vim/conf/fzf.vim
 
