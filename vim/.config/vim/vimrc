@@ -1,19 +1,20 @@
+vim9script
+
 set nocompatible
 
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+var data_dir = has('nvim') ? stdpath('data') .. '/site' : '~/.vim'
+if empty(glob(data_dir .. '/autoload/plug.vim'))
+  silent execute '!curl -fLo ' .. data_dir .. '/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 endif
 
-exe 'source' "~/.vim/autoload/plug.vim"
+source ~/.vim/autoload/plug.vim
 
-" disable internal plug
-let g:loaded_matchparen=1
-let g:loaded_matchit=1
-let g:loaded_netrwPlugin=1
+# disable internal plug
+g:loaded_matchparen = 1
+g:loaded_matchit = 1
+g:loaded_netrwPlugin = 1
 
-let g:coc_data_home = "~/.config/coc_vim/"
+g:coc_data_home = "~/.config/coc_vim/"
 
 if $VIM_LSP == "lsp"
     call plug#begin('~/.vim/lsp_plugged')
@@ -43,7 +44,7 @@ inoremap jk <ESC>
 map <space> <leader>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
-let loaded_netrwPlugin=1
+g:loaded_netrwPlugin = 1
 nnoremap <c-p> :Files<CR>
 nnoremap <leader>b :BLines<CR>
 nnoremap <leader>f :Rg<space>
@@ -67,7 +68,7 @@ nnoremap <leader>[ :bp<cr>
 nnoremap <leader>] :bn<cr>
 xnoremap <leader>s :s/.*'\(.*\)'.*/\1
 
-" -- 交换内容，先删除内容1，再选中内容2，然后用<leader>x交换
+#  交换内容，先删除内容1，再选中内容2，然后用<leader>x交换
 xnoremap <leader>x <ESC>`.``gvp``P
 nnoremap <leader>x viw<ESC>`.``gvp``P<c-o>
 
@@ -100,23 +101,23 @@ set smartcase
 set laststatus=2
 set hlsearch
 set signcolumn=yes
-" set confirm
+# set confirm
 set incsearch
 set splitright
 
-" theme
-function! s:default_theme() 
-    " set background=dark
+# theme
+def Default_theme() 
+    # set background=dark
     hi SignColumn ctermbg=237
     hi Pmenu ctermbg=237 ctermfg=145
     hi PmenuSel ctermbg=39 ctermfg=236
     hi MatchParen ctermfg=204 cterm=underline ctermbg=None
     hi Comment ctermfg=59
-endfunction
+enddef
 
-" call s:default_theme()
-" colorscheme codedark
-" hi Type ctermfg=43 guifg=#4EC9B0
+# call s:default_theme()
+# colorscheme codedark
+# hi Type ctermfg=43 guifg=#4EC9B0
 
 hi DiffAdd ctermfg=114 ctermbg=237
 hi DiffDelete ctermfg=204 ctermbg=237
@@ -127,7 +128,7 @@ hi default link GitSignsChange DiffChange
 hi default link GitSignsDelete GitSignsDelete
 set statusline=%f%m%h\ \ %l\ of\ %L
 
-" my settings
+# my settings
 au FileType qf wincmd J
 au FileType help wincmd L
 au FileType * set fo-=o
@@ -143,13 +144,14 @@ source ~/.config/vim/conf/theme.vim
 source ~/.config/vim/conf/other.vim
 source ~/.config/vim/conf/fzf.vim
 
-function! SynStack ()
+def SynStack()
     for i1 in synstack(line("."), col("."))
-        let i2 = synIDtrans(i1)
-        let n1 = synIDattr(i1, "name")
-        let n2 = synIDattr(i2, "name")
+        var i2 = synIDtrans(i1)
+        var n1 = synIDattr(i1, "name")
+        var n2 = synIDattr(i2, "name")
         echo n1 "->" n2
     endfor
-endfunction
-" map gm :call SynStack()<CR>
+enddef
+
+# map gm :call SynStack()<CR>
 command! Inspect :call SynStack()
