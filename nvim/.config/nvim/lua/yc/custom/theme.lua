@@ -194,6 +194,7 @@ local theme = {
 
   -- blink.cmp
   BlinkCmpGhostText = { link = "Comment" },
+  BlinkCmpKind = { myfg = colors.white },
 
   -- dap
   DapUIStoppedThread = { myfg = colors.red },
