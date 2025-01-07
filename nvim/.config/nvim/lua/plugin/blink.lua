@@ -10,6 +10,7 @@ plugin.config = function()
   local opts = {
     keymap = {
       ["<cr>"] = { "select_and_accept", "fallback" },
+      ["<c-y>"] = { "select_and_accept", "fallback" },
       ["<C-n>"] = {
         function(cmp)
           if cmp.is_visible() then
@@ -51,19 +52,6 @@ plugin.config = function()
   }
 
   require("blink.cmp").setup(opts)
-
-  -- 在默认模式下按<c-n>或者<c-p>可以修改当前的word
-  local list = require "blink.cmp.completion.list"
-  local select = list.select
-  list.select = function(idx, o)
-    select(idx, o)
-    local item = list.items[idx]
-    require("blink.cmp.completion.trigger").suppress_events_for_callback(function()
-      if idx and idx > 1 and item and list.config.selection == "preselect" then
-        list.apply_preview(item)
-      end
-    end)
-  end
 end
 
 return plugin
