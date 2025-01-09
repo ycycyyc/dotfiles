@@ -13,11 +13,7 @@ plugin.initfuncs = {
     "snacks_input",
     function()
       YcVim.keys.buf_map("i", "<C-w>", function()
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        local l = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]
-        for i = 1, #l do
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<backspace>", true, false, true), "n", true)
-        end
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-S-w>", true, false, true), "n", false)
       end)
     end,
   },
