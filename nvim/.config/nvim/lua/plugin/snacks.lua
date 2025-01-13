@@ -8,17 +8,6 @@ plugin.user_cmds = {
   },
 }
 
-plugin.initfuncs = {
-  {
-    "snacks_input",
-    function()
-      YcVim.keys.buf_map("i", "<C-w>", function()
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-S-w>", true, false, true), "n", false)
-      end)
-    end,
-  },
-}
-
 --- https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
 vim.api.nvim_create_autocmd("LspProgress", {
   ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
