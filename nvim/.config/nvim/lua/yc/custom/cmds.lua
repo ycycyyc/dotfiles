@@ -1,6 +1,7 @@
-local plugin = {}
+---@type YcVim.Setup
+local setup = {}
 
-plugin.initfuncs = {
+setup.initfuncs = {
   {
     "qf",
     function()
@@ -16,7 +17,7 @@ plugin.initfuncs = {
   },
 }
 
-plugin.user_cmds = {
+setup.user_cmds = {
   {
     "BufOnly",
     function()
@@ -47,4 +48,4 @@ plugin.user_cmds = {
   },
 }
 
-YcVim.setup(plugin)
+YcVim.setup(setup)

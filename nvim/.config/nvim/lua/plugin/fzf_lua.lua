@@ -1,16 +1,20 @@
-local live_grep = function(cmd, query, filepath)
+---@param find Yc.Finder
+local live_grep = function(find)
   require("fzf-lua").live_grep {
-    cmd = cmd,
-    search = query,
-    filespec = filepath,
+    cmd = find:cmd(),
+    no_esc = true,
+    search = find.query,
+    filespec = find.filepath,
   }
 end
 
-local grep = function(cmd, query, filepath)
+---@param find Yc.Finder
+local grep = function(find)
   require("fzf-lua").grep {
-    cmd = cmd,
-    search = query,
-    filespec = filepath,
+    cmd = find:cmd(),
+    no_esc = true,
+    search = find.query,
+    filespec = find.filepath,
   }
 end
 
@@ -24,9 +28,10 @@ local grep_buf_word = function()
   }
 end
 
-local plugin = {}
+---@type YcVim.Setup
+local setup = {}
 
-plugin.user_cmds = {
+setup.user_cmds = {
   {
     "Buffers",
     function()
@@ -88,7 +93,7 @@ local build_opt = function()
   }
 end
 
-plugin.init = function()
+local init = function()
   local lsp_method = YcVim.lsp.method
 
   lsp_method.definition = function()
@@ -113,7 +118,7 @@ plugin.init = function()
   end
 end
 
-plugin.config = function()
+local config = function()
   -- " 让输入上方，搜索列表在下方
   vim.env.FZF_DEFAULT_OPTS = "--layout=reverse"
   vim.g.fzf_preview_window = { "up:45%", "ctrl-/" }
@@ -144,12 +149,6 @@ plugin.config = function()
       -- ["--delimiter"] = ":",
       -- ["--nth"] = "4..",
     },
-    lsp = {
-      _cached_hls = {}, -- fzf-lua更新到新版本？
-      symbols = {
-        symbol_style = 3, -- remove icon
-      },
-    },
     git = {
       status = {
         actions = {
@@ -167,7 +166,7 @@ plugin.config = function()
     },
   }
 
-  YcVim.setup(plugin)
+  YcVim.setup(setup)
 end
 
 local keys = YcVim.keys
@@ -176,22 +175,21 @@ return {
   "ycycyyc/fzf-lua",
   lazy = true,
   keys = {
-    { keys.search_resume, "<cmd>FzfLua resume<cr>" },
-    { keys.switch_buffers, "<cmd>FzfLua buffers<cr>" },
-    { keys.search_find_files, "<cmd>FzfLua files<cr>" },
-    { keys.search_git_status, "<cmd>FzfLua git_status<cr>" },
-    { keys.search_buffer, "<cmd>FzfLua grep_curbuf<cr>" },
+    { keys.pick_open, "<cmd>FzfLua<cr>" },
+    { keys.pick_resume, "<cmd>FzfLua resume<cr>" },
+    { keys.pick_files, "<cmd>FzfLua files<cr>" },
+    { keys.pick_lines, "<cmd>FzfLua grep_curbuf<cr>" },
     { keys.lsp_symbols, "<cmd>FzfLua lsp_document_symbols<cr>" },
     { keys.lsp_finder, "<cmd>FzfLua lsp_finder<cr>" },
     { keys.lsp_global_symbols, "<cmd>FzfLua lsp_live_workspace_symbols<cr>" },
     { keys.git_commits, ":Commits<cr>" },
-    { keys.search_global, ":Rg " },
-    { keys.search_cur_word, ":Rg <c-r><c-w><cr>" },
-    { keys.cmd_history, ":FzfLua command_history<cr>" },
-    { keys.search_cur_word_cur_buf, grep_buf_word },
+    { keys.pick_grep, ":Rg " },
+    { keys.pick_grep_word, ":Rg <c-r><c-w><cr>" },
+    { keys.pick_cmd_history, ":FzfLua command_history<cr>" },
+    { keys.pick_grep_word_cur_buf, grep_buf_word },
   },
-  cmd = YcVim.lazy.cmds(plugin.user_cmds, { "FzfLua" }),
-  config = plugin.config,
-  init = plugin.init,
+  cmd = YcVim.lazy.cmds(setup.user_cmds, { "FzfLua" }),
+  config = config,
+  init = init,
   cond = YcVim.env.fzf_lua,
 }

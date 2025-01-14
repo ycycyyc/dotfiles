@@ -1,6 +1,4 @@
-local plugin = {}
-
-plugin.config = function()
+local config = function()
   local dap = require "dap"
   vim.fn.sign_define("DapBreakpoint", { text = "B", texthl = "WarningMsg", linehl = "", numhl = "" })
 
@@ -34,8 +32,6 @@ plugin.config = function()
   dap.listeners.before.event_exited["dapui_config"] = function()
     dapui.close()
   end
-
-  YcVim.setup(plugin)
 end
 
 local keys = YcVim.keys
@@ -50,6 +46,6 @@ return {
     { keys.dbg_step_into, function() require("dap").step_into() end, },
     { keys.dbg_eval, function() require("dapui").eval() end, },
   },
-  config = plugin.config,
+  config = config,
   dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
 }

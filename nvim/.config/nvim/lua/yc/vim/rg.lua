@@ -1,11 +1,24 @@
 local M = {}
 
+local rg = {
+  "rg",
+  "-H",
+  "--hidden",
+  "--column",
+  "--line-number",
+  "--no-heading",
+  "--glob=!.git/",
+  "--color=always",
+  "--smart-case",
+  "-F", --  regex = false
+}
+
 ---@class Yc.Finder
----@field rg string[]
----@field islive boolean|nil
----@field query string
+---@field islive boolean
 ---@field words string[]
+---@field query string
 ---@field filepath string|nil
+---@field fts string[]
 local Finder = {}
 
 ---@param args table
@@ -17,17 +30,16 @@ function Finder:new(args)
   self.query = args["args"]
   self.words = args["fargs"]
   -- stylua: ignore
-  self.rg = { "rg", "-H", "--hidden", "--column", "--line-number", "--no-heading", "--glob=!.git/", "--color=always", "--smart-case" }
   self.filepath = nil
+  self.islive = false
+  self.fts = {}
   return o
 end
 
-local types_mapping = {
-  ["cpp"] = "-t cpp -t c",
-  ["c"] = "-t cpp -t c",
-  ["go"] = "-t go",
-  ["lua"] = "-t lua",
-  ["rust"] = "-t rust",
+---@type table<string, string[]>
+local filetypes = {
+  ["cpp"] = { "c", "cpp" },
+  ["c"] = { "c", "cpp" },
 }
 
 ---@param wanted_word string
@@ -52,18 +64,21 @@ function Finder:parse()
       end
 
       -- -t 后面的那个元素
-      local val_after_t = self.words[index + 1] -- go cpp c lua or else
+      local filetype = self.words[index + 1] -- go cpp c lua or else
 
-      for _type, _t_type in pairs(types_mapping) do
-        if _type == val_after_t then
-          table.insert(self.rg, _t_type)
-
-          -- 后面再适配-t go 中间出现很多个空格的情况
-          local match = string.match(self.query, "-t%s+" .. _type)
-          self.query = string.gsub(self.query, match, "")
-          self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
+      local fts = filetypes[filetype]
+      if fts == nil then
+        table.insert(self.fts, filetype)
+      else
+        for _, ft in ipairs(fts) do
+          table.insert(self.fts, ft)
         end
       end
+
+      -- 后面再适配-t go 中间出现很多个空格的情况
+      local match = string.match(self.query, "-t%s+" .. filetype)
+      self.query = string.gsub(self.query, match, "")
+      self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
     end,
     ["--"] = function(index)
       -- 最后一个提前退出
@@ -72,14 +87,16 @@ function Finder:parse()
       end
 
       self.filepath = self.words[index + 1]
+
       self.query = string.gsub(self.query, "%-%-", "") -- TODO 如何避免删错了
       self.query = string.gsub(self.query, self.words[index + 1], "")
       self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
     end,
     ["-i"] = function(_)
+      self.islive = true
+
       self.query = string.gsub(self.query, "%-i", "") -- TODO 如何避免删错了
       self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
-      self.islive = true
     end,
   }
 
@@ -89,27 +106,43 @@ function Finder:parse()
       handler(index)
     end
   end
+
+  if not self.query or self.query == "" then
+    self.islive = true
+  end
 end
 
----@param live_grep function
----@param grep function
+---@param live_grep fun(f: Yc.Finder)
+---@param grep fun(f: Yc.Finder)
 function Finder:run(live_grep, grep)
   -- 解析命令行工具
   self:parse()
 
-  -- 生成最后的rg cmd
-  -- rg的命令格式，可以减少转义 看上去不需要? (note)
-  -- table.insert(self.rg, "-- ")
-  local cmd = table.concat(self.rg, " ")
-
   -- live_grep or grep
   local find = grep -- 默认使用grep
-  if self.islive or not self.query or self.query == "" then
+  if self.islive then
     find = live_grep
   end
 
-  -- vim.print("query|" .. self.query .. "|")
-  find(cmd, self.query, self.filepath)
+  find(self)
+end
+
+---@return string
+function Finder:cmd()
+  local cmd = {}
+
+  for _, w in ipairs(rg) do
+    table.insert(cmd, w)
+  end
+
+  -- 生成最后的rg cmd
+  -- 文件名
+  for _, ft in ipairs(self.fts) do
+    table.insert(cmd, "-t")
+    table.insert(cmd, ft)
+  end
+
+  return table.concat(cmd, " ")
 end
 
 M.run = function(live_grep, grep)

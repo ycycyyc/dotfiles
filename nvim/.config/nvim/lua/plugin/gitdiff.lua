@@ -1,6 +1,4 @@
-local plugin = {}
-
-plugin.init = function()
+local init = function()
   ---@param commit string | nil
   YcVim.git.commit_diff = function(commit)
     if not commit then
@@ -30,7 +28,10 @@ plugin.init = function()
   end
 end
 
-plugin.initfuncs = {
+---@type YcVim.Setup
+local setup = {}
+
+setup.initfuncs = {
   {
     { "DiffviewFiles", "DiffviewFileHistory" },
     function()
@@ -46,9 +47,11 @@ plugin.initfuncs = {
   },
 }
 
+YcVim.setup(setup)
+
 return {
   "sindrets/diffview.nvim",
-  init = plugin.init,
+  init = init,
   keys = {
     {
       YcVim.keys.git_diff_file,
@@ -63,9 +66,12 @@ return {
     },
   },
   cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewFocusFiles" },
-  config = function()
-    local opt = require "plugin.gitdiff_opt"
-    require("diffview").setup(opt)
-    YcVim.setup(plugin)
-  end,
+  opts = {
+    file_panel = {
+      win_config = {
+        position = "bottom",
+        height = 14,
+      },
+    },
+  },
 }

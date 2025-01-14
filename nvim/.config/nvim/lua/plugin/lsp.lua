@@ -3,8 +3,6 @@
 local env = YcVim.env
 local keys = YcVim.keys
 
-local plugin = {}
-
 local lua_ls_runtime_path = function()
   ---@type string[]
   local runtime_path = vim.split(package.path, ";")
@@ -31,6 +29,7 @@ local function switch_source_header_cmd()
   end)
 end
 
+---@type table<string, YcVim.Lsp.Conf>
 local attach_confs = {
   protols = {
     keymaps = {
@@ -67,6 +66,7 @@ local attach_confs = {
   },
 }
 
+---@type table<string, table>
 local servers = {
   vtsls = {}, -- npm install -g @vtsls/language-server
   protols = {},
@@ -144,7 +144,7 @@ local servers = {
   },
 }
 
-plugin.config = function()
+local config = function()
   local lspconfig = require "lspconfig"
 
   vim.lsp.set_log_level "OFF"
@@ -165,6 +165,7 @@ plugin.config = function()
     }
 
     -- 2. on_attach使用的配置
+    ---@type YcVim.Lsp.Conf
     local conf = attach_confs[name] or {}
 
     local attach_opt = {
@@ -185,5 +186,5 @@ end
 return {
   "neovim/nvim-lspconfig",
   event = "User FilePost",
-  config = plugin.config,
+  config = config,
 }

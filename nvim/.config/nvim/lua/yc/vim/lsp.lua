@@ -2,11 +2,11 @@ local lsp = {}
 
 local keys = YcVim.keys
 
----@alias Yc.KeyMaps table<string, table>
+---@alias YcVim.Keymaps table<string, table>
 
----@class Yc.LspConf
+---@class YcVim.Lsp.Conf
 ---@field auto_format boolean
----@field keymaps Yc.KeyMaps
+---@field keymaps YcVim.Keymaps
 
 lsp.lsp_capabilities = function()
   ---@module 'blink.cmp'
@@ -90,7 +90,7 @@ lsp.v_range_format = function()
   range_format(pos)
 end
 
----@return Yc.LspConf
+---@return YcVim.Lsp.Conf
 local default_lsp_config = function()
   return {
     auto_format = false,
@@ -128,14 +128,14 @@ local default_lsp_config = function()
   }
 end
 
----@param user_lsp_config Yc.LspConf|nil
+---@param user_lsp_config YcVim.Lsp.Conf|nil
 ---@return fun(client: vim.lsp.Client, bufnr: number)
 lsp.on_attach_func = function(user_lsp_config)
   ---@param client vim.lsp.Client
   ---@param bufnr number
   return function(client, bufnr)
     -- 合并各个语言的不同配置
-    local lsp_config = vim.tbl_deep_extend("force", default_lsp_config(), user_lsp_config or {}) ---@type Yc.LspConf
+    local lsp_config = vim.tbl_deep_extend("force", default_lsp_config(), user_lsp_config or {}) ---@type YcVim.Lsp.Conf
 
     -- keymap
     local buf_map = function(mode, key, action)

@@ -1,6 +1,7 @@
-local plugin = {}
+---@type YcVim.Setup
+local setup = {}
 
-plugin.user_cmds = {
+setup.user_cmds = {
   {
     "SnacksShowHistory",
     ":lua Snacks.notifier.show_history()<cr>",
@@ -24,56 +25,11 @@ vim.api.nvim_create_autocmd("LspProgress", {
   end,
 })
 
-plugin.config = function()
-  local snacks = require "snacks"
-  snacks.setup {
-    dashboard = {
-      preset = {
-        pick = nil,
-        keys = {
-          { icon = "", key = "l", desc = " Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
-          { icon = "", key = "q", desc = " Quit", action = ":q" },
-        },
-      },
-      formats = {
-        icon = function(item)
-          return { "", hl = "icon", width = 2 }
-        end,
-      },
-      sections = {
-        { section = "header" },
-        { icon = "", section = "keys", indent = 2, padding = 1, gap = 1 },
-        { icon = "", section = "recent_files", indent = 2, padding = 1, gap = 0.5 },
-        { section = "startup" },
-      },
-    },
-    input = {
-      win = {
-        relative = "cursor",
-        row = -3,
-        col = 0,
-        keys = {
-          i_esc = { "<esc>", { "cmp_close", "cancel" }, mode = "i" },
-        },
-      },
-      icon = ">",
-    },
-    notifier = {
-      enabled = true,
-      icons = {
-        error = "E ",
-        warn = "W ",
-        info = "I ",
-        debug = "E ",
-        trace = "T ",
-      },
-      margin = { top = 1, right = 1, bottom = 1 },
-    },
-  }
-
-  YcVim.setup(plugin)
+local init = function()
+  YcVim.setup(setup)
 
   vim.keymap.set("n", YcVim.keys.toggle_term, function()
+    local snacks = require "snacks"
     snacks.terminal.toggle(nil, {
       win = {
         on_buf = function(win)
@@ -100,5 +56,45 @@ return {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
-  config = plugin.config,
+  opts = {
+    dashboard = {
+      preset = {
+        pick = nil,
+        keys = {
+          { icon = "●", key = "l", desc = "Lazy", action = ":Lazy" },
+          { icon = "●", key = "q", desc = "Quit", action = ":q" },
+        },
+      },
+      sections = {
+        { section = "header" },
+        { section = "keys", indent = 2, padding = 1, gap = 1 },
+        { section = "recent_files", indent = 2, padding = 1, gap = 0.5 },
+        { section = "startup" },
+      },
+    },
+    input = {
+      win = {
+        -- TODO: https://github.com/folke/snacks.nvim/pull/427
+        relative = "cursor",
+        row = -3,
+        col = 0,
+        keys = {
+          i_esc = { "<esc>", { "cmp_close", "cancel" }, mode = "i" },
+        },
+      },
+      icon = ">",
+    },
+    notifier = {
+      enabled = true,
+      icons = {
+        error = "E ",
+        warn = "W ",
+        info = "I ",
+        debug = "E ",
+        trace = "T ",
+      },
+      margin = { top = 1, right = 1, bottom = 1 },
+    },
+  },
+  init = init,
 }

@@ -3,12 +3,16 @@ return {
   keys = {
     {
       YcVim.keys.global_find_and_replace,
-      ":GrugFar<cr>",
+      function()
+        require("grug-far").open { prefills = { search = vim.fn.expand "<cword>", flags = "--fixed-strings" } }
+      end,
     },
     {
       YcVim.keys.buffer_find_and_replace,
       function()
-        require("grug-far").with_visual_selection { prefills = { paths = vim.fn.expand "%" } }
+        require("grug-far").open {
+          prefills = { search = vim.fn.expand "<cword>", paths = vim.fn.expand "%v", flags = "--fixed-strings" },
+        }
       end,
     },
   },
@@ -18,12 +22,8 @@ return {
       syncLine = { n = ",l" },
       syncLocations = { n = ",s" },
       qflist = { n = ",p" },
-      close = { n = "<leader>q" },
+      close = { n = "q" },
       refresh = { n = ",f" },
-    },
-    resultsSeparatorLineChar = "-",
-    icons = {
-      enabled = false,
     },
   },
 }

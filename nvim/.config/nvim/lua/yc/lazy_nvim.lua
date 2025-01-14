@@ -6,12 +6,12 @@ end
 -- stylua: ignore
 local plugin_names = {
   "plenary", "oil", "flash", "git_manager", "gitdiff", "nvim-surround",
-  "snacks", "comment", "grug", "substitute", "debug", "tree_sitter",
+  "snacks", "comment", "grug", "substitute", "debug", "tree_sitter", "icon",
 }
 
 -- stylua: ignore
 local lsp_plugin_names = {
-  "fzf_lua", "lsp", "winbar", "gotest", "autopairs",
+  "pick", "lsp", "winbar", "gotest", "autopairs",
   "gitsigns", "rust", "format", "symbol", "code", "snippet",
 }
 
@@ -71,19 +71,5 @@ require("lazy").setup(plugins, {
   },
   ui = {
     border = "rounded",
-    icons = {
-      cmd = "⌘",
-      config = "🛠",
-      event = "📅",
-      ft = "📂",
-      init = "⚙",
-      keys = "🗝",
-      plugin = "🔌",
-      runtime = "💻",
-      source = "📄",
-      start = "🚀",
-      task = "📌",
-      lazy = "💤 ",
-    },
   },
 })

@@ -105,12 +105,12 @@ local M = {
     },
   },
   keymaps = {
-    { "n", keys.search_find_files, ":Files<cr>", { noremap = true } },
-    { "n", keys.switch_buffers, ":Buffers<cr>", { noremap = true } },
-    { "n", keys.search_cur_word_cur_buf, ":BLines <c-r><c-w><cr>", { noremap = true } },
-    { "n", keys.cmd_history, ":History:<cr>", { noremap = true } },
+    { "n", keys.pick_files, ":Files<cr>", { noremap = true } },
+    { "n", keys.pick_buffers, ":Buffers<cr>", { noremap = true } },
+    { "n", keys.pick_grep_word_cur_buf, ":BLines <c-r><c-w><cr>", { noremap = true } },
+    { "n", keys.pick_cmd_history, ":History:<cr>", { noremap = true } },
     { "n", keys.git_commits, git_commit, { noremap = true } },
-    { "n", keys.search_buffer, search_buf, { noremap = true } },
+    { "n", keys.pick_lines, search_buf, { noremap = true } },
   },
 }
 

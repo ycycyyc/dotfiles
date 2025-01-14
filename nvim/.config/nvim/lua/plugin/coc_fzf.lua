@@ -13,9 +13,9 @@ end
 
 local M = {
   keymaps = {
-    { "n", keys.search_resume, ":CocFzfListResume<cr>", {} },
-    { "n", keys.search_cur_word, ":CocFzfList fzf-grep <c-r><c-w><cr>", {} },
-    { "n", keys.search_global, ":CocFzfList fzf-grep ", {} },
+    { "n", keys.pick_resume, ":CocFzfListResume<cr>", {} },
+    { "n", keys.pick_grep_word, ":CocFzfList fzf-grep <c-r><c-w><cr>", {} },
+    { "n", keys.pick_grep, ":CocFzfList fzf-grep ", {} },
 
     -- coc outline
     { "n", keys.lsp_symbols, ":CocFzfList outline<cr>", {} },

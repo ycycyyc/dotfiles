@@ -1,11 +1,8 @@
-local plugin = {}
-
 local colors = YcVim.colors
 local bg = colors.cursor_grey4
-
 local convert = colors.convert
 
-plugin.opts = {
+local opts = {
   include_buftypes = { "", "nowrite", "nofile" },
   create_autocmd = false,
   modifiers = {
@@ -15,8 +12,8 @@ plugin.opts = {
 
   theme = {
     normal = convert { mybg = bg },
-    dirname = convert { bold = true, myfg = colors.white, mybg = bg },
-    basename = convert { bold = true, myfg = colors.black, mybg = colors.green },
+    dirname = convert { bold = false, myfg = colors.white, mybg = bg },
+    basename = convert { bold = true, myfg = colors.white, mybg = bg },
     modified = convert { bold = true, myfg = colors.red },
     context_method = convert { bold = false, myfg = colors.blue, mybg = bg },
     context_function = convert { bold = true, myfg = colors.blue, mybg = bg },
@@ -45,38 +42,9 @@ plugin.opts = {
 
   show_modified = true,
   show_dirname = true,
-
-  kinds = {
-    File = "file:",
-    Module = "module:",
-    Namespace = "",
-    Package = "package:",
-    Class = "",
-    Method = "",
-    Property = "property:",
-    Field = "",
-    Constructor = "",
-    Enum = "",
-    Interface = "",
-    Function = "",
-    Variable = "",
-    Constant = "",
-    String = "str:",
-    Number = "number:",
-    Boolean = "bool:",
-    Array = "arr:",
-    Object = "",
-    Key = "key:",
-    Null = "null:",
-    EnumMember = "",
-    Struct = "",
-    Event = "event:",
-    Operator = "",
-    TypeParameter = "",
-  },
 }
 
-plugin.config = function()
+local config = function()
   vim.api.nvim_create_autocmd({
     YcVim.util.since_nvim(0, 9) and "WinResized" or "WinScrolled",
     "BufWinEnter",
@@ -92,7 +60,7 @@ plugin.config = function()
     end,
   })
 
-  require("barbecue").setup(plugin.opts)
+  require("barbecue").setup(opts)
 end
 
 return {
@@ -106,6 +74,6 @@ return {
       lazy_update_context = true,
     },
   },
-  config = plugin.config,
+  config = config,
   cond = YcVim.env.winbar,
 }

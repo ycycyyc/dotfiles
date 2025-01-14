@@ -7,22 +7,13 @@ local cj = function()
   end
 end
 
-local plugin = {}
-
-plugin.keymaps = {
-  { "i", "<c-j>", cj, { expr = true, noremap = true, replace_keycodes = false } },
-}
-
-plugin.config = function()
-  require("nvim-autopairs").setup {
-    disable_filetype = { "snacks_input" },
-    map_c_w = true,
-  }
-  YcVim.setup(plugin)
-end
+vim.keymap.set("i", "<c-j>", cj, { expr = true, noremap = true, replace_keycodes = false, buffer = true })
 
 return {
   "windwp/nvim-autopairs",
   event = "InsertEnter",
-  config = plugin.config,
+  opts = {
+    disable_filetype = { "snacks_input", "snacks_picker_input" },
+    map_c_w = true,
+  },
 }

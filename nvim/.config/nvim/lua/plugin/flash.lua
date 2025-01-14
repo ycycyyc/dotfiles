@@ -1,45 +1,17 @@
 local keys = YcVim.keys
 
-local plugin = {}
-
-plugin.opts = {
-  modes = {
-    char = {
-      enabled = false, -- f t F T  ...
-    },
-    search = {
-      enabled = true, -- 开启/ ？查询
-    },
-  },
-  label = {
-    after = false, ---@type boolean|number[]
-    -- before = { 0, 0 }, ---@type boolean|number[]
-    before = true,
-  },
-  treesitter = {
-    labels = "asdfghjklqwertyuiopzxcvbnm",
-  },
-  highlight = {
-    backdrop = false,
-  },
-}
-
-plugin.keymaps = {
-  {
-    "c",
-    "<c-g>",
-    function()
-      require("flash").toggle()
-    end,
-    {},
-  },
-}
-
 return {
   "folke/flash.nvim",
   keys = {
     { "/" },
     { "?" },
+    {
+      "<c-g>",
+      function()
+        require("flash").toggle()
+      end,
+      mode = "c",
+    },
     {
       keys.jump,
       function()
@@ -62,8 +34,20 @@ return {
       end,
     },
   },
-  config = function()
-    require("flash").setup(plugin.opts)
-    YcVim.setup(plugin)
-  end,
+
+  opts = {
+    modes = {
+      -- f t F T  ...
+      char = { enabled = false },
+      -- 开启/ ？查询
+      search = { enabled = true },
+    },
+    label = {
+      after = false, ---@type boolean|number[]
+      -- before = { 0, 0 }, ---@type boolean|number[]
+      before = true,
+    },
+    treesitter = { labels = "asdfghjklqwertyuiopzxcvbnm" },
+    highlight = { backdrop = false },
+  },
 }

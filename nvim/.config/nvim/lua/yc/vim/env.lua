@@ -6,7 +6,6 @@ local env = {
   treesitter_textobj = true,
   semantic_token = true,
   coc = false,
-  python3 = "",
   winbar = true,
   inlayhint = true,
   git = "neogit",
@@ -15,6 +14,7 @@ local env = {
   cmp_ghost_text = true,
   snippet = "native",
   cmp = "blink",
+  pick = "snacks",
 }
 
 local json_conf = vim.env.NVIM_JSON_CONF or "{}"

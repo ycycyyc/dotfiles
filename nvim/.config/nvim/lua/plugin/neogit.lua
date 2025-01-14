@@ -1,6 +1,4 @@
-local plugin = {}
-
-plugin.toggle_git_status = function()
+local toggle_neogit = function()
   vim.defer_fn(function()
     vim.cmd "checktime"
   end, 200)
@@ -18,16 +16,16 @@ plugin.toggle_git_status = function()
   require("neogit").open {}
 end
 
-plugin.init = function()
-  local stage_file = function()
-    local file = vim.fn.expand "%:p"
+local stage_file = function()
+  local file = vim.fn.expand "%:p"
 
-    local git = require "neogit.lib.git"
-    git.status.stage { file }
+  local git = require "neogit.lib.git"
+  git.status.stage { file }
 
-    vim.notify("stage file:" .. file)
-  end
+  vim.notify("stage file:" .. file)
+end
 
+local init = function()
   vim.api.nvim_create_user_command("Gwrite", stage_file, {})
   vim.api.nvim_create_user_command("Gw", stage_file, {})
 
@@ -54,10 +52,10 @@ end
 
 return {
   "NeogitOrg/neogit",
-  init = plugin.init,
+  init = init,
   cmd = { "Neogit" },
   keys = {
-    { YcVim.keys.git_status, plugin.toggle_git_status },
+    { YcVim.keys.git_status, toggle_neogit },
   },
   opts = {
     kind = "floating",
@@ -72,17 +70,6 @@ return {
     auto_close_console = false,
     remember_settings = false,
     disable_line_numbers = false,
-    notification_icon = "",
-    status = {
-      -- recent_commit_count = 30, -- 去掉recent_commit
-      mode_text = {
-        M = "M",
-        N = "N",
-        D = "D",
-        R = "R",
-        A = "A",
-      },
-    },
     disable_insert_on_commit = true,
   },
 }

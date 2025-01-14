@@ -15,21 +15,11 @@ plugin.config = function()
   end
 
   require("nvim-treesitter.configs").setup {
-    ensure_installed = ensure_installed, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    ensure_installed = ensure_installed,
     highlight = {
-      enable = true, -- false will disable the whole extension
+      enable = true,
       disable = ts_disable,
       additional_vim_regex_highlighting = false,
-    },
-    incremental_selection = {
-      enable = false,
-      disable = ts_disable,
-      keymaps = {
-        init_selection = "<TAB>",
-        node_incremental = "<TAB>",
-        node_decremental = "<S-TAB>",
-        -- scope_incremental = "<TAB>",
-      },
     },
   }
 end
@@ -65,12 +55,9 @@ plugin.textobj_config = function()
       select = {
         enable = true,
         disable = ts_disable,
-
-        -- Automatically jump forward to textobj, similar to targets.vim
         lookahead = true,
 
         keymaps = {
-          -- You can use the capture groups defined in textobjects.scm
           ["af"] = "@function.outer",
           ["if"] = "@function.inner",
           ["as"] = "@class.outer",
@@ -83,48 +70,6 @@ plugin.textobj_config = function()
   }
 end
 
-plugin.context_config = function()
-  require("treesitter-context").setup {
-    enable = false, -- Enable this plugin (Can be enabled/disabled later via commands)
-    max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-    trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-    patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
-      -- For all filetypes
-      -- Note that setting an entry here replaces all other patterns for this entry.
-      -- By setting the 'default' entry below, you can control which nodes you want to
-      -- appear in the context window.
-      default = {
-        "class",
-        "function",
-        "method",
-        "for", -- These won't appear in the context
-        "while",
-        "if",
-        "switch",
-        "case",
-      },
-      -- Example for a specific filetype.
-      -- If a pattern is missing, *open a PR* so everyone can benefit.
-      --   rust = {
-      --       'impl_item',
-      --   },
-    },
-    exact_patterns = {
-      -- Example for a specific filetype with Lua patterns
-      -- Treat patterns.rust as a Lua pattern (i.e "^impl_item$" will
-      -- exactly match "impl_item" only)
-      -- rust = true,
-    },
-
-    -- [!] The options below are exposed but shouldn't require your attention,
-    --     you can safely ignore them.
-
-    zindex = 20, -- The Z-index of the context window
-    mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
-    separator = nil, -- Separator between context and content. Should be a single character string, like '-'.
-  }
-end
-
 return {
   "nvim-treesitter/nvim-treesitter",
   event = { "BufReadPost", "BufNewFile" },
@@ -132,16 +77,11 @@ return {
   config = plugin.config,
   dependencies = {
     {
-      "nvim-treesitter/nvim-treesitter-context",
-      config = plugin.context_config,
-      cond = false, -- disable now
-    },
-    {
       "nvim-treesitter/nvim-treesitter-textobjects",
       config = plugin.textobj_config,
       cond = YcVim.env.treesitter_textobj,
     },
   },
-  lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+  lazy = vim.fn.argc(-1) == 0 and YcVim.env.pick ~= "snacks",
   cond = YcVim.env.ts,
 }

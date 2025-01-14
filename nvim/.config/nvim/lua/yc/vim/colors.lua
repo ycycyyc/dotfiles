@@ -18,6 +18,7 @@ local colors = {
   virtual_grey = { n = 242, gui = "#6c6c6c" },
   cmdline = { n = 235, gui = "#262626" },
   current_line = { n = 11, gui = "#ffff00" },
+  fuzzy_match = { n = 75, gui = "#82A37F" },
 }
 
 local function convert(opt)

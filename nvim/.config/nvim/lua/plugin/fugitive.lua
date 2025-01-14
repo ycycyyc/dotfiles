@@ -103,9 +103,9 @@ local fugitiveblame_initfunc = function()
   end)
 end
 
-local plugin = {}
+local setup = {}
 
-plugin.initfuncs = {
+setup.initfuncs = {
   { "fugitive", fugitive_initfunc },
   { "fugitiveblame", fugitiveblame_initfunc },
 }
@@ -118,6 +118,6 @@ return {
   },
   cmd = { "Gw" },
   config = function()
-    YcVim.setup(plugin)
+    YcVim.setup(setup)
   end,
 }

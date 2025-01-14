@@ -1,6 +1,7 @@
-local plugin = {}
+---@type YcVim.Setup
+local setup = {}
 
-plugin.initfuncs = {
+setup.initfuncs = {
   {
     "oil",
     function()
@@ -12,19 +13,10 @@ plugin.initfuncs = {
   },
 }
 
-local type_hlgroups = setmetatable({
-  ["▸"] = "Directory",
-}, {
-  __index = function()
-    return "OilTypeFile"
-  end,
-})
+YcVim.setup(setup)
 
 return {
   "stevearc/oil.nvim",
-  init = function()
-    YcVim.setup(plugin)
-  end,
   keys = {
     {
       YcVim.keys.toggle_dir,
@@ -40,18 +32,6 @@ return {
     },
   },
   opts = {
-    columns = {
-      {
-        "type",
-        icons = {
-          directory = "▸",
-          file = "",
-        },
-        highlight = function(type_str)
-          return type_hlgroups[type_str]
-        end,
-      },
-    },
     default_file_explorer = false,
     keymaps = {
       ["<CR>"] = "actions.select",

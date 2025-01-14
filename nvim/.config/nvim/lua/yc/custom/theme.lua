@@ -51,6 +51,7 @@ local theme = {
   LineNr = { myfg = colors.comment_grey, mybg = colors.menu_grey },
   MatchParen = { myfg = colors.white, underline = true },
   CursorLineNr = { mybg = colors.menu_grey, myfg = colors.current_line, cterm = {} },
+  CursorLine = { mybg = colors.menu_grey },
 
   diffAdded = { myfg = colors.green },
   diffRemoved = { myfg = colors.red },
@@ -232,6 +233,20 @@ local theme = {
   -- snacks
   -- dashboard
   SnacksDashboardHeader = { myfg = colors.blue },
+  -- pick
+  SnacksPicker = { link = "clear" },
+  SnacksPickerCol = { myfg = colors.yellow },
+  -- SnacksPickerMatch = { cterm = { reverse = true } },
+  SnacksPickerMatch = { mybg = colors.fuzzy_match, myfg = colors.black, cterm = { bold = true } },
+  -- SnacksPickerSearch = { cterm = { reverse = true } },
+  SnacksPickerSearch = { mybg = colors.fuzzy_match, myfg = colors.black, cterm = { bold = true } },
+  SnacksPickerDir = { myfg = colors.purple },
+  SnacksPickerFile = { myfg = colors.white, cterm = { bold = true } },
+  SnacksPickerComment = { myfg = colors.white },
+  SnacksPickerGitCommit = { myfg = colors.yellow },
+  SnacksPickerListCursorLine = { mybg = colors.menu_grey },
+  -- LineNr引起的查询的字段后多一个灰色背景的字符
+  SnacksPickerInputSearch = { myfg = colors.purple, mybg = colors.menu_grey, cterm = { bold = true, underline = true } },
 
   --- 4. treesitter
   ["@variable"] = { myfg = colors.white },

@@ -1,19 +1,18 @@
 -- 常用 快捷键
 local keys = {
   -- search
-  search_global = "<Leader>f", -- search use rg and fzf
-  run_find = "<Leader>F",
-  search_toggle_rg_mode = "<leader>T", -- 使用fixString 匹配还是 正则
-  search_buffer = "<Leader>b", -- search only in buffer use fzf
-  search_find_files = "<C-p>", -- 查文件
-  search_git_status = "<C-f>",
-  search_cur_word = "gw",
-  search_cur_word_cur_buf = "gW",
-  search_resume = "<leader>l",
-  switch_buffers = "<leader>o", -- buffers 切换
-  global_find_and_replace = "<leader>R",
-  buffer_find_and_replace = "<leader>rr",
-  cmd_history = "<leader>H",
+  pick_open = "<leader>o",
+  pick_grep = "<leader>f", -- search use rg and fzf
+  pick_lines = "<leader>b", -- search only in buffer use fzf
+  pick_files = "<C-p>", -- 查文件
+  pick_grep_word = "gw",
+  pick_grep_word_cur_buf = "gW",
+  pick_resume = "<leader>l",
+  -- pick_buffers = "<leader>o", -- buffers 切换
+  pick_cmd_history = "<leader>H",
+
+  global_find_and_replace = "<leader>rr",
+  buffer_find_and_replace = "<leader>R",
 
   -- op
   toggle_dir = "<Leader>n", -- 打开目录树
