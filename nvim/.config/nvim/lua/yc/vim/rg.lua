@@ -1,6 +1,8 @@
-local M = {}
+---@class YcVim.rg
+local rg = {}
 
-local rg = {
+---@type string[]
+local rgCmdArgs = {
   "rg",
   "-H",
   "--hidden",
@@ -13,7 +15,7 @@ local rg = {
   "-F", --  regex = false
 }
 
----@class Yc.Finder
+---@class YcVim.Finder
 ---@field islive boolean
 ---@field words string[]
 ---@field query string
@@ -22,7 +24,7 @@ local rg = {
 local Finder = {}
 
 ---@param args table
----@return Yc.Finder
+---@return YcVim.Finder
 function Finder:new(args)
   local o = {}
   setmetatable(o, self)
@@ -112,8 +114,8 @@ function Finder:parse()
   end
 end
 
----@param live_grep fun(f: Yc.Finder)
----@param grep fun(f: Yc.Finder)
+---@param live_grep fun(f: YcVim.Finder)
+---@param grep fun(f: YcVim.Finder)
 function Finder:run(live_grep, grep)
   -- 解析命令行工具
   self:parse()
@@ -129,10 +131,10 @@ end
 
 ---@return string
 function Finder:cmd()
-  local cmd = {}
+  local cmd = {} ---@type string[]
 
-  for _, w in ipairs(rg) do
-    table.insert(cmd, w)
+  for _, arg in ipairs(rgCmdArgs) do
+    table.insert(cmd, arg)
   end
 
   -- 生成最后的rg cmd
@@ -145,10 +147,13 @@ function Finder:cmd()
   return table.concat(cmd, " ")
 end
 
-M.run = function(live_grep, grep)
+---@param live_grep fun(f: YcVim.Finder)
+---@param grep fun(f: YcVim.Finder)
+---@return fun(args: table)
+rg.run = function(live_grep, grep)
   return function(args)
     Finder:new(args):run(live_grep, grep)
   end
 end
 
-return M
+return rg

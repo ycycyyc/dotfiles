@@ -1,3 +1,4 @@
+---@class YcVim.lsp
 local lsp = {}
 
 local keys = YcVim.keys
@@ -77,7 +78,7 @@ local range_format = function(pos)
   para.range = range
 
   -- 退出可视模式
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+  YcVim.util.feedkey("<esc>", "n")
 
   local method = "textDocument/rangeFormatting" ---@type string
   local resp = vim.lsp.buf_request_sync(0, method, para, timeoutms)

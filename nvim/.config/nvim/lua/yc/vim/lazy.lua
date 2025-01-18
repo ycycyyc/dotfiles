@@ -1,3 +1,4 @@
+---@class YcVim.lazy
 local lazy = {}
 
 ---@param keymaps table[]

@@ -1,39 +1,44 @@
----@class yc.line.Component
+---@class YcLine.setion
 ---@field content string
 ---@field width number?
 ---@field cnt number
 ---@field metrics fun():string?
 ---@field refresh fun()?
 ---@field start fun()?
-local Component = {}
 
----@return yc.line.Component
-YcVim.extra.new_component = function(name)
-  local o = {}
-  o.name = name
-  o.content = ""
-  o.cnt = 0
-  return o
+YcLine = {}
+
+---@param name string
+---@return YcLine.setion
+YcLine.new_section = function(name)
+  local section = {}
+  section.name = name
+  section.content = ""
+  section.cnt = 0
+  return section
 end
 
----@type string
-local module_prefix = "yc.custom.line."
+---@type YcLine.setion[]
+local sections = {}
 
----@type string[]
-local component_names = { "mode", "githead", "gitinfo", "alig", "bufferlist", "alig", "off", "nbuffers" }
-
----@type yc.line.Component[]
-local components = {}
+---@return string
+YcLine.statusline = function()
+  local res = {} ---@type string[]
+  for _, sec in ipairs(sections) do
+    table.insert(res, sec.content)
+  end
+  return table.concat(res)
+end
 
 ---@return number
-function YcVim.extra.yc_statusline_avail_width()
+YcLine.avail_width = function()
   local w = 0 ---@type number
-  for _, c in ipairs(components) do
+  for _, section in ipairs(sections) do
     local add ---@type number
-    if c.width then
-      add = c.width
+    if section.width then
+      add = section.width
     else
-      add = YcVim.util.evaluates_width(c.content)
+      add = YcVim.util.evaluates_width(section.content)
     end
     w = w + add
   end
@@ -41,53 +46,47 @@ function YcVim.extra.yc_statusline_avail_width()
   return vim.o.columns - padding - w -- 10是padding的长度
 end
 
----@return string
-function YcVim.extra.yc_statusline()
-  local res = {} ---@type string[]
-  for _, c in ipairs(components) do
-    table.insert(res, c.content)
-  end
-  return table.concat(res)
-end
-
-for _, name in ipairs(component_names) do
-  local component = require(module_prefix .. name)
-  table.insert(components, component)
-  if component.start then
-    component.start()
+---@type string[]
+local section_names = { "mode", "githead", "gitinfo", "alig", "bufferlist", "alig", "off", "nbuffers" }
+for _, name in ipairs(section_names) do
+  local module_prefix = "yc.custom.line."
+  local section = require(module_prefix .. name) ---@type YcLine.setion
+  table.insert(sections, section)
+  if section.start then
+    section.start()
   end
 end
 
-local refresh_all_cnt = 0 ---@type number
-local refresh_all = function()
-  refresh_all_cnt = refresh_all_cnt + 1
-  for _, c in ipairs(components) do
-    if c.refresh then
-      c.refresh()
+local render_cnt = 0 ---@type number
+local render = function()
+  render_cnt = render_cnt + 1
+  for _, sec in ipairs(sections) do
+    if sec.refresh then
+      sec.refresh()
     end
   end
-  vim.opt.statusline = "%!v:lua.YcVim.extra.yc_statusline()"
+  vim.opt.statusline = "%!v:lua.YcLine.statusline()"
 end
 
-refresh_all()
+render()
 
 vim.api.nvim_create_autocmd("User", {
   pattern = "LineRefresh",
   callback = function()
     vim.schedule(function()
-      refresh_all()
+      render()
     end)
   end,
 })
 
-local show_line_stats = function()
-  local msg = { "[refresh_all_cnt:" .. tostring(refresh_all_cnt) .. "]" } ---@type string[]
-  for _, c in ipairs(components) do
-    if c.metrics then
-      table.insert(msg, c.metrics())
+local stats = function()
+  local msg = { "[refresh_all_cnt:" .. tostring(render_cnt) .. "]" } ---@type string[]
+  for _, section in ipairs(sections) do
+    if section.metrics then
+      table.insert(msg, section.metrics())
     end
   end
   vim.notify(vim.inspect(msg))
 end
 
-vim.api.nvim_create_user_command("ShowLineStats", show_line_stats, {})
+vim.api.nvim_create_user_command("ShowLineStats", stats, {})

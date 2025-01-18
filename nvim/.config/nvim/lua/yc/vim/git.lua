@@ -1,3 +1,4 @@
+---@class YcVim.git
 local git = {}
 
 ---@param commit string | nil

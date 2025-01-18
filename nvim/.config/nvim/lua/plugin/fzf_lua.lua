@@ -1,4 +1,4 @@
----@param find Yc.Finder
+---@param find YcVim.Finder
 local live_grep = function(find)
   require("fzf-lua").live_grep {
     cmd = find:cmd(),
@@ -8,7 +8,7 @@ local live_grep = function(find)
   }
 end
 
----@param find Yc.Finder
+---@param find YcVim.Finder
 local grep = function(find)
   require("fzf-lua").grep {
     cmd = find:cmd(),
@@ -28,7 +28,7 @@ local grep_buf_word = function()
   }
 end
 
----@type YcVim.Setup
+---@type YcVim.SetupOpt
 local setup = {}
 
 setup.user_cmds = {
@@ -191,5 +191,4 @@ return {
   cmd = YcVim.lazy.cmds(setup.user_cmds, { "FzfLua" }),
   config = config,
   init = init,
-  cond = YcVim.env.fzf_lua,
 }

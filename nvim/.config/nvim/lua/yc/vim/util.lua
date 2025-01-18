@@ -1,3 +1,4 @@
+---@class YcVim.util
 local util = {}
 
 util.has_words_before = function()
@@ -31,6 +32,13 @@ util.since_nvim = function(major, minor, patch)
   return false
 end
 
+---@param key string
+---@param mode string
+util.feedkey = function(key, mode)
+  -- 这里的true和false是什么意思?
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), mode, true)
+end
+
 util.buf_only = function()
   local api = vim.api
   ---@type number
@@ -49,9 +57,8 @@ util.buf_only = function()
 end
 
 function util.i_move_to_end()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("A", true, false, true), "n", true)
+  util.feedkey("<esc>", "n")
+  util.feedkey("A", "n")
 end
 
 ---@return number[]

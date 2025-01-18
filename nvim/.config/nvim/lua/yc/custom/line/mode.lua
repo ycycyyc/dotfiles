@@ -86,8 +86,7 @@ local stylecache = {}
 ---@type string
 local end_style = "StatusLineNormal"
 
----@class yc.line.Component
-local M = YcVim.extra.new_component "mode"
+local M = YcLine.new_section "mode"
 
 function M.start()
   M.refresh()

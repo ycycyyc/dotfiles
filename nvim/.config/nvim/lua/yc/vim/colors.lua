@@ -1,3 +1,4 @@
+---@class YcVim.colors
 local colors = {
   red = { n = 204, gui = "#ff5f87" },
   blue = { n = 39, gui = "#00afff" },
@@ -21,6 +22,8 @@ local colors = {
   fuzzy_match = { n = 75, gui = "#82A37F" },
 }
 
+---@param opt table
+---@return table
 local function convert(opt)
   local res = {}
 

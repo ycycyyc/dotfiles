@@ -1,3 +1,4 @@
+---@class YcVim.cmp
 local cmp = {}
 
 cmp.visible = function()

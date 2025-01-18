@@ -1,3 +1,4 @@
+---@class YcVim.env
 local env = {
   clangd_bin = "clangd", -- {path}
   cpp_debug_mode = "vscode", -- vscode or lldb

@@ -1,4 +1,4 @@
----@type YcVim.Setup
+---@type YcVim.SetupOpt
 local setup = {}
 
 setup.initfuncs = {
@@ -42,7 +42,7 @@ setup.user_cmds = {
   {
     "ShowEnvHash",
     function()
-      vim.notify(vim.inspect(YcVim.extra.env_hash))
+      vim.notify(vim.inspect(YcVim.env_hash))
     end,
     {},
   },

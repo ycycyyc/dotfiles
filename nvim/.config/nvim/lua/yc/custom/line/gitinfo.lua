@@ -1,5 +1,4 @@
----@class yc.line.Component
-local M = YcVim.extra.new_component "gitinfo"
+local M = YcLine.new_section "gitinfo"
 
 ---@return string
 local get_msg = function()

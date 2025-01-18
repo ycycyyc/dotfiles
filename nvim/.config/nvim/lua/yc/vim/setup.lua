@@ -2,7 +2,7 @@
 ---@alias YcVim.Setup.Keymap {[1]: string|string[], [2]: string, [3]: string|function, [4]: vim.keymap.set.Opts?}
 ---@alias YcVim.Setup.Usercmd {[1]:string, [2]:function|string, [3]:vim.api.keyset.user_command}
 
----@class YcVim.Setup
+---@class YcVim.SetupOpt
 ---@field user_cmds? YcVim.Setup.Usercmd[]
 ---@field keymaps? YcVim.Setup.Keymap[]
 ---@field initfuncs? YcVim.Setup.Initfunc[]
@@ -55,7 +55,7 @@ local function setup_initfuncs(initfuncs)
   end
 end
 
----@param m YcVim.Setup
+---@param m YcVim.SetupOpt
 local setup = function(m)
   if m.user_cmds then
     setup_usercmd(m.user_cmds)

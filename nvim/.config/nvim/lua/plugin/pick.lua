@@ -4,7 +4,7 @@ end
 
 local hidden = false
 local cwd = vim.uv.cwd()
-if string.match(cwd, "dotfiles") then
+if cwd and string.match(cwd, "dotfiles") then
   hidden = true
 end
 
@@ -15,8 +15,7 @@ local confirm = function(picker, item)
     return
   end
   -- lua/snacks/picker/actions.lua
-  -- remove jump to center
-  picker:action "edit"
+  picker:action "jump"
 end
 
 local lsp_method = YcVim.lsp.method
@@ -40,7 +39,7 @@ lsp_method.impl = function()
   }
 end
 
----@param find Yc.Finder
+---@param find YcVim.Finder
 local grep = function(find)
   local opt = {
     live = find.islive,
@@ -58,7 +57,7 @@ local grep = function(find)
   require("snacks").picker.grep(opt)
 end
 
----@type YcVim.Setup
+---@type YcVim.SetupOpt
 local setup = {}
 
 setup.user_cmds = {
@@ -120,10 +119,20 @@ return {
   },
   opts = {
     picker = {
+      icons = {
+        ui = {
+          live = "Live",
+          hidden = "h",
+          ignored = "i",
+          selected = "▌",
+          unselected = " ",
+        },
+      },
       win = {
         preview = { wo = { cursorlineopt = "both" } },
         input = {
           keys = {
+            ["<Esc>"] = { "close", mode = { "i", "n" } },
             ["<c-f>"] = { "<right>", mode = { "i" }, expr = true },
             ["<c-a>"] = { "<c-o>0", mode = { "i" }, expr = true },
             ["<a-a>"] = { "select_all", mode = { "n", "i" } },
@@ -137,11 +146,11 @@ return {
             width = 0.8,
             height = 0.9,
             zindex = 50,
-            { win = "preview", border = "rounded" },
+            { win = "preview", title = "{preview}", border = "rounded" },
             {
               box = "vertical",
               border = "rounded",
-              title = "{source} {live}",
+              title = "{source} {live} {flags}",
               title_pos = "center",
               { win = "input", height = 1, border = "bottom" },
               { win = "list", border = "none" },

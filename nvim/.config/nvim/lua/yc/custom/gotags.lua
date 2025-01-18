@@ -65,7 +65,7 @@ local function remove(tags)
   run("-remove-tags", tags)
 end
 
----@type YcVim.Setup
+---@type YcVim.SetupOpt
 local setup = {}
 
   -- stylua: ignore

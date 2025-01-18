@@ -1,5 +1,5 @@
 local lazypath = function()
-  local path = "lazy_" .. YcVim.extra.env_hash
+  local path = "lazy_" .. YcVim.env_hash
   return vim.fn.stdpath "data" .. "/" .. path .. "/lazy.nvim"
 end
 

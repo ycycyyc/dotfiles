@@ -28,7 +28,7 @@ local init = function()
   end
 end
 
----@type YcVim.Setup
+---@type YcVim.SetupOpt
 local setup = {}
 
 setup.initfuncs = {

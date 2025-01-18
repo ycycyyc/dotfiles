@@ -3,8 +3,7 @@ local buflisted = fn.buflisted ---@type fun(number:number):number
 local bufname_of = fn.bufname
 local util = YcVim.util
 
----@type yc.line.Component
-local M = YcVim.extra.new_component "bufferlist"
+local M = YcLine.new_section "bufferlist"
 
 local costs = {} ---@type number[]
 local max_items = 0
@@ -91,7 +90,7 @@ local get_color_items = function()
 
   local colored_file_items = { colorfy_item(bufnr_list[cur_index], cur_buf_format) }
   local total_sz = util.evaluates_width(colored_file_items[1])
-  local available_sz = YcVim.extra.yc_statusline_avail_width()
+  local available_sz = YcLine.avail_width()
 
   ---@param index number
   ---@param forward boolean
@@ -151,7 +150,7 @@ end
 M.width = 0
 
 M.start = function()
-  vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  vim.api.nvim_create_autocmd({ "BufEnter", "BufAdd" }, {
     callback = function()
       M.refresh()
     end,

@@ -1,5 +1,4 @@
----@class yc.line.Component
-local M = YcVim.extra.new_component "githead"
+local M = YcLine.new_section "githead"
 
 local style = "StatusLineGitHead"
 local end_style = "StatusLineNormal"

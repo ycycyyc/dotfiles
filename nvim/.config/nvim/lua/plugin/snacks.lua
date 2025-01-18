@@ -1,4 +1,4 @@
----@type YcVim.Setup
+---@type YcVim.SetupOpt
 local setup = {}
 
 setup.user_cmds = {

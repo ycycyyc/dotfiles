@@ -1,4 +1,5 @@
 -- 常用 快捷键
+---@class YcVim.keys
 local keys = {
   -- search
   pick_open = "<leader>o",

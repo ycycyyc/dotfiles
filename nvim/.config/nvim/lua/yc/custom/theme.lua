@@ -247,6 +247,7 @@ local theme = {
   SnacksPickerListCursorLine = { mybg = colors.menu_grey },
   -- LineNr引起的查询的字段后多一个灰色背景的字符
   SnacksPickerInputSearch = { myfg = colors.purple, mybg = colors.menu_grey, cterm = { bold = true, underline = true } },
+  SnacksPickerSelected = { myfg = colors.red },
 
   --- 4. treesitter
   ["@variable"] = { myfg = colors.white },
@@ -278,6 +279,6 @@ local theme = {
 }
 
 for name, opt in pairs(theme) do
-  local o = colors.convert(opt)
-  vim.api.nvim_set_hl(0, name, o)
+  local val = colors.convert(opt)
+  vim.api.nvim_set_hl(0, name, val)
 end
