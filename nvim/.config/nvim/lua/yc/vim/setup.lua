@@ -1,6 +1,6 @@
----@alias YcVim.Setup.Initfunc {[1]:string|string[],[2]:function }
----@alias YcVim.Setup.Keymap {[1]: string|string[], [2]: string, [3]: string|function, [4]: vim.keymap.set.Opts?}
----@alias YcVim.Setup.Usercmd {[1]:string, [2]:function|string, [3]:vim.api.keyset.user_command}
+---@alias YcVim.Setup.Initfunc [string|string[], function]
+---@alias YcVim.Setup.Keymap [string|string[], string, string|function, vim.keymap.set.Opts?]
+---@alias YcVim.Setup.Usercmd [string, function|string, vim.api.keyset.user_command]
 
 ---@class YcVim.SetupOpt
 ---@field user_cmds? YcVim.Setup.Usercmd[]

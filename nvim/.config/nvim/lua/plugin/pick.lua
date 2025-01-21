@@ -47,6 +47,7 @@ local grep = function(find)
     search = find.query,
     ft = find.fts,
     hidden = hidden,
+    limit = find.limit,
     actions = { confirm = confirm },
   }
 

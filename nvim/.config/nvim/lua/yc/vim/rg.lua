@@ -17,6 +17,7 @@ local rgCmdArgs = {
 
 ---@class YcVim.Finder
 ---@field islive boolean
+---@field limit number
 ---@field words string[]
 ---@field query string
 ---@field filepath string|nil
@@ -34,6 +35,7 @@ function Finder:new(args)
   -- stylua: ignore
   self.filepath = nil
   self.islive = false
+  self.limit = 1024 * 100
   self.fts = {}
   return o
 end
@@ -98,6 +100,13 @@ function Finder:parse()
       self.islive = true
 
       self.query = string.gsub(self.query, "%-i", "") -- TODO 如何避免删错了
+      self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
+    end,
+    ["-nolimit"] = function()
+      self.limit = math.huge
+      vim.notify "grep `text` -nolimit"
+
+      self.query = string.gsub(self.query, "%-nolimit", "") -- TODO 如何避免删错了
       self.query = string.gsub(self.query, "%s+$", "") --删除最后面的空字符
     end,
   }
