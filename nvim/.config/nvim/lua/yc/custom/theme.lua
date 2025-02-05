@@ -196,6 +196,7 @@ local theme = {
   -- blink.cmp
   BlinkCmpGhostText = { link = "Comment" },
   BlinkCmpKind = { myfg = colors.white },
+  PmenuKind = { myfg = colors.green },
   BlinkCmpLabelMatch = { myfg = colors.yellow },
 
   -- dap
