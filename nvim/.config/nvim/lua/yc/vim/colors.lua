@@ -20,6 +20,8 @@ local colors = {
   cmdline = { n = 235, gui = "#262626" },
   current_line = { n = 11, gui = "#ffff00" },
   fuzzy_match = { n = 75, gui = "#46a8ff" },
+  color9 = { n = 9, gui = "#f02f1d" },
+  color0 = { n = 0, gui = "#000000" },
 }
 
 ---@param opt table

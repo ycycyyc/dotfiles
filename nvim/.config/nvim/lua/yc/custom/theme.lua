@@ -40,7 +40,8 @@ local theme = {
   --- 2. builtin
   -- Cursor = { myfg = black, mybg = blue },
   Search = { myfg = colors.black, mybg = colors.yellow },
-  IncSearch = { cterm = { reverse = true } },
+  -- IncSearch = { cterm = { reverse = true } },
+  IncSearch = { reverse = true },
   Directory = { myfg = colors.blue },
   Pmenu = { myfg = colors.white, mybg = colors.menu_grey },
   PmenuSel = { myfg = colors.cursor_grey1, mybg = colors.blue },
@@ -68,6 +69,7 @@ local theme = {
   FloatTitle = { cterm = { bold = true }, myfg = colors.red },
   FloatBorder = { link = "clear" },
 
+  DiagnosticError = { myfg = colors.red },
   DiagnosticInfo = { myfg = colors.blue },
   DiagnosticHint = { myfg = colors.blue },
   CmpItemAbbrMatch = { myfg = colors.yellow },
@@ -211,7 +213,7 @@ local theme = {
   DapUIBreakpointsPath = { myfg = colors.blue },
 
   -- flash.nvim
-  FlashLabel = { cterm = { nocombine = true }, ctermfg = 0, ctermbg = 9 },
+  FlashLabel = { cterm = { nocombine = true }, mybg = colors.color9, myfg = colors.color0 },
 
   -- gitsigns
   GitSignsAdd = { myfg = colors.green, mybg = colors.menu_grey },
