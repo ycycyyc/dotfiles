@@ -159,6 +159,7 @@ return {
           },
         },
       },
+      formatters = { file = { truncate = 999 } }, -- don't trancate file name
       layout = { cycle = false, preset = "ycvim" },
     },
   },
