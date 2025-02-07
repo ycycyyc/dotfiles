@@ -83,7 +83,7 @@ return {
     {
       keys.pick_lines,
       function()
-        require("snacks").picker.lines { layout = { preview = false } }
+        require("snacks").picker.lines { layout = { preview = true, preset = "ycvim" } }
       end,
     },
     { keys.pick_grep, ":Rg " },
@@ -92,7 +92,7 @@ return {
       keys.pick_grep_word_cur_buf,
       function()
         require("snacks").picker.lines {
-          layout = { preview = false },
+          layout = { preview = true, preset = "ycvim" },
           pattern = "'" .. vim.fn.expand "<cword>",
         }
       end,

@@ -11,7 +11,7 @@ local plugin_names = {
 
 -- stylua: ignore
 local lsp_plugin_names = {
-  "pick", "lsp", "winbar", "gotest", "autopairs",
+  "pick", "lspconfig", "winbar", "gotest", "autopairs",
   "gitsigns", "rust", "format", "symbol", "code", "snippet",
 }
 

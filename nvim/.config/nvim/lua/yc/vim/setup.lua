@@ -70,4 +70,6 @@ local setup = function(m)
   end
 end
 
+---@alias YcVim.Setup.SetUpFunc fun(m: YcVim.SetupOpt)
+
 return setup

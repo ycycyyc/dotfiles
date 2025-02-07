@@ -10,18 +10,7 @@ plugin.opts = {
   keymap = {
     ["<cr>"] = { "select_and_accept", "fallback" },
     ["<c-y>"] = { "select_and_accept", "fallback" },
-    ["<C-n>"] = {
-      function(cmp)
-        if cmp.is_visible() then
-          cmp.select_next()
-          return true
-        elseif YcVim.util.has_words_before() then
-          cmp.show()
-          return true
-        end
-      end,
-      "fallback",
-    },
+    ["<C-n>"] = { "select_next", "show", "fallback" },
     ["<C-e>"] = {
       function()
         require("blink.cmp").hide()

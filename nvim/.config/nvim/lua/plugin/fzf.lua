@@ -15,7 +15,7 @@ local search_buf = function()
     table.insert(items, filename .. ":" .. tostring(i) .. ":1: " .. l)
   end
 
-  local opt_preview = vim.fn["fzf#vim#with_preview"] "up:+{2}-/2"
+  local opt_preview = vim.fn["fzf#vim#with_preview"] "up:+{2}-/2" ---@type table
 
 -- stylua: ignore
   local options = {

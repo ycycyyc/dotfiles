@@ -2,43 +2,12 @@
 local lsp = {}
 
 local keys = YcVim.keys
+local env = YcVim.env
 
 ---@alias YcVim.Keymaps table<string, table>
 
 ---@class YcVim.Lsp.Conf
----@field auto_format boolean
----@field keymaps YcVim.Keymaps
-
-lsp.lsp_capabilities = function()
-  ---@module 'blink.cmp'
-  local blink = package.loaded["blink.cmp"]
-  if blink then
-    return blink.get_lsp_capabilities()
-  end
-
-  ---@module 'cmp_nvim_lsp'
-  local cmp_nvim_lsp = package.loaded["cmp_nvim_lsp"]
-  if cmp_nvim_lsp then
-    return require("cmp_nvim_lsp").default_capabilities()
-  end
-end
-
-local function sync_format_save()
-  vim.lsp.buf.format { async = false }
-  vim.cmd "silent write"
-end
-
-lsp.method = {
-  -- 默认方法, 后续会被插件覆盖（fzf-lua)
-  definition = vim.lsp.buf.definition,
-  references = vim.lsp.buf.references,
-  impl = vim.lsp.buf.implementation,
-  code_action = vim.lsp.buf.code_action,
-  format = sync_format_save,
-  plugin_format = function()
-    vim.notify "not support now"
-  end, --插件格式化
-}
+---@field keymaps? YcVim.Keymaps
 
 local apply_lsp_edit = function(resp)
   if resp and resp[1] then
@@ -86,10 +55,78 @@ local range_format = function(pos)
   apply_lsp_edit(resp)
 end
 
-lsp.v_range_format = function()
+local v_range_format = function()
   local pos = YcVim.util.get_visual_selection()
   range_format(pos)
 end
+
+local switch_source_header_cmd = function()
+  local bufnr = 0
+  local cmd = "edit"
+  local lspconfig = require "lspconfig"
+  bufnr = lspconfig.util.validate_bufnr(bufnr)
+  local params = { uri = vim.uri_from_bufnr(bufnr) }
+  vim.lsp.buf_request(bufnr, "textDocument/switchSourceHeader", params, function(err, dst_file, result)
+    if err then
+      error(tostring(err))
+    end
+    if not result then
+      print "Corresponding file can’t be determined"
+      return
+    end
+    vim.api.nvim_command(cmd .. " " .. vim.uri_to_fname(dst_file))
+  end)
+end
+
+local sync_format_save = function()
+  vim.lsp.buf.format { async = false }
+  vim.cmd "silent write"
+end
+
+---@type table<string, YcVim.Lsp.Conf>
+local lsp_confs = {
+  protols = {
+    keymaps = {
+      [keys.lsp_format] = { function() end },
+    },
+  },
+  emmylua_ls = {
+    keymaps = {
+      [keys.lsp_format] = {
+        function()
+          YcVim.lsp.method.plugin_format()
+        end,
+      },
+    },
+  },
+  lua_ls = {
+    keymaps = {
+      [keys.lsp_format] = {
+        function()
+          YcVim.lsp.method.plugin_format()
+        end,
+      },
+    },
+  },
+  gopls = {},
+  clangd = {
+    keymaps = {
+      [keys.lsp_format] = { function() end },
+      [keys.lsp_range_format] = { v_range_format, "x" },
+      [keys.switch_source_header] = { switch_source_header_cmd },
+    },
+  },
+  pyright = {
+    keymaps = {
+      [keys.lsp_format] = {
+        function()
+          YcVim.lsp.method.plugin_format()
+        end,
+      },
+    },
+  },
+}
+
 
 ---@return YcVim.Lsp.Conf
 local default_lsp_config = function()
@@ -104,7 +141,16 @@ local default_lsp_config = function()
 
       [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
       [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
-      [keys.lsp_hover] = { vim.lsp.buf.hover },
+      [keys.lsp_hover] = {
+        function()
+          -- better hover
+          vim.lsp.buf.hover {
+            border = "rounded",
+            max_height = math.floor(vim.o.lines * 0.9),
+            max_width = math.floor(vim.o.columns * 0.5),
+          }
+        end,
+      },
       [keys.lsp_rename] = { vim.lsp.buf.rename },
       [keys.lsp_range_format] = { function() end, "x" },
       [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev },
@@ -129,28 +175,165 @@ local default_lsp_config = function()
   }
 end
 
----@param user_lsp_config YcVim.Lsp.Conf|nil
----@return fun(client: vim.lsp.Client, bufnr: number)
-lsp.on_attach_func = function(user_lsp_config)
-  ---@param client vim.lsp.Client
-  ---@param bufnr number
-  return function(client, bufnr)
-    -- 合并各个语言的不同配置
-    local lsp_config = vim.tbl_deep_extend("force", default_lsp_config(), user_lsp_config or {}) ---@type YcVim.Lsp.Conf
-
-    -- keymap
-    local buf_map = function(mode, key, action)
-      vim.keymap.set(mode, key, action, { noremap = true, buffer = bufnr, silent = true })
-    end
-    for key, action in pairs(lsp_config.keymaps) do
-      if action ~= nil then
-        local mode = action[2] or "n"
-        buf_map(mode, key, action[1])
-      end
-    end
-
-    vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
+---@return lsp.ClientCapabilities
+lsp.capabilities = function()
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  ---@module 'blink.cmp'
+  local blink = package.loaded["blink.cmp"]
+  if blink then
+    return blink.get_lsp_capabilities(capabilities)
   end
+
+  ---@module 'cmp_nvim_lsp'
+  local cmp_nvim_lsp = package.loaded["cmp_nvim_lsp"]
+  if cmp_nvim_lsp then
+    return require("cmp_nvim_lsp").default_capabilities()
+  end
+
+  return capabilities
+end
+
+lsp.method = {
+  definition = vim.lsp.buf.definition,
+  references = vim.lsp.buf.references,
+  impl = vim.lsp.buf.implementation,
+  code_action = vim.lsp.buf.code_action,
+  format = sync_format_save,
+  plugin_format = function()
+    vim.notify "not support now"
+  end, --插件格式化
+}
+
+---@param lsp_conf YcVim.Lsp.Conf?
+---@param _ vim.lsp.Client
+---@param bufnr number
+lsp.on_attach = function(lsp_conf, _, bufnr)
+  lsp_conf = vim.tbl_deep_extend("force", default_lsp_config(), lsp_conf or {})
+
+  local buf_map = function(mode, key, action)
+    vim.keymap.set(mode, key, action, { noremap = true, buffer = bufnr, silent = true })
+  end
+  for key, action in pairs(lsp_conf.keymaps) do
+    if action ~= nil then
+      local mode = action[2] or "n"
+      buf_map(mode, key, action[1])
+    end
+  end
+
+  vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
+end
+
+lsp.servers = {
+  vtsls = {}, -- npm install -g @vtsls/language-server
+  protols = {},
+  lua_ls = {
+    settings = {
+      Lua = {
+        runtime = { version = "LuaJIT" },
+        workspace = {
+          checkThirdParty = false,
+          library = { vim.env.VIMRUNTIME, vim.env.VIMRUNTIME .. "/lua" },
+        },
+      },
+    },
+  },
+
+  gopls = {
+    cmd = { "gopls", "serve" },
+    settings = {
+      gopls = {
+        semanticTokens = env.semantic_token,
+        experimentalPostfixCompletions = true,
+        usePlaceholders = env.usePlaceholders,
+        analyses = {
+          unusedparams = true,
+          shadow = true,
+          nilness = true,
+          printf = true,
+          unusedwrite = true,
+          fieldalignment = false,
+        },
+        hints = {
+          assignVariableTypes = env.inlayhint,
+          compositeLiteralFields = env.inlayhint,
+          compositeLiteralTypes = env.inlayhint,
+          constantValues = env.inlayhint,
+          functionTypeParameters = env.inlayhint,
+          parameterNames = env.inlayhint,
+          rangeVariableTypes = env.inlayhint,
+        },
+        staticcheck = true,
+      },
+    },
+    root_dir = function()
+      return vim.fn.getcwd()
+    end,
+  },
+
+  clangd = {
+    cmd = {
+      env.clangd_bin,
+      "--background-index",
+      "--suggest-missing-includes",
+      "-j=15",
+      "--clang-tidy",
+      "--all-scopes-completion",
+      "--completion-style=detailed",
+      "--header-insertion=iwyu",
+      "--pch-storage=memory",
+      env.usePlaceholders and "--function-arg-placeholders" or "--function-arg-placeholders=0",
+    },
+    filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
+    commands = { Format = { lsp.method.format, description = "format" } },
+  },
+
+  pyright = {
+    filetypes = { "python" },
+    settings = {
+      python = {
+        analysis = { autoSearchPaths = true, diagnosticMode = "workspace", useLibraryCodeForTypes = true },
+      },
+    },
+    single_file_support = true,
+  },
+}
+
+-- -- `emmylua_ls`
+-- vim.lsp.config("emmylua_ls", {
+--   cmd = { "emmylua_ls" },
+--   filetypes = { "lua" },
+--   root_markers = { ".luarc.json" },
+-- })
+--
+-- vim.lsp.enable "emmylua_ls"
+
+vim.lsp.set_log_level "OFF"
+vim.diagnostic.config {
+  underline = false,
+  signs = false,
+  virtual_text = true,
+}
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
+
+    local lsp_conf = lsp_confs[client.name]
+    if lsp_conf then
+      lsp.on_attach(lsp_conf, client, bufnr)
+    end
+  end,
+})
+
+if vim.fn.has "nvim-0.11" == 1 then
+  vim.keymap.del("n", "grr")
+  vim.keymap.del("n", "gri")
+  vim.keymap.del("n", "gra")
+  vim.keymap.del("x", "gra")
+  vim.keymap.del("n", "grn")
+  vim.keymap.del("n", "]d")
+  vim.keymap.del("n", "[d")
 end
 
 return lsp

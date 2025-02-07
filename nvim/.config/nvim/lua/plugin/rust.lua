@@ -1,5 +1,4 @@
 local config = function()
-
   local keys = YcVim.keys
   local attach_conf = {
     keymaps = {
@@ -16,7 +15,7 @@ local config = function()
     },
     server = {
       on_attach = function(client, bufnr)
-        YcVim.lsp.on_attach_func(attach_conf)(client, bufnr)
+        YcVim.lsp.on_attach(attach_conf, client, bufnr)
       end,
     },
   }

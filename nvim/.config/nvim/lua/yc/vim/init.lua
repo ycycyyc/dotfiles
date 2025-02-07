@@ -9,7 +9,7 @@
 ---@field lazy YcVim.lazy
 ---@field cmp YcVim.cmp
 ---@field extra YcVim.extra
----@field setup fun(m: YcVim.SetupOpt)
+---@field setup YcVim.Setup.SetUpFunc
 ---@field env_hash number
 YcVim = {}
 
