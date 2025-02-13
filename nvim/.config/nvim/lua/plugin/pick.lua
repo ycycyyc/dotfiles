@@ -109,9 +109,10 @@ return {
       function()
         require("snacks").picker.git_log {
           actions = {
-            confirm = function(picker, item)
-              picker:close()
-              YcVim.git.commit_diff(item.commit)
+            confirm = function(_, item)
+              vim.schedule(function()
+                YcVim.git.commit_diff(item.commit)
+              end)
             end,
           },
         }
