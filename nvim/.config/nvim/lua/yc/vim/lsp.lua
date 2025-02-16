@@ -127,7 +127,6 @@ local lsp_confs = {
   },
 }
 
-
 ---@return YcVim.Lsp.Conf
 local default_lsp_config = function()
   return {

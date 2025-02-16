@@ -20,8 +20,8 @@ plugin.opts = {
   },
   sources = {
     default = { "lsp", "path", "buffer" },
-    cmdline = {},
   },
+  cmdline = { enabled = false },
   completion = {
     menu = {
       draw = {
