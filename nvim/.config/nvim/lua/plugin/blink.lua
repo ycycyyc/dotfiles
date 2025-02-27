@@ -29,11 +29,6 @@ plugin.opts = {
       },
     },
   },
-  fuzzy = {
-    prebuilt_binaries = {
-      download = false,
-    },
-  },
 }
 
 return plugin
