@@ -5,7 +5,7 @@ local ts_disable = function(lang, bufnr)
     return false
   end
 
-  return vim.api.nvim_buf_line_count(bufnr) > 3500
+  return vim.api.nvim_buf_line_count(bufnr) > 10000
 end
 
 plugin.config = function()
