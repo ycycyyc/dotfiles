@@ -225,18 +225,6 @@ end
 lsp.servers = {
   vtsls = {}, -- npm install -g @vtsls/language-server
   protols = {},
-  lua_ls = {
-    settings = {
-      Lua = {
-        runtime = { version = "LuaJIT" },
-        workspace = {
-          checkThirdParty = false,
-          library = { vim.env.VIMRUNTIME, vim.env.VIMRUNTIME .. "/lua" },
-        },
-      },
-    },
-  },
-
   gopls = {
     cmd = { "gopls", "serve" },
     settings = {
@@ -297,14 +285,21 @@ lsp.servers = {
   },
 }
 
--- -- `emmylua_ls`
--- vim.lsp.config("emmylua_ls", {
---   cmd = { "emmylua_ls" },
---   filetypes = { "lua" },
---   root_markers = { ".luarc.json" },
--- })
---
--- vim.lsp.enable "emmylua_ls"
+if vim.env.EMMY and vim.fn.executable "emmylua_ls" == 1 then
+  lsp.servers.emmylua_ls = {}
+else
+  lsp.servers.lua_ls = {
+    settings = {
+      Lua = {
+        runtime = { version = "LuaJIT" },
+        workspace = {
+          checkThirdParty = false,
+          library = { vim.env.VIMRUNTIME, vim.env.VIMRUNTIME .. "/lua" },
+        },
+      },
+    },
+  }
+end
 
 vim.lsp.set_log_level "OFF"
 vim.diagnostic.config {

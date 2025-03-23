@@ -8,7 +8,6 @@
 ---@field colors YcVim.colors
 ---@field lazy YcVim.lazy
 ---@field cmp YcVim.cmp
----@field extra YcVim.extra
 ---@field setup YcVim.Setup.SetUpFunc
 ---@field env_hash number
 YcVim = {}

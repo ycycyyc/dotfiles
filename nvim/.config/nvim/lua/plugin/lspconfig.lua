@@ -7,6 +7,28 @@ return {
   event = "User FilePost",
   config = function()
     local lspconfig = require "lspconfig"
+    local configs = require "lspconfig.configs"
+
+    if not configs.emmylua_ls then
+      local root_files = {
+        ".luarc.json",
+        ".luarc.jsonc",
+        ".emmyrc.json",
+        ".git",
+      }
+
+      local util = require "lspconfig.util"
+
+      configs.emmylua_ls = {
+        default_config = {
+          cmd = { "emmylua_ls" },
+          filetypes = { "lua" },
+          root_dir = util.root_pattern(root_files),
+        },
+      }
+    else
+      vim.notify "emmylua_ls is added in nvim-lspconfig"
+    end
 
     for name, opt in pairs(YcVim.lsp.servers) do
       lspconfig[name].setup(vim.tbl_deep_extend("error", opt, {
