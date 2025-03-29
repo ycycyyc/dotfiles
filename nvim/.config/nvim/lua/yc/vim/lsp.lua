@@ -92,6 +92,14 @@ local lsp_confs = {
   },
 }
 
+local goto_prev_diagnostic = function()
+  vim.diagnostic.jump { count = -1, float = true }
+end
+
+local goto_next_diagnostic = function()
+  vim.diagnostic.jump { count = 1, float = true }
+end
+
 ---@return YcVim.Lsp.Conf
 local default_lsp_config = function()
   return {
@@ -117,8 +125,8 @@ local default_lsp_config = function()
       },
       [keys.lsp_rename] = { vim.lsp.buf.rename },
       [keys.lsp_range_format] = { function() end, "x" },
-      [keys.lsp_err_goto_prev] = { vim.diagnostic.goto_prev },
-      [keys.lsp_err_goto_next] = { vim.diagnostic.goto_next },
+      [keys.lsp_err_goto_prev] = { goto_prev_diagnostic },
+      [keys.lsp_err_goto_next] = { goto_next_diagnostic },
 
       [keys.lsp_signature_help] = {
         function()
@@ -285,14 +293,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-if vim.fn.has "nvim-0.11" == 1 then
-  vim.keymap.del("n", "grr")
-  vim.keymap.del("n", "gri")
-  vim.keymap.del("n", "gra")
-  vim.keymap.del("x", "gra")
-  vim.keymap.del("n", "grn")
-  vim.keymap.del("n", "]d")
-  vim.keymap.del("n", "[d")
-end
+vim.keymap.del("n", "grr")
+vim.keymap.del("n", "gri")
+vim.keymap.del("n", "gra")
+vim.keymap.del("x", "gra")
+vim.keymap.del("n", "grn")
+vim.keymap.del("n", "]d")
+vim.keymap.del("n", "[d")
 
 return lsp
