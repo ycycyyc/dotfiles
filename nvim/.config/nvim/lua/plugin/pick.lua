@@ -21,6 +21,7 @@ end
 local lsp_method = YcVim.lsp.method
 lsp_method.references = function()
   require("snacks").picker.lsp_references {
+    include_current = true,
     auto_confirm = false,
     actions = { confirm = confirm },
   }
@@ -28,6 +29,7 @@ end
 
 lsp_method.definition = function()
   require("snacks").picker.lsp_definitions {
+    include_current = true,
     actions = { confirm = confirm },
   }
 end
@@ -35,6 +37,7 @@ end
 lsp_method.impl = function()
   require("snacks").picker.lsp_implementations {
     auto_confirm = false,
+    include_current = true,
     actions = { confirm = confirm },
   }
 end
