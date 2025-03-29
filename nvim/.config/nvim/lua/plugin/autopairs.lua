@@ -1,10 +1,9 @@
 local cj = function()
   local npairs = require "nvim-autopairs"
-  if vim.fn.pumvisible() ~= 0 then
-    return npairs.esc "<c-j>" .. npairs.autopairs_cr()
-  else
-    return npairs.autopairs_cr()
+  if YcVim.cmp.visible() then
+    YcVim.cmp.hide()
   end
+  return npairs.autopairs_cr()
 end
 
 vim.keymap.set("i", "<c-j>", cj, { expr = true, noremap = true, replace_keycodes = false, buffer = true })
