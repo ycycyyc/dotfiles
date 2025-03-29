@@ -131,7 +131,7 @@ return {
         },
       },
       win = {
-        preview = { wo = { cursorlineopt = "both" } },
+        preview = { wo = { cursorlineopt = "screenline" } },
         input = {
           keys = {
             ["<Esc>"] = { "close", mode = { "i", "n" } },

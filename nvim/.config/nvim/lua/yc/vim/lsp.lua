@@ -9,55 +9,20 @@ local env = YcVim.env
 ---@class YcVim.Lsp.Conf
 ---@field keymaps? YcVim.Keymaps
 
-local apply_lsp_edit = function(resp)
-  if resp and resp[1] then
-    local result = resp[1].result
-    if result then
-      local uri = vim.uri_from_bufnr(0)
-      local textDocument = { uri = uri, version = 0 }
-      local edits = result
-      local documentChanges = {}
-      table.insert(documentChanges, { edits = edits, textDocument = textDocument })
-      local change_list = { documentChanges = documentChanges }
-      vim.lsp.util.apply_workspace_edit(change_list, "utf-8")
-    end
-  end
-end
-
----@param pos number[]
-local range_format = function(pos)
-  local timeoutms = 1000 ---@type number
-  local para = vim.lsp.util.make_given_range_params()
+local v_range_format = function()
+  local pos = YcVim.util.get_visual_selection()
 
   local startp, endp = pos[1], pos[2]
   if startp > endp then
     startp, endp = pos[2], pos[1]
   end
 
-  local range = {
-    start = {
-      line = startp - 1,
-      character = 0,
-    },
-  }
-  range["end"] = {
-    line = endp - 1,
-    character = 0,
-  }
-  para.range = range
+  local range = {}
+  range["start"] = { startp - 1, 0 }
+  range["end"] = { endp - 1, 0 }
 
-  -- 退出可视模式
+  vim.lsp.buf.format { range = range }
   YcVim.util.feedkey("<esc>", "n")
-
-  local method = "textDocument/rangeFormatting" ---@type string
-  local resp = vim.lsp.buf_request_sync(0, method, para, timeoutms)
-
-  apply_lsp_edit(resp)
-end
-
-local v_range_format = function()
-  local pos = YcVim.util.get_visual_selection()
-  range_format(pos)
 end
 
 local switch_source_header_cmd = function()
