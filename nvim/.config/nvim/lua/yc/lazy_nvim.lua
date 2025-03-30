@@ -24,7 +24,7 @@ else
 end
 
 local plugins = {}
-for i, name in ipairs(plugin_names) do
+for _, name in ipairs(plugin_names) do
   local pn = require("plugin." .. name)
 
   if type(pn[1]) == "string" then

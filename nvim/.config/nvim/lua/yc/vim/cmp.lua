@@ -59,10 +59,6 @@ cmp.toggle = function()
   end
 end
 
-cmp.snippet = {
-  try_stop = function()
-    vim.snippet.stop()
-  end,
-}
+cmp.snippet = {}
 
 return cmp

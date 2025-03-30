@@ -163,6 +163,10 @@ if YcVim.env.snippet == "native" then
     end
   end
 
+  YcVim.cmp.snippet.try_stop = function()
+    vim.snippet.stop()
+  end
+
   return {}
 end
 
