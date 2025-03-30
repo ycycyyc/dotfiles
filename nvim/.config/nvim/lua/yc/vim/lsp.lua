@@ -233,15 +233,11 @@ lsp.servers = {
   clangd = {
     cmd = {
       env.clangd_bin,
-      "--background-index",
-      "--suggest-missing-includes",
-      "-j=15",
-      "--clang-tidy",
-      "--all-scopes-completion",
+      "-j=15", -- TODO(yc)
       "--completion-style=detailed",
       "--header-insertion=iwyu",
       "--pch-storage=memory",
-      env.usePlaceholders and "--function-arg-placeholders" or "--function-arg-placeholders=0",
+      env.usePlaceholders and "--function-arg-placeholders=1" or "--function-arg-placeholders=0",
     },
     filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
     commands = { Format = { lsp.method.format, description = "format" } },
@@ -274,7 +270,7 @@ else
   }
 end
 
-vim.lsp.set_log_level "OFF"
+-- vim.lsp.set_log_level "OFF"
 vim.diagnostic.config {
   underline = false,
   signs = false,
