@@ -134,7 +134,7 @@ return {
         },
       },
       win = {
-        preview = { wo = { cursorlineopt = "screenline" } },
+        -- preview = { wo = { cursorlineopt = "screenline" } }, -- bug: 跳转的时候会修改cursorlineopt
         input = {
           keys = {
             ["<Esc>"] = { "close", mode = { "i", "n" } },

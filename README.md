@@ -46,6 +46,9 @@ build type: Release
 ## clangd配置
 1. clangd (needed)
 
+## install gopls
+1. go install golang.org/x/tools/gopls@v0.14.3
+
 ## neovim env
 1. export NVIM_JSON_CONF='{}'
 

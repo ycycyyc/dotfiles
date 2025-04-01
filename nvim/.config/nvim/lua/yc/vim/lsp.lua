@@ -222,7 +222,7 @@ lsp.servers = {
           parameterNames = env.inlayhint,
           rangeVariableTypes = env.inlayhint,
         },
-        staticcheck = true,
+        -- staticcheck = true, -- go1.18不支持 gopls 0.14.2
       },
     },
     root_dir = function()
