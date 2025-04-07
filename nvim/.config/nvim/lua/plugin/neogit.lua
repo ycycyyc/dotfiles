@@ -22,7 +22,7 @@ local stage_file = function()
   local git = require "neogit.lib.git"
   git.status.stage { file }
 
-  vim.notify("stage file:" .. file)
+  vim.notify("stage file:" .. vim.fn.expand "%:~:.")
 end
 
 local init = function()
