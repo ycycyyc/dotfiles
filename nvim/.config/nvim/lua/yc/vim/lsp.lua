@@ -12,16 +12,16 @@ local env = YcVim.env
 local v_range_format = function()
   local pos = YcVim.util.get_visual_selection()
 
-  local startp, endp = pos[1], pos[2]
-  if startp > endp then
-    startp, endp = pos[2], pos[1]
-  end
+  local startl = math.min(pos[1], pos[2])
+  local endl = math.max(pos[1], pos[2])
 
-  local range = {}
-  range["start"] = { startp - 1, 0 }
-  range["end"] = { endp - 1, 0 }
+  vim.lsp.buf.format {
+    range = {
+      ["start"] = { startl - 1, 0 },
+      ["end"] = { endl - 1, 0 },
+    },
+  }
 
-  vim.lsp.buf.format { range = range }
   YcVim.util.feedkey("<esc>", "n")
 end
 
