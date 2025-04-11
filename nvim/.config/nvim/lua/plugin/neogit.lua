@@ -19,6 +19,9 @@ end
 local stage_file = function()
   local file = vim.fn.expand "%:p"
 
+  vim.api.nvim_command("w " .. file)
+  vim.notify("save file:" .. vim.fn.expand "%:~:.")
+
   local git = require "neogit.lib.git"
   git.status.stage { file }
 
