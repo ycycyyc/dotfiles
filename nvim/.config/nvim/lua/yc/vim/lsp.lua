@@ -4,10 +4,8 @@ local lsp = {}
 local keys = YcVim.keys
 local env = YcVim.env
 
----@alias YcVim.Keymaps table<string, table>
-
----@class YcVim.Lsp.Conf
----@field keymaps? YcVim.Keymaps
+---@alias YcVim.Lsp.Action [function|string, string?]
+---@alias YcVim.Lsp.Keymaps table<string, YcVim.Lsp.Action>
 
 local v_range_format = function()
   local pos = YcVim.util.get_visual_selection()
@@ -25,124 +23,84 @@ local v_range_format = function()
   YcVim.util.feedkey("<esc>", "n")
 end
 
-local switch_source_header_cmd = function()
-  local bufnr = 0
-  local cmd = "edit"
-  local lspconfig = require "lspconfig"
-  bufnr = lspconfig.util.validate_bufnr(bufnr)
-  local params = { uri = vim.uri_from_bufnr(bufnr) }
-  vim.lsp.buf_request(bufnr, "textDocument/switchSourceHeader", params, function(err, dst_file, result)
-    if err then
-      error(tostring(err))
-    end
-    if not result then
-      print "Corresponding file can’t be determined"
-      return
-    end
-    vim.api.nvim_command(cmd .. " " .. vim.uri_to_fname(dst_file))
-  end)
-end
-
-local sync_format_save = function()
-  vim.lsp.buf.format { async = false }
-  vim.cmd "silent write"
-end
-
----@type table<string, YcVim.Lsp.Conf>
-local lsp_confs = {
+---@type table<string, YcVim.Lsp.Keymaps>
+local keymaps = {
   protols = {
-    keymaps = {
-      [keys.lsp_format] = { function() end },
-    },
+    [keys.lsp_format] = { function() end },
   },
   emmylua_ls = {
-    keymaps = {
-      [keys.lsp_format] = {
-        function()
-          YcVim.lsp.method.plugin_format()
-        end,
-      },
+    [keys.lsp_format] = {
+      function()
+        YcVim.lsp.method.plugin_format()
+      end,
     },
   },
   lua_ls = {
-    keymaps = {
-      [keys.lsp_format] = {
-        function()
-          YcVim.lsp.method.plugin_format()
-        end,
-      },
+    [keys.lsp_format] = {
+      function()
+        YcVim.lsp.method.plugin_format()
+      end,
     },
   },
   gopls = {},
   clangd = {
-    keymaps = {
-      [keys.lsp_format] = { function() end },
-      [keys.lsp_range_format] = { v_range_format, "x" },
-      [keys.switch_source_header] = { switch_source_header_cmd },
-    },
+    [keys.lsp_format] = { function() end },
+    [keys.lsp_range_format] = { v_range_format, "x" },
+    [keys.switch_source_header] = { ":ClangdSwitchSourceHeader<cr>" },
   },
   pyright = {
-    keymaps = {
-      [keys.lsp_format] = {
-        function()
-          YcVim.lsp.method.plugin_format()
-        end,
-      },
+    [keys.lsp_format] = {
+      function()
+        YcVim.lsp.method.plugin_format()
+      end,
     },
   },
 }
 
-local goto_prev_diagnostic = function()
-  vim.diagnostic.jump { count = -1, float = true }
-end
-
-local goto_next_diagnostic = function()
-  vim.diagnostic.jump { count = 1, float = true }
-end
-
----@return YcVim.Lsp.Conf
-local default_lsp_config = function()
+---@return YcVim.Lsp.Keymaps
+local default_lsp_keymap = function()
   return {
-    auto_format = false,
-    keymaps = {
-      [keys.lsp_goto_definition] = { lsp.method.definition },
-      [keys.lsp_goto_references] = { lsp.method.references },
-      [keys.lsp_format] = { lsp.method.format },
-      [keys.lsp_impl] = { lsp.method.impl },
-      [keys.lsp_code_action] = { lsp.method.code_action },
-
-      [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
-      [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
-      [keys.lsp_hover] = {
-        function()
-          -- better hover
-          vim.lsp.buf.hover {
-            border = "rounded",
-            max_height = math.floor(vim.o.lines * 0.9),
-            max_width = math.floor(vim.o.columns * 0.5),
-          }
-        end,
-      },
-      [keys.lsp_rename] = { vim.lsp.buf.rename },
-      [keys.lsp_range_format] = { function() end, "x" },
-      [keys.lsp_err_goto_prev] = { goto_prev_diagnostic },
-      [keys.lsp_err_goto_next] = { goto_next_diagnostic },
-
-      [keys.lsp_signature_help] = {
-        function()
-          YcVim.cmp.hide()
-          vim.lsp.buf.signature_help()
-        end,
-        "i",
-      },
-
-      [keys.lsp_toggle_inlay_hint] = {
-        function()
-          if vim.lsp.inlay_hint then
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
-          end
-        end,
-      },
+    [keys.lsp_goto_definition] = { lsp.method.definition },
+    [keys.lsp_goto_references] = { lsp.method.references },
+    [keys.lsp_format] = { lsp.method.format },
+    [keys.lsp_impl] = { lsp.method.impl },
+    [keys.lsp_code_action] = { lsp.method.code_action },
+    [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
+    [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
+    [keys.lsp_hover] = {
+      function()
+        vim.lsp.buf.hover {
+          border = "rounded",
+          max_height = math.floor(vim.o.lines * 0.9),
+          max_width = math.floor(vim.o.columns * 0.5),
+        }
+      end,
+    },
+    [keys.lsp_rename] = { vim.lsp.buf.rename },
+    [keys.lsp_range_format] = { function() end, "x" },
+    [keys.lsp_err_goto_prev] = {
+      function()
+        vim.diagnostic.jump { count = -1, float = true }
+      end,
+    },
+    [keys.lsp_err_goto_next] = {
+      function()
+        vim.diagnostic.jump { count = 1, float = true }
+      end,
+    },
+    [keys.lsp_signature_help] = {
+      function()
+        YcVim.cmp.hide()
+        vim.lsp.buf.signature_help()
+      end,
+      "i",
+    },
+    [keys.lsp_toggle_inlay_hint] = {
+      function()
+        if vim.lsp.inlay_hint then
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
+        end
+      end,
     },
   }
 end
@@ -170,22 +128,26 @@ lsp.method = {
   references = vim.lsp.buf.references,
   impl = vim.lsp.buf.implementation,
   code_action = vim.lsp.buf.code_action,
-  format = sync_format_save,
+  format = function()
+    vim.lsp.buf.format { async = false }
+    vim.cmd "silent write"
+  end,
   plugin_format = function()
     vim.notify "not support now"
   end, --插件格式化
 }
 
----@param lsp_conf YcVim.Lsp.Conf?
+---@param lsp_keymap YcVim.Lsp.Keymaps?
 ---@param _ vim.lsp.Client
 ---@param bufnr number
-lsp.on_attach = function(lsp_conf, _, bufnr)
-  lsp_conf = vim.tbl_deep_extend("force", default_lsp_config(), lsp_conf or {})
+lsp.on_attach = function(lsp_keymap, _, bufnr)
+  lsp_keymap = vim.tbl_deep_extend("force", default_lsp_keymap(), lsp_keymap or {})
 
   local buf_map = function(mode, key, action)
     vim.keymap.set(mode, key, action, { noremap = true, buffer = bufnr, silent = true })
   end
-  for key, action in pairs(lsp_conf.keymaps) do
+
+  for key, action in pairs(lsp_keymap) do
     if action ~= nil then
       local mode = action[2] or "n"
       buf_map(mode, key, action[1])
@@ -199,7 +161,6 @@ lsp.servers = {
   vtsls = {}, -- npm install -g @vtsls/language-server
   protols = {},
   gopls = {
-    cmd = { "gopls", "serve" },
     settings = {
       gopls = {
         semanticTokens = env.semantic_token,
@@ -225,9 +186,6 @@ lsp.servers = {
         -- staticcheck = true, -- go1.18不支持 gopls 0.14.2
       },
     },
-    root_dir = function()
-      return vim.fn.getcwd()
-    end,
   },
 
   clangd = {
@@ -282,9 +240,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local bufnr = args.buf
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
 
-    local lsp_conf = lsp_confs[client.name]
-    if lsp_conf then
-      lsp.on_attach(lsp_conf, client, bufnr)
+    local keymap = keymaps[client.name]
+    if keymap then
+      lsp.on_attach(keymap, client, bufnr)
     end
   end,
 })
