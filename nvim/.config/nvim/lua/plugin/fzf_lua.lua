@@ -94,19 +94,19 @@ local build_opt = function()
 end
 
 local init = function()
-  local lsp_method = YcVim.lsp.method
+  local lsp_action = YcVim.lsp.action
 
-  lsp_method.definition = function()
+  lsp_action.definition = function()
     require("fzf-lua").lsp_definitions {
       jump_to_single_result = true,
     }
   end
 
-  lsp_method.references = function()
+  lsp_action.references = function()
     require("fzf-lua").lsp_references(build_opt())
   end
 
-  lsp_method.impl = function()
+  lsp_action.impl = function()
     require("fzf-lua").lsp_implementations(build_opt())
   end
 

@@ -18,8 +18,8 @@ local confirm = function(picker, item)
   picker:action "jump"
 end
 
-local lsp_method = YcVim.lsp.method
-lsp_method.references = function()
+local lsp_action = YcVim.lsp.action
+lsp_action.references = function()
   require("snacks").picker.lsp_references {
     include_current = true,
     auto_confirm = false,
@@ -27,14 +27,14 @@ lsp_method.references = function()
   }
 end
 
-lsp_method.definition = function()
+lsp_action.definition = function()
   require("snacks").picker.lsp_definitions {
     include_current = true,
     actions = { confirm = confirm },
   }
 end
 
-lsp_method.impl = function()
+lsp_action.impl = function()
   require("snacks").picker.lsp_implementations {
     auto_confirm = false,
     include_current = true,

@@ -37,7 +37,7 @@ return {
             client.server_capabilities.semanticTokensProvider = false
           end
         end,
-        capabilities = YcVim.lsp.capabilities(),
+        capabilities = YcVim.lsp.capabilities(name),
       }))
     end
   end,

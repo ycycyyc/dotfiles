@@ -1,12 +1,4 @@
 local config = function()
-  local keys = YcVim.keys
-  local attach_conf = {
-    keymaps = {
-      [keys.lsp_code_action] = { ":RustLsp codeAction<cr>" },
-      [keys.lsp_hover] = { ":RustLsp hover actions<cr>" },
-    },
-  }
-
   vim.g.rustaceanvim = {
     tools = {
       code_actions = {
@@ -14,8 +6,8 @@ local config = function()
       },
     },
     server = {
-      on_attach = function(client, bufnr)
-        YcVim.lsp.on_attach(attach_conf, client, bufnr)
+      on_attach = function(_, bufnr)
+        YcVim.lsp.buf_map(nil, bufnr)
       end,
     },
   }

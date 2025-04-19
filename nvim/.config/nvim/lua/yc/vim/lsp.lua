@@ -31,14 +31,14 @@ local keymaps = {
   emmylua_ls = {
     [keys.lsp_format] = {
       function()
-        YcVim.lsp.method.plugin_format()
+        YcVim.lsp.action.plugin_format()
       end,
     },
   },
   lua_ls = {
     [keys.lsp_format] = {
       function()
-        YcVim.lsp.method.plugin_format()
+        YcVim.lsp.action.plugin_format()
       end,
     },
   },
@@ -51,7 +51,7 @@ local keymaps = {
   pyright = {
     [keys.lsp_format] = {
       function()
-        YcVim.lsp.method.plugin_format()
+        YcVim.lsp.action.plugin_format()
       end,
     },
   },
@@ -60,11 +60,11 @@ local keymaps = {
 ---@return YcVim.Lsp.Keymaps
 local default_lsp_keymap = function()
   return {
-    [keys.lsp_goto_definition] = { lsp.method.definition },
-    [keys.lsp_goto_references] = { lsp.method.references },
-    [keys.lsp_format] = { lsp.method.format },
-    [keys.lsp_impl] = { lsp.method.impl },
-    [keys.lsp_code_action] = { lsp.method.code_action },
+    [keys.lsp_goto_definition] = { lsp.action.definition },
+    [keys.lsp_goto_references] = { lsp.action.references },
+    [keys.lsp_format] = { lsp.action.format },
+    [keys.lsp_impl] = { lsp.action.impl },
+    [keys.lsp_code_action] = { lsp.action.code_action },
     [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
     [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
     [keys.lsp_hover] = {
@@ -105,25 +105,31 @@ local default_lsp_keymap = function()
   }
 end
 
+---@param name string
 ---@return lsp.ClientCapabilities
-lsp.capabilities = function()
+lsp.capabilities = function(name)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   ---@module 'blink.cmp'
   local blink = package.loaded["blink.cmp"]
   if blink then
-    return blink.get_lsp_capabilities(capabilities)
+    capabilities = blink.get_lsp_capabilities(capabilities)
   end
 
   ---@module 'cmp_nvim_lsp'
   local cmp_nvim_lsp = package.loaded["cmp_nvim_lsp"]
   if cmp_nvim_lsp then
-    return require("cmp_nvim_lsp").default_capabilities()
+    capabilities = require("cmp_nvim_lsp").default_capabilities()
+  end
+
+  if name == "clangd" then
+    capabilities.textDocument.completion.editsNearCursor = true
+    capabilities.offsetEncoding = { "utf-8", "utf-16" }
   end
 
   return capabilities
 end
 
-lsp.method = {
+lsp.action = {
   definition = vim.lsp.buf.definition,
   references = vim.lsp.buf.references,
   impl = vim.lsp.buf.implementation,
@@ -138,9 +144,8 @@ lsp.method = {
 }
 
 ---@param lsp_keymap YcVim.Lsp.Keymaps?
----@param _ vim.lsp.Client
 ---@param bufnr number
-lsp.on_attach = function(lsp_keymap, _, bufnr)
+lsp.buf_map = function(lsp_keymap, bufnr)
   lsp_keymap = vim.tbl_deep_extend("force", default_lsp_keymap(), lsp_keymap or {})
 
   local buf_map = function(mode, key, action)
@@ -198,7 +203,7 @@ lsp.servers = {
       env.usePlaceholders and "--function-arg-placeholders=1" or "--function-arg-placeholders=0",
     },
     filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
-    commands = { Format = { lsp.method.format, description = "format" } },
+    commands = { Format = { lsp.action.format, description = "format" } },
   },
 
   pyright = {
@@ -242,7 +247,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     local keymap = keymaps[client.name]
     if keymap then
-      lsp.on_attach(keymap, client, bufnr)
+      lsp.buf_map(keymap, bufnr)
     end
   end,
 })
