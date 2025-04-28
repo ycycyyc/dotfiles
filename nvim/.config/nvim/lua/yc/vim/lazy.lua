@@ -2,7 +2,7 @@
 local lazy = {}
 
 ---@param keymaps table[]
----@param extra string[]|nil
+---@param extra string[]?
 ---@return string[]
 lazy.keys = function(keymaps, extra)
   local keys = extra or {}
@@ -34,7 +34,7 @@ lazy.keys = function(keymaps, extra)
 end
 
 ---@param user_cmds table[]
----@param extra string[] | nil
+---@param extra string[]?
 ---@return string[]
 lazy.cmds = function(user_cmds, extra)
   local cmds = extra or {}

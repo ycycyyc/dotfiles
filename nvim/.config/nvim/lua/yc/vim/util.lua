@@ -41,10 +41,8 @@ end
 
 util.buf_only = function()
   local api = vim.api
-  ---@type number
   local cur = api.nvim_get_current_buf()
 
-  ---@type number[]
   local list = api.nvim_list_bufs()
 
   for _, i in ipairs(list) do
@@ -61,13 +59,13 @@ function util.i_move_to_end()
   util.feedkey("A", "n")
 end
 
----@return number[]
+---@return integer[]
 function util.get_visual_selection()
-  ---@type number[] | number
+  ---@type integer | integer[]
   local startp = vim.fn.getpos "v" -- len == 4
   startp = startp[2]
 
-  ---@type number[] | number
+  ---@type integer | integer[]
   local endp = vim.fn.getpos "." -- len == 4
   endp = endp[2]
 
@@ -75,7 +73,7 @@ function util.get_visual_selection()
 end
 
 ---@param match function
----@return number[]
+---@return integer[]
 local get_winnums = function(match)
   local win_nums = {}
   local wins = vim.api.nvim_list_wins()
@@ -90,7 +88,7 @@ local get_winnums = function(match)
 end
 
 ---@param wanted string
----@return number[]
+---@return integer[]
 function util.get_winnums_byft(wanted)
   return get_winnums(function(ft)
     return ft == wanted
@@ -98,7 +96,7 @@ function util.get_winnums_byft(wanted)
 end
 
 ---@param wanted string
----@return number[]
+---@return integer[]
 function util.get_winnums_like_ft(wanted)
   return get_winnums(function(ft)
     return string.match(ft, wanted) ~= nil

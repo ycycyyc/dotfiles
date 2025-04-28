@@ -143,9 +143,9 @@ lsp.action = {
   end, --插件格式化
 }
 
+---@param bufnr integer
 ---@param lsp_keymap YcVim.Lsp.Keymaps?
----@param bufnr number
-lsp.buf_map = function(lsp_keymap, bufnr)
+lsp.buf_map = function(bufnr, lsp_keymap)
   lsp_keymap = vim.tbl_deep_extend("force", default_lsp_keymap(), lsp_keymap or {})
 
   local buf_map = function(mode, key, action)
@@ -247,7 +247,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     local keymap = keymaps[client.name]
     if keymap then
-      lsp.buf_map(keymap, bufnr)
+      lsp.buf_map(bufnr, keymap)
     end
   end,
 })

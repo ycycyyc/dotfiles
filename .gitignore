@@ -6,3 +6,4 @@ nvim/.config/nvim/plugin/
 lazy-lock.json
 
 .luarc.json
+.emmyrc.json

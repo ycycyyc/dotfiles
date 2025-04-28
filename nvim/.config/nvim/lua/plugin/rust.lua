@@ -7,7 +7,7 @@ local config = function()
     },
     server = {
       on_attach = function(_, bufnr)
-        YcVim.lsp.buf_map(nil, bufnr)
+        YcVim.lsp.buf_map(bufnr)
       end,
     },
   }

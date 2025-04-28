@@ -1,5 +1,5 @@
 local init = function()
-  ---@param commit string | nil
+  ---@param commit string?
   YcVim.git.commit_diff = function(commit)
     if not commit then
       vim.cmd "DiffviewOpen"

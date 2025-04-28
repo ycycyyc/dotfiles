@@ -1,14 +1,14 @@
 ---@class YcVim.git
 local git = {}
 
----@param commit string | nil
+---@param commit string?
 git.commit_diff = function(commit)
-  vim.notify "not support commit diff"
+  vim.notify("not support commit diff:" .. commit or "")
 end
 
 ---@param file string
 git.file_diff = function(file)
-  vim.notify "not support file diff"
+  vim.notify("not support file diff:" .. file)
 end
 
 ---@param args string[]
@@ -96,7 +96,6 @@ git.path_async = function(on_ok, on_err)
 end
 
 git.add_file = function()
-  local Job = require "plenary.job"
   local args = {}
   local file = vim.fn.expand "%:p"
   table.insert(args, "add")
