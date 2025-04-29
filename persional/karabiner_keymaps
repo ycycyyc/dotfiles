@@ -1,0 +1,53 @@
+{
+    "description": "copy paste and cut in MacOS",
+    "manipulators": [
+        {
+            "from": {
+                "key_code": "insert",
+                "modifiers": {
+                    "mandatory": ["right_control"],
+                    "optional": ["any"]
+                }
+            },
+            "to": [
+                {
+                    "key_code": "c",
+                    "modifiers": ["command"]
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "from": {
+                "key_code": "insert",
+                "modifiers": {
+                    "mandatory": ["shift"],
+                    "optional": ["any"]
+                }
+            },
+            "to": [
+                {
+                    "key_code": "v",
+                    "modifiers": ["command"]
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "from": {
+                "key_code": "delete_forward",
+                "modifiers": {
+                    "mandatory": ["shift"],
+                    "optional": ["any"]
+                }
+            },
+            "to": [
+                {
+                    "key_code": "x",
+                    "modifiers": ["command"]
+                }
+            ],
+            "type": "basic"
+        }
+    ]
+}
