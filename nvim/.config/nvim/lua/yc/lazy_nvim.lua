@@ -5,7 +5,7 @@ end
 
 -- stylua: ignore
 local plugin_names = {
-  "plenary", "oil", "flash", "git_manager", "gitdiff", "nvim-surround",
+  "plenary", "oil", "flash", "git_manager", "gitdiff", "nvim-surround", "junegunn_fzf",
   "snacks", "comment", "grug", "substitute", "debug", "tree_sitter", "icon",
 }
 
