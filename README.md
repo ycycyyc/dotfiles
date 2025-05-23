@@ -27,6 +27,7 @@ source ~/dotfiles/persional/.persionalrc
 mkdir nvim
 git clone https://github.com/neovim/neovim -b {最新的release分支}
 make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=/usr/local/nvim
+或者 make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=~/local/bin/nvim  DEPS_CMAKE_FLAGS=-DTREESITTER_ARGS=-DCMAKE_C_FLAGS=-D_BSD_SOURCE  -j 30
 make install
 
 export PATH="/usr/local/nvim/bin/":${PATH}

@@ -57,21 +57,21 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
-    dashboard = {
-      preset = {
-        pick = nil,
-        keys = {
-          { icon = "●", key = "l", desc = "Lazy", action = ":Lazy" },
-          { icon = "●", key = "q", desc = "Quit", action = ":q" },
-        },
-      },
-      sections = {
-        { section = "header" },
-        { section = "keys", indent = 2, padding = 1, gap = 1 },
-        { section = "recent_files", indent = 2, padding = 1, gap = 0.5 },
-        { section = "startup" },
-      },
-    },
+    -- dashboard = {
+    --   preset = {
+    --     pick = nil,
+    --     keys = {
+    --       { icon = "●", key = "l", desc = "Lazy", action = ":Lazy" },
+    --       { icon = "●", key = "q", desc = "Quit", action = ":q" },
+    --     },
+    --   },
+    --   sections = {
+    --     { section = "header" },
+    --     { section = "keys", indent = 2, padding = 1, gap = 1 },
+    --     { section = "recent_files", indent = 2, padding = 1, gap = 0.5 },
+    --     { section = "startup" },
+    --   },
+    -- },
     input = {
       win = {
         -- TODO: https://github.com/folke/snacks.nvim/pull/427
