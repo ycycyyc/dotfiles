@@ -7,3 +7,5 @@ lazy-lock.json
 
 .luarc.json
 .emmyrc.json
+
+.DS_Store

@@ -104,6 +104,8 @@ set signcolumn=yes
 # set confirm
 set incsearch
 set splitright
+set nu
+set rnu
 
 # theme
 def Default_theme() 
