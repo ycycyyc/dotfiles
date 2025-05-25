@@ -14,9 +14,11 @@ alias jj='tmux -u a -t'
 export FZF_DEFAULT_COMMAND='rg --hidden  --glob=!.git/   -l ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export YCBIN=${YCHOME}/local/bin
+export YCBIN=${YCHOME}/local/software
 
 # go env
 export GOPATH=${YCHOME}/local/code/go
 export GOBIN=${YCBIN}/gobin
 export PATH=${GOBIN}:${PATH}
+
+export PATH=${YCHOME}/local/bin:${PATH}
