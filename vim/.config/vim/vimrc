@@ -161,3 +161,7 @@ command! Inspect :call SynStack()
 hi Comment ctermfg=59
 hi SignColumn ctermbg=237
 hi LineNr ctermbg=237 ctermfg=59
+
+set fillchars=vert:\ 
+set colorcolumn=80
+hi ColorColumn ctermbg=236  
