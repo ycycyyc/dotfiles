@@ -2,10 +2,6 @@ local plugin = {
   "saghen/blink.cmp",
 }
 
-if 1 == vim.fn.executable "cargo" then
-  plugin.build = "cargo build --release"
-end
-
 plugin.opts = {
   keymap = {
     ["<cr>"] = { "select_and_accept", "fallback" },
@@ -30,5 +26,11 @@ plugin.opts = {
     },
   },
 }
+
+if 1 == vim.fn.executable "cargo" then
+  plugin.build = "cargo build --release"
+else
+  plugin.opts.fuzzy = { implementation = "lua" }
+end
 
 return plugin
