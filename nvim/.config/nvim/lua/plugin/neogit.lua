@@ -1,6 +1,6 @@
 local toggle_neogit = function()
   vim.defer_fn(function()
-    vim.cmd "checktime"
+    vim.cmd("set autoread | checktime")
   end, 200)
 
   local cur_win = vim.api.nvim_get_current_win()
