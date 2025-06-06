@@ -1,14 +1,10 @@
-if YcVim.env.pick == "fzf" then
-  return require "plugin.fzf_lua"
-end
-
 local hidden = false
 local cwd = vim.uv.cwd()
 if cwd and string.match(cwd, "dotfiles") then
   hidden = true
 end
 
-local confirm = function(picker, item)
+local confirm = function(picker, _)
   local sel = picker:selected()
   if #sel > 1 then
     picker:action "qflist"

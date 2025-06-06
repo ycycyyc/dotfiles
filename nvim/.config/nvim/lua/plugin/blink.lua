@@ -1,6 +1,33 @@
 local plugin = {
   "saghen/blink.cmp",
+  dependencies = {
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    build = "make install_jsregexp",
+    lazy = true,
+
+    config = function(_, opts)
+      local luasnip = require "luasnip"
+
+      ---@diagnostic disable: undefined-field
+      luasnip.setup(opts)
+
+      require("luasnip.loaders.from_vscode").lazy_load {
+        paths = vim.fn.stdpath "config" .. "/snippets",
+      }
+    end,
+  },
 }
+
+YcVim.cmp.snippet.try_stop = function()
+  if
+    require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
+    and not require("luasnip").session.jump_active
+  then
+    local ls = require "luasnip"
+    ls.unlink_current()
+  end
+end
 
 plugin.opts = {
   keymap = {
@@ -14,10 +41,8 @@ plugin.opts = {
       end,
     },
   },
-  sources = {
-    default = { "lsp", "path", "buffer" },
-  },
   cmdline = { enabled = false },
+  snippets = { preset = "luasnip" },
   completion = {
     menu = {
       draw = {

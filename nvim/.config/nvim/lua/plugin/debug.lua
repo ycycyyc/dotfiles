@@ -2,8 +2,8 @@ local config = function()
   local dap = require "dap"
   vim.fn.sign_define("DapBreakpoint", { text = "B", texthl = "WarningMsg", linehl = "", numhl = "" })
 
-  require "plugin.debug_langs.go"
-  require "plugin.debug_langs.cpp"
+  require "yc.debug_langs.go"
+  require "yc.debug_langs.cpp"
   dap.configurations.c = dap.configurations.cpp
   dap.configurations.rust = dap.configurations.cpp
 

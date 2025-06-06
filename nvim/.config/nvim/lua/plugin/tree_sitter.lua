@@ -82,6 +82,5 @@ return {
       cond = YcVim.env.treesitter_textobj,
     },
   },
-  lazy = vim.fn.argc(-1) == 0 and YcVim.env.pick ~= "snacks",
-  cond = YcVim.env.ts,
+  lazy = false,
 }
