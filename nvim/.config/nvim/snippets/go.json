@@ -1,0 +1,12 @@
+{
+    "main() template": {
+        "prefix": "main",
+        "body": [
+            "func main() {",
+            "   $0",
+            "   return",
+            "}"
+        ],
+        "description": "Standard main() snippet"
+    }
+}

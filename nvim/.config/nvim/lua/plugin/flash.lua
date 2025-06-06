@@ -26,10 +26,6 @@ return {
     {
       keys.select_ts,
       function()
-        if YcVim.env.coc then
-          vim.notify "neovim will panic"
-          return -- TODO: 同时使用coc 和treesitter neovim会直接退出？
-        end
         require("flash").treesitter()
       end,
     },

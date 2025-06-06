@@ -63,10 +63,10 @@ return {
   opts = {
     kind = "floating",
     log_view = {
-      kind = "auto",
+      kind = "floating",
     },
     commit_editor = {
-      kind = "auto",
+      kind = "floating",
     },
     filewatcher = { enabled = false },
     auto_refresh = false,

@@ -195,7 +195,7 @@ lsp.servers = {
 
   clangd = {
     cmd = {
-      env.clangd_bin,
+      "clangd",
       "-j=15", -- TODO(yc)
       "--completion-style=detailed",
       "--header-insertion=iwyu",
