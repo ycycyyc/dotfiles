@@ -15,7 +15,7 @@
         }
     },
     "inlayHint.display": false,
-    "semanticTokens.enable": false,
+    "semanticTokens.enable": true,
     "clangd.arguments": [
         "--function-arg-placeholders=1",
         "--background-index",

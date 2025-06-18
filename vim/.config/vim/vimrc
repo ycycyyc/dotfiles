@@ -142,7 +142,7 @@ else
 endif
 
 set background=dark
-# source ~/.config/vim/conf/theme.vim
+source ~/.config/vim/conf/theme.vim
 source ~/.config/vim/conf/other.vim
 source ~/.config/vim/conf/fzf.vim
 
