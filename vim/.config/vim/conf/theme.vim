@@ -62,7 +62,7 @@ function! s:onedark_theme()
     highlight VertSplit guibg=NONE cterm=NONE ctermbg=237
 
     " hi CocMenuSel ctermbg=237
-    hi CocMenuSel ctermbg=39 ctermfg=236
+    " hi CocMenuSel ctermbg=39 ctermfg=236
     hi CursorLineNr ctermbg=237 ctermfg=11 cterm=None
 
 
