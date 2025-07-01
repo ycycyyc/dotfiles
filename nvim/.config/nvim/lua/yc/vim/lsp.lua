@@ -253,6 +253,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.keymap.del("n", "grr")
+vim.keymap.set("n", "grt", function() end, {}) -- ^_^
 vim.keymap.del("n", "grt")
 vim.keymap.del("n", "gri")
 vim.keymap.del("n", "gra")
