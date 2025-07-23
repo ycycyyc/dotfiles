@@ -233,7 +233,7 @@ else
   }
 end
 
--- vim.lsp.set_log_level "OFF"
+vim.lsp.set_log_level "OFF"
 vim.diagnostic.config {
   underline = false,
   signs = false,
