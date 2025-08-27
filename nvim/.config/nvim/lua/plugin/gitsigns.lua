@@ -1,6 +1,15 @@
 return {
   "lewis6991/gitsigns.nvim",
   event = "User FilePost",
+  keys = {
+    {
+      YcVim.keys.git_blame,
+      function()
+        vim.cmd "Gitsigns blame"
+        vim.cmd "set termguicolors"
+      end,
+    },
+  },
   opts = {
     signs = {
       add = { text = "+" },
