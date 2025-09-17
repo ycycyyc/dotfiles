@@ -26,7 +26,11 @@ return {
     {
       keys.select_ts,
       function()
-        require("flash").treesitter()
+        require("flash").treesitter {
+          actions = {
+            ["<bs>"] = "prev",
+          },
+        }
       end,
     },
   },
