@@ -46,7 +46,7 @@ local keymaps = {
   clangd = {
     [keys.lsp_format] = { function() end },
     [keys.lsp_range_format] = { v_range_format, "x" },
-    [keys.switch_source_header] = { ":ClangdSwitchSourceHeader<cr>" },
+    [keys.switch_source_header] = { ":LspClangdSwitchSourceHeader<cr>" },
   },
   pyright = {
     [keys.lsp_format] = {
