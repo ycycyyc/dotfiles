@@ -162,77 +162,6 @@ lsp.buf_map = function(bufnr, lsp_keymap)
   vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 end
 
-lsp.servers = {
-  vtsls = {}, -- npm install -g @vtsls/language-server
-  protols = {},
-  gopls = {
-    settings = {
-      gopls = {
-        semanticTokens = env.semantic_token,
-        experimentalPostfixCompletions = true,
-        usePlaceholders = env.usePlaceholders,
-        analyses = {
-          unusedparams = true,
-          shadow = true,
-          nilness = true,
-          printf = true,
-          unusedwrite = true,
-          fieldalignment = false,
-        },
-        hints = {
-          assignVariableTypes = env.inlayhint,
-          compositeLiteralFields = env.inlayhint,
-          compositeLiteralTypes = env.inlayhint,
-          constantValues = env.inlayhint,
-          functionTypeParameters = env.inlayhint,
-          parameterNames = env.inlayhint,
-          rangeVariableTypes = env.inlayhint,
-        },
-        -- staticcheck = true, -- go1.18不支持 gopls 0.14.2
-      },
-    },
-  },
-
-  clangd = {
-    cmd = {
-      "clangd",
-      "-j=15", -- TODO(yc)
-      "--completion-style=detailed",
-      "--header-insertion=iwyu",
-      "--pch-storage=memory",
-      env.usePlaceholders and "--function-arg-placeholders=1" or "--function-arg-placeholders=0",
-    },
-    filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
-    commands = { Format = { lsp.action.format, description = "format" } },
-  },
-
-  pyright = {
-    filetypes = { "python" },
-    settings = {
-      python = {
-        analysis = { autoSearchPaths = true, diagnosticMode = "workspace", useLibraryCodeForTypes = true },
-      },
-    },
-    single_file_support = true,
-  },
-}
-
-if vim.env.EMMY and vim.fn.executable "emmylua_ls" == 1 then
-  lsp.servers.emmylua_ls = {}
-else
-  lsp.servers.lua_ls = {
-    settings = {
-      Lua = {
-        runtime = { version = "LuaJIT" },
-        workspace = {
-          checkThirdParty = false,
-          library = { vim.env.VIMRUNTIME, vim.env.VIMRUNTIME .. "/lua" },
-        },
-      },
-    },
-  }
-end
-
 vim.lsp.set_log_level "OFF"
 vim.diagnostic.config {
   underline = false,
@@ -248,6 +177,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local keymap = keymaps[client.name]
     if keymap then
       lsp.buf_map(bufnr, keymap)
+    end
+
+    if client.name == "clangd" then
+      vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
     end
   end,
 })
