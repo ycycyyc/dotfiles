@@ -48,6 +48,7 @@ return {
     float = {
       padding = 4,
       max_width = 200,
+      border = "rounded",
     },
     view_options = {
       show_hidden = true,
