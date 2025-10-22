@@ -50,6 +50,11 @@ return {
       max_width = 200,
       border = "rounded",
     },
+    confirmation = {
+      win_options = {
+        winhighlight = "Normal:MyFloatNormal",
+      },
+    },
     view_options = {
       show_hidden = true,
       is_always_hidden = function(name, _)
