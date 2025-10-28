@@ -1,11 +1,12 @@
 local toggle_neogit = function()
   vim.defer_fn(function()
-    vim.cmd("set autoread | checktime")
+    vim.cmd "set autoread | checktime"
   end, 200)
 
   local cur_win = vim.api.nvim_get_current_win()
 
   local wins = YcVim.util.get_winnums_like_ft "Neogit"
+
   for _, winn in ipairs(wins) do
     if cur_win == winn then
       vim.api.nvim_input "q"
@@ -26,6 +27,8 @@ local stage_file = function()
   git.status.stage { file }
 
   vim.notify("stage file:" .. vim.fn.expand "%:~:.")
+
+  -- vim.cmd("e")
 end
 
 local init = function()
