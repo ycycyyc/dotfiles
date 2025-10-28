@@ -45,6 +45,7 @@ plugin.opts = {
   snippets = { preset = "luasnip" },
   completion = {
     menu = {
+      border = "none",
       draw = {
         columns = { { "label", "label_description", gap = 2 }, { "kind_icon", "kind", gap = 2 } },
       },
