@@ -39,10 +39,25 @@ setup.user_cmds = {
     end,
     {},
   },
+
   {
     "ShowEnvHash",
     function()
       vim.notify(vim.inspect(YcVim.env_hash))
+    end,
+    {},
+  },
+
+  {
+    "JsonFormat",
+    function()
+      if vim.fn.executable "python" == 1 then
+        vim.cmd [[ %!python -m json.tool ]]
+      elseif vim.fn.executable "python3" == 1 then
+        vim.cmd [[ %!python3 -m json.tool ]]
+      end
+
+      vim.cmd "silent write"
     end,
     {},
   },

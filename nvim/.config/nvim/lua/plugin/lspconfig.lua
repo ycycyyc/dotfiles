@@ -3,6 +3,7 @@ local env = YcVim.env
 local servers = {
   vtsls = {}, -- npm install -g @vtsls/language-server
   protols = {},
+  jsonls = {},
   gopls = {
     settings = {
       gopls = {
