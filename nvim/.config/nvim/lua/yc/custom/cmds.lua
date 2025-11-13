@@ -55,6 +55,8 @@ setup.user_cmds = {
         vim.cmd [[ %!python -m json.tool ]]
       elseif vim.fn.executable "python3" == 1 then
         vim.cmd [[ %!python3 -m json.tool ]]
+      else
+        return
       end
 
       vim.cmd "silent write"

@@ -21,7 +21,7 @@ local keys = {
   toggle_symbol = "<Leader>t", -- symbol
   switch_source_header = "<Leader>c", -- cpp h 文件切换
   jump = "<Leader>e", -- 跳转
-  select_ts = "<leader>v",
+  select_ts = "<leader>;",
   --term
   toggle_term = "<C-t>", -- 打开/关闭内置终端
   toggle_mouse = "<leader>A",

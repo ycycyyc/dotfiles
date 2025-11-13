@@ -2,7 +2,6 @@
 local lsp = {}
 
 local keys = YcVim.keys
-local env = YcVim.env
 
 ---@alias YcVim.Lsp.Action [function|string, string?]
 ---@alias YcVim.Lsp.Keymaps table<string, YcVim.Lsp.Action>
@@ -45,7 +44,6 @@ local keymaps = {
       end,
     },
   },
-  gopls = {},
   clangd = {
     [keys.lsp_format] = { function() end },
     [keys.lsp_range_format] = { v_range_format, "x" },
@@ -177,10 +175,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local bufnr = args.buf
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
 
-    local keymap = keymaps[client.name]
-    if keymap then
-      lsp.buf_map(bufnr, keymap)
-    end
+    lsp.buf_map(bufnr, keymaps[client.name])
 
     if client.name == "clangd" or client.name == "jsonls" then
       vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
