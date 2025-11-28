@@ -12,9 +12,9 @@ end
 return {
   "mfussenegger/nvim-jdtls",
   ft = java_filetypes,
-  cond = 1 == vim.fn.executable "jdtls",
+  cond = 1 == vim.fn.executable "jdtls" and vim.env.JDTLS_JAVA_BIN ~= nil,
   opts = function()
-    local cmd = { vim.fn.exepath "jdtls" }
+    local cmd = { vim.fn.exepath "jdtls", "--java-executable", vim.env.JDTLS_JAVA_BIN }
     return {
       root_dir = function(path)
         return vim.fs.root(path, ".classpath")
@@ -49,7 +49,7 @@ return {
             opts.jdtls_workspace_dir(project_name),
           })
         end
-        return cmd
+        return cmd2
       end,
 
       -- These depend on nvim-dap, but can additionally be disabled by setting false here.
