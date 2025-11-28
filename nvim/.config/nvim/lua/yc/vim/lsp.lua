@@ -29,6 +29,7 @@ local keymaps = {
   },
   jdtls = {
     [keys.lsp_format] = { function() end },
+    [keys.lsp_range_format] = { v_range_format, "x" },
   },
   protols = {
     [keys.lsp_format] = { function() end },
