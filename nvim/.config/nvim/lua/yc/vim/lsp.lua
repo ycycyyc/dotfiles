@@ -27,6 +27,9 @@ local keymaps = {
   jsonls = {
     [keys.lsp_format] = { function() end },
   },
+  jdtls = {
+    [keys.lsp_format] = { function() end },
+  },
   protols = {
     [keys.lsp_format] = { function() end },
   },
@@ -177,7 +180,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     lsp.buf_map(bufnr, keymaps[client.name])
 
-    if client.name == "clangd" or client.name == "jsonls" then
+    if client.name == "clangd" or client.name == "jsonls" or client.name == "jdtls" then
       vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
     end
   end,

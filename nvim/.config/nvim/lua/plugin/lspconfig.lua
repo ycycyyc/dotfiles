@@ -55,6 +55,10 @@ local servers = {
   },
 }
 
+if 1 == vim.fn.executable "jdtls" then
+  servers.jdtls = { root_markers = { ".classpath" } }
+end
+
 if vim.env.EMMY and vim.fn.executable "emmylua_ls" == 1 then
   servers.emmylua_ls = {}
 else
