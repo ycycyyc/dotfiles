@@ -4,7 +4,7 @@ local lsp = {}
 local keys = YcVim.keys
 
 ---@alias YcVim.Lsp.Action [function|string, string?]
----@alias YcVim.Lsp.Keymaps table<string, YcVim.Lsp.Action>
+---@alias YcVim.Lsp.Keymaps table<string, YcVim.Lsp.Action|boolean>
 
 local v_range_format = function()
   local pos = YcVim.util.get_visual_selection()
@@ -24,16 +24,12 @@ end
 
 ---@type table<string, YcVim.Lsp.Keymaps>
 local keymaps = {
-  jsonls = {
-    [keys.lsp_format] = { function() end },
-  },
+  jsonls = { [keys.lsp_format] = false },
   jdtls = {
-    [keys.lsp_format] = { function() end },
+    [keys.lsp_format] = false,
     [keys.lsp_range_format] = { v_range_format, "x" },
   },
-  protols = {
-    [keys.lsp_format] = { function() end },
-  },
+  protols = { [keys.lsp_format] = false },
   emmylua_ls = {
     [keys.lsp_format] = {
       function()
@@ -49,17 +45,12 @@ local keymaps = {
     },
   },
   clangd = {
-    [keys.lsp_format] = { function() end },
+    [keys.lsp_format] = false,
     [keys.lsp_range_format] = { v_range_format, "x" },
     [keys.switch_source_header] = { ":LspClangdSwitchSourceHeader<cr>" },
   },
-  pyright = {
-    [keys.lsp_format] = {
-      function()
-        YcVim.lsp.action.plugin_format()
-      end,
-    },
-  },
+  ty = { [keys.lsp_format] = false },
+  pyright = { [keys.lsp_format] = false },
 }
 
 ---@return YcVim.Lsp.Keymaps
@@ -144,8 +135,9 @@ lsp.action = {
     vim.cmd "silent write"
   end,
   plugin_format = function()
-    vim.notify "not support now"
-  end, --插件格式化
+    require("conform").format { bufnr = 0 }
+    vim.cmd "silent write"
+  end,
 }
 
 ---@param bufnr integer
@@ -153,11 +145,23 @@ lsp.action = {
 lsp.buf_map = function(bufnr, lsp_keymap)
   lsp_keymap = vim.tbl_deep_extend("force", default_lsp_keymap(), lsp_keymap or {})
 
+  ---@cast lsp_keymap YcVim.Lsp.Keymaps
+
   local buf_map = function(mode, key, action)
     vim.keymap.set(mode, key, action, { noremap = true, buffer = bufnr, silent = true })
   end
 
   for key, action in pairs(lsp_keymap) do
+    if action == false then
+      action = {
+        function()
+          vim.notify "do nothing"
+        end,
+      }
+    end
+
+    ---@cast action YcVim.Lsp.Action
+
     if action ~= nil then
       local mode = action[2] or "n"
       buf_map(mode, key, action[1])
@@ -183,6 +187,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     if client.name == "clangd" or client.name == "jsonls" or client.name == "jdtls" then
       vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
+    end
+
+    local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+
+    if ft == "python" then
+      vim.api.nvim_buf_create_user_command(bufnr, "Format", function()
+        YcVim.lsp.action.plugin_format()
+      end, { desc = "format python file" })
     end
   end,
 })

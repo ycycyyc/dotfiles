@@ -9,6 +9,10 @@ local function extend_or_override(config, custom, ...)
   return config
 end
 
+-- mvn clean package
+-- mvn eclipse:clean
+-- mvn eclipse:eclipse
+
 return {
   "mfussenegger/nvim-jdtls",
   ft = java_filetypes,

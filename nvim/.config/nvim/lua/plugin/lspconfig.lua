@@ -43,16 +43,6 @@ local servers = {
     },
     filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
   },
-
-  pyright = {
-    filetypes = { "python" },
-    settings = {
-      python = {
-        analysis = { autoSearchPaths = true, diagnosticMode = "workspace", useLibraryCodeForTypes = true },
-      },
-    },
-    single_file_support = true,
-  },
 }
 
 if vim.env.EMMY and vim.fn.executable "emmylua_ls" == 1 then
@@ -68,6 +58,20 @@ else
         },
       },
     },
+  }
+end
+
+if vim.fn.executable "ty" == 1 then
+  servers.ty = {}
+elseif vim.fn.executable "pyright" == 1 then
+  servers.pyright = {
+    filetypes = { "python" },
+    settings = {
+      python = {
+        analysis = { autoSearchPaths = true, diagnosticMode = "workspace", useLibraryCodeForTypes = true },
+      },
+    },
+    single_file_support = true,
   }
 end
 
