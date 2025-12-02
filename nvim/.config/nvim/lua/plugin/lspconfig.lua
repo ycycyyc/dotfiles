@@ -31,8 +31,12 @@ local servers = {
       },
     },
   },
+}
 
-  clangd = {
+if vim.env.CPP_LS_PREFER_CCLS == "1" and vim.fn.executable "ccls" == 1 then
+  servers.ccls = {}
+else
+  servers.clangd = {
     cmd = {
       "clangd",
       "-j=15", -- TODO(yc)
@@ -42,8 +46,8 @@ local servers = {
       env.usePlaceholders and "--function-arg-placeholders=1" or "--function-arg-placeholders=0",
     },
     filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
-  },
-}
+  }
+end
 
 if vim.env.EMMY and vim.fn.executable "emmylua_ls" == 1 then
   servers.emmylua_ls = {}

@@ -49,6 +49,11 @@ local keymaps = {
     [keys.lsp_range_format] = { v_range_format, "x" },
     [keys.switch_source_header] = { ":LspClangdSwitchSourceHeader<cr>" },
   },
+  ccls = {
+    [keys.lsp_format] = false,
+    [keys.lsp_range_format] = { v_range_format, "x" },
+    [keys.switch_source_header] = { ":LspCclsSwitchSourceHeader<cr>" },
+  },
   ty = { [keys.lsp_format] = false },
   pyright = { [keys.lsp_format] = false },
 }
