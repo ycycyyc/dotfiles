@@ -135,8 +135,11 @@ return {
           keys = {
             ["<Esc>"] = { "close", mode = { "i", "n" } },
             ["<c-f>"] = { "<right>", mode = { "i" }, expr = true },
-            ["<c-a>"] = { "<c-o>0", mode = { "i" }, expr = true },
+            ["<c-a>"] = { "<Home>", mode = { "i" }, expr = true },
             ["<a-a>"] = { "select_all", mode = { "n", "i" } },
+            ["<c-u>"] = { "<c-s-u>", mode = { "i" }, expr = true },
+            ["<a-f>"] = { "<S-Right>", mode = { "i" }, expr = true },
+            ["<a-b>"] = { "<S-Left>", mode = { "i" }, expr = true },
           },
         },
       },
