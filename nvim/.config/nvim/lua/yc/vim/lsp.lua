@@ -160,7 +160,7 @@ lsp.buf_map = function(bufnr, lsp_keymap)
     if action == false then
       action = {
         function()
-          vim.notify "do nothing"
+          vim.notify("do nothing", "info", { id = "LSP: default buf map function" })
         end,
       }
     end
