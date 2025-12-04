@@ -28,8 +28,10 @@ vim.api.nvim_create_autocmd("LspProgress", {
 local init = function()
   YcVim.setup(setup)
 
+  local snacks = require "snacks"
+  snacks.config.style("notification", { wo = { winblend = 0 } })
+
   vim.keymap.set("n", YcVim.keys.toggle_term, function()
-    local snacks = require "snacks"
     snacks.terminal.toggle(nil, {
       win = {
         on_buf = function(win)
@@ -70,6 +72,7 @@ return {
     },
     notifier = {
       enabled = true,
+      padding = false,
       icons = {
         error = "E ",
         warn = "W ",
