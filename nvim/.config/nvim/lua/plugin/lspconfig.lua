@@ -1,10 +1,10 @@
 local env = YcVim.env
 
-local servers = {
-  vtsls = {}, -- npm install -g @vtsls/language-server
-  protols = {},
-  jsonls = {},
-  gopls = {
+local servers = {}
+
+--- @brief: go
+if vim.fn.executable "gopls" == 1 then
+  servers.gopls = {
     settings = {
       gopls = {
         semanticTokens = env.semantic_token,
@@ -30,12 +30,30 @@ local servers = {
         -- staticcheck = true, -- go1.18不支持 gopls 0.14.2
       },
     },
-  },
-}
+  }
+end
 
-if vim.env.CPP_LS_PREFER_CCLS == "1" and vim.fn.executable "ccls" == 1 then
+--- @brief: proto
+if vim.fn.executable "protols" == 1 then
+  servers.protols = {}
+end
+
+--- @brief: json
+if vim.fn.executable "vscode-json-language-server" == 1 then
+  servers.jsonls = {}
+end
+
+--- @brief: typescript/javascript
+if vim.env.TS_LSPREFER_TSGO and vim.fn.executable "tsgo" == 1 then
+  servers.tsgo = {}
+elseif vim.fn.executable "vtsls" == 1 then
+  servers.vtsls = {} -- npm install -g @vtsls/language-server
+end
+
+--- @brief: c/cpp
+if vim.env.CPP_LS_PREFER_CCLS and vim.fn.executable "ccls" == 1 then
   servers.ccls = {}
-else
+elseif vim.fn.executable "clangd" == 1 then
   servers.clangd = {
     cmd = {
       "clangd",
@@ -49,9 +67,10 @@ else
   }
 end
 
-if vim.env.EMMY and vim.fn.executable "emmylua_ls" == 1 then
+--- @brief: lua
+if vim.env.LUA_LS_PREFER_EMMYLUA and vim.fn.executable "emmylua_ls" == 1 then
   servers.emmylua_ls = {}
-else
+elseif vim.fn.executable "lua-language-server" == 1 then
   servers.lua_ls = {
     settings = {
       Lua = {
@@ -65,6 +84,7 @@ else
   }
 end
 
+--- @brief: python
 if vim.fn.executable "ty" == 1 then
   servers.ty = {}
 elseif vim.fn.executable "pyright" == 1 then
