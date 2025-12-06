@@ -104,7 +104,7 @@ return {
       end,
     },
     {
-      keys.git_commits,
+      keys.git_logs,
       function()
         require("snacks").picker.git_log {
           actions = {
