@@ -22,6 +22,11 @@ local v_range_format = function()
   YcVim.util.feedkey("<esc>", "n")
 end
 
+local format_lua_file = function()
+  require("conform").format { bufnr = 0, formatters = { "stylua" } }
+  vim.cmd "silent write"
+end
+
 ---@type table<string, YcVim.Lsp.Keymaps>
 local keymaps = {
   jsonls = { [keys.lsp_format] = false },
@@ -31,18 +36,10 @@ local keymaps = {
   },
   protols = { [keys.lsp_format] = false },
   emmylua_ls = {
-    [keys.lsp_format] = {
-      function()
-        YcVim.lsp.action.plugin_format()
-      end,
-    },
+    [keys.lsp_format] = { format_lua_file },
   },
   lua_ls = {
-    [keys.lsp_format] = {
-      function()
-        YcVim.lsp.action.plugin_format()
-      end,
-    },
+    [keys.lsp_format] = { format_lua_file },
   },
   clangd = {
     [keys.lsp_format] = false,
@@ -56,6 +53,7 @@ local keymaps = {
   },
   ty = { [keys.lsp_format] = false },
   pyright = { [keys.lsp_format] = false },
+  ruff = { [keys.lsp_format] = false },
 }
 
 ---@return YcVim.Lsp.Keymaps
@@ -106,9 +104,8 @@ local default_lsp_keymap = function()
   }
 end
 
----@param name string
 ---@return lsp.ClientCapabilities
-lsp.capabilities = function(name)
+lsp.capabilities = function()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   ---@module 'blink.cmp'
   local blink = package.loaded["blink.cmp"]
@@ -120,11 +117,6 @@ lsp.capabilities = function(name)
   local cmp_nvim_lsp = package.loaded["cmp_nvim_lsp"]
   if cmp_nvim_lsp then
     capabilities = require("cmp_nvim_lsp").default_capabilities()
-  end
-
-  if name == "clangd" then
-    capabilities.textDocument.completion.editsNearCursor = true
-    capabilities.offsetEncoding = { "utf-8", "utf-16" }
   end
 
   return capabilities
@@ -157,17 +149,8 @@ lsp.buf_map = function(bufnr, lsp_keymap)
   end
 
   for key, action in pairs(lsp_keymap) do
-    if action == false then
-      action = {
-        function()
-          vim.notify("do nothing", "info", { id = "LSP: default buf map function" })
-        end,
-      }
-    end
-
     ---@cast action YcVim.Lsp.Action
-
-    if action ~= nil then
+    if action ~= false then
       local mode = action[2] or "n"
       buf_map(mode, key, action[1])
     end
@@ -190,16 +173,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     lsp.buf_map(bufnr, keymaps[client.name])
 
-    if client.name == "clangd" or client.name == "jsonls" or client.name == "jdtls" then
+    if vim.tbl_contains({ "clangd", "jsonls", "jdtls", "ruff" }, client.name) == true then
       vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
     end
 
-    local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
-
-    if ft == "python" then
-      vim.api.nvim_buf_create_user_command(bufnr, "Format", function()
-        YcVim.lsp.action.plugin_format()
-      end, { desc = "format python file" })
+    -- disable Hover in favor of 'Pyright'
+    if client.name == "ruff" then
+      client.server_capabilities.hoverProvider = false
     end
   end,
 })

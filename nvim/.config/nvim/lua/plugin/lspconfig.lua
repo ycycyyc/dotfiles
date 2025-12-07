@@ -1,5 +1,6 @@
 local env = YcVim.env
 
+---@type table<string, table>
 local servers = {}
 
 --- @brief: go
@@ -63,7 +64,6 @@ elseif vim.fn.executable "clangd" == 1 then
       "--pch-storage=memory",
       env.usePlaceholders and "--function-arg-placeholders=1" or "--function-arg-placeholders=0",
     },
-    filetypes = { "c", "cpp", "objc", "objcpp", "hpp", "h" },
   }
 end
 
@@ -85,18 +85,16 @@ elseif vim.fn.executable "lua-language-server" == 1 then
 end
 
 --- @brief: python
-if vim.fn.executable "ty" == 1 then
+if vim.env.PY_LS_PREFER_TY and vim.fn.executable "ty" == 1 then
   servers.ty = {}
 elseif vim.fn.executable "pyright" == 1 then
   servers.pyright = {
-    filetypes = { "python" },
-    settings = {
-      python = {
-        analysis = { autoSearchPaths = true, diagnosticMode = "workspace", useLibraryCodeForTypes = true },
-      },
-    },
     single_file_support = true,
   }
+end
+
+if vim.fn.executable "ruff" == 1 then
+  servers.ruff = {}
 end
 
 -- install lsp-server from
@@ -106,17 +104,7 @@ return {
   event = "User FilePost",
   config = function()
     for name, opt in pairs(servers) do
-      vim.lsp.config(
-        name,
-        vim.tbl_deep_extend("error", opt, {
-          on_init = function(client, _)
-            if client.server_capabilities and not env.semantic_token then
-              client.server_capabilities.semanticTokensProvider = false
-            end
-          end,
-          capabilities = YcVim.lsp.capabilities(name),
-        })
-      )
+      vim.lsp.config(name, vim.tbl_deep_extend("error", opt, { capabilities = YcVim.lsp.capabilities() }))
       vim.lsp.enable(name)
     end
   end,
