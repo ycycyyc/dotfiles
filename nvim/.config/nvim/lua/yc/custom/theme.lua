@@ -102,7 +102,7 @@ local theme = {
   MsgArea = { myfg = colors.white, mybg = colors.cmdline },
 
   -- " 0.10
-  NormalFloat = { link = "Pmenu" },
+  -- NormalFloat = { link = "Pmenu" },  -- hover 会去掉灰色背景?
 
   -- lsp
   LspDiagnosticsVirtualTextError = { myfg = colors.red },

@@ -13,7 +13,7 @@ local init = function()
   YcVim.setup(setup)
 
   local snacks = require "snacks"
-  snacks.config.style("notification", { wo = { winblend = 0 } })
+  snacks.config.style("notification", { wo = { winblend = 0 } }) -- 避免notifier和代码重叠
 
   vim.keymap.set("n", YcVim.keys.toggle_term, function()
     snacks.terminal.toggle(nil, {
