@@ -1,0 +1,40 @@
+{
+    "manipulators": [
+        {
+            "description": "clipboard history",
+            "from": {
+                "key_code": "scroll_lock",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "key_code": "c",
+                    "modifiers": ["left_command", "shift"]
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "snipaste",
+            "from": { "key_code": "f12" },
+            "to": [
+                {
+                    "key_code": "d",
+                    "modifiers": ["left_command", "shift"]
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "snipaste",
+            "from": { "key_code": "print_screen" },
+            "to": [
+                {
+                    "key_code": "d",
+                    "modifiers": ["left_command", "shift"]
+                }
+            ],
+            "type": "basic"
+        }
+    ]
+}  
