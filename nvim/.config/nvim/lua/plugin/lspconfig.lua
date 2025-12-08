@@ -107,5 +107,6 @@ return {
       vim.lsp.config(name, vim.tbl_deep_extend("error", opt, { capabilities = YcVim.lsp.capabilities() }))
       vim.lsp.enable(name)
     end
+    vim.api.nvim_create_user_command("LspInfo", ":vertical checkhealth vim.lsp", {})
   end,
 }
