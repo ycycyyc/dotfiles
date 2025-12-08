@@ -1,6 +1,5 @@
 ---@class YcVim.env
 local env = {
-  cpp_debug_mode = "vscode", -- vscode or lldb
   go_debug_mode = "dlv", -- dlv or vscode
   treesitter_textobj = true,
   semantic_token = true,
