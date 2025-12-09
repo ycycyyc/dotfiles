@@ -192,13 +192,19 @@ util.toggle_mouse = function(enable)
   local on = function()
     vim.opt.mouse = "nv"
     mouseEnable = true
-    vim.notify "set mouse=nv"
+    vim.notify("set mouse=nv", "info", {
+      id = "toggle_mouse",
+      title = "mouse mode",
+    })
   end
 
   local off = function()
     vim.opt.mouse = ""
     mouseEnable = false
-    vim.notify "set mouse="
+    vim.notify("set mouse=", "info", {
+      id = "toggle_mouse",
+      title = "mouse mode",
+    })
   end
 
   if enable == true then

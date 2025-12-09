@@ -56,11 +56,6 @@ return {
         return cmd2
       end,
 
-      -- These depend on nvim-dap, but can additionally be disabled by setting false here.
-      dap = { hotcodereplace = "auto", config_overrides = {} },
-      -- Can set this to false to disable main class scan, which is a performance killer for large project
-      dap_main = {},
-      test = true,
       settings = {
         java = {
           inlayHints = {
@@ -85,7 +80,7 @@ return {
           bundles = bundles,
         },
         settings = opts.settings,
-        capabilities = YcVim.lsp.capabilities "jdtls",
+        capabilities = YcVim.lsp.capabilities(),
       }, opts.jdtls)
 
       require("jdtls").start_or_attach(config)
