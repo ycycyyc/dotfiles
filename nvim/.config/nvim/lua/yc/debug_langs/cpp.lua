@@ -9,7 +9,7 @@ dap.adapters.gdb = {
   args = { "--interpreter=dap", "--eval-command", "set print pretty on" },
 }
 
-dap.configurations.c = {
+dap.configurations.cpp = {
   {
     name = "Launch",
     type = "gdb",
@@ -57,10 +57,9 @@ if file_exists(local_config_file) then
   vim.notify "local gdb dap config file exists"
   local local_configs = dofile(local_config_file)
   for _, local_config in ipairs(local_configs) do
-    table.insert(dap.configurations.c, local_config)
+    table.insert(dap.configurations.cpp, local_config)
   end
 else
   vim.notify "local gdb dap config file doesn't exist"
 end
 
-dap.configurations.cpp = dap.configurations.c
