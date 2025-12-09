@@ -27,6 +27,21 @@ local config = function()
   local dapui = require "dapui"
 
   dapui.setup {
+    controls = {
+      element = "repl",
+      enabled = true,
+      icons = {
+        disconnect = " disconnect",
+        pause = " pause",
+        play = " play",
+        run_last = " run last",
+        step_back = " back",
+        step_into = " in",
+        step_out = " out",
+        step_over = " over",
+        terminate = " terminate",
+      },
+    },
     icons = { expanded = "▾", collapsed = "▸" },
     mappings = {
       expand = "o",
@@ -39,14 +54,17 @@ local config = function()
   }
 
   dap.listeners.after.event_initialized["dapui_config"] = function()
+    YcVim.util.toggle_mouse(true)
     dapui.open()
   end
 
   dap.listeners.before.event_terminated["dapui_config"] = function()
+    YcVim.util.toggle_mouse(false)
     dapui.close()
   end
 
   dap.listeners.before.event_exited["dapui_config"] = function()
+    YcVim.util.toggle_mouse(false)
     dapui.close()
   end
 end

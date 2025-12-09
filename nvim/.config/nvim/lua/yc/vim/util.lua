@@ -185,4 +185,31 @@ util.evaluates_width = function(c)
   return res.width
 end
 
+local mouseEnable = false ---@type boolean
+
+---@param enable boolean?
+util.toggle_mouse = function(enable)
+  local on = function()
+    vim.opt.mouse = "nv"
+    mouseEnable = true
+    vim.notify "set mouse=nv"
+  end
+
+  local off = function()
+    vim.opt.mouse = ""
+    mouseEnable = false
+    vim.notify "set mouse="
+  end
+
+  if enable == true then
+    on()
+  elseif enable == false then
+    off()
+  elseif mouseEnable == false then
+    on()
+  else
+    off()
+  end
+end
+
 return util
