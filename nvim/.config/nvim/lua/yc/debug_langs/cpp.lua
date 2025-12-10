@@ -7,6 +7,9 @@ dap.adapters.gdb = {
   type = "executable",
   command = "gdb",
   args = { "--interpreter=dap", "--eval-command", "set print pretty on" },
+  options = {
+    initialize_timeout_sec = 120,
+  },
 }
 
 dap.configurations.cpp = {
@@ -62,4 +65,3 @@ if file_exists(local_config_file) then
 else
   vim.notify "local gdb dap config file doesn't exist"
 end
-
