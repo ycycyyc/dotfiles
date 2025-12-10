@@ -41,6 +41,9 @@ plugin.opts = {
       end,
     },
   },
+  enabled = function()
+    return not vim.tbl_contains({ "dap-repl" }, vim.bo.filetype)
+  end,
   cmdline = { enabled = false },
   snippets = { preset = "luasnip" },
   completion = {
