@@ -163,7 +163,11 @@ vim.lsp.set_log_level "OFF"
 vim.diagnostic.config {
   underline = false,
   signs = false,
-  virtual_text = true,
+  virtual_text = {
+    format = function(diagnostic)
+      return string.format("[%s] %s", diagnostic.source or "unknown", diagnostic.message)
+    end,
+  },
 }
 
 vim.api.nvim_create_autocmd("LspAttach", {
