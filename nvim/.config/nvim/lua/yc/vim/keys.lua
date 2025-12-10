@@ -48,6 +48,7 @@ local keys = {
   lsp_toggle_inlay_hint = "<leader>a",
   lsp_symbols = "<leader>s",
   lsp_global_symbols = "<leader>S",
+  lsp_diagnostics = "<leader>G",
 
   -- debug 调试
   dbg_breakpoint = "<F1>",

@@ -97,6 +97,7 @@ return {
       end,
     },
     { keys.lsp_symbols, "<cmd>lua Snacks.picker.lsp_symbols()<cr>" },
+    { keys.lsp_diagnostics, "<cmd>lua Snacks.picker.diagnostics()<cr>" },
     {
       keys.pick_cmd_history,
       function()
