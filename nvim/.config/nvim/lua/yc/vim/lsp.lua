@@ -177,7 +177,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     lsp.buf_map(bufnr, keymaps[client.name])
 
-    if vim.tbl_contains({ "clangd", "jsonls", "jdtls", "ruff" }, client.name) == true then
+    if vim.tbl_contains({ "clangd", "ccls", "jsonls", "jdtls", "ruff" }, client.name) == true then
       vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
     end
 
