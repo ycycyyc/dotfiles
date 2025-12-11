@@ -1,0 +1,15 @@
+{
+    "description": "Map mouse button5 to left_option +Tab",
+    "manipulators": [
+        {
+            "from": { "pointing_button": "button5" },
+            "to": [
+                {
+                    "key_code": "tab",
+                    "modifiers": ["left_option"]
+                }
+            ],
+            "type": "basic"
+        }
+    ]
+}
