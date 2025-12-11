@@ -165,7 +165,10 @@ vim.diagnostic.config {
   signs = false,
   virtual_text = {
     format = function(diagnostic)
-      return string.format("[%s] %s", diagnostic.source or "unknown", diagnostic.message)
+      if diagnostic.source then
+        return string.format("[%s] %s", diagnostic.source, diagnostic.message)
+      end
+      return diagnostic.message
     end,
   },
 }
