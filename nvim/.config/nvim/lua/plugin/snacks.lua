@@ -16,13 +16,17 @@ local confirm = function(picker, _)
   picker:action "jump"
 end
 
-vim.keymap.set("n", keys.toggle_term, function()
+---@param dir string?
+local open_term = function(dir)
   local snacks = require "snacks"
   snacks.terminal.toggle(nil, {
+    cwd = dir,
     win = {
       on_buf = function(win)
         vim.keymap.set("t", keys.toggle_term, function()
-          snacks.terminal.toggle()
+          snacks.terminal.toggle(nil, {
+            cwd = dir,
+          })
         end, { buffer = win.buf, nowait = true })
       end,
       border = "rounded",
@@ -37,6 +41,15 @@ vim.keymap.set("n", keys.toggle_term, function()
   vim.defer_fn(function()
     vim.api.nvim_exec_autocmds("User", { pattern = "LineRefresh" })
   end, 0)
+end
+
+vim.keymap.set("n", keys.toggle_term, function()
+  open_term()
+end)
+
+vim.keymap.set("n", keys.open_cur_dir_term, function()
+  local dir = vim.fn.fnamemodify(vim.fn.expand "%:~:.", ":h")
+  open_term(dir)
 end)
 
 local lsp_action = YcVim.lsp.action

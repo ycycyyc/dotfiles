@@ -24,6 +24,7 @@ local keys = {
   select_ts = "<leader>;",
   --term
   toggle_term = "<C-t>", -- 打开/关闭内置终端
+  open_cur_dir_term = "<leader>T", -- 打开/关闭内置终端(当前文件夹)
   toggle_mouse = "<leader>A",
   -- jump
   jump_to_next_qf = "]e",
@@ -44,7 +45,6 @@ local keys = {
   lsp_err_goto_prev = "[g", -- 上个错误
   lsp_err_goto_next = "]g", -- 下个错误
   lsp_finder = "<A-d>",
-  lsp_toggle_autoformat = "<leader>T",
   lsp_toggle_inlay_hint = "<leader>a",
   lsp_symbols = "<leader>s",
   lsp_global_symbols = "<leader>S",
