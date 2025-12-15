@@ -22,38 +22,19 @@ local v_range_format = function()
   YcVim.util.feedkey("<esc>", "n")
 end
 
-local format_lua_file = function()
-  require("conform").format { bufnr = 0, formatters = { "stylua" } }
-  vim.cmd "silent write"
-end
-
 ---@type table<string, YcVim.Lsp.Keymaps>
 local keymaps = {
-  jsonls = { [keys.lsp_format] = false },
   jdtls = {
-    [keys.lsp_format] = false,
     [keys.lsp_range_format] = { v_range_format, "x" },
   },
-  protols = { [keys.lsp_format] = false },
-  emmylua_ls = {
-    [keys.lsp_format] = { format_lua_file },
-  },
-  lua_ls = {
-    [keys.lsp_format] = { format_lua_file },
-  },
   clangd = {
-    [keys.lsp_format] = false,
     [keys.lsp_range_format] = { v_range_format, "x" },
     [keys.switch_source_header] = { ":LspClangdSwitchSourceHeader<cr>" },
   },
   ccls = {
-    [keys.lsp_format] = false,
     [keys.lsp_range_format] = { v_range_format, "x" },
     [keys.switch_source_header] = { ":LspCclsSwitchSourceHeader<cr>" },
   },
-  ty = { [keys.lsp_format] = false },
-  pyright = { [keys.lsp_format] = false },
-  ruff = { [keys.lsp_format] = false },
 }
 
 ---@return YcVim.Lsp.Keymaps
@@ -61,7 +42,6 @@ local default_lsp_keymap = function()
   return {
     [keys.lsp_goto_definition] = { lsp.action.definition },
     [keys.lsp_goto_references] = { lsp.action.references },
-    [keys.lsp_format] = { lsp.action.format },
     [keys.lsp_impl] = { lsp.action.impl },
     [keys.lsp_code_action] = { lsp.action.code_action },
     [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
@@ -180,13 +160,25 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     lsp.buf_map(bufnr, keymaps[client.name])
 
+    local buf_map = function(mode, key, action)
+      vim.keymap.set(mode, key, action, { noremap = true, buffer = bufnr, silent = true })
+    end
+
     if vim.tbl_contains({ "clangd", "ccls", "jsonls", "jdtls", "ruff" }, client.name) == true then
       vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
+    elseif vim.tbl_contains({ "gopls", "stylua" }, client.name) then
+      buf_map("n", keys.lsp_format, lsp.action.format)
     end
 
     -- disable Hover in favor of 'Pyright'
     if client.name == "ruff" then
       client.server_capabilities.hoverProvider = false
+    end
+
+    -- disable format in favor of 'stylua'
+    if vim.tbl_contains({ "lua_ls", "emmylua_ls" }, client.name) == true then
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
     end
   end,
 })

@@ -84,6 +84,10 @@ elseif vim.fn.executable "lua-language-server" == 1 then
   }
 end
 
+if vim.fn.executable "stylua" == 1 then
+  servers.stylua = {}
+end
+
 --- @brief: python
 if vim.env.PY_LS_PREFER_TY and vim.fn.executable "ty" == 1 then
   servers.ty = {}
