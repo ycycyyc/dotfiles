@@ -69,7 +69,17 @@ end
 
 --- @brief: lua
 if vim.env.LUA_LS_PREFER_EMMYLUA and vim.fn.executable "emmylua_ls" == 1 then
-  servers.emmylua_ls = {}
+  servers.emmylua_ls = {
+    settings = {
+      Lua = {
+        runtime = { version = "LuaJIT" },
+        workspace = {
+          checkThirdParty = false,
+          library = { vim.env.VIMRUNTIME, vim.env.VIMRUNTIME .. "/lua" },
+        },
+      },
+    },
+  }
 elseif vim.fn.executable "lua-language-server" == 1 then
   servers.lua_ls = {
     settings = {
