@@ -99,12 +99,12 @@ if vim.fn.executable "stylua" == 1 then
 end
 
 --- @brief: python
-if vim.env.PY_LS_PREFER_TY and vim.fn.executable "ty" == 1 then
-  servers.ty = {}
-elseif vim.fn.executable "pyright" == 1 then
+if vim.env.PY_LS_PREFER_PYRIGHT and vim.fn.executable "pyright" == 1 then
   servers.pyright = {
     single_file_support = true,
   }
+elseif vim.fn.executable "ty" == 1 then
+  servers.ty = {}
 end
 
 if vim.fn.executable "ruff" == 1 then
