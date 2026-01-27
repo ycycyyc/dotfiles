@@ -108,7 +108,7 @@ local theme = {
   LspDiagnosticsVirtualTextError = { myfg = colors.red },
   LspDiagnosticsVirtualTextWarning = { myfg = colors.yellow },
   LspProgress = { myfg = colors.yellow, cterm = { bold = true } },
-  LspInlayHint = { ctermfg = 61, ctermbg = 234 },
+  LspInlayHint = { myfg = colors.shadow_blue, mybg = colors.backgroud },
 
   -- statusline
   StatusLine = { myfg = colors.cursor_grey1, mybg = colors.white },
