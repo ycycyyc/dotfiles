@@ -139,7 +139,8 @@ lsp.buf_map = function(bufnr, lsp_keymap)
   vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 end
 
-vim.lsp.set_log_level "OFF"
+vim.lsp.log.set_level "OFF"
+
 vim.diagnostic.config {
   underline = false,
   signs = false,
