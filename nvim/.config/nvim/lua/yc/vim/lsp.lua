@@ -46,15 +46,6 @@ local default_lsp_keymap = function()
     [keys.lsp_code_action] = { lsp.action.code_action },
     [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
     [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
-    [keys.lsp_hover] = {
-      function()
-        vim.lsp.buf.hover {
-          border = "rounded",
-          max_height = math.floor(vim.o.lines * 0.9),
-          max_width = math.floor(vim.o.columns * 0.5),
-        }
-      end,
-    },
     [keys.lsp_rename] = { vim.lsp.buf.rename },
     [keys.lsp_range_format] = { function() end, "x" },
     [keys.lsp_err_goto_prev] = {
@@ -191,6 +182,7 @@ vim.keymap.del("n", "gri")
 vim.keymap.del("n", "gra")
 vim.keymap.del("x", "gra")
 vim.keymap.del("n", "grn")
+vim.keymap.del("n", "grx")
 vim.keymap.del("n", "]d")
 vim.keymap.del("n", "[d")
 
