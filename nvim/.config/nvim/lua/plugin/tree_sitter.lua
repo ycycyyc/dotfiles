@@ -1,86 +1,49 @@
-local plugin = {}
-
-local ts_disable = function(lang, bufnr)
-  if vim.tbl_contains({ "cpp", "go" }, lang) then
-    return false
-  end
-
-  return vim.api.nvim_buf_line_count(bufnr) > 10000
+local ensure_installed = { "cpp", "go", "lua", "c", "java", "python" }
+if vim.fn.has "mac" == 1 then
+  ensure_installed = { "cpp", "go", "java", "python" }
 end
 
-plugin.config = function()
-  local ensure_installed = { "cpp", "go", "lua", "c" }
-  if vim.fn.has "mac" == 1 then
-    ensure_installed = { "cpp", "go" }
-  end
+-- main分支, 需要手动开启
+vim.api.nvim_create_autocmd({ "Filetype" }, {
+  callback = function(event)
+    -- make sure nvim-treesitter is loaded
+    local ok, nvim_treesitter = pcall(require, "nvim-treesitter")
 
-  require("nvim-treesitter.configs").setup {
-    ensure_installed = ensure_installed,
-    highlight = {
-      enable = true,
-      disable = ts_disable,
-      additional_vim_regex_highlighting = false,
-    },
-  }
-end
+    -- no nvim-treesitter, maybe fresh install
+    if not ok then
+      return
+    end
 
-plugin.textobj_config = function()
-  require("nvim-treesitter.configs").setup {
-    textobjects = {
-      move = {
-        enable = true,
-        disable = ts_disable,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        goto_next_start = {
-          ["]f"] = "@function.outer",
-          ["]s"] = "@class.outer",
-          ["]a"] = "@parameter.inner",
-        },
-        goto_next_end = {
-          ["]F"] = "@function.outer",
-          ["]S"] = "@class.outer",
-          ["]A"] = "@parameter.inner",
-        },
-        goto_previous_start = {
-          ["[f"] = "@function.outer",
-          ["[s"] = "@class.outer",
-          ["[a"] = "@parameter.inner",
-        },
-        goto_previous_end = {
-          ["[F"] = "@function.outer",
-          ["[S"] = "@class.outer",
-          ["[A"] = "@parameter.inner",
-        },
-      },
-      select = {
-        enable = true,
-        disable = ts_disable,
-        lookahead = true,
+    local parsers = require "nvim-treesitter.parsers"
 
-        keymaps = {
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["as"] = "@class.outer",
-          ["is"] = "@class.inner",
-          ["ia"] = "@parameter.inner",
-          ["aa"] = "@parameter.outer",
-        },
-      },
-    },
-  }
-end
+    if not parsers[event.match] or not nvim_treesitter.install then
+      return
+    end
 
+    local ft = vim.bo[event.buf].ft
+    local lang = vim.treesitter.language.get_lang(ft)
+
+    local installed_langs = nvim_treesitter.get_installed()
+    if vim.tbl_contains(installed_langs, lang) == true then
+      pcall(vim.treesitter.start, event.buf)
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end
+  end,
+})
+
+-- cargo install --locked tree-sitter-cli
 return {
   "nvim-treesitter/nvim-treesitter",
-  event = { "BufReadPost", "BufNewFile" },
-  cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-  config = plugin.config,
-  dependencies = {
-    {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      config = plugin.textobj_config,
-      cond = YcVim.env.treesitter_textobj,
-    },
-  },
+  branch = "main",
   lazy = false,
+  build = ":TSUpdate",
+  config = function()
+    local ok, nvim_treesitter = pcall(require, "nvim-treesitter")
+    if not ok then
+      return
+    end
+
+    nvim_treesitter.install(ensure_installed)
+  end,
 }
