@@ -10,6 +10,15 @@ setup.initfuncs = {
     end,
   },
   {
+    "gitsigns-blame",
+    function()
+      YcVim.keys.buf_map("n", "q", function()
+        vim.cmd("q")
+        vim.opt.termguicolors = false
+      end)
+    end,
+  },
+  {
     "help",
     function()
       vim.cmd.wincmd "L"

@@ -49,3 +49,5 @@ vim.opt.showmode = false
 
 vim.opt.syntax = "off"
 vim.opt.winborder = "rounded"
+
+vim.opt.termguicolors = false

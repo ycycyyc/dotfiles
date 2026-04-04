@@ -26,8 +26,8 @@ local colors = {
   backgroud = { n = 234, gui = "#1c1c1c" },
   diffadd = { n = 22, gui = "#1e3a1e" },
   diffdel = { n = 52, gui = "#3d1515" },
-  difftext = { n = 39, gui = "#2c485f" },
-  diffchange = { n = 237, gui = "#1a2a37" },
+  difftext = { n = 39, gui = "#1c4a6e" },
+  diffchange = { n = 237, gui = "#102b40" },
 }
 
 ---@param opt table
