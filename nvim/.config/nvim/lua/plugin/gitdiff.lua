@@ -26,6 +26,20 @@ local init = function()
     vim.notify("Run cmd: " .. cmd)
     vim.cmd(cmd)
   end
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "DiffviewViewOpened",
+    callback = function()
+      vim.opt.termguicolors = true
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "DiffviewViewClosed",
+    callback = function()
+      vim.opt.termguicolors = false
+    end,
+  })
 end
 
 ---@type YcVim.SetupOpt
