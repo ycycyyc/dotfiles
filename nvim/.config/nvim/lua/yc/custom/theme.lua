@@ -57,9 +57,10 @@ local theme = {
   diffAdded = { myfg = colors.green },
   diffRemoved = { myfg = colors.red },
 
-  DiffAdd = { myfg = colors.black, mybg = colors.green },
-  DiffDelete = { myfg = colors.black, mybg = colors.red },
-  DiffText = { myfg = colors.black, mybg = colors.yellow },
+  DiffAdd = { mybg = colors.diffadd },
+  DiffDelete = { mybg = colors.diffdel },
+  DiffChange = { mybg = colors.diffchange },
+  DiffText = { mybg = colors.difftext },
 
   ColorColumn = { mybg = colors.cursor_grey1 },
 

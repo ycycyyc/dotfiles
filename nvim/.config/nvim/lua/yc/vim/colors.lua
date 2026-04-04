@@ -24,6 +24,10 @@ local colors = {
   color0 = { n = 0, gui = "#000000" },
   shadow_blue = { n = 61, gui = "#5f5faf" },
   backgroud = { n = 234, gui = "#1c1c1c" },
+  diffadd = { n = 22, gui = "#1e3a1e" },
+  diffdel = { n = 52, gui = "#3d1515" },
+  difftext = { n = 39, gui = "#2c485f" },
+  diffchange = { n = 237, gui = "#1a2a37" },
 }
 
 ---@param opt table
