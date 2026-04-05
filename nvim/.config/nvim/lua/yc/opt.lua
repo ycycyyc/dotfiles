@@ -51,3 +51,5 @@ vim.opt.syntax = "off"
 vim.opt.winborder = "rounded"
 
 vim.opt.termguicolors = false
+
+vim.opt.diffopt:append { "algorithm:patience" }
