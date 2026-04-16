@@ -35,7 +35,7 @@ vim.opt.signcolumn = "yes:2"
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 
-vim.opt.guicursor = "n-v-c-i:block"
+vim.opt.guicursor = "n-v-c-i:block-blinkon0"
 vim.opt.splitright = true
 
 -- 分割线出掉白线

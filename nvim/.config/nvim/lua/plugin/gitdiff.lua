@@ -64,7 +64,7 @@ setup.initfuncs = {
 YcVim.setup(setup)
 
 return {
-  "sindrets/diffview.nvim",
+  "dlyongemallo/diffview.nvim",
   init = init,
   keys = {
     {
