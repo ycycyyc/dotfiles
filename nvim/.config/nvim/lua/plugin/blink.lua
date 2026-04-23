@@ -1,21 +1,26 @@
 local plugin = {
   "saghen/blink.cmp",
   dependencies = {
-    "L3MON4D3/LuaSnip",
-    version = "v2.*",
-    build = "make install_jsregexp",
-    lazy = true,
+    {
+      "saghen/blink.lib",
+    },
+    {
+      "L3MON4D3/LuaSnip",
+      version = "v2.*",
+      build = "make install_jsregexp",
+      lazy = true,
 
-    config = function(_, opts)
-      local luasnip = require "luasnip"
+      config = function(_, opts)
+        local luasnip = require "luasnip"
 
-      ---@diagnostic disable: undefined-field
-      luasnip.setup(opts)
+        ---@diagnostic disable: undefined-field
+        luasnip.setup(opts)
 
-      require("luasnip.loaders.from_vscode").lazy_load {
-        paths = vim.fn.stdpath "config" .. "/snippets",
-      }
-    end,
+        require("luasnip.loaders.from_vscode").lazy_load {
+          paths = vim.fn.stdpath "config" .. "/snippets",
+        }
+      end,
+    },
   },
 }
 
@@ -57,9 +62,13 @@ plugin.opts = {
 }
 
 if 1 == vim.fn.executable "cargo" then
-  plugin.build = "cargo build --release"
+  plugin.build = function()
+    require("blink.cmp").build():wait(60000)
+  end
+  plugin.opts.fuzzy = { implementation = "rust" }
 else
   plugin.opts.fuzzy = { implementation = "lua" }
+  vim.notify "blink.cmp use LUA implementation"
 end
 
 return plugin
