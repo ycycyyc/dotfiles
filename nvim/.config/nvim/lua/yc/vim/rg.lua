@@ -23,21 +23,20 @@ local rgCmdArgs = {
 ---@field filepath string|nil
 ---@field fts string[]
 local Finder = {}
+Finder.__index = Finder
 
 ---@param args table
 ---@return YcVim.Finder
 function Finder:new(args)
-  local o = {}
-  setmetatable(o, self)
-  self.__index = self
-  self.query = args["args"]
-  self.words = args["fargs"]
-  -- stylua: ignore
-  self.filepath = nil
-  self.islive = false
-  self.limit = 1024 * 100
-  self.fts = {}
-  return o
+  local o = {
+    query = args["args"],
+    words = args["fargs"],
+    filepath = nil,
+    islive = false,
+    limit = 1024 * 100,
+    fts = {},
+  }
+  return setmetatable(o, self)
 end
 
 ---@type table<string, string[]>

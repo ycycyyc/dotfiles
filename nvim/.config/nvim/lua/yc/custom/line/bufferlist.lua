@@ -8,7 +8,7 @@ local M = YcLine.new_section "bufferlist"
 ---@param text string
 ---@param width integer
 ---@param left? boolean
-function truncate(text, width, left)
+local function truncate(text, width, left)
   local tw = vimapi.nvim_strwidth(text)
   if tw > width then
     return left and "…" .. vimfn.strcharpart(text, tw - width + 1, width - 1)
