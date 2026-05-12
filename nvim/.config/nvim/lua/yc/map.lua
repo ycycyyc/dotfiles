@@ -11,8 +11,8 @@ map("n", "<Leader>w", "<cmd>silent w<cr>")
 map("n", "<Leader>q", "<cmd>q<cr>")
 map("n", "<Leader>m", "`")
 
-map("n", "j", "gj")
-map("n", "k", "gk")
+-- map("n", "j", "gj")
+-- map("n", "k", "gk")
 
 map({ "i", "s" }, "jk", function()
   vim.cmd "noh"
