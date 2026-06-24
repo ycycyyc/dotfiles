@@ -63,7 +63,7 @@ plugin.opts = {
 
 if 1 == vim.fn.executable "cargo" then
   plugin.build = function()
-    require("blink.cmp").build():wait(60000)
+    require('blink.cmp').build():pwait()
   end
   plugin.opts.fuzzy = { implementation = "rust" }
 else
