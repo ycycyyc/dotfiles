@@ -1,0 +1,10 @@
+{
+    "description": "Map mouse button4 to Launchpad (F4)",
+    "manipulators": [
+        {
+            "from": { "pointing_button": "button4" },
+            "to": [{ "key_code": "launchpad" }],
+            "type": "basic"
+        }
+    ]
+}
