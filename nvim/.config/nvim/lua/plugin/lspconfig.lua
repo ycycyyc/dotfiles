@@ -45,8 +45,8 @@ if vim.fn.executable "vscode-json-language-server" == 1 then
 end
 
 --- @brief: typescript/javascript
-if vim.env.TS_LSPREFER_TSGO and vim.fn.executable "tsgo" == 1 then
-  servers.tsgo = {}
+if vim.fn.executable "tsc" == 1 then
+  servers.tsc = {}
 elseif vim.fn.executable "vtsls" == 1 then
   servers.vtsls = {} -- npm install -g @vtsls/language-server
 end
