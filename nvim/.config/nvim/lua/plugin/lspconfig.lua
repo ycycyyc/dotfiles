@@ -52,7 +52,9 @@ elseif vim.fn.executable "vtsls" == 1 then
 end
 
 --- @brief: c/cpp
-if vim.env.CPP_LS_PREFER_CCLS and vim.fn.executable "ccls" == 1 then
+if vim.env.CPP_LS_PREFER_CLICE and vim.fn.executable "clice" == 1 then
+  servers.clice = {}
+elseif vim.env.CPP_LS_PREFER_CCLS and vim.fn.executable "ccls" == 1 then
   servers.ccls = {}
 elseif vim.fn.executable "clangd" == 1 then
   servers.clangd = {
