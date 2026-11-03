@@ -45,7 +45,7 @@ local default_lsp_keymap = function()
     [keys.lsp_impl] = { lsp.action.impl },
     [keys.lsp_code_action] = { lsp.action.code_action },
     [keys.lsp_goto_declaration] = { vim.lsp.buf.declaration },
-    [keys.lsp_goto_type_definition] = { vim.lsp.buf.type_definition },
+    [keys.lsp_goto_type_definition] = { lsp.action.type },
     [keys.lsp_rename] = { vim.lsp.buf.rename },
     [keys.lsp_range_format] = { function() end, "x" },
     [keys.lsp_err_goto_prev] = {
@@ -98,6 +98,7 @@ lsp.action = {
   references = vim.lsp.buf.references,
   impl = vim.lsp.buf.implementation,
   code_action = vim.lsp.buf.code_action,
+  type = vim.lsp.buf.type_definition,
   format = function()
     vim.lsp.buf.format { async = false }
     vim.cmd "silent write"
@@ -156,7 +157,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.keymap.set(mode, key, action, { noremap = true, buffer = bufnr, silent = true })
     end
 
-    if vim.tbl_contains({ "clangd", "ccls", "jsonls", "jdtls", "ruff" }, client.name) == true then
+    if vim.tbl_contains({ "clangd", "ccls", "jsonls", "jdtls", "ruff", "clice" }, client.name) == true then
       vim.api.nvim_buf_create_user_command(bufnr, "Format", lsp.action.format, { desc = "format file" })
     elseif vim.tbl_contains({ "gopls", "stylua" }, client.name) then
       buf_map("n", keys.lsp_format, lsp.action.format)
@@ -165,6 +166,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- disable Hover in favor of 'Pyright'
     if client.name == "ruff" then
       client.server_capabilities.hoverProvider = false
+    end
+
+    if client.name == "clice" then
+      client.server_capabilities.semanticTokensProvider = nil
     end
 
     -- disable format in favor of 'stylua'

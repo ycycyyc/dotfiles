@@ -76,6 +76,14 @@ lsp_action.impl = function()
   }
 end
 
+lsp_action.type = function()
+  require("snacks").picker.lsp_type_definitions {
+    auto_confirm = false,
+    include_current = true,
+    actions = { confirm = confirm },
+  }
+end
+
 ---@param find YcVim.Finder
 local grep = function(find)
   local opt = {
